@@ -75,7 +75,7 @@ height:100%;
 /* end of header on page1  */
 /* Hero section */
 #hero{
-    background-image:url(../images/pexels-negative-space-160107.jpg);
+    background-image: url(images/pexels-negative-space-160107.jpg);
     background-size: cover;
     background-position: top center;
     position: relative;
