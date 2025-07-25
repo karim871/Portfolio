@@ -80,7 +80,7 @@ body, html {
 }
 
 .contact-section {
-  position: relative;
+  position: right;
   height: 100vh;
   width: 100%;
   display: flex;
