@@ -9,7 +9,11 @@
     text-decoration:none;
 }
 body{
-    background-image: url(../images/andr.jpg);
+	background-image: url(../images/andr.jpg);
+	background-size: cover;
+	background-position: top center;
+	position: relative;
+	z-index: 1
 }
 html{
     font-size:20px;
