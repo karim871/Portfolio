@@ -1,86 +1,82 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&display=swap');
 
-*{
-    padding:0; 
-    margin:0;
-    box-sizing: border-box;
-    text-decoration:none;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
 }
-html{
-    font-size:20px;
-    font-family:'Montserrat', sans-serif;
+
+html {
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
 }
-a{
-   outline-color: white; 
-    color: red;
-   
+
+a {
+  outline-color: white;
+  color: red;
 }
+
+/* Header */
 .header {
-	width: 100%;
-	height: 100px;
-    display: block;
-    background-color: #101010;
-}
-.inner_header{
-    width:1800px;
-    height:100%;
-    display:block;
-    margin:0 auto;
-    
-}
-.logo_container{
-    height: 100%;
-    display: table;
-    float: left;
-}
-.logo_container h1{
-    color: white;
-    height:100%;
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 32px;
-    font-weight: 200;
-}
-.logo_container h1 span{
-    font-weight: 800
+  width: 100%;
+  height: 100px;
+  display: block;
+  background-color: #101010;
 }
 
-.navigation{
-float: right;
-height:100%;
+.inner_header {
+  width: 1800px;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
 }
-.navigation a{
-    height: 100%;
-    display: table;
-    float: left;
-    padding:0px 40px
+
+.logo_container {
+  height: 100%;
+  display: table;
+  float: left;
 }
-.navigation li{
-    display: table-cell;
-    vertical-align: middle;
-    color: white;
-    height: 100%;
-    font-size: 25px;
+
+.logo_container h1 {
+  color: white;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 32px;
+  font-weight: 200;
 }
-.container{
-    min-height: 100vh;
-    width: 100%;
-    display: flex;  
-    align-items: center;
-    justify-content: center;
-    margin: auto;
 
+.logo_container h1 span {
+  font-weight: 800;
 }
-/* end of header on page1  */
 
+.navigation {
+  float: right;
+  height: 100%;
+}
 
+.navigation a {
+  height: 100%;
+  display: table;
+  float: left;
+  padding: 0px 40px;
+}
 
+.navigation li {
+  display: table-cell;
+  vertical-align: middle;
+  color: white;
+  height: 100%;
+  font-size: 25px;
+}
+
+/* Contact Section */
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .contact-section {
@@ -95,10 +91,16 @@ body, html {
 .overlay-title {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   z-index: 10;
-  text-align: center;
+  text-align: right;
+  padding-right: 3rem;
+  width: 100%;
+}
+
+.overlay-title.right {
+  text-align: right;
+  right: 0;
 }
 
 .overlay-title h1 {
@@ -109,8 +111,10 @@ body, html {
   padding: 1rem 2rem;
   border-radius: 6px;
   color: #111;
+  display: inline-block;
 }
 
+/* Split layout */
 .split {
   display: flex;
   height: 100%;
@@ -179,6 +183,7 @@ body, html {
   color: black;
 }
 
+/* Footer */
 .footer {
   background-color: rgb(219, 222, 226);
   padding: 2%;
