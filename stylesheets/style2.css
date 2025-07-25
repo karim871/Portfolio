@@ -142,6 +142,19 @@ font-size: 30px;
 
  padding:140px;
 }
+html, body {
+    height: 100%;
+}
+
+.page-wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-wrapper > *:not(.footer) {
+    flex-grow: 1;
+}
 .footer {
     background-color: rgb(219, 222, 226);
     padding: 2%;
