@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&display=swap');
-/* Contact me section */
-
 
 body, html {
   margin: 0;
@@ -9,6 +7,7 @@ body, html {
   height: 100%;
   font-family: 'Montserrat', sans-serif;
 }
+
 .contact-section {
   position: relative;
   height: 100vh;
@@ -64,7 +63,6 @@ body, html {
   object-fit: cover;
 }
 
-/* Form styling stays mostly the same */
 .my-form {
   width: 100%;
   color: white;
@@ -103,5 +101,16 @@ body, html {
 
 .button:hover {
   background-color: white;
+  color: black;
+}
+
+.footer {
+  background-color: rgb(219, 222, 226);
+  padding: 2%;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.footer a {
   color: black;
 }
