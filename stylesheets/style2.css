@@ -91,16 +91,15 @@ form {
 }
 
 label {
-  background-color: white;
   color: black;
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  outline: none;
-  font-family: 'Montserrat', sans-serif;
+  background-color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: inline-block;
 }
+
 
 
 /* UPDATED: input and textarea text color & background */
