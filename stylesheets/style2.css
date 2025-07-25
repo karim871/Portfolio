@@ -72,7 +72,7 @@ main {
 /* UPDATED: "Get In Touch" heading style */
 .contact-container h1 {
   background-color: white;      /* White box background */
-  color: black !important;      /* Black text */
+  color: black;      /* Black text */
   padding: 1rem 2rem;
   border-radius: 8px;
   display: inline-block;
