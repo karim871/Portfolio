@@ -144,9 +144,10 @@ font-size: 30px;
 }
 .footer {
     background-color: rgb(219, 222, 226);
-    padding:2%;
+    padding: 2%;
     text-align: center;
     text-decoration: underline;
+    margin-top: auto;
 }
 .footer a{
     color: black;
