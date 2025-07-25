@@ -92,12 +92,9 @@ form {
 
 label {
   color: black;
-  background-color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-weight: 600;
+  font-weight: 800;
   margin-bottom: 0.5rem;
-  display: inline-block;
+  display: block;
 }
 
 
