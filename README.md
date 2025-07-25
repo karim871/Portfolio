@@ -22,18 +22,10 @@ Here you'll find:
 ├── scripts/ → JS scripts or automation tools
 └── README.md → This file
 
-## 🧠 About Me
-
-I'm **Karim**, a passionate cybersecurity student and aspiring professional, certified in:
-
-- ✅ CompTIA Security+
-- ✅ Cisco CCNA (Enterprise, Security, Routing & Switching)
-- ✅ Microsoft Azure Fundamentals (in progress)
-- 🔎 Interested in Threat Hunting, Blue Teaming, and Pentesting
 
 ## 📫 Contact
 
-- ✉️ Email: karimzouaki@protonmail.com  
+- ✉️ Email: karimezouaki@gmail.com  
 - 🌐 GitHub: [karim871](https://github.com/karim871)  
 - 🧑‍💼 LinkedIn: [linkedin.com/in/karim-zouaki](https://linkedin.com/in/karim-zouaki)
 
