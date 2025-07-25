@@ -1,196 +1,136 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&display=swap');
-
-/* * {
-  padding: 0;
+/* Reset */
+* {
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
   text-decoration: none;
 }
 
-html {
-  font-size: 20px;
+html, body {
+  height: 100%;
   font-family: 'Montserrat', sans-serif;
+  background-color: #0a0a0a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-a {
-  outline-color: white;
-  color: red;
-}
-*/
 /* Header */
-.header {
-  width: 100%;
-  height: 100px;
-  display: block;
+header {
   background-color: #101010;
-}
-
-.inner_header {
-  width: 1800px;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-
-.logo_container {
-  height: 100%;
-  display: table;
-  float: left;
+  padding: 1rem 2rem;
+  text-align: center;
 }
 
 .logo_container h1 {
-  color: white;
-  height: 100%;
-  display: table-cell;
-  vertical-align: middle;
-  font-size: 32px;
   font-weight: 200;
+  font-size: 32px;
+  color: white;
 }
 
 .logo_container h1 span {
   font-weight: 800;
 }
 
-.navigation {
-  float: right;
-  height: 100%;
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
 }
 
-.navigation a {
-  height: 100%;
-  display: table;
-  float: left;
-  padding: 0px 40px;
+nav li {
+  font-size: 20px;
 }
 
-.navigation li {
-  display: table-cell;
-  vertical-align: middle;
+nav a {
   color: white;
-  height: 100%;
-  font-size: 25px;
+  transition: color 0.3s ease;
 }
 
-/* Contact Section */
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+nav a:hover {
+  color: red;
 }
 
-.contact-section {
-  position: right;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #0a0a0a;
-}
-
-.overlay-title {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  text-align: right;
-  padding-right: 3rem;
-  width: 100%;
-}
-
-.overlay-title.right {
-  text-align: right;
-  right: 0;
-}
-
-.overlay-title h1 {
-  font-family: 'Lato', sans-serif;
-  font-size: 4rem;
-  font-style: italic;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 1rem 2rem;
-  border-radius: 6px;
-  color: #111;
-  display: inline-block;
-}
-
-/* Split layout */
-.split {
-  display: flex;
-  height: 100%;
-  z-index: 1;
-}
-
-.left-panel {
-  width: 50%;
-  padding: 5rem;
+/* Main Contact Section */
+main {
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(10, 10, 10, 0.9);
-  z-index: 1;
+  padding: 3rem 1rem;
 }
 
-.right-panel {
-  width: 50%;
-  overflow: hidden;
-}
-
-.right-panel img {
+.contact-container {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 500px;
 }
 
-.my-form {
-  width: 100%;
-  color: white;
+.contact-container h1 {
+  font-family: 'Lato', sans-serif;
+  font-size: 3rem;
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.my-form label {
-  display: block;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+label {
+  font-weight: 600;
   margin-bottom: 0.5rem;
+  display: block;
 }
 
-.my-form input,
-.my-form textarea {
+input, textarea {
   width: 100%;
   padding: 1rem;
-  margin-bottom: 1.5rem;
   font-size: 1rem;
   border: none;
+  border-radius: 5px;
   outline: none;
-  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
 }
 
-.my-form textarea {
-  height: 150px;
+textarea {
+  resize: vertical;
+  min-height: 120px;
 }
 
-.button {
+button {
   background-color: black;
   color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
+  padding: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.button:hover {
+button:hover {
   background-color: white;
   color: black;
 }
 
 /* Footer */
-.footer {
+footer {
   background-color: rgb(219, 222, 226);
-  padding: 2%;
+  padding: 1rem;
   text-align: center;
-  text-decoration: underline;
 }
 
-.footer a {
+footer a {
   color: black;
+  text-decoration: underline;
+  font-weight: 600;
 }
