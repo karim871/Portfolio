@@ -2,191 +2,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&display=swap');
 /* Contact me section */
 
-*{
+/* *{
     padding:0; 
     margin:0;
     box-sizing: border-box;
     text-decoration:none;
 }
-body{
+*/
+body {
 	background-image: url(../images/andr.jpg);
 	background-size: cover;
 	background-position: top center;
 	position: relative;
-	z-index: 1
+	z-index: 1;
 }
-html{
-    font-size:20px;
-    font-family:'Montserrat', sans-serif;
-}
-a{
-    outline-color: white; 
-     color: red; 
- }
- 
-.header {
-	width: 100%;
-	height: 100px;
-    display: block;
-    background-color: #101010;
-}
-.inner_header{
-    width:1800px;
-    height:100%;
-    display:block;
-    margin:0 auto;
-    
-}
-.logo_container{
-    height: 100%;
-    display: table;
-    float: left;
-}
-.logo_container h1{
-    color: white;
-    height:100%;
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 32px;
-    font-weight: 200;
-}
-.logo_container h1 span{
-    font-weight: 800
-}
-.navigation{
-    float: right;
-    height:100%;
-    }
-    .navigation a{
-        height: 100%;
-        display: table;
-        float: left;
-        padding:0px 40px
-    }
-    .navigation li{
-        display: table-cell;
-        vertical-align: middle;
-        color: white;
-        height: 100%;
-        font-size: 25px;
-    }
-    .container{
-        min-height: 100vh;
-        width: 100%;
-        display: flex;  
-        align-items: center;
-        justify-content: center;
-        margin: auto;
-    
-    }
-    /* end of header */
-.box1 {
-    font-size: 25px ;
-    font-family: 'Lato', sans-serif;
-    background-color: rgb(219, 222, 226);
-    padding:4%;
-    text-align:center;
-    
-}
-.box1 h1{
-    padding: 13px;
-    font-size: 70px ;
-}
-.box1 h2{
-padding: 10px;
-}
-.box1 h2:nth-child(4){
-    letter-spacing: 7px;
-}
-.my-form{
-    margin-top:130px ;
+.my-form {
+    margin-top: 130px;
     padding-left: 200px;
     float: left;
-    width:60%;
+    width: 60%;
 }
-.form-group {
-padding-bottom:25px;
-font-size: 30px;
+.my-image {
+    padding: 140px;
 }
-.form-group label{
-    display: block;
-}
-.form-group input[type="text"]{
-    padding:25px;
-    width:80%;
+.form-group input[type="text"] {
+    padding: 25px;
+    width: 80%;
     margin-top: 5px;
     font-size: 35px;
 }
 .form-group textarea {
-    width:80%;
+    width: 80%;
     padding: 50px;
     font-size: 30px;
 }
-.my-form .button{
+.my-form .button {
     padding: 15px 25px;
-    font-size: 17Px; 
+    font-size: 17px;
     text-transform: uppercase;
     letter-spacing: 3px;
-    margin-top: 0px;
-    transition:.3s ease ;
-    background-color:black;
+    background-color: black;
     color: white;
     border-radius: 6px;
 }
-.my-form .button:hover{
+.my-form .button:hover {
     color: black;
     background-color: white;
-    border-color: black;
 }
-.my-image{
-
- padding:140px;
-}
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.page-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 2rem;
-}
-
-/* Clear float issues - override your float layout */
-.my-form {
-  width: 60%;
-  font-size: 1rem;
-  float: none;
-  padding-left: 2rem;
-  margin-top: 4rem;
-}
-
-.my-image {
-	width: 35%;
-	padding: 2rem;
-	
-}
-
-/* Footer fix */
-.footer {
-  background-color: rgb(219, 222, 226);
-  padding: 2%;
-  text-align: center;
-  text-decoration: underline;
-  margin-top: auto;
-}
-
-.footer a {
-  color: black;
-}
-
