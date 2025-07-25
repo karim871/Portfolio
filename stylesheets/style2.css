@@ -91,10 +91,12 @@ form {
 }
 
 label {
-  font-weight: 600;
+  color: black;
+  font-weight: 800;
   margin-bottom: 0.5rem;
   display: block;
 }
+
 
 /* UPDATED: input and textarea text color & background */
 input, textarea {
