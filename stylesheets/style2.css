@@ -135,6 +135,7 @@ font-size: 30px;
     border-color: black;
 }
 .my-image{
+background-image: url(../images/andr.jpg)
  padding:140px;
 }
 .footer {
