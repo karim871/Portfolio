@@ -71,12 +71,8 @@ main {
 
 /* UPDATED: "Get In Touch" heading style */
 .contact-container h1 {
-  font-weight: 900; 
-  background-color: white;      /* White box background */
+  font-weight: 900;    
   color: black !important;      /* Black text */
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  display: inline-block;
   margin-bottom: 2rem;
   font-family: 'Lato', sans-serif;
   font-size: 3rem;
