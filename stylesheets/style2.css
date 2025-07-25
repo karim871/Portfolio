@@ -71,6 +71,7 @@ main {
 
 /* UPDATED: "Get In Touch" heading style */
 .contact-container h1 {
+  font-weight: 800; 
   background-color: white;      /* White box background */
   color: black !important;      /* Black text */
   padding: 1rem 2rem;
