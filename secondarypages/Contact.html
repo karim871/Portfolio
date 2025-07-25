@@ -3,156 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact</title>
-  
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:ital,wght@1,300&display=swap"
-    rel="stylesheet"
-  />
-  
-  <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      text-decoration: none;
-    }
 
-    html, body {
-      height: 100%;
-      font-family: 'Montserrat', sans-serif;
-      background-color: #0a0a0a;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:ital,wght@1,300&display=swap" rel="stylesheet" />
 
-    /* Header */
-    header {
-      background-color: #101010;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-
-    .logo_container h1 {
-      font-weight: 200;
-      font-size: 32px;
-      color: white;
-    }
-
-    .logo_container h1 span {
-      font-weight: 800;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 0.5rem;
-    }
-
-    nav li {
-      font-size: 20px;
-    }
-
-    nav a {
-      color: white;
-      transition: color 0.3s ease;
-    }
-
-    nav a:hover {
-      color: red;
-    }
-
-    /* Main contact section */
-    main {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 1rem;
-      background-color: #0a0a0a;
-    }
-
-    .contact-container {
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .contact-container h1 {
-      font-family: 'Lato', sans-serif;
-      font-size: 3rem;
-      font-style: italic;
-      text-align: center;
-      margin-bottom: 2rem;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    label {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      outline: none;
-      font-family: 'Montserrat', sans-serif;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    button {
-      background-color: black;
-      color: white;
-      padding: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: white;
-      color: black;
-    }
-
-    /* Footer */
-    footer {
-      background-color: rgb(219, 222, 226);
-      padding: 1rem;
-      text-align: center;
-    }
-
-    footer a {
-      color: black;
-      text-decoration: underline;
-      font-weight: 600;
-    }
-  </style>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="../stylesheets/contact-style.css" />
 </head>
 <body>
 
+  <!-- Header -->
   <header>
     <div class="logo_container">
       <h1>MON<span>SITE</span></h1>
@@ -166,6 +28,7 @@
     </nav>
   </header>
 
+  <!-- Contact Section -->
   <main>
     <div class="contact-container">
       <h1>Get In Touch</h1>
@@ -187,6 +50,7 @@
     </div>
   </main>
 
+  <!-- Footer -->
   <footer>
     <a href="./termes d'utilisation.html">Termes d'utilisation</a>
   </footer>
