@@ -172,8 +172,9 @@ html, body {
 }
 
 .my-image {
-  width: 35%;
-  padding: 2rem;
+	width: 35%;
+	padding: 2rem;
+	float: left;
 }
 
 /* Footer fix */
