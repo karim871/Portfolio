@@ -72,7 +72,7 @@ main {
 /* UPDATED: "Get In Touch" heading style */
 .contact-container h1 {
   background-color: white;      /* White box background */
-  color: black;      /* Black text */
+  color: black !important;      /* Black text */
   padding: 1rem 2rem;
   border-radius: 8px;
   display: inline-block;
@@ -91,4 +91,55 @@ form {
 
 label {
   font-weight: 600;
-  margin-bot
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* UPDATED: input and textarea text color & background */
+input, textarea {
+  color: black;              /* Black text inside inputs */
+  background-color: white;   /* White background for inputs */
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+button {
+  background-color: black;
+  color: white;
+  padding: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+  background-color: white;
+  color: black;
+}
+
+/* Footer */
+footer {
+  background-color: rgb(219, 222, 226);
+  padding: 1rem;
+  text-align: center;
+}
+
+footer a {
+  color: black;
+  text-decoration: underline;
+  font-weight: 600;
+}
