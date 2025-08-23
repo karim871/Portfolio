@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Name Tag</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="name-tag">
+    <div class="circuit-pattern"></div>
+    <div class="status-indicator"></div>
+    <div class="header">
+      CYBERSECURITY PROFESSIONAL
+    </div>
+    <div class="content">
+      <div class="hello">Hello, my name is</div>
+      <div class="name">ABDELKRIM</div>
+      <div class="role">Security Analyst • Threat Hunter</div>
+    </div>
+    <div class="security-icons">
+      <div class="icon lock-icon"></div>
+      <div class="icon shield-icon"></div>
+      <div class="icon terminal-icon"></div>
+    </div>
+    <div class="click-hint">Click to expand →</div>
+    <div class="collapse-hint">← Click to collapse</div>
+    <div class="accomplishments">
+      <h3>Key Accomplishments</h3>
+      <ul>
+        <li>CompTIA CySA+ & Security+ Certified (2025-2028)</li>
+        <li>Cisco CCNA: Enterprise Networking & Security</li>
+        <li>Microsoft Azure Fundamentals (AZ-900) Certified</li>
+        <li>IT Support at Alorica - Costco Technical Support</li>
+        <li>Cybersecurity Intern at Groupe Cosior TI</li>
+        <li>Built comprehensive home lab for security testing</li>
+        <li>Raspberry Pi cybersecurity projects</li>
+        <li>Bilingual: French & English proficiency</li>
+        <li>DCS Computer Security & Networking Graduate</li>
+        <li>Preparing for Microsoft SC-200 certification</li>
+      </ul>
+    </div>
+  </div>
 
+  <script>
+    document.querySelector('.name-tag').addEventListener('click', function() {
+      this.classList.toggle('expanded');
+    });
+  </script>
+</body>
+</html>
