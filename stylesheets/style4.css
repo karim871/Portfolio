@@ -10,6 +10,9 @@ body {
 }
 
 .name-tag {
+  /* Make the card fill a good portion of the viewport */
+  width: clamp(350px, 60vw, 500px);
+  height: clamp(200px, 30vh, 300px);
   width: 350px;
   height: 200px;
   background: linear-gradient(135deg, #16213e, #0f3460);
