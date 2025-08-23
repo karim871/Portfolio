@@ -255,38 +255,3 @@ body {
 .name-tag.expanded .collapse-hint {
   opacity: 1;
 }
-
-
-
-/* Layout for the blog page */
-.blog-container {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.name-tag {
-  /* It takes up 40% of the width on large screens */
-  flex: 0 0 40%;
-  /* rest of your .name-tag styling here */
-}
-
-/* Project viewer on the right side */
-.project-viewer {
-  flex: 1; /* Take the remaining space */
-  min-height: clamp(200px, 40vh, 600px);
-  background-color: #0f0f23; /* match your page background */
-  border: 2px solid #00ff41; /* optional styling */
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-}
-
-.project-viewer iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: #0f0f23;
-}
