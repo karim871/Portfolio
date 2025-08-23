@@ -7,42 +7,52 @@
   <link rel="stylesheet" href="../stylesheets/style4.css">
 </head>
 <body>
-  <div class="name-tag">
-    <div class="circuit-pattern"></div>
-    <div class="status-indicator"></div>
-    <div class="header">
-      CYBERSECURITY PROFESSIONAL
+  <!-- Container to hold both the card and the project viewer -->
+  <div class="blog-container">
+    <!-- The interactive name tag on the left -->
+    <div class="name-tag">
+      <div class="circuit-pattern"></div>
+      <div class="status-indicator"></div>
+      <div class="header">CYBERSECURITY PROFESSIONAL</div>
+      <div class="content">
+        <div class="hello">Hello, my name is</div>
+        <div class="name">ABDELKRIM</div>
+        <div class="role">Security Analyst • Threat Hunter</div>
+      </div>
+      <div class="security-icons">
+        <div class="icon lock-icon"></div>
+        <div class="icon shield-icon"></div>
+        <div class="icon terminal-icon"></div>
+      </div>
+      <div class="click-hint">Click to expand →</div>
+      <div class="collapse-hint">← Click to collapse</div>
+      <div class="accomplishments">
+        <h3>Key Accomplishments</h3>
+        <ul>
+          <!-- Each li becomes a link with a target pointing to the iframe name -->
+          <li><a href="../projects/cysa-security.html" target="project-frame">CompTIA CySA+ & Security+ Certified (2025-2028)</a></li>
+          <li><a href="../projects/ccna-enterprise.html" target="project-frame">Cisco CCNA: Enterprise Networking & Security</a></li>
+          <li><a href="../projects/azure-fundamentals.html" target="project-frame">Microsoft Azure Fundamentals (AZ-900) Certified</a></li>
+          <li><a href="../projects/alorica-it-support.html" target="project-frame">IT Support at Alorica – Costco Technical Support</a></li>
+          <li><a href="../projects/cosior-internship.html" target="project-frame">Cybersecurity Intern at Groupe Cosior TI</a></li>
+          <li><a href="../projects/home-lab.html" target="project-frame">Built comprehensive home lab for security testing</a></li>
+          <li><a href="../projects/raspberry-pi-projects.html" target="project-frame">Raspberry Pi cybersecurity projects</a></li>
+          <li><a href="../projects/bilingual.html" target="project-frame">Bilingual: French & English proficiency</a></li>
+          <li><a href="../projects/dcs-graduate.html" target="project-frame">DCS Computer Security & Networking Graduate</a></li>
+          <li><a href="../projects/sc-200-prep.html" target="project-frame">Preparing for Microsoft SC-200 certification</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="content">
-      <div class="hello">Hello, my name is</div>
-      <div class="name">ABDELKRIM</div>
-      <div class="role">Security Analyst • Threat Hunter</div>
-    </div>
-    <div class="security-icons">
-      <div class="icon lock-icon"></div>
-      <div class="icon shield-icon"></div>
-      <div class="icon terminal-icon"></div>
-    </div>
-    <div class="click-hint">Click to expand →</div>
-    <div class="collapse-hint">← Click to collapse</div>
-    <div class="accomplishments">
-      <h3>Key Accomplishments</h3>
-      <ul>
-        <li>CompTIA CySA+ & Security+ Certified (2025-2028)</li>
-        <li>Cisco CCNA: Enterprise Networking & Security</li>
-        <li>Microsoft Azure Fundamentals (AZ-900) Certified</li>
-        <li>IT Support at Alorica – Costco Technical Support</li>
-        <li>Cybersecurity Intern at Groupe Cosior TI</li>
-        <li>Built comprehensive home lab for security testing</li>
-        <li>Raspberry Pi cybersecurity projects</li>
-        <li>Bilingual: French & English proficiency</li>
-        <li>DCS Computer Security & Networking Graduate</li>
-        <li>Preparing for Microsoft SC-200 certification</li>
-      </ul>
+
+    <!-- The project viewer on the right -->
+    <div class="project-viewer">
+      <!-- This iframe will display the linked documentation pages -->
+      <iframe name="project-frame" id="project-frame" src=""></iframe>
     </div>
   </div>
 
   <script>
+    // toggle expanded state
     document.querySelector('.name-tag').addEventListener('click', function() {
       this.classList.toggle('expanded');
     });
