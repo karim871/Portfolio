@@ -1,257 +1,55 @@
-body {
-  margin: 0;
-  padding: 40px;
-  background: linear-gradient(135deg, #0f0f23, #1a1a2e);
-  font-family: 'Courier New', monospace;
+
+
+/* THM badge card inside the accomplishments */
+.thm-badge-card {
+  margin-top: 14px;
+  padding: 10px;
+  border: 1px solid #00ff41;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #101b34, #0f294a);
+  box-shadow: 0 0 18px rgba(0, 255, 65, 0.18), inset 0 0 12px rgba(0, 255, 65, 0.10);
+}
+
+.thm-badge-head {
   display: flex;
-  justify-content: center;
   align-items: center;
-  min-height: 100vh;
-}
-
-.name-tag {
-  /* Enlarged initial size, responsive to viewport */
-  width: clamp(350px, 60vw, 500px);
-  height: clamp(200px, 40vh, 350px);
-  background: linear-gradient(135deg, #16213e, #0f3460);
-  border: 2px solid #00ff41;
-  border-radius: 15px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3),
-              inset 0 0 20px rgba(0, 255, 65, 0.1);
-  animation: pulseGlow 3s ease-in-out infinite;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.name-tag.expanded {
-  /* Expanded size scales with viewport but has minimum dimensions */
-  width: clamp(400px, 70vw, 600px);
-  height: clamp(450px, 60vh, 600px);
-}
-
-.name-tag::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
-  animation: scan 4s linear infinite;
-}
-
-.header {
-  background: linear-gradient(90deg, #00ff41, #00cc33);
-  color: #000;
-  padding: 8px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.content {
-  padding: 20px;
-  position: relative;
-  z-index: 2;
-}
-
-.hello {
-  color: #00ff41;
-  font-size: 14px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.name {
-  color: #ffffff;
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-  animation: textGlow 2s ease-in-out infinite alternate;
-}
-
-.role {
-  color: #00ff41;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-
-/* Icon styles */
-.security-icons {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  display: flex;
   gap: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #00ff41;
+  margin-bottom: 8px;
 }
 
-.icon {
-  width: 20px;
-  height: 20px;
-  background: #00ff41;
-  border-radius: 3px;
-  position: relative;
-  animation: iconBlink 2s ease-in-out infinite;
+.thm-badge-logo {
+  width: 16px; height: 16px;
+  filter: drop-shadow(0 0 4px rgba(0,255,65,.6));
 }
 
-.icon:nth-child(2) { animation-delay: 0.5s; }
-.icon:nth-child(3) { animation-delay: 1s; }
-
-.icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
-  background: #000;
-  border-radius: 1px;
-}
-
-.lock-icon::after  { content: '🔒'; font-size: 12px; color: #000; }
-.shield-icon::after{ content: '🛡️'; font-size: 12px; }
-.terminal-icon::after { content: '>'; font-size: 14px; color: #000; font-weight: bold; }
-
-/* Circuit background */
-.circuit-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Give the iframe real dimensions so it renders */
+.thm-badge-card iframe {
   width: 100%;
-  height: 100%;
-  opacity: 0.1;
-  background-image:
-    linear-gradient(90deg, #00ff41 1px, transparent 1px),
-    linear-gradient(180deg, #00ff41 1px, transparent 1px);
-  background-size: 20px 20px;
-  animation: circuitMove 10s linear infinite;
+  height: 210px;            /* tweak to taste */
+  border: none;
+  border-radius: 8px;
+  background: #0b1630;      /* avoids a flash on load */
+  display: block;
 }
 
-.status-indicator {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 8px;
-  height: 8px;
-  background: #00ff41;
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(0, 255, 65, 0.8);
-  animation: statusBlink 1s ease-in-out infinite;
+/* Only show fallback image if iframe fails (keep it visually out of the way) */
+.thm-badge-fallback {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 8px;
+  display: none;            /* hidden by default */
 }
 
-/* Animations */
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1); }
-  50%    { box-shadow: 0 0 40px rgba(0, 255, 65, 0.5), inset 0 0 30px rgba(0, 255, 65, 0.2); }
-}
+/* If you want the fallback always visible under the iframe, delete the line above. */
 
-@keyframes scan {
-  0%   { left: -100%; }
-  100% { left: 100%; }
-}
-
-@keyframes textGlow {
-  0% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
-  100% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.4); }
-}
-
-@keyframes iconBlink {
-  0%, 80%, 100% { opacity: 1; }
-  90% { opacity: 0.3; }
-}
-
-@keyframes circuitMove {
-  0%   { background-position: 0 0; }
-  100% { background-position: 20px 20px; }
-}
-
-@keyframes statusBlink {
-  0%, 50%, 100% { opacity: 1; }
-  25%, 75% { opacity: 0.3; }
-}
-
-/* Accomplishments */
-.accomplishments {
-  position: absolute;
-  top: 180px;
-  left: 20px;
-  right: 20px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
-  color: #ffffff;
-  font-size: 11px;
-  line-height: 1.4;
-}
-
+/* Already in your CSS, but reminder: this is what reveals the section */
 .name-tag.expanded .accomplishments {
   opacity: 1;
   transform: translateY(0);
 }
 
-.accomplishments h3 {
-  color: #00ff41;
-  font-size: 13px;
-  margin: 0 0 10px 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-bottom: 1px solid rgba(0, 255, 65, 0.3);
-  padding-bottom: 5px;
-}
 
-.accomplishments ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.accomplishments li {
-  margin-bottom: 8px;
-  padding-left: 15px;
-  position: relative;
-}
-
-.accomplishments li::before {
-  content: '▸';
-  color: #00ff41;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.click-hint {
-  position: absolute;
-  bottom: 5px;
-  left: 15px;
-  font-size: 10px;
-  color: rgba(0, 255, 65, 0.6);
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.name-tag.expanded .click-hint {
-  opacity: 0;
-}
-
-.collapse-hint {
-  position: absolute;
-  top: 160px;
-  right: 15px;
-  font-size: 10px;
-  color: rgba(0, 255, 65, 0.6);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.name-tag.expanded .collapse-hint {
-  opacity: 1;
-}
