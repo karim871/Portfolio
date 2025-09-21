@@ -42,16 +42,25 @@
         <li>Preparing for Microsoft SC-200 certification</li>
       </ul>
     </div>
-     <!-- Live badge -->
-      <iframe
-        title="TryHackMe live badge"
-        src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=1422044"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-      ></iframe>
-    
-  </div>
+      <!-- TRYHACKME BADGE (shows only when the card is expanded) -->
+  <div class="thm-badge-card">
+    <div class="thm-badge-head">
+      <img src="https://tryhackme.com/img/favicon.png" alt="" class="thm-badge-logo">
+      <span>Live TryHackMe Stats</span>
+    </div>
 
+    <iframe
+      title="TryHackMe live badge"
+      src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=1422044"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+    ></iframe>
+
+    <!-- Fallback if iframe is blocked -->
+    <img class="thm-badge-fallback"
+         src="https://tryhackme-badges.s3.amazonaws.com/karimwq.png"
+         alt="TryHackMe Badge (static)">
+     
   <script>
     document.querySelector('.name-tag').addEventListener('click', function() {
       this.classList.toggle('expanded');
