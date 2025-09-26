@@ -1,5 +1,4 @@
-/* ===== CYBERSECURITY NAME TAG CSS ===== */
-
+/* ===== RESET & BASE STYLES ===== */
 * {
   margin: 0;
   padding: 0;
@@ -18,6 +17,7 @@ body {
   gap: 20px;
 }
 
+/* ===== MAIN NAME TAG CARD ===== */
 .name-tag {
   position: relative;
   width: 400px;
@@ -40,6 +40,7 @@ body {
     inset 0 0 25px rgba(0, 255, 65, 0.15);
 }
 
+/* Circuit Pattern Background */
 .circuit-pattern {
   position: absolute;
   top: 0;
@@ -54,6 +55,7 @@ body {
   pointer-events: none;
 }
 
+/* Status Indicator */
 .status-indicator {
   position: absolute;
   top: 15px;
@@ -71,6 +73,7 @@ body {
   50% { opacity: 0.5; }
 }
 
+/* ===== CARD CONTENT ===== */
 .header {
   text-align: center;
   font-size: 12px;
@@ -110,6 +113,7 @@ body {
   letter-spacing: 1px;
 }
 
+/* ===== SECURITY ICONS ===== */
 .security-icons {
   display: flex;
   justify-content: center;
@@ -154,6 +158,7 @@ body {
   font-size: 14px;
 }
 
+/* ===== EXPAND/COLLAPSE HINTS ===== */
 .click-hint, .collapse-hint {
   text-align: center;
   font-size: 11px;
@@ -174,6 +179,7 @@ body {
   display: block;
 }
 
+/* ===== ACCOMPLISHMENTS SECTION ===== */
 .accomplishments {
   margin-top: 20px;
   opacity: 0;
@@ -222,8 +228,8 @@ body {
   font-size: 8px;
 }
 
-/* TryHackMe Badge Card - Separate from main card */
-.thm-badge-container {
+/* ===== TRYHACKME BADGE - SEPARATE CARD ===== */
+.thm-badge-card {
   width: 400px;
   background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
   border: 2px solid #00ff41;
@@ -235,16 +241,19 @@ body {
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+  margin-top: 0;
 }
 
-.thm-badge-container:hover {
+.thm-badge-card:hover {
   transform: translateY(-5px);
   box-shadow: 
     0 0 40px rgba(0, 255, 65, 0.4),
     inset 0 0 25px rgba(0, 255, 65, 0.15);
 }
 
-.thm-badge-container .circuit-pattern {
+/* Circuit pattern for TryHackMe card */
+.thm-badge-card::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -258,7 +267,7 @@ body {
   pointer-events: none;
 }
 
-.thm-badge-header {
+.thm-badge-head {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -270,6 +279,8 @@ body {
   margin-bottom: 15px;
   font-size: 14px;
   text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  position: relative;
+  z-index: 1;
 }
 
 .thm-badge-logo {
@@ -278,35 +289,40 @@ body {
   filter: drop-shadow(0 0 8px rgba(0, 255, 65, 0.6));
 }
 
-.thm-badge-content {
-  position: relative;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(0, 255, 65, 0.2);
-}
-
-.thm-badge-content iframe {
+.thm-badge-card iframe {
   width: 100%;
   height: 200px;
   border: none;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
   display: block;
-  background: transparent;
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(0, 255, 65, 0.2);
 }
 
 .thm-badge-fallback {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 10px;
   display: none;
+  position: relative;
+  z-index: 1;
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 480px) {
-  .name-tag, .thm-badge-container {
+  .name-tag, 
+  .thm-badge-card {
     width: 100%;
     max-width: 350px;
   }
   
   .name {
     font-size: 28px;
+  }
+  
+  body {
+    padding: 15px;
+    gap: 15px;
   }
 }
