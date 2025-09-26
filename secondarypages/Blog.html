@@ -1,52 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cybersecurity Name Tag</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:ital,wght@0,300;0,700;1,300;1,700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../stylesheets/style4.css" />
+    <link rel="stylesheet" href="../stylesheets/style4.css" />
     <script src="../stylesheets/script.js"></script>
-    
-</head>
-<body>
-    <div class="name-tag">
-        <div class="circuit-pattern"></div>
-        <div class="status-indicator"></div>
-        <div class="header">
-            CYBERSECURITY PROFESSIONAL
-        </div>
-        <div class="content">
-            <div class="hello">Hello, my name is</div>
-            <div class="name">ABDELKRIM</div>
-            <div class="role">Security Analyst • Threat Hunter</div>
-        </div>
-        <div class="security-icons">
-            <div class="icon lock-icon"></div>
-            <div class="icon shield-icon"></div>
-            <div class="icon terminal-icon"></div>
-        </div>
-        <div class="click-hint">Click to expand →</div>
-        <div class="collapse-hint">← Click to collapse</div>
-        <div class="accomplishments">
-            <h3>Key Accomplishments</h3>
-            <ul>
-                <li>CompTIA CySA+ & Security+ Certified (2025-2028)</li>
-                <li>Cisco CCNA: Enterprise Networking & Security</li>
-                <li>Microsoft Azure Fundamentals (AZ-900) Certified</li>
-                <li>IT Support at Alorica - Costco Technical Support</li>
-                <li>Cybersecurity Intern at Groupe Cosior TI</li>
-                <li>Built comprehensive home lab for security testing</li>
-                <li>Raspberry Pi cybersecurity projects</li>
-                <li>Bilingual: French & English proficiency</li>
-                <li>DCS Computer Security & Networking Graduate</li>
-                <li>Preparing for Microsoft SC-200 certification</li>
-            </ul>
-        </div>
-    </div>
-<style>
+    <style>
         body {
             margin: 0;
             padding: 40px;
@@ -75,8 +37,8 @@
         }
 
         .name-tag.expanded {
-            height: 450px;
-            width: 400px;
+            height: 550px;
+            width: 420px;
         }
 
         .name-tag::before {
@@ -213,36 +175,6 @@
             animation: statusBlink 1s ease-in-out infinite;
         }
 
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1); }
-            50% { box-shadow: 0 0 40px rgba(0, 255, 65, 0.5), inset 0 0 30px rgba(0, 255, 65, 0.2); }
-        }
-
-        @keyframes scan {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        @keyframes textGlow {
-            0% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
-            100% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.4); }
-        }
-
-        @keyframes iconBlink {
-            0%, 80%, 100% { opacity: 1; }
-            90% { opacity: 0.3; }
-        }
-
-        @keyframes circuitMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 20px 20px; }
-        }
-
-        @keyframes statusBlink {
-            0%, 50%, 100% { opacity: 1; }
-            25%, 75% { opacity: 0.3; }
-        }
-
         .accomplishments {
             position: absolute;
             top: 180px;
@@ -274,11 +206,11 @@
         .accomplishments ul {
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin: 0 0 15px 0;
         }
 
         .accomplishments li {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             padding-left: 15px;
             position: relative;
         }
@@ -318,44 +250,159 @@
         .name-tag.expanded .collapse-hint {
             opacity: 1;
         }
-    
-/* TryHackMe link inside the card (appears when .accomplishments visible) */
-.thm-link-block {
-  margin-top: 12px;
-  display: flex;
-  justify-content: flex-start; /* left aligned — change to center if you prefer */
-}
 
-.thm-link {
-  display: inline-block;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: linear-gradient(90deg, rgba(0,255,65,0.06), rgba(0,255,65,0.03));
-  color: #00ff41;
-  font-weight: 700;
-  text-decoration: none;
-  font-size: 12px;
-  border: 1px solid rgba(0,255,65,0.14);
-  box-shadow: 0 0 8px rgba(0,255,65,0.06), inset 0 0 6px rgba(0,255,65,0.02);
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-}
+        /* TryHackMe Profile Embed */
+        .thm-profile {
+            margin-top: 15px;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.05), rgba(0, 255, 65, 0.02));
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+        }
 
-.thm-link:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0,255,65,0.12), inset 0 0 10px rgba(0,255,65,0.04);
-  background: linear-gradient(90deg, rgba(0,255,65,0.12), rgba(0,255,65,0.06));
-}
+        .thm-profile iframe {
+            width: 100%;
+            height: 120px;
+            border: none;
+            border-radius: 10px;
+        }
 
+        /* Alternative: Custom TryHackMe Link Button */
+        .thm-link-custom {
+            display: block;
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #212c3d, #1a252f);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .thm-link-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .thm-link-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+            border-color: #ff5252;
+        }
+
+        .thm-link-custom:hover::before {
+            left: 100%;
+        }
+
+        .thm-logo {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: #ff6b6b;
+            border-radius: 3px;
+            margin-right: 8px;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 65, 0.5), inset 0 0 30px rgba(0, 255, 65, 0.2); }
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+            100% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.4); }
+        }
+
+        @keyframes iconBlink {
+            0%, 80%, 100% { opacity: 1; }
+            90% { opacity: 0.3; }
+        }
+
+        @keyframes circuitMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+        @keyframes statusBlink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
+        }
     </style>
-    
-  <!-- TryHackMe link (inside card, shows when expanded) -->
-  <div class="thm-link-block">
-    <a class="thm-link" href="https://tryhackme.com/p/karimwq" target="_blank" rel="noopener noreferrer">
-      View my TryHackMe Profile →
-    </a>
-  </div>
+</head>
+<body>
+    <div class="name-tag">
+        <div class="circuit-pattern"></div>
+        <div class="status-indicator"></div>
+        <div class="header">
+            CYBERSECURITY PROFESSIONAL
+        </div>
+        <div class="content">
+            <div class="hello">Hello, my name is</div>
+            <div class="name">ABDELKRIM</div>
+            <div class="role">Security Analyst • Threat Hunter</div>
+        </div>
+        <div class="security-icons">
+            <div class="icon lock-icon"></div>
+            <div class="icon shield-icon"></div>
+            <div class="icon terminal-icon"></div>
+        </div>
+        <div class="click-hint">Click to expand →</div>
+        <div class="collapse-hint">← Click to collapse</div>
+        <div class="accomplishments">
+            <h3>Key Accomplishments</h3>
+            <ul>
+                <li>CompTIA CySA+ & Security+ Certified (2025-2028)</li>
+                <li>Cisco CCNA: Enterprise Networking & Security</li>
+                <li>Microsoft Azure Fundamentals (AZ-900) Certified</li>
+                <li>IT Support at Alorica - Costco Technical Support</li>
+                <li>Cybersecurity Intern at Groupe Cosior TI</li>
+                <li>Built comprehensive home lab for security testing</li>
+                <li>Raspberry Pi cybersecurity projects</li>
+                <li>Bilingual: French & English proficiency</li>
+                <li>DCS Computer Security & Networking Graduate</li>
+                <li>Preparing for Microsoft SC-200 certification</li>
+            </ul>
+            
+            <!-- TryHackMe Profile Embed (shows profile banner/pfp) -->
+            <div class="thm-profile">
+                <script src="https://tryhackme.com/badge/karimwq"></script>
+            </div>
+            
+            <!-- Alternative: Custom styled link -->
+            <a href="https://tryhackme.com/p/karimwq" target="_blank" rel="noopener noreferrer" class="thm-link-custom">
+                <span class="thm-logo">T</span>
+                View Full TryHackMe Profile
+            </a>
+        </div>
+    </div>
 
-    
     <script>
         document.querySelector('.name-tag').addEventListener('click', function() {
             this.classList.toggle('expanded');
