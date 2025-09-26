@@ -1,59 +1,139 @@
-/* Header */
-.header {
-	width: 100%;
-	height: 100px;
-    display: block;
-    background-color: #101010;
-}
-.inner_header{
-    width:1800px;
-    height:100%;
-    display:block;
-    margin:0 auto;
-    
-}
-.logo_container{
-    height: 100%;
-    display: table;
-    float: left;
-}
-.logo_container h1{
-    color: white;
-    height:100%;
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 32px;
-    font-weight: 200;
-}
-.logo_container h1 span{
-    font-weight: 800
-}
-
-.navigation{
-float: right;
-height:100%;
-}
-.navigation a{
-    height: 100%;
-    display: table;
-    float: left;
-    padding:0px 40px
-}
-.navigation li{
-    display: table-cell;
-    vertical-align: middle;
-    color: white;
-    height: 100%;
-    font-size: 25px;
-}
-.container{
-    min-height: 100vh;
-    width: 100%;
-    display: flex;  
-    align-items: center;
+body {
+    margin: 0;
+    padding: 40px;
+    background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+    font-family: 'Courier New', monospace;
+    display: flex;
     justify-content: center;
-    margin: auto;
-
+    align-items: center;
+    min-height: 100vh;
 }
 
+.name-tag {
+    width: 350px;
+    height: 200px;
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    border: 2px solid #00ff41;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1);
+    animation: pulseGlow 3s ease-in-out infinite;
+}
 
+.name-tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+    animation: scan 4s linear infinite;
+}
+
+.header {
+    background: linear-gradient(90deg, #00ff41, #00cc33);
+    color: #000;
+    padding: 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.content {
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.hello {
+    color: #00ff41;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.name {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+.role {
+    color: #00ff41;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.security-icons {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    display: flex;
+    gap: 8px;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    background: #00ff41;
+    border-radius: 3px;
+    position: relative;
+    animation: iconBlink 2s ease-in-out infinite;
+}
+
+.icon:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.icon:nth-child(3) {
+    animation-delay: 1s;
+}
+
+/* Animations */
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 30px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 255, 65, 0.5), inset 0 0 25px rgba(0, 255, 65, 0.15);
+    }
+}
+
+@keyframes scan {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+@keyframes textGlow {
+    0% {
+        text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.4);
+    }
+}
+
+@keyframes iconBlink {
+    0%, 50% {
+        opacity: 1;
+        background: #00ff41;
+    }
+    51%, 100% {
+        opacity: 0.3;
+        background: #006622;
+    }
+}
