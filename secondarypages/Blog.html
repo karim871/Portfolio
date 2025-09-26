@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cybersecurity Name Tag</title>
-  <link rel="stylesheet" href="../stylesheets/style4.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
-  <div class="name-tag">
+  <!-- Main Name Tag Card -->
+  <div class="name-tag" onclick="toggleExpand()">
     <div class="circuit-pattern"></div>
     <div class="status-indicator"></div>
     <div class="header">
@@ -42,29 +41,32 @@
         <li>Preparing for Microsoft SC-200 certification</li>
       </ul>
     </div>
-      <!-- TRYHACKME BADGE (shows only when the card is expanded) -->
-  <div class="thm-badge-card">
-    <div class="thm-badge-head">
-      <img src="https://tryhackme.com/img/favicon.png" alt="" class="thm-badge-logo">
+  </div>
+
+  <!-- TryHackMe Badge Card - Separate -->
+  <div class="thm-badge-container">
+    <div class="circuit-pattern"></div>
+    <div class="thm-badge-header">
+      <img src="https://tryhackme.com/img/favicon.png" alt="TryHackMe" class="thm-badge-logo">
       <span>Live TryHackMe Stats</span>
     </div>
+    <div class="thm-badge-content">
+      <iframe
+        title="TryHackMe live badge"
+        src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=1422044"
+        loading="lazy"
+        referrerpolicy="no-referrer">
+      </iframe>
+      <img class="thm-badge-fallback"
+           src="https://tryhackme-badges.s3.amazonaws.com/karimwq.png"
+           alt="TryHackMe Badge (static)">
+    </div>
+  </div>
 
-    <iframe
-      title="TryHackMe live badge"
-      src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=1422044"
-      loading="lazy"
-      referrerpolicy="no-referrer"
-    ></iframe>
-
-    <!-- Fallback if iframe is blocked -->
-    <img class="thm-badge-fallback"
-         src="https://tryhackme-badges.s3.amazonaws.com/karimwq.png"
-         alt="TryHackMe Badge (static)">
-     
   <script>
-    document.querySelector('.name-tag').addEventListener('click', function() {
-      this.classList.toggle('expanded');
-    });
+    function toggleExpand() {
+      document.querySelector('.name-tag').classList.toggle('expanded');
+    }
   </script>
 </body>
 </html>
