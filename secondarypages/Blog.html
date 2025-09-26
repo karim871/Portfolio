@@ -1,67 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cybersecurity Name Tag</title>
-  <link rel="stylesheet" href="../stylesheets/style4.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Karim — Cybersecurity Name Tag</title>
+
+  <!-- Link to local stylesheet (same folder) -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- small SEO / social preview (optional) -->
+  <meta name="description" content="Karim Zouaki — Security Analyst & Threat Hunter. Portfolio highlights & certifications." />
 </head>
 <body>
+  <main class="page">
+    <article class="name-tag" aria-label="Cybersecurity name tag card" tabindex="0">
+      <div class="circuit-pattern" aria-hidden="true"></div>
 
-  <div class="name-tag">
-    <div class="circuit-pattern"></div>
-    <div class="status-indicator"></div>
-    <div class="header">
-      CYBERSECURITY PROFESSIONAL
-    </div>
-    <div class="content">
-      <div class="hello">Hello, my name is</div>
-      <div class="name">ABDELKRIM</div>
-      <div class="role">Security Analyst • Threat Hunter</div>
-    </div>
-    <div class="security-icons">
-      <div class="icon lock-icon"></div>
-      <div class="icon shield-icon"></div>
-      <div class="icon terminal-icon"></div>
-    </div>
-    <div class="click-hint">Click to expand →</div>
-    <div class="collapse-hint">← Click to collapse</div>
-    <div class="accomplishments">
-      <h3>Key Accomplishments</h3>
-      <ul>
-        <li>CompTIA CySA+ & Security+ Certified (2025-2028)</li>
-        <li>Cisco CCNA: Enterprise Networking & Security</li>
-        <li>Microsoft Azure Fundamentals (AZ-900) Certified</li>
-        <li>IT Support at Alorica – Costco Technical Support</li>
-        <li>Cybersecurity Intern at Groupe Cosior TI</li>
-        <li>Built comprehensive home lab for security testing</li>
-        <li>Raspberry Pi cybersecurity projects</li>
-        <li>Bilingual: French & English proficiency</li>
-        <li>DCS Computer Security & Networking Graduate</li>
-        <li>Preparing for Microsoft SC-200 certification</li>
-      </ul>
-    </div>
-      <!-- TRYHACKME BADGE (shows only when the card is expanded) -->
-  <div class="thm-badge-card">
-    <div class="thm-badge-head">
-      <img src="https://tryhackme.com/img/favicon.png" alt="" class="thm-badge-logo">
-      <span>Live TryHackMe Stats</span>
-    </div>
-    <iframe
-      title="TryHackMe live badge"
-      src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=1422044"
-      loading="lazy"
-      referrerpolicy="no-referrer"
-    ></iframe>
-    <!-- Fallback if iframe is blocked -->
-    <img class="thm-badge-fallback"
-         src="https://tryhackme-badges.s3.amazonaws.com/karimwq.png"
-         alt="TryHackMe Badge (static)">
+      <header class="nt-header">
+        <div class="status-indicator" aria-hidden="true"></div>
+        <div class="nt-title">CYBERSECURITY PROFESSIONAL</div>
+      </header>
 
+      <section class="nt-content">
+        <div class="hello">Hello, my name is</div>
+        <h1 class="name">ABDELKRIM</h1>
+        <div class="role">Security Analyst • Threat Hunter</div>
+
+        <div class="click-hint" aria-hidden="true">Click to expand →</div>
+        <div class="collapse-hint" aria-hidden="true">← Click to collapse</div>
+      </section>
+
+      <section class="accomplishments" aria-hidden="true">
+        <h2>Key Accomplishments</h2>
+        <ul>
+          <li>CompTIA CySA+ & Security+ (2025–2028)</li>
+          <li>Cisco CCNA: Enterprise Networking & Security</li>
+          <li>Microsoft AZ-900 Certified</li>
+          <li>IT Support at Alorica – Costco Technical Support</li>
+          <li>Cybersecurity Intern at Groupe Cosior TI</li>
+          <li>Built a comprehensive home lab for security testing</li>
+          <li>Raspberry Pi cybersecurity projects</li>
+          <li>Bilingual: French & English</li>
+          <li>DCS Computer Security & Networking Graduate</li>
+          <li>Preparing for Microsoft SC-200</li>
+        </ul>
+
+        <!-- TRYHACKME BADGE CARD -->
+        <div class="thm-badge-card" id="thmCard" aria-live="polite">
+          <div class="thm-badge-head">
+            <img src="https://tryhackme.com/img/favicon.png" alt="" class="thm-badge-logo">
+            <span>Live TryHackMe Stats</span>
+          </div>
+
+          <!-- Live iframe (may be blocked by some browsers or CSP) -->
+          <iframe
+            id="thmIframe"
+            title="TryHackMe live badge"
+            src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=1422044"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            sandbox="allow-same-origin allow-scripts allow-popups"
+          ></iframe>
+
+          <!-- Static fallback image (hidden by default) -->
+          <img
+            id="thmFallback"
+            class="thm-badge-fallback"
+            src="https://tryhackme-badges.s3.amazonaws.com/karimwq.png"
+            alt="TryHackMe Badge (static)"
+          />
+        </div>
+      </section>
+
+      <nav class="security-icons" aria-hidden="true">
+        <div class="icon lock-icon" title="Lock"></div>
+        <div class="icon shield-icon" title="Shield"></div>
+        <div class="icon terminal-icon" title="Terminal"></div>
+      </nav>
+    </article>
+  </main>
+
+  <!-- Inline script: toggle expanded state + handle iframe fallback -->
   <script>
-    document.querySelector('.name-tag').addEventListener('click', function() {
-      this.classList.toggle('expanded');
-    });
+    (function () {
+      const card = document.querySelector('.name-tag');
+      const accomplishments = card.querySelector('.accomplishments');
+      const thmIframe = document.getElementById('thmIframe');
+      const thmFallback = document.getElementById('thmFallback');
+
+      // Toggle expand/collapse on click OR keyboard Enter/Space
+      function toggle(e) {
+        // avoid toggling when user clicks inside links (if any)
+        if (e.target.tagName === 'A') return;
+        card.classList.toggle('expanded');
+
+        // control aria-hidden for accessibility
+        const expanded = card.classList.contains('expanded');
+        accomplishments.setAttribute('aria-hidden', !expanded);
+      }
+
+      card.addEventListener('click', toggle);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle(e);
+        }
+      });
+
+      // If iframe doesn't load within X seconds, show fallback
+      const fallbackTimeout = setTimeout(() => {
+        // if iframe has not successfully loaded, show fallback
+        if (!thmIframe.contentWindow || thmIframe.dataset.loaded !== 'true') {
+          thmIframe.style.display = 'none';
+          thmFallback.style.display = 'block';
+        }
+      }, 2500);
+
+      // mark iframe loaded when we receive load event
+      thmIframe.addEventListener('load', () => {
+        clearTimeout(fallbackTimeout);
+        thmIframe.dataset.loaded = 'true';
+        thmFallback.style.display = 'none';
+        thmIframe.style.display = 'block';
+      });
+
+      // also fallback on iframe error
+      thmIframe.addEventListener('error', () => {
+        thmIframe.style.display = 'none';
+        thmFallback.style.display = 'block';
+      });
+    })();
   </script>
 </body>
 </html>
