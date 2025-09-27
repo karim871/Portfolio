@@ -17,8 +17,8 @@ Here you'll find:
 
 📁 Portfolio/
 ├── index.html → Homepage content
-├── style.css → Custom styling
-├── style.css → Custom styling (if applicable)
+├── secondarypages → Custom styling
+├── stylesheets → Custom styling (if applicable)
 ├── images/ → Screenshots, diagrams, etc.
 ├── scripts/ → JS scripts or automation tools
 └── README.md → This file
