@@ -27,6 +27,6 @@ Here you'll find:
 
 - ✉️ Email: karimezouaki@gmail.com  
 - 🌐 GitHub: [karim871](https://github.com/karim871)  
-- 🧑‍💼 LinkedIn: [linkedin.com/in/karim-zouaki](https://linkedin.com/in/karim-zouaki)
+- 🧑‍💼 LinkedIn: [linkedin.com/in/karim-zouaki](https://www.linkedin.com/in/abdelkrim-z-9a3782229/)
 
 
