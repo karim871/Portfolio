@@ -1,3 +1,46 @@
+header {
+  background-color: #101010;
+  padding: 1rem 2rem;
+  text-align: center;
+}
+.logo_container{ 
+  height: 100%;
+  display: table;
+  float: left;
+} 
+
+.logo_container h1{
+  color: white;
+ height:100%;
+ display: table-cell;
+ vertical-align: middle;
+ font-size: 32px; font-weight: 200;
+} 
+.logo_container h1 span{
+  font-weight: 800
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+nav li {
+  font-size: 20px;
+}
+
+nav a {
+  color: white;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: red;
+}
+
 body {
     margin: 0;
     padding: 40px;
