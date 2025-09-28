@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-  <!-- Header -->
- 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,30 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cybersecurity Name Tag</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:ital,wght@0,300;0,700;1,300;1,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../stylesheets/style4.css" />
-    <script src="../stylesheets/script.js"></script>
-    <header>
-    <div class="logo_container">
-      <h1>Z<span>Sec.io</span></h1>
-    </div>
-    <nav>
-      <ul>
-       <li><a href="../index.html">Home</a></li>
-        <li><a href="../secondarypages/Blog.html">Blog</a></li>
-        <li><a href="../secondarypages/Contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
     <style>
-        body {
+        * {
             margin: 0;
-            padding: 40px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             background: linear-gradient(135deg, #0f0f23, #1a1a2e);
             font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #101010;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo_container h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 200;
+            margin: 0;
+        }
+
+        .logo_container h1 span {
+            font-weight: 800;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+        }
+
+        nav li {
+            font-size: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: red;
+        }
+
+        .main-content {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 40px;
         }
 
         .name-tag {
@@ -371,49 +408,64 @@
     </style>
 </head>
 <body>
-    <div class="name-tag">
-        <div class="circuit-pattern"></div>
-        <div class="status-indicator"></div>
-        <div class="header">
-            CYBERSECURITY PROFESSIONAL
+    <header>
+        <div class="logo_container">
+            <h1>Z<span>Sec.io</span></h1>
         </div>
-        <div class="content">
-            <div class="hello">Hello, my name is</div>
-            <div class="name">KARIM ZOUAKI</div>
-            <div class="role">Security Analyst • Threat Hunter</div>
-        </div>
-        <div class="security-icons">
-            <div class="icon lock-icon"></div>
-            <div class="icon shield-icon"></div>
-            <div class="icon terminal-icon"></div>
-        </div>
-        <div class="click-hint">Click to expand →</div>
-        <div class="collapse-hint">← Click to collapse</div>
-        <div class="accomplishments">
-            <h3>Key Accomplishments</h3>
+        <nav>
             <ul>
-                <li>CompTIA CySA+ & Security+ Certified (2025-2028)</li>
-                <li>Cisco CCNA: Enterprise Networking & Security</li>
-                <li>Microsoft Azure Fundamentals (AZ-900) Certified</li>
-                <li>IT Support at Alorica - Costco Technical Support</li>
-                <li>Cybersecurity Intern at Groupe Cosior TI</li>
-                <li>Built comprehensive home lab for security testing</li>
-                <li>Raspberry Pi cybersecurity projects</li>
-                <li>Bilingual: French & English proficiency</li>
-                <li>DCS Computer Security & Networking Graduate</li>
-                <li>Preparing for Microsoft SC-200 certification</li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../secondarypages/Blog.html">Blog</a></li>
+                <li><a href="../secondarypages/Contact.html">Contact</a></li>
             </ul>
-            
-            <!-- TryHackMe Profile Embed (shows profile banner/pfp) -->
-            <div class="thm-profile">
-                <script src="https://tryhackme.com/badge/karimwq"></script>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="name-tag">
+            <div class="circuit-pattern"></div>
+            <div class="status-indicator"></div>
+            <div class="header">
+                CYBERSECURITY PROFESSIONAL
             </div>
-            
-            <!-- Alternative: Custom styled link -->
-            <a href="https://tryhackme.com/p/karimwq" target="_blank" rel="noopener noreferrer" class="thm-link-custom">
-                <span class="thm-logo">T</span>
-                View Full TryHackMe Profile
-            </a>
+            <div class="content">
+                <div class="hello">Hello, my name is</div>
+                <div class="name">KARIM ZOUAKI</div>
+                <div class="role">Security Analyst • Threat Hunter</div>
+            </div>
+            <div class="security-icons">
+                <div class="icon lock-icon"></div>
+                <div class="icon shield-icon"></div>
+                <div class="icon terminal-icon"></div>
+            </div>
+            <div class="click-hint">Click to expand →</div>
+            <div class="collapse-hint">← Click to collapse</div>
+            <div class="accomplishments">
+                <h3>Key Accomplishments</h3>
+                <ul>
+                    <li>CompTIA CySA+ & Security+ Certified (2025-2028)</li>
+                    <li>Cisco CCNA: Enterprise Networking & Security</li>
+                    <li>Microsoft Azure Fundamentals (AZ-900) Certified</li>
+                    <li>IT Support at Alorica - Costco Technical Support</li>
+                    <li>Cybersecurity Intern at Groupe Cosior TI</li>
+                    <li>Built comprehensive home lab for security testing</li>
+                    <li>Raspberry Pi cybersecurity projects</li>
+                    <li>Bilingual: French & English proficiency</li>
+                    <li>DCS Computer Security & Networking Graduate</li>
+                    <li>Preparing for Microsoft SC-200 certification</li>
+                </ul>
+                
+                <!-- TryHackMe Profile Embed -->
+                <div class="thm-profile">
+                    <script src="https://tryhackme.com/badge/karimwq"></script>
+                </div>
+                
+                <!-- Alternative: Custom styled link -->
+                <a href="https://tryhackme.com/p/karimwq" target="_blank" rel="noopener noreferrer" class="thm-link-custom">
+                    <span class="thm-logo">T</span>
+                    View Full TryHackMe Profile
+                </a>
+            </div>
         </div>
     </div>
 
