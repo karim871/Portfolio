@@ -1,58 +1,393 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    
-<meta property="og:title" content="Karim Zouaki — Portfolio" />
-<meta property="og:description" content="My cybersecurity-themed portfolio showcasing web projects built with HTML, CSS, and GitHub Pages." />
-<meta property="og:image" content="https://karim871.github.io/Portfolio/images/thumbnail.png" />
-<meta property="og:url" content="https://karim871.github.io/Portfolio/" />
-<meta property="og:type" content="website" />
-
-
+    <meta property="og:title" content="Karim Zouaki — Portfolio" />
+    <meta property="og:description" content="My cybersecurity-themed portfolio showcasing web projects built with HTML, CSS, and GitHub Pages." />
+    <meta property="og:image" content="https://karim871.github.io/Portfolio/images/thumbnail.png" />
+    <meta property="og:url" content="https://karim871.github.io/Portfolio/" />
+    <meta property="og:type" content="website" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./stylesheets/style.css">
-    <title>ZSec.io</title>
-</head>
+    <title>ZSec.io - Cybersecurity Excellence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Courier+New&display=swap" rel="stylesheet">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
 
+        html {
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Header */
+        .header {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #101010, #1a1a1a);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .inner_header {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo_container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo_container h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 200;
+            margin: 0;
+            transition: all 0.3s ease;
+        }
+
+        .logo_container h1 span {
+            font-weight: 800;
+            color: #00ff41;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .logo_container:hover h1 span {
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
+        }
+
+        .navigation {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navigation a {
+            height: auto;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navigation a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .navigation li {
+            color: white;
+            font-size: 18px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+
+        .navigation a:hover {
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .navigation a:hover::before {
+            left: 100%;
+        }
+
+        .navigation a:hover li {
+            color: #00ff41;
+        }
+
+        /* Hero Section */
+        .container {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            padding-top: 100px;
+        }
+
+        #hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><g stroke="%2300ff41" stroke-width="0.5" opacity="0.3"><path d="M10,10 L90,10 M10,30 L90,30 M10,50 L90,50 M10,70 L90,70 M10,90 L90,90"/><path d="M10,10 L10,90 M30,10 L30,90 M50,10 L50,90 M70,10 L70,90 M90,10 L90,90"/><circle cx="20" cy="20" r="2" fill="%2300ff41" opacity="0.6"/><circle cx="80" cy="40" r="1.5" fill="%2300ff41" opacity="0.4"/><circle cx="40" cy="80" r="2" fill="%2300ff41" opacity="0.7"/></g></svg>');
+            background-size: cover, 200px 200px;
+            background-position: center, center;
+            position: relative;
+            z-index: 1;
+            animation: backgroundMove 20s linear infinite;
+        }
+
+        @keyframes backgroundMove {
+            0% { background-position: center, 0 0; }
+            100% { background-position: center, 200px 200px; }
+        }
+
+        .hero {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        #hero h1 {
+            display: block;
+            width: fit-content;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            position: relative;
+            color: white;
+            margin: 25px auto;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        #hero h1:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        #hero h1:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        #hero h1:nth-child(3) {
+            color: #00ff41;
+            margin-bottom: 0px;
+            animation-delay: 0.6s;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #hero .cta {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            border: 3px solid #00ff41;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            border-radius: 50px;
+            color: #00ff41;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        #hero .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        #hero .cta:hover {
+            color: #000;
+            background: #00ff41;
+            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.4);
+            transform: translateY(-5px);
+        }
+
+        #hero .cta:hover::before {
+            left: 100%;
+        }
+
+        /* Pulse animation for logo */
+        @keyframes pulse {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.3);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .inner_header {
+                max-width: 100%;
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                height: 80px;
+            }
+
+            .inner_header {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+
+            .logo_container h1 {
+                font-size: 24px;
+                margin-bottom: 0.5rem;
+            }
+
+            .navigation {
+                gap: 0.5rem;
+            }
+
+            .navigation li {
+                font-size: 16px;
+            }
+
+            .container {
+                padding-top: 80px;
+            }
+
+            #hero h1 {
+                font-size: 2.5rem;
+                margin: 15px auto;
+            }
+
+            #hero .cta {
+                font-size: 1.2rem;
+                padding: 12px 30px;
+                letter-spacing: 2px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navigation a {
+                padding: 0.3rem 1rem;
+            }
+
+            .navigation li {
+                font-size: 14px;
+            }
+
+            #hero h1 {
+                font-size: 2rem;
+            }
+
+            #hero .cta {
+                font-size: 1rem;
+                padding: 10px 25px;
+            }
+        }
+
+        /* Additional cybersecurity-themed elements */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc33;
+        }
+    </style>
+</head>
 <body>
-    <!-- debut partie header -->
+    <div class="matrix-bg"></div>
+    
+    <!-- Enhanced Header -->
     <div class="header">
         <div class="inner_header">
             <div class="logo_container">
                 <h1>Z<span>Sec.io</span></h1>
             </div>
             <ul class="navigation">
-                <a href="./index.html"><li>Home</li>
-                </a>
-                <a href="./secondarypages/Blog.html"><li>Blog</li>
-                </a>
-                <a href="./secondarypages/Contact.html"><li>Contact</li>
-                </a>
-
+                <a href="./index.html" class="active"><li>Home</li></a>
+                <a href="./secondarypages/Blog.html"><li>Blog</li></a>
+                <a href="./secondarypages/Contact.html"><li>Contact</li></a>
             </ul>
         </div>
     </div>
-    <!-- Fin partie header -->
-
-    <!-- Main Section -->
+    
+    <!-- Enhanced Main Section -->
     <section id="hero">
         <div class="hero container">
             <div>
                 <h1>Teaching Cyber Security with Clarity.</h1>
                 <h1>Creating with Intent.</h1>
-                <h1> Partnering with Purpose</h1>
-                <a href="#" type="button" class="cta">Karim Zouaki</a>
+                <h1>Partnering with Purpose</h1>
+                <a href="#about" type="button" class="cta">Karim Zouaki</a>
             </div>
         </div>
     </section>
-    <!-- Fin Main section -->
 
+    <script>
+        // Add smooth scrolling for CTA button
+        document.querySelector('.cta').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Add your scroll behavior or navigation here
+            console.log('CTA clicked - add your navigation logic');
+        });
 
-
-
+        // Add header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+    </script>
 </body>
-
 </html>
