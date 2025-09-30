@@ -474,6 +474,18 @@
         document.querySelector('.name-tag').addEventListener('click', function() {
             this.classList.toggle('expanded');
         });
+
+         // Add header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
+                header.style.backdropFilter = 'none';
+            }
+        });
     </script>
 </body>
 </html>
