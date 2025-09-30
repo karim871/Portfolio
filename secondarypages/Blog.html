@@ -21,102 +21,6 @@
             flex-direction: column;
         }
 
-        /* Enhanced Header */
-        .header {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(135deg, #101010, #1a1a1a);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
-            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
-        }
-
-        .inner_header {
-            max-width: 1400px;
-            height: 100%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo_container {
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo_container h1 {
-            color: white;
-            font-size: 32px;
-            font-weight: 200;
-            margin: 0;
-            transition: all 0.3s ease;
-        }
-
-        .logo_container h1 span {
-            font-weight: 800;
-            color: #00ff41;
-            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .logo_container:hover h1 span {
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
-        }
-
-        .navigation {
-            display: flex;
-            height: 100%;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .navigation a {
-            height: auto;
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .navigation a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
-            transition: left 0.3s ease;
-        }
-
-        .navigation li {
-            list-style: none; /* No bullets before Home/blog/contact */
-            color: white;
-            font-size: 18px;
-            font-weight: 400;
-            transition: all 0.3s ease;
-        }
-
-        .navigation a:hover {
-            background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .navigation a:hover::before {
-            left: 100%;
-        }
-
-        .navigation a:hover li {
-            color: #00ff41;
-        }
-
         header {
             background-color: #101010;
             padding: 1rem 2rem;
@@ -155,10 +59,9 @@
             transition: color 0.3s ease;
         }
 
-       nav a:hover {
-      color: #00ff41;
-      background: rgba(0, 255, 65, 0.1);
-    }
+        nav a:hover {
+            color: red;
+        }
 
         .main-content {
             flex: 1;
@@ -505,21 +408,18 @@
     </style>
 </head>
 <body>
-    <div class="matrix-bg"></div>
-    
-    <!-- Enhanced Header -->
-    <div class="header">
-        <div class="inner_header">
-            <div class="logo_container">
-                <h1>Z<span>Sec.io</span></h1>
-            </div>
-            <ul class="navigation">
-                <a href="./index.html" class="active"><li>Home</li></a>
-                <a href="./secondarypages/Blog.html"><li>Blog</li></a>
-                <a href="./secondarypages/Contact.html"><li>Contact</li></a>
-            </ul>
+    <header>
+        <div class="logo_container">
+            <h1>Z<span>Sec.io</span></h1>
         </div>
-    </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../secondarypages/Blog.html">Blog</a></li>
+                <li><a href="../secondarypages/Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <div class="main-content">
         <div class="name-tag">
@@ -572,18 +472,6 @@
     <script>
         document.querySelector('.name-tag').addEventListener('click', function() {
             this.classList.toggle('expanded');
-        });
-
-         // Add header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
-                header.style.backdropFilter = 'blur(10px)';
-            } else {
-                header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
-                header.style.backdropFilter = 'none';
-            }
         });
     </script>
 </body>
