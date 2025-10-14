@@ -6,12 +6,46 @@
   <title>Pi-hole Project | Karim Zouaki</title>
   <link rel="stylesheet" href="../stylesheets/style4.css">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+    }
+    
     .project-section {
       max-width: 1000px;
       margin: 0 auto;
       padding: 20px;
-      line-height: 1.6;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
+    
+    h1 {
+      color: #0066cc;
+      border-bottom: 3px solid #0066cc;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    
+    h2 {
+      margin-top: 40px;
+      border-bottom: 2px solid #0066cc;
+      padding-bottom: 10px;
+      color: #0066cc;
+    }
+    
+    h3 {
+      color: #444;
+      margin-top: 25px;
+    }
+    
     .command-block {
       background: #1e1e1e;
       color: #d4d4d4;
@@ -19,9 +53,11 @@
       border-radius: 8px;
       overflow-x: auto;
       margin: 15px 0;
-      font-family: 'Courier New', monospace;
+      font-family: 'Courier New', 'Consolas', monospace;
       font-size: 14px;
+      line-height: 1.5;
     }
+    
     .info-box {
       background: #e8f4f8;
       border-left: 4px solid #0066cc;
@@ -29,6 +65,7 @@
       margin: 15px 0;
       border-radius: 4px;
     }
+    
     .warning-box {
       background: #fff3cd;
       border-left: 4px solid #ffc107;
@@ -36,6 +73,7 @@
       margin: 15px 0;
       border-radius: 4px;
     }
+    
     .success-box {
       background: #d4edda;
       border-left: 4px solid #28a745;
@@ -43,21 +81,26 @@
       margin: 15px 0;
       border-radius: 4px;
     }
+    
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
       margin: 20px 0;
     }
+    
     .gallery img {
       width: 100%;
+      height: auto;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
     }
+    
     .gallery img:hover {
       transform: scale(1.02);
     }
+    
     .step-number {
       display: inline-block;
       background: #0066cc;
@@ -70,36 +113,79 @@
       margin-right: 10px;
       font-weight: bold;
     }
+    
     code {
       background: #f4f4f4;
       padding: 2px 6px;
       border-radius: 3px;
-      font-family: 'Courier New', monospace;
+      font-family: 'Courier New', 'Consolas', monospace;
       color: #e83e8c;
+      font-size: 0.9em;
     }
-    h2 {
-      margin-top: 40px;
-      border-bottom: 2px solid #0066cc;
-      padding-bottom: 10px;
-    }
+    
     .tech-specs {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       margin: 20px 0;
     }
+    
     .tech-card {
       background: #f8f9fa;
       padding: 15px;
       border-radius: 8px;
       border-left: 3px solid #0066cc;
     }
+    
+    .tech-card strong {
+      display: block;
+      color: #0066cc;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    
     .footer {
       margin-top: 50px;
       padding-top: 20px;
       border-top: 1px solid #ddd;
       text-align: center;
       color: #666;
+    }
+    
+    ul, ol {
+      padding-left: 25px;
+    }
+    
+    li {
+      margin: 8px 0;
+    }
+    
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      .project-section {
+        padding: 15px;
+      }
+      
+      .tech-specs {
+        grid-template-columns: 1fr;
+      }
+      
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+      
+      .command-block {
+        font-size: 12px;
+        padding: 10px;
+      }
     }
   </style>
 </head>
@@ -124,25 +210,25 @@
     <h2>⚙️ Technical Specifications</h2>
     <div class="tech-specs">
       <div class="tech-card">
-        <strong>Hardware</strong><br>
+        <strong>Hardware</strong>
         Raspberry Pi Zero 2 WH<br>
         MicroSD Card (16GB+)<br>
         Power Supply (5V/2.5A)
       </div>
       <div class="tech-card">
-        <strong>Software</strong><br>
+        <strong>Software</strong>
         Raspberry Pi OS (Debian-based)<br>
         Pi-hole v5.x<br>
         NetworkManager
       </div>
       <div class="tech-card">
-        <strong>Network Config</strong><br>
+        <strong>Network Config</strong>
         Static IP: 10.0.0.153<br>
         Gateway: 10.0.0.1<br>
         DNS: Cloudflare (1.1.1.1)
       </div>
       <div class="tech-card">
-        <strong>Access</strong><br>
+        <strong>Access</strong>
         SSH enabled<br>
         Web interface: http://10.0.0.153/admin<br>
         mDNS: raspberrypi.local
@@ -153,18 +239,15 @@
 
     <h3><span class="step-number">1</span>Initial System Preparation</h3>
     <p>After flashing Raspberry Pi OS and enabling SSH, connect from your workstation:</p>
-    <div class="command-block">
-# Discover Raspberry Pi on the network
+    <div class="command-block"># Discover Raspberry Pi on the network
 sudo nmap -sn 10.0.0.0/24
 
 # Connect via SSH (default password: raspberry)
-ssh pi@10.0.0.153
-    </div>
+ssh pi@10.0.0.153</div>
 
     <h3><span class="step-number">2</span>System Update and Security</h3>
     <p>First, secure the system and update all packages:</p>
-    <div class="command-block">
-# Change default password
+    <div class="command-block"># Change default password
 passwd
 
 # Update system packages
@@ -172,8 +255,7 @@ sudo apt update && sudo apt full-upgrade -y
 sudo apt autoremove -y
 
 # Install essential tools
-sudo apt install -y curl git htop vim net-tools
-    </div>
+sudo apt install -y curl git htop vim net-tools</div>
 
     <h3><span class="step-number">3</span>Configure Static IP Address</h3>
     <div class="warning-box">
@@ -181,8 +263,7 @@ sudo apt install -y curl git htop vim net-tools
     </div>
     
     <p><strong>Method 1: NetworkManager (Recommended for newer Pi OS)</strong></p>
-    <div class="command-block">
-# Open network configuration interface
+    <div class="command-block"># Open network configuration interface
 sudo nmtui
 
 # Navigate: Edit a connection → eth0 → IPv4 Configuration → Manual
@@ -195,12 +276,10 @@ sudo nmtui
 sudo systemctl restart NetworkManager
 
 # Verify IP configuration
-ip -4 addr show eth0
-    </div>
+ip -4 addr show eth0</div>
 
     <p><strong>Method 2: dhcpcd (Legacy method)</strong></p>
-    <div class="command-block">
-# Edit DHCP configuration
+    <div class="command-block"># Edit DHCP configuration
 sudo nano /etc/dhcpcd.conf
 
 # Add the following lines:
@@ -210,13 +289,11 @@ static routers=10.0.0.1
 static domain_name_servers=1.1.1.1 8.8.8.8
 
 # Restart DHCP client
-sudo systemctl restart dhcpcd
-    </div>
+sudo systemctl restart dhcpcd</div>
 
     <h3><span class="step-number">4</span>Verify System Resources</h3>
     <p>Ensure sufficient disk space and system health:</p>
-    <div class="command-block">
-# Check disk space (should have 1-2GB free minimum)
+    <div class="command-block"># Check disk space (should have 1-2GB free minimum)
 df -h
 
 # Clean up if needed
@@ -226,14 +303,11 @@ sudo journalctl --vacuum-size=100M
 
 # Check system status
 uptime
-free -h
-    </div>
+free -h</div>
 
     <h3><span class="step-number">5</span>Install Pi-hole</h3>
     <p>Run the official Pi-hole installer:</p>
-    <div class="command-block">
-curl -sSL https://install.pi-hole.net | bash
-    </div>
+    <div class="command-block">curl -sSL https://install.pi-hole.net | bash</div>
 
     <div class="info-box">
       <strong>Installation Wizard Choices:</strong>
@@ -263,17 +337,13 @@ curl -sSL https://install.pi-hole.net | bash
 
     <h2>🖥️ Web Interface Configuration</h2>
     <p>Access the Pi-hole admin dashboard at:</p>
-    <div class="command-block">
-http://10.0.0.153/admin
+    <div class="command-block">http://10.0.0.153/admin
 # or
-http://raspberrypi.local/admin
-    </div>
+http://raspberrypi.local/admin</div>
 
     <h3>Setting/Changing Admin Password</h3>
-    <div class="command-block">
-pihole -a -p
-# Enter new password when prompted
-    </div>
+    <div class="command-block">pihole -a -p
+# Enter new password when prompted</div>
 
     <h3>Key Dashboard Features</h3>
     <ul>
@@ -312,47 +382,37 @@ pihole -a -p
     <h2>🔒 Security Hardening (Optional)</h2>
     
     <h3>Enable HTTPS for Web Interface</h3>
-    <div class="command-block">
-sudo apt install lighttpd openssl -y
+    <div class="command-block">sudo apt install lighttpd openssl -y
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout /etc/lighttpd/server.pem \
-  -out /etc/lighttpd/server.pem
-    </div>
+  -out /etc/lighttpd/server.pem</div>
 
     <h3>Install Fail2Ban for Brute-Force Protection</h3>
-    <div class="command-block">
-sudo apt install fail2ban -y
+    <div class="command-block">sudo apt install fail2ban -y
 sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
-    </div>
+sudo systemctl start fail2ban</div>
 
     <h3>Update Pi-hole Blocklists</h3>
-    <div class="command-block">
-# Update gravity (blocklists)
+    <div class="command-block"># Update gravity (blocklists)
 pihole -g
 
 # View available commands
-pihole -h
-    </div>
+pihole -h</div>
 
     <h2>🧪 Testing and Verification</h2>
     
     <h3>Test DNS Resolution</h3>
-    <div class="command-block">
-# From any device on your network
+    <div class="command-block"># From any device on your network
 nslookup google.com 10.0.0.153
 
-# Should return a response (DNS working)
-    </div>
+# Should return a response (DNS working)</div>
 
     <h3>Test Ad Blocking</h3>
-    <div class="command-block">
-# Watch queries in real-time
+    <div class="command-block"># Watch queries in real-time
 pihole -t
 
 # Or visit test pages:
-# https://pi-hole.net/pages-to-test-ad-blocking-performance/
-    </div>
+# https://pi-hole.net/pages-to-test-ad-blocking-performance/</div>
 
     <h3>Monitor Query Logs</h3>
     <p>Check the Query Log in the web interface to see which domains are being blocked in real-time. You can whitelist or blacklist domains as needed.</p>
@@ -411,21 +471,40 @@ pihole -t
     <h2>📝 Technical Skills Demonstrated</h2>
     <div class="tech-specs">
       <div class="tech-card">
-        <strong>Networking</strong><br>
+        <strong>Networking</strong>
         DNS Configuration<br>
         Static IP Setup<br>
         DHCP Management<br>
         Network Troubleshooting
       </div>
       <div class="tech-card">
-        <strong>Linux Administration</strong><br>
+        <strong>Linux Administration</strong>
         Package Management (apt)<br>
         Service Management (systemd)<br>
         File System Navigation<br>
-        System Monitor<br>
-         </div>
+        System Monitoring<br>
+        Shell Scripting
+      </div>
+      <div class="tech-card">
+        <strong>Security</strong>
+        DNS Sinkhole Implementation<br>
+        Access Control<br>
+        SSL/TLS Configuration<br>
+        Fail2Ban Setup<br>
+        System Hardening
+      </div>
+      <div class="tech-card">
+        <strong>Hardware</strong>
+        Raspberry Pi Configuration<br>
+        Embedded Systems<br>
+        Network Appliances<br>
+        IoT Security
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 Karim Zouaki | Network Security & Infrastructure</p>
     </div>
   </section>
 </body>
-  </head>
 </html>
