@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pi-hole Project | Karim Zouaki</title>
+  <link rel="stylesheet" href="../stylesheets/style4.css">
+</head>
+<body>
+  <section class="project-section">
+    <h1>🧠 Building a Network-wide Ad Blocker with Pi-hole</h1>
+    <p><strong>Date:</strong> October 2025</p>
+    <p>
+      This project demonstrates how I deployed <b>Pi-hole</b> on a Raspberry Pi to block ads, trackers,
+      and malicious domains across my entire network, enhancing both <b>privacy</b> and <b>performance</b>.
+    </p>
+
+    <h2>⚙️ System Setup</h2>
+    <ul>
+      <li>Device: Raspberry Pi Zero 2 WH</li>
+      <li>OS: Raspberry Pi OS (Debian-based)</li>
+      <li>DNS Resolver: Pi-hole v5</li>
+      <li>Network: Home router (DNS pointing to Pi-hole)</li>
+    </ul>
+
+    <h2>🧩 Installation Steps</h2>
+<pre><code>sudo apt update && sudo apt upgrade -y
+sudo nano /etc/dhcpcd.conf   # Set static IP
+curl -sSL https://install.pi-hole.net | bash
+</code></pre>
+
+    <h2>🖥️ Configuration</h2>
+    <p>
+      Access the web admin interface at:
+      <code>http://192.168.1.250/admin</code>
+    </p>
+    <ul>
+      <li>Selected upstream DNS: Cloudflare (1.1.1.1)</li>
+      <li>Enabled ad-block lists via Gravity</li>
+      <li>Integrated Fail2Ban for protection</li>
+    </ul>
+
+    <h2>📸 Screenshots</h2>
+    <div class="gallery">
+      <img src="../images/pihole_dashboard.png" alt="Pi-hole dashboard">
+      <img src="../images/pihole_queries.png" alt="Query log">
+    </div>
+
+    <h2>💡 Key Takeaways</h2>
+    <ul>
+      <li>Improved understanding of DNS-level filtering</li>
+      <li>Enhanced privacy and reduced ad traffic</li>
+      <li>Hands-on experience in Linux and network security</li>
+    </ul>
+
+    <h2>🔗 Resources</h2>
+    <ul>
+      <li><a href="https://pi-hole.net/" target="_blank">Official Pi-hole website</a></li>
+      <li><a href="https://github.com/pi-hole/pi-hole" target="_blank">Pi-hole GitHub repo</a></li>
+    </ul>
+
+    <p class="footer">© 2025 Karim Zouaki | <a href="../index.html">Back to Portfolio</a></p>
+  </section>
+</body>
+</html>
