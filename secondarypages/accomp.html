@@ -1,1 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CompTIA Certifications | ZSec.io</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:ital,wght@0,300;0,700;1,300;1,700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        header {
+            background-color: #101010;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 255, 65, 0.2);
+        }
+
+        .logo_container h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 200;
+            margin: 0;
+        }
+
+        .logo_container h1 span {
+            font-weight: 800;
+            color: #00ff41;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+        }
+
+        nav li {
+            font-size: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #00ff41;
+            background: rgba(0, 255, 65, 0.2);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(90deg, #00ff41 1px, transparent 1px),
+                linear-gradient(180deg, #00ff41 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+        .hero-section h1 {
+            font-size: 48px;
+            color: #00ff41;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.5); }
+            100% { text-shadow: 0 0 30px rgba(0, 255, 65, 0.8), 0 0 40px rgba(0, 255, 65, 0.4); }
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            color: #ffffff;
+            opacity: 0.8;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cert-badges {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 40px 20px;
+            flex-wrap: wrap;
+        }
+
+        .badge-container {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid #00ff41;
+            border-radius: 20px;
+            padding: 30px;
+            width: 350px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .badge-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.5);
+        }
+
+        .badge-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            animation: scanEffect 3s linear infinite;
+        }
+
+        @keyframes scanEffect {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .badge-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge-title {
+            font-size: 24px;
+            color: #00ff41;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge-date {
+            text-align: center;
+            color: #ffffff;
+            opacity: 0.7;
+            font-size: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7));
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #00ff41;
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section h3 {
+            color: #00ff41;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section p, .section li {
+            line-height: 1.8;
+            color: #ffffff;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .section li::before {
+            content: '▸';
+            color: #00ff41;
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 4px solid #00ff41;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #00ff41;
+        }
+
+        .highlight {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #00ff41;
+            font-weight: bold;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .grid-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .grid-item h4 {
+            color: #00ff41;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        th {
+            background: rgba(0, 255, 65, 0.1);
+            color: #00ff41;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            color: #ffffff;
+        }
+
+        .exam-tips {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .exam-tips h3 {
+            color: #ff6b6b;
+        }
+
+        .exam-tips p {
+            color: #ffffff;
+        }
+
+        .lifecycle-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .lifecycle-step {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(0, 102, 204, 0.1);
+            border: 2px solid #0066cc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .lifecycle-step::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00ff41;
+            font-size: 24px;
+        }
+
+        .lifecycle-step:last-child::after {
+            content: '';
+        }
+
+        .lifecycle-step h4 {
+            color: #0066cc;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 40px 0 20px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            color: #00ff41;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-link:hover {
+            background: rgba(0, 255, 65, 0.1);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .back-link::before {
+            content: '← ';
+        }
+
+        @media (max-width: 768px) {
+            .cert-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .lifecycle-container {
+                flex-direction: column;
+            }
+
+            .lifecycle-step::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -30px;
+                transform: translateX(50%);
+            }
+
+            .lifecycle-step:last-child::after {
+                content: '';
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo_container">
+            <h1>Z<span>Sec.io</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../secondarypages/Blog.html">Blog</a></li>
+                <li><a href="../secondarypages/Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <h1>CompTIA Certifications</h1>
+        <p>Cybersecurity Analyst & Security Professional</p>
+    </div>
+
+    <div class="cert-badges">
+        <div class="badge-container">
+            <img src="../images/CySA+-png.png" alt="CompTIA CySA+ Certification" class="badge-image">
+            <div class="badge-title">CySA+</div>
+            <div class="badge-date">Valid: 2025 - 2028</div>
+        </div>
+        <div class="badge-container">
+            <img src="../images/Security+-png.png" alt="CompTIA Security+ Certification" class="badge-image">
+            <div class="badge-title">Security+</div>
+            <div class="badge-date">Valid: 2025 - 2028</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <a href="index.html" class="back-link">Back to Portfolio</a>
+
+        <div class="exam-tips">
+            <h3>🎯 CySA+ Exam Strategy</h3>
+            <p>This certification involves critical thinking and practical application. <span class="highlight">Know your concepts deeply</span> - you won't pass by just memorizing definitions. The exam will ask "What is the BEST solution" or "What is the NEXT step" - pay close attention to these keywords. What may be BEST is not necessarily what is the NEXT step in incident response.</p>
+            <p><strong>Study Approach:</strong> 6-8 hours per weekday, two practice tests daily during exam week, studied for 3 weeks total. The Sybex book provided the best explanations.</p>
+            <p><strong>Key Focus Areas:</strong> Incident Response Life Cycle, Threat Intelligence, Reading Logs, IOCs and Remediations</p>
+        </div>
+
+        <section class="section">
+            <h2>📋 Incident Response Life Cycle</h2>
+            <p>The cornerstone of CySA+ - when in doubt, follow this lifecycle. It's a lifesaver, especially the Containment step.</p>
+            <div class="lifecycle-container">
+                <div class="lifecycle-step">
+                    <h4>1. Preparation</h4>
+                    <p>Establish policies, procedures, and tools</p>
+                </div>
+                <div class="lifecycle-step">
+                    <h4>2. Detection & Analysis</h4>
+                    <p>Identify and investigate incidents</p>
+                </div>
+                <div class="lifecycle-step">
+                    <h4>3. Containment, Eradication & Recovery</h4>
+                    <p>Isolate, remove threat, restore systems</p>
+                </div>
+                <div class="lifecycle-step">
+                    <h4>4. Post-Event Activity</h4>
+                    <p>Review and improve processes</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Indicators of Compromise (IOCs)</h2>
+            
+            <h3>Network IOCs</h3>
+            <ul>
+                <li>Unusual traffic patterns or spikes in network activity</li>
+                <li>Unauthorized devices or connections on the network</li>
+                <li>DNS or IP address anomalies (traffic to known malicious IPs/domains)</li>
+                <li>Unexpected protocol usage or protocol anomalies</li>
+                <li>Suspicious file transfers or data exfiltration</li>
+                <li>Unauthorized access attempts or login failures</li>
+            </ul>
+
+            <h3>Host IOCs</h3>
+            <ul>
+                <li>Suspicious files or processes running on a host</li>
+                <li>Unusual system or application behavior (crashes, freezes)</li>
+                <li>Unauthorized software installations or changes to system files</li>
+                <li>System logs showing unusual activity or errors</li>
+                <li>Changes to user account privileges or permissions</li>
+                <li>Evidence of data theft or destruction</li>
+            </ul>
+
+            <h3>Application IOCs</h3>
+            <ul>
+                <li>Unusual or unauthorized user activity (unusual login patterns, unusual data access)</li>
+                <li>Unauthorized changes to application configuration or settings</li>
+                <li>Known vulnerabilities or exploits associated with the application</li>
+                <li>Suspicious application traffic to known malicious domains or IPs</li>
+                <li>Presence of malicious or unauthorized files within the application</li>
+                <li>Evidence of unauthorized access or data exfiltration within the application</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>🌐 HTTP Status Codes</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Range</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>100-199</td>
+                            <td>Informational</td>
+                            <td>Server has received request and is processing it</td>
+                        </tr>
+                        <tr>
+                            <td>200-299</td>
+                            <td>Success</td>
+                            <td>Request was successful, server delivered content</td>
+                        </tr>
+                        <tr>
+                            <td>300-399</td>
+                            <td>Redirection</td>
+                            <td>Client needs to take additional action (follow redirect)</td>
+                        </tr>
+                        <tr>
+                            <td>400-499</td>
+                            <td>Client Error</td>
+                            <td>Invalid request or error on client side</td>
+                        </tr>
+                        <tr>
+                            <td>500-599</td>
+                            <td>Server Error</td>
+                            <td>Server encountered error while processing request</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🛠️ Nmap Port Scanning Methods</h2>
+            
+            <div class="grid-2col">
+                <div class="grid-item">
+                    <h4>TCP SYN Scan (-sS)</h4>
+                    <p>Most popular and fastest scan type. Stealthier than connect scan, works against all functional TCP stacks.</p>
+                </div>
+                <div class="grid-item">
+                    <h4>TCP Connect Scan (-sT)</h4>
+                    <p>Uses system call, typically for unprivileged users and IPv6 targets where SYN scan doesn't work.</p>
+                </div>
+                <div class="grid-item">
+                    <h4>UDP Scan (-sU)</h4>
+                    <p>Don't forget UDP ports - they offer plenty of security holes too.</p>
+                </div>
+                <div class="grid-item">
+                    <h4>TCP FIN/NULL/Xmas (-sF, -sN, -sX)</h4>
+                    <p>Special purpose scans for sneaking past firewalls. Note: Don't work well against Windows.</p>
+                </div>
+                <div class="grid-item">
+                    <h4>TCP ACK Scan (-sA)</h4>
+                    <p>Maps firewall rulesets. Cannot distinguish open from closed ports.</p>
+                </div>
+                <div class="grid-item">
+                    <h4>TCP Idle Scan (-sI)</h4>
+                    <p>Stealthiest scan type, exploits trusted IP relationships. Slow and complex.</p>
+                </div>
+            </div>
+
+            <h3>🔥 Firewall Evasion Techniques</h3>
+            <div class="code-block">
+                <code>-f                  # Fragment packets (split into smaller pieces)</code><br>
+                <code>--mtu &lt;number&gt;      # Control packet size (must be multiple of 8)</code><br>
+                <code>--scan-delay &lt;time&gt; # Add delay between packets</code><br>
+                <code>--badsum            # Generate invalid checksum to detect firewall/IDS</code><br>
+                <code>-Pn                 # Skip ping, treat host as alive (bypass ICMP block)</code><br>
+                <code>-sn                 # No port scan, ICMP echo + SYN to 443 + ACK to 80</code>
+            </div>
+
+            <h3>💡 Key Nmap Concepts</h3>
+            <ul>
+                <li><span class="highlight">Closed port:</span> Server responds with RST flag</li>
+                <li><span class="highlight">Filtered port:</span> No response (firewall drops packets)</li>
+                <li><span class="highlight">Default scan:</span> SYN with sudo, Connect without sudo</li>
+                <li><span class="highlight">-Pn caveat:</span> Bypasses ICMP block but takes longer if host is actually down</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>⚡ Hping3 Commands</h2>
+            
+            <div class="code-block">
+                <code># Basic TCP connection test</code><br>
+                <code>hping3 -S &lt;target IP&gt;</code><br><br>
+                
+                <code># Ping sweep</code><br>
+                <code>hping3 -1 &lt;target IP range&gt;</code><br><br>
+                
+                <code># Traceroute</code><br>
+                <code>hping3 --traceroute &lt;target IP&gt;</code><br><br>
+                
+                <code># SYN flood attack</code><br>
+                <code>hping3 -S -p &lt;port&gt; --flood &lt;target IP&gt;</code><br><br>
+                
+                <code># UDP flood attack</code><br>
+                <code>hping3 -2 -p &lt;port&gt; --flood &lt;target IP&gt;</code><br><br>
+                
+                <code># OS fingerprinting</code><br>
+                <code>hping3 -F -A -V &lt;target IP&gt;</code>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Tcpdump Commands</h2>
+            
+            <div class="code-block">
+                <code># Basic packet capture</code><br>
+                <code>tcpdump -i &lt;interface&gt; -n</code><br><br>
+                
+                <code># Filter by protocol</code><br>
+                <code>tcpdump -i &lt;interface&gt; -n &lt;protocol&gt;</code><br><br>
+                
+                <code># Filter by IP address</code><br>
+                <code>tcpdump -i &lt;interface&gt; -n host &lt;IP address&gt;</code><br><br>
+                
+                <code># Filter by port</code><br>
+                <code>tcpdump -i &lt;interface&gt; -n port &lt;port number&gt;</code><br><br>
+                
+                <code># Save to file</code><br>
+                <code>tcpdump -i &lt;interface&gt; -n -w &lt;filename&gt;</code><br><br>
+                
+                <code># Read from file</code><br>
+                <code>tcpdump -r &lt;filename&gt;</code>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🌐 Netstat Commands</h2>
+            
+            <div class="code-block">
+                <code># Display all active connections</code><br>
+                <code>netstat -a</code><br><br>
+                
+                <code># Display active TCP connections</code><br>
+                <code>netstat -at</code><br><br>
+                
+                <code># Display active UDP connections</code><br>
+                <code>netstat -au</code><br><br>
+                
+                <code># Display network interface statistics</code><br>
+                <code>netstat -i</code><br><br>
+                
+                <code># Display connections with process info</code><br>
+                <code>netstat -ap</code><br><br>
+                
+                <code># Display routing table</code><br>
+                <code>netstat -r</code>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔎 Dig (DNS Query) Commands</h2>
+            
+            <div class="code-block">
+                <code># Basic DNS query</code><br>
+                <code>dig &lt;domain name&gt;</code><br><br>
+                
+                <code># Reverse DNS lookup</code><br>
+                <code>dig -x &lt;IP address&gt;</code><br><br>
+                
+                <code># Specify DNS server</code><br>
+                <code>dig &lt;domain name&gt; @&lt;DNS server IP&gt;</code><br><br>
+                
+                <code># Query specific record type (A, MX, TXT, NS)</code><br>
+                <code>dig &lt;domain name&gt; &lt;record type&gt;</code><br><br>
+                
+                <code># Enable recursion</code><br>
+                <code>dig &lt;domain name&gt; +recurse</code><br><br>
+                
+                <code># Display additional info</code><br>
+                <code>dig &lt;domain name&gt; +all</code>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📝 Syslog Severity Levels</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>Emergency</td>
+                            <td>System is unusable</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Alert</td>
+                            <td>Action must be taken immediately</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Critical</td>
+                            <td>Critical conditions</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Error</td>
+                            <td>Error conditions</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Warning</td>
+                            <td>Warning conditions</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Notice</td>
+                            <td>Normal but significant condition</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Informational</td>
+                            <td>Informational messages</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Debug</td>
+                            <td>Debug-level messages</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 CVSS (Common Vulnerability Scoring System)</h2>
+            <p>CVSS provides a standardized method for rating IT vulnerabilities and determining urgency of response. Scores range from 0-10, with 10 being the most severe.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rating</th>
+                            <th>Score Range</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>None</td>
+                            <td>0.0</td>
+                            <td>No vulnerability</td>
+                        </tr>
+                        <tr>
+                            <td>Low</td>
+                            <td>0.1 - 3.9</td>
+                            <td>Minor impact, difficult to exploit</td>
+                        </tr>
+                        <tr>
+                            <td>Medium</td>
+                            <td>4.0 - 6.9</td>
+                            <td>Moderate impact, somewhat difficult to exploit</td>
+                        </tr>
+                        <tr>
+                            <td>High</td>
+                            <td>7.0 - 8.9</td>
+                            <td>Significant impact, relatively easy to exploit</td>
+                        </tr>
+                        <tr>
+                            <td>Critical</td>
+                            <td>9.0 - 10.0</td>
+                            <td>Severe impact, very easy to exploit</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">Back to Portfolio</a>
