@@ -13,20 +13,10 @@ Here you'll find:
 
 👉 [View my live portfolio](https://karim871.github.io/Portfolio/)
 
-## 📁 Repository Structure
-
-📁 Portfolio/
-├── index.html → Homepage content
-├── secondarypages → Custom styling
-├── stylesheets → Custom styling (if applicable)
-├── images/ → Screenshots, diagrams, etc.
-├── scripts/ → JS scripts or automation tools
-└── README.md → This file
-
 
 ## 📫 Contact
 
-- ✉️ Email: karimezouaki@gmail.com  
+- ✉️ Email: abdelkrim.zouaki.ti@gmail.com 
 - 🌐 GitHub: [karim871](https://github.com/karim871)  
 - 🧑‍💼 LinkedIn: [linkedin.com/in/karim-zouaki](https://www.linkedin.com/in/abdelkrim-z-9a3782229/)
 
