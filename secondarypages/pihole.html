@@ -1,253 +1,536 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pi-hole Project | Abdeelkrim Zouaki</title>
-  <link rel="stylesheet" href="../stylesheets/style4.css">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      background: #f5f5f5;
-    }
-    
-    .project-section {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      background: white;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    h1 {
-      color: #0066cc;
-      border-bottom: 3px solid #0066cc;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
-    }
-    
-    h2 {
-      margin-top: 40px;
-      border-bottom: 2px solid #0066cc;
-      padding-bottom: 10px;
-      color: #0066cc;
-    }
-    
-    h3 {
-      color: #444;
-      margin-top: 25px;
-    }
-    
-    .command-block {
-      background: #1e1e1e;
-      color: #d4d4d4;
-      padding: 15px;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin: 15px 0;
-      font-family: 'Courier New', 'Consolas', monospace;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    
-    .info-box {
-      background: #e8f4f8;
-      border-left: 4px solid #0066cc;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-    }
-    
-    .warning-box {
-      background: #fff3cd;
-      border-left: 4px solid #ffc107;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-    }
-    
-    .success-box {
-      background: #d4edda;
-      border-left: 4px solid #28a745;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-    }
-    
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin: 20px 0;
-    }
-    
-    .gallery img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-    
-    .gallery img:hover {
-      transform: scale(1.02);
-    }
-    
-    .step-number {
-      display: inline-block;
-      background: #0066cc;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 30px;
-      margin-right: 10px;
-      font-weight: bold;
-    }
-    
-    code {
-      background: #f4f4f4;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'Courier New', 'Consolas', monospace;
-      color: #e83e8c;
-      font-size: 0.9em;
-    }
-    
-    .tech-specs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-    
-    .tech-card {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 8px;
-      border-left: 3px solid #0066cc;
-    }
-    
-    .tech-card strong {
-      display: block;
-      color: #0066cc;
-      margin-bottom: 10px;
-      font-size: 1.1em;
-    }
-    
-    .footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid #ddd;
-      text-align: center;
-      color: #666;
-    }
-    
-    ul, ol {
-      padding-left: 25px;
-    }
-    
-    li {
-      margin: 8px 0;
-    }
-    
-    a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-    
-    a:hover {
-      text-decoration: underline;
-    }
-    
-    @media (max-width: 768px) {
-      .project-section {
-        padding: 15px;
-      }
-      
-      .tech-specs {
-        grid-template-columns: 1fr;
-      }
-      
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-      
-      .command-block {
-        font-size: 12px;
-        padding: 10px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pi-hole Project | ZSec.io</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:ital,wght@0,300;0,700;1,300;1,700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        header {
+            background-color: #101010;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 255, 65, 0.2);
+        }
+
+        .logo_container h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 200;
+            margin: 0;
+        }
+
+        .logo_container h1 span {
+            font-weight: 800;
+            color: #00ff41;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+        }
+
+        nav li {
+            font-size: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #00ff41;
+            background: rgba(0, 255, 65, 0.2);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(90deg, #00ff41 1px, transparent 1px),
+                linear-gradient(180deg, #00ff41 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+        .hero-section h1 {
+            font-size: 48px;
+            color: #00ff41;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.5); }
+            100% { text-shadow: 0 0 30px rgba(0, 255, 65, 0.8), 0 0 40px rgba(0, 255, 65, 0.4); }
+        }
+
+        .hero-section .subtitle {
+            font-size: 18px;
+            color: #ffffff;
+            opacity: 0.8;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 10px;
+        }
+
+        .hero-section .date {
+            font-size: 14px;
+            color: #00ff41;
+            opacity: 0.7;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.15), rgba(0, 102, 204, 0.05));
+            border: 2px solid #0066cc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.2), transparent);
+            animation: scanEffect 3s linear infinite;
+        }
+
+        @keyframes scanEffect {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .info-box strong {
+            color: #0066cc;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-box p {
+            position: relative;
+            z-index: 2;
+            line-height: 1.8;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.05));
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .warning-box strong {
+            color: #ffc107;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(40, 167, 69, 0.05));
+            border: 2px solid #28a745;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .success-box strong {
+            color: #28a745;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7));
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #00ff41;
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section h3 {
+            color: #00ff41;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #00ff41;
+            color: #000;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+
+        .section p, .section li {
+            line-height: 1.8;
+            color: #ffffff;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .section ul, .section ol {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .section ul li::before {
+            content: '▸';
+            color: #00ff41;
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+        }
+
+        .section ol {
+            counter-reset: item;
+        }
+
+        .section ol li {
+            counter-increment: item;
+        }
+
+        .section ol li::before {
+            content: counter(item) ".";
+            color: #00ff41;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .command-block {
+            background: rgba(0, 0, 0, 0.7);
+            border-left: 4px solid #00ff41;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .command-block code {
+            color: #00ff41;
+        }
+
+        code {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .tech-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .tech-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            border-color: #00ff41;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.2);
+        }
+
+        .tech-card strong {
+            display: block;
+            color: #00ff41;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .gallery a {
+            display: block;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .gallery a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery a:hover {
+            border-color: #00ff41;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+        }
+
+        .gallery a:hover::before {
+            opacity: 1;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 40px 0 20px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            color: #00ff41;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-link:hover {
+            background: rgba(0, 255, 65, 0.1);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .back-link::before {
+            content: '← ';
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            border-top: 2px solid rgba(0, 255, 65, 0.3);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 32px;
+            }
+
+            .tech-specs {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .command-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <section class="project-section">
-    <h1>🛡️ Building a Network-wide Ad Blocker with Pi-hole</h1>
-    <p><strong>Date:</strong> October 2025 | <strong>Author:</strong> Abdelkrim Zouaki</p>
-    
-    <div class="info-box">
-      <strong>Project Overview:</strong> This documentation details the complete setup of a Pi-hole DNS sinkhole on a Raspberry Pi to block advertisements, trackers, and malicious domains across an entire home network. This project demonstrates practical skills in Linux system administration, networking, DNS configuration, and cybersecurity hardening.
+    <header>
+        <div class="logo_container">
+            <h1>Z<span>Sec.io</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../secondarypages/Blog.html">Blog</a></li>
+                <li><a href="../secondarypages/Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <h1>🛡️ Network-Wide Ad Blocker with Pi-hole</h1>
+        <p class="subtitle">DNS Sinkhole Implementation on Raspberry Pi</p>
+        <p class="date">October 2025 | Abdelkrim Zouaki</p>
     </div>
 
-    <h2>🎯 Project Objectives</h2>
-    <ul>
-      <li>Deploy a network-level ad blocker that protects all devices automatically</li>
-      <li>Improve network privacy by blocking tracking and telemetry domains</li>
-      <li>Enhance DNS security with DNS-over-HTTPS (DoH) support</li>
-      <li>Reduce bandwidth usage and improve page load times</li>
-      <li>Gain hands-on experience with Raspberry Pi, Linux, and network administration</li>
-    </ul>
+    <div class="main-content">
+        <a href="index.html" class="back-link">Back to Portfolio</a>
 
-    <h2>⚙️ Technical Specifications</h2>
-    <div class="tech-specs">
-      <div class="tech-card">
-        <strong>Hardware</strong>
-        Raspberry Pi Zero 2 WH<br>
-        MicroSD Card (16GB+)<br>
-        Power Supply (5V/2.5A)
-      </div>
-      <div class="tech-card">
-        <strong>Software</strong>
-        Raspberry Pi OS (Debian-based)<br>
-        Pi-hole v5.x<br>
-        NetworkManager
-      </div>
-      <div class="tech-card">
-        <strong>Network Config</strong>
-        Static IP: 10.0.0.153<br>
-        Gateway: 10.0.0.1<br>
-        DNS: Cloudflare (1.1.1.1)
-      </div>
-      <div class="tech-card">
-        <strong>Access</strong>
-        SSH enabled<br>
-        Web interface: http://10.0.0.153/admin<br>
-        mDNS: raspberrypi.local
-      </div>
-    </div>
+        <div class="info-box">
+            <strong>📌 Project Overview</strong>
+            <p>This documentation details the complete setup of a Pi-hole DNS sinkhole on a Raspberry Pi to block advertisements, trackers, and malicious domains across an entire home network. This project demonstrates practical skills in Linux system administration, networking, DNS configuration, and cybersecurity hardening.</p>
+        </div>
 
-    <h2>🔧 Installation Process</h2>
+        <section class="section">
+            <h2>🎯 Project Objectives</h2>
+            <ul>
+                <li>Deploy a network-level ad blocker that protects all devices automatically</li>
+                <li>Improve network privacy by blocking tracking and telemetry domains</li>
+                <li>Enhance DNS security with DNS-over-HTTPS (DoH) support</li>
+                <li>Reduce bandwidth usage and improve page load times</li>
+                <li>Gain hands-on experience with Raspberry Pi, Linux, and network administration</li>
+            </ul>
+        </section>
 
-    <h3><span class="step-number">1</span>Initial System Preparation</h3>
-    <p>After flashing Raspberry Pi OS and enabling SSH, connect from your workstation:</p>
-    <div class="command-block"># Discover Raspberry Pi on the network
+        <section class="section">
+            <h2>⚙️ Technical Specifications</h2>
+            <div class="tech-specs">
+                <div class="tech-card">
+                    <strong>Hardware</strong>
+                    Raspberry Pi Zero 2 WH<br>
+                    MicroSD Card (16GB+)<br>
+                    Power Supply (5V/2.5A)
+                </div>
+                <div class="tech-card">
+                    <strong>Software</strong>
+                    Raspberry Pi OS (Debian-based)<br>
+                    Pi-hole v5.x<br>
+                    NetworkManager
+                </div>
+                <div class="tech-card">
+                    <strong>Network Config</strong>
+                    Static IP: 10.0.0.153<br>
+                    Gateway: 10.0.0.1<br>
+                    DNS: Cloudflare (1.1.1.1)
+                </div>
+                <div class="tech-card">
+                    <strong>Access</strong>
+                    SSH enabled<br>
+                    Web interface: http://10.0.0.153/admin<br>
+                    mDNS: raspberrypi.local
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔧 Installation Process</h2>
+
+            <h3><span class="step-number">1</span>Initial System Preparation</h3>
+            <p>After flashing Raspberry Pi OS and enabling SSH, connect from your workstation:</p>
+            <div class="command-block"><code># Discover Raspberry Pi on the network
 sudo nmap -sn 10.0.0.0/24
 
 # Connect via SSH (default password: raspberry)
-ssh pi@10.0.0.153</div>
+ssh pi@10.0.0.153</code></div>
 
-    <h3><span class="step-number">2</span>System Update and Security</h3>
-    <p>First, secure the system and update all packages:</p>
-    <div class="command-block"># Change default password
+            <h3><span class="step-number">2</span>System Update and Security</h3>
+            <p>First, secure the system and update all packages:</p>
+            <div class="command-block"><code># Change default password
 passwd
 
 # Update system packages
@@ -255,15 +538,16 @@ sudo apt update && sudo apt full-upgrade -y
 sudo apt autoremove -y
 
 # Install essential tools
-sudo apt install -y curl git htop vim net-tools</div>
+sudo apt install -y curl git htop vim net-tools</code></div>
 
-    <h3><span class="step-number">3</span>Configure Static IP Address</h3>
-    <div class="warning-box">
-      <strong>Important:</strong> Modern Raspberry Pi OS uses NetworkManager instead of dhcpcd. If you see <code>dhcpcd.service not found</code>, use the NetworkManager method below.
-    </div>
-    
-    <p><strong>Method 1: NetworkManager (Recommended for newer Pi OS)</strong></p>
-    <div class="command-block"># Open network configuration interface
+            <h3><span class="step-number">3</span>Configure Static IP Address</h3>
+            <div class="warning-box">
+                <strong>⚠️ Important</strong>
+                <p>Modern Raspberry Pi OS uses NetworkManager instead of dhcpcd. If you see <code>dhcpcd.service not found</code>, use the NetworkManager method below.</p>
+            </div>
+            
+            <p><strong>Method 1: NetworkManager (Recommended for newer Pi OS)</strong></p>
+            <div class="command-block"><code># Open network configuration interface
 sudo nmtui
 
 # Navigate: Edit a connection → eth0 → IPv4 Configuration → Manual
@@ -276,10 +560,10 @@ sudo nmtui
 sudo systemctl restart NetworkManager
 
 # Verify IP configuration
-ip -4 addr show eth0</div>
+ip -4 addr show eth0</code></div>
 
-    <p><strong>Method 2: dhcpcd (Legacy method)</strong></p>
-    <div class="command-block"># Edit DHCP configuration
+            <p><strong>Method 2: dhcpcd (Legacy method)</strong></p>
+            <div class="command-block"><code># Edit DHCP configuration
 sudo nano /etc/dhcpcd.conf
 
 # Add the following lines:
@@ -289,11 +573,11 @@ static routers=10.0.0.1
 static domain_name_servers=1.1.1.1 8.8.8.8
 
 # Restart DHCP client
-sudo systemctl restart dhcpcd</div>
+sudo systemctl restart dhcpcd</code></div>
 
-    <h3><span class="step-number">4</span>Verify System Resources</h3>
-    <p>Ensure sufficient disk space and system health:</p>
-    <div class="command-block"># Check disk space (should have 1-2GB free minimum)
+            <h3><span class="step-number">4</span>Verify System Resources</h3>
+            <p>Ensure sufficient disk space and system health:</p>
+            <div class="command-block"><code># Check disk space (should have 1-2GB free minimum)
 df -h
 
 # Clean up if needed
@@ -303,251 +587,206 @@ sudo journalctl --vacuum-size=100M
 
 # Check system status
 uptime
-free -h</div>
+free -h</code></div>
 
-    <h3><span class="step-number">5</span>Install Pi-hole</h3>
-    <p>Run the official Pi-hole installer:</p>
-    <div class="command-block">curl -sSL https://install.pi-hole.net | bash</div>
+            <h3><span class="step-number">5</span>Install Pi-hole</h3>
+            <p>Run the official Pi-hole installer:</p>
+            <div class="command-block"><code>curl -sSL https://install.pi-hole.net | bash</code></div>
 
-    <div class="info-box">
-      <strong>Installation Wizard Choices:</strong>
-      <ul style="margin: 10px 0 0 0;">
-        <li>✅ Network interface: eth0 (or wlan0 for Wi-Fi)</li>
-        <li>✅ Upstream DNS: Cloudflare (1.1.1.1) - fast and privacy-focused</li>
-        <li>✅ Blocklists: Use default StevenBlack list</li>
-        <li>✅ Admin Web Interface: Yes</li>
-        <li>✅ Web Server: Lighttpd (default)</li>
-        <li>✅ Logging: Enable query logging</li>
-        <li>✅ Privacy Mode: Show everything (can adjust later)</li>
-      </ul>
-    </div>
+            <div class="info-box">
+                <strong>📋 Installation Wizard Choices</strong>
+                <ul style="margin: 15px 0 0 0; padding-left: 20px;">
+                    <li>✅ Network interface: eth0 (or wlan0 for Wi-Fi)</li>
+                    <li>✅ Upstream DNS: Cloudflare (1.1.1.1) - fast and privacy-focused</li>
+                    <li>✅ Blocklists: Use default StevenBlack list</li>
+                    <li>✅ Admin Web Interface: Yes</li>
+                    <li>✅ Web Server: Lighttpd (default)</li>
+                    <li>✅ Logging: Enable query logging</li>
+                    <li>✅ Privacy Mode: Show everything (can adjust later)</li>
+                </ul>
+            </div>
 
-    <h3><span class="step-number">6</span>Configure Router DNS</h3>
-    <p>Point your router's DHCP server to use Pi-hole as the DNS server:</p>
-    <ol>
-      <li>Access your router admin panel (usually http://10.0.0.1)</li>
-      <li>Navigate to DHCP settings</li>
-      <li>Set Primary DNS to: <code>10.0.0.153</code></li>
-      <li>Save and reboot router (or renew DHCP leases on devices)</li>
-    </ol>
+            <h3><span class="step-number">6</span>Configure Router DNS</h3>
+            <p>Point your router's DHCP server to use Pi-hole as the DNS server:</p>
+            <ol>
+                <li>Access your router admin panel (usually http://10.0.0.1)</li>
+                <li>Navigate to DHCP settings</li>
+                <li>Set Primary DNS to: <code>10.0.0.153</code></li>
+                <li>Save and reboot router (or renew DHCP leases on devices)</li>
+            </ol>
 
-    <div class="success-box">
-      <strong>Result:</strong> All devices on the network will now use Pi-hole for DNS resolution, automatically blocking ads and tracking domains without any per-device configuration.
-    </div>
+            <div class="success-box">
+                <strong>✅ Result</strong>
+                <p>All devices on the network will now use Pi-hole for DNS resolution, automatically blocking ads and tracking domains without any per-device configuration.</p>
+            </div>
+        </section>
 
-    <h2>🖥️ Web Interface Configuration</h2>
-    <p>Access the Pi-hole admin dashboard at:</p>
-    <div class="command-block">http://10.0.0.153/admin
+        <section class="section">
+            <h2>🖥️ Web Interface Configuration</h2>
+            <p>Access the Pi-hole admin dashboard at:</p>
+            <div class="command-block"><code>http://10.0.0.153/admin
 # or
-http://raspberrypi.local/admin</div>
+http://raspberrypi.local/admin</code></div>
 
-    <h3>Setting/Changing Admin Password</h3>
-    <div class="command-block">pihole -a -p
-# Enter new password when prompted</div>
+            <h3>Setting/Changing Admin Password</h3>
+            <div class="command-block"><code>pihole -a -p
+# Enter new password when prompted</code></div>
 
-    <h3>Key Dashboard Features</h3>
-    <ul>
-      <li><strong>Total Queries:</strong> Real-time view of DNS requests</li>
-      <li><strong>Queries Blocked:</strong> Percentage and count of blocked domains</li>
-      <li><strong>Blocklist:</strong> Currently blocking domains from selected lists</li>
-      <li><strong>Top Allowed/Blocked Domains:</strong> Analytics on network traffic patterns</li>
-      <li><strong>Query Log:</strong> Detailed logs for troubleshooting and monitoring</li>
-    </ul>
+            <h3>Key Dashboard Features</h3>
+            <ul>
+                <li><strong>Total Queries:</strong> Real-time view of DNS requests</li>
+                <li><strong>Queries Blocked:</strong> Percentage and count of blocked domains</li>
+                <li><strong>Blocklist:</strong> Currently blocking domains from selected lists</li>
+                <li><strong>Top Allowed/Blocked Domains:</strong> Analytics on network traffic patterns</li>
+                <li><strong>Query Log:</strong> Detailed logs for troubleshooting and monitoring</li>
+            </ul>
+        </section>
 
-    <h2>📊 Results and Performance</h2>
-    
-    <div class="success-box">
-      <strong>Immediate Impact:</strong>
-      <ul style="margin: 10px 0 0 0;">
-        <li>✅ Network-wide ad blocking active across all devices</li>
-        <li>✅ Mobile apps, smart TVs, and IoT devices protected</li>
-        <li>✅ Reduced bandwidth consumption</li>
-        <li>✅ Faster page load times (no ad resources loaded)</li>
-        <li>✅ Enhanced privacy (blocked tracking pixels and analytics)</li>
-      </ul>
-    </div>
+        <section class="section">
+            <h2>📊 Results and Performance</h2>
+            
+            <div class="success-box">
+                <strong>🎉 Immediate Impact</strong>
+                <ul style="margin: 15px 0 0 0; padding-left: 20px;">
+                    <li>✅ Network-wide ad blocking active across all devices</li>
+                    <li>✅ Mobile apps, smart TVs, and IoT devices protected</li>
+                    <li>✅ Reduced bandwidth consumption</li>
+                    <li>✅ Faster page load times (no ad resources loaded)</li>
+                    <li>✅ Enhanced privacy (blocked tracking pixels and analytics)</li>
+                </ul>
+            </div>
+        </section>
 
+        <section class="section">
+            <h2>📸 Project Screenshots</h2>
+            <div class="gallery">
+                <a href="../images/Screenshot1.png" target="_blank">
+                    <img src="../images/Screenshot1.png" alt="Pi-hole installation process - network detection">
+                </a>
+                <a href="../images/Screenshot2.png" target="_blank">
+                    <img src="../images/Screenshot2.png" alt="Pi-hole installation - upstream DNS selection">
+                </a>
+                <a href="../images/Screenshot3.png" target="_blank">
+                    <img src="../images/Screenshot3.png" alt="Pi-hole installation - blocklist configuration">
+                </a>
+                <a href="../images/Screenshot4.png" target="_blank">
+                    <img src="../images/Screenshot4.png" alt="Pi-hole installation - web interface setup">
+                </a>
+                <a href="../images/Screenshot5.png" target="_blank">
+                    <img src="../images/Screenshot5.png" alt="Pi-hole admin dashboard showing blocked queries">
+                </a>
+                <a href="../images/Screenshot6.png" target="_blank">
+                    <img src="../images/Screenshot6.png" alt="Query log showing DNS requests and blocks">
+                </a>
+                <a href="../images/Screenshot7.png" target="_blank">
+                    <img src="../images/Screenshot7.png" alt="Statistics and analytics dashboard">
+                </a>
+                <a href="../images/Screenshot8.png" target="_blank">
+                    <img src="../images/Screenshot8.png" alt="Additional Pi-hole configuration">
+                </a>
+                <a href="../images/Screenshot9.png" target="_blank">
+                    <img src="../images/Screenshot9.png" alt="Network statistics">
+                </a>
+                <a href="../images/Screenshot10.png" target="_blank">
+                    <img src="../images/Screenshot10.png" alt="Blocklist management">
+                </a>
+                <a href="../images/Screenshot11.png" target="_blank">
+                    <img src="../images/Screenshot11.png" alt="Pi-hole performance metrics">
+                </a>
+                <a href="../images/Screenshot13.png" target="_blank">
+                    <img src="../images/Screenshot13.png" alt="Advanced settings configuration">
+                </a>
+                <a href="../images/Screenshot14.png" target="_blank">
+                    <img src="../images/Screenshot14.png" alt="Network-wide protection overview">
+                </a>
+                <a href="../images/Screenshot15.png" target="_blank">
+                    <img src="../images/Screenshot15.png" alt="Mobile device ad-free browsing">
+                </a>
+                <a href="../images/phone.png" target="_blank">
+                    <img src="../images/phone.png" alt="Mobile device DNS config">
+                </a>
+            </div>
+        </section>
 
-     /* IMAGES */
-   
-          <h2>📸 Project Screenshots</h2>
-          <div class="gallery">
-            <a href="../images/Screenshot1.png" target="_blank">
-              <img src="../images/Screenshot1.png" alt="Pi-hole installation process - network detection">
-            </a>
-            <a href="../images/Screenshot2.png" target="_blank">
-              <img src="../images/Screenshot2.png" alt="Pi-hole installation - upstream DNS selection">
-            </a>
-            <a href="../images/Screenshot3.png" target="_blank">
-              <img src="../images/Screenshot3.png" alt="Pi-hole installation - blocklist configuration">
-            </a>
-            <a href="../images/Screenshot4.png" target="_blank">
-              <img src="../images/Screenshot4.png" alt="Pi-hole installation - web interface setup">
-            </a>
-            <a href="../images/Screenshot5.png" target="_blank">
-              <img src="../images/Screenshot5.png" alt="Pi-hole admin dashboard showing blocked queries">
-            </a>
-            <a href="../images/Screenshot6.png" target="_blank">
-              <img src="../images/Screenshot6.png" alt="Query log showing DNS requests and blocks">
-            </a>
-            <a href="../images/Screenshot7.png" target="_blank">
-              <img src="../images/Screenshot7.png" alt="Statistics and analytics dashboard">
-            </a>
-            <a href="../images/Screenshot8.png" target="_blank">
-              <img src="../images/Screenshot8.png" alt="Additional Pi-hole configuration">
-            </a>
-            <a href="../images/Screenshot9.png" target="_blank">
-              <img src="../images/Screenshot9.png" alt="Network statistics">
-            </a>
-            <a href="../images/Screenshot10.png" target="_blank">
-              <img src="../images/Screenshot10.png" alt="Blocklist management">
-            </a>
-            <a href="../images/Screenshot11.png" target="_blank">
-              <img src="../images/Screenshot11.png" alt="Pi-hole performance metrics">
-            </a>
-            <a href="../images/Screenshot13.png" target="_blank">
-              <img src="../images/Screenshot13.png" alt="Advanced settings configuration">
-            </a>
-            <a href="../images/Screenshot14.png" target="_blank">
-              <img src="../images/Screenshot14.png" alt="Network-wide protection overview">
-            </a>
-            <a href="../images/Screenshot15.png" target="_blank">
-              <img src="../images/Screenshot15.png" alt="Mobile device ad-free browsing">
-            </a>
-            <a href="../images/phone.png" target="_blank">
-              <img src="../images/phone.png" alt="Mobile device DNS config">
-            </a>
-             
-          </div>
-
-
-    
-    <h2>🔒 Security Hardening (Optional)</h2>
-    
-    <h3>Enable HTTPS for Web Interface</h3>
-    <div class="command-block">sudo apt install lighttpd openssl -y
+        <section class="section">
+            <h2>🔒 Security Hardening (Optional)</h2>
+            
+            <h3>Enable HTTPS for Web Interface</h3>
+            <div class="command-block"><code>sudo apt install lighttpd openssl -y
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout /etc/lighttpd/server.pem \
-  -out /etc/lighttpd/server.pem</div>
+  -out /etc/lighttpd/server.pem</code></div>
 
-    <h3>Install Fail2Ban for Brute-Force Protection</h3>
-    <div class="command-block">sudo apt install fail2ban -y
+            <h3>Install Fail2Ban for Brute-Force Protection</h3>
+            <div class="command-block"><code>sudo apt install fail2ban -y
 sudo systemctl enable fail2ban
-sudo systemctl start fail2ban</div>
+sudo systemctl start fail2ban</code></div>
 
-    <h3>Update Pi-hole Blocklists</h3>
-    <div class="command-block"># Update gravity (blocklists)
+            <h3>Update Pi-hole Blocklists</h3>
+            <div class="command-block"><code># Update gravity (blocklists)
 pihole -g
 
 # View available commands
-pihole -h</div>
+pihole -h</code></div>
+        </section>
 
-    <h2>🧪 Testing and Verification</h2>
-    
-    <h3>Test DNS Resolution</h3>
-    <div class="command-block"># From any device on your network
+        <section class="section">
+            <h2>🧪 Testing and Verification</h2>
+            
+            <h3>Test DNS Resolution</h3>
+            <div class="command-block"><code># From any device on your network
 nslookup google.com 10.0.0.153
 
-# Should return a response (DNS working)</div>
+# Should return a response (DNS working)</code></div>
 
-    <h3>Test Ad Blocking</h3>
-    <div class="command-block"># Watch queries in real-time
+            <h3>Test Ad Blocking</h3>
+            <div class="command-block"><code># Watch queries in real-time
 pihole -t
 
 # Or visit test pages:
-# https://pi-hole.net/pages-to-test-ad-blocking-performance/</div>
+# https://pi-hole.net/pages-to-test-ad-blocking-performance/</code></div>
 
-    <h3>Monitor Query Logs</h3>
-    <p>Check the Query Log in the web interface to see which domains are being blocked in real-time. You can whitelist or blacklist domains as needed.</p>
+            <h3>Monitor Query Logs</h3>
+            <p>Check the Query Log in the web interface to see which domains are being blocked in real-time. You can whitelist or blacklist domains as needed.</p>
+        </section>
 
-    <h2>🐛 Troubleshooting</h2>
-    
-    <h3>DNS Not Working</h3>
-    <ul>
-      <li>Verify Pi-hole is running: <code>pihole status</code></li>
-      <li>Check FTL (Faster Than Light) DNS service: <code>sudo systemctl status pihole-FTL</code></li>
-      <li>Restart Pi-hole: <code>pihole restartdns</code></li>
-    </ul>
+        <section class="section">
+            <h2>🐛 Troubleshooting</h2>
+            
+            <h3>DNS Not Working</h3>
+            <ul>
+                <li>Verify Pi-hole is running: <code>pihole status</code></li>
+                <li>Check FTL (Faster Than Light) DNS service: <code>sudo systemctl status pihole-FTL</code></li>
+                <li>Restart Pi-hole: <code>pihole restartdns</code></li>
+            </ul>
 
-    <h3>Cannot Access Web Interface</h3>
-    <ul>
-      <li>Verify lighttpd is running: <code>sudo systemctl status lighttpd</code></li>
-      <li>Check firewall rules if enabled</li>
-      <li>Verify IP address: <code>hostname -I</code></li>
-    </ul>
+            <h3>Cannot Access Web Interface</h3>
+            <ul>
+                <li>Verify lighttpd is running: <code>sudo systemctl status lighttpd</code></li>
+                <li>Check firewall rules if enabled</li>
+                <li>Verify IP address: <code>hostname -I</code></li>
+            </ul>
 
-    <h3>Some Sites Breaking</h3>
-    <ul>
-      <li>Check Query Log for blocked domains</li>
-      <li>Whitelist necessary domains: <code>pihole -w domain.com</code></li>
-      <li>Temporarily disable blocking: <code>pihole disable 5m</code> (5 minutes)</li>
-    </ul>
+            <h3>Some Sites Breaking</h3>
+            <ul>
+                <li>Check Query Log for blocked domains</li>
+                <li>Whitelist necessary domains: <code>pihole -w domain.com</code></li>
+                <li>Temporarily disable blocking: <code>pihole disable 5m</code> (5 minutes)</li>
+            </ul>
+        </section>
 
-    <h2>💡 Key Takeaways</h2>
-    <ul>
-      <li><strong>DNS-Level Filtering:</strong> Understanding how DNS sinkholes work to block unwanted content at the network level</li>
-      <li><strong>Linux System Administration:</strong> Hands-on experience with package management, service configuration, and system hardening</li>
-      <li><strong>Network Configuration:</strong> Practical application of static IP assignment, DHCP configuration, and router DNS settings</li>
-      <li><strong>Security & Privacy:</strong> Enhanced understanding of online tracking mechanisms and privacy protection techniques</li>
-      <li><strong>Monitoring & Analytics:</strong> Real-time visibility into network DNS traffic and patterns</li>
-    </ul>
+        <section class="section">
+            <h2>💡 Key Takeaways</h2>
+            <ul>
+                <li><strong>DNS-Level Filtering:</strong> Understanding how DNS sinkholes work to block unwanted content at the network level</li>
+                <li><strong>Linux System Administration:</strong> Hands-on experience with package management, service configuration, and system hardening</li>
+                <li><strong>Network Configuration:</strong> Practical application of static IP assignment, DHCP configuration, and router DNS settings</li>
+                <li><strong>Security & Privacy:</strong> Enhanced understanding of online tracking mechanisms and privacy protection techniques</li>
+                <li><strong>Monitoring & Analytics:</strong> Real-time visibility into network DNS traffic and patterns</li>
+            </ul>
+        </section>
 
-    <h2>🚀 Future Enhancements</h2>
-    <ul>
-      <li>Implement Unbound as a recursive DNS resolver for additional privacy</li>
-      <li>Set up DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT)</li>
-      <li>Configure Gravity Sync for multiple Pi-hole instances (redundancy)</li>
-      <li>Integrate with Prometheus and Grafana for advanced monitoring</li>
-      <li>Automate blocklist updates and maintenance with cron jobs</li>
-      <li>Implement VPN integration for remote ad-blocking access</li>
-    </ul>
-
-    <h2>🔗 Resources and References</h2>
-    <ul>
-      <li><a href="https://pi-hole.net/" target="_blank">Official Pi-hole Website</a></li>
-      <li><a href="https://github.com/pi-hole/pi-hole" target="_blank">Pi-hole GitHub Repository</a></li>
-      <li><a href="https://docs.pi-hole.net/" target="_blank">Pi-hole Documentation</a></li>
-      <li><a href="https://discourse.pi-hole.net/" target="_blank">Pi-hole Community Forum</a></li>
-      <li><a href="https://www.raspberrypi.com/documentation/" target="_blank">Raspberry Pi Documentation</a></li>
-    </ul>
-
-    <h2>📝 Technical Skills Demonstrated</h2>
-    <div class="tech-specs">
-      <div class="tech-card">
-        <strong>Networking</strong>
-        DNS Configuration<br>
-        Static IP Setup<br>
-        DHCP Management<br>
-        Network Troubleshooting
-      </div>
-      <div class="tech-card">
-        <strong>Linux Administration</strong>
-        Package Management (apt)<br>
-        Service Management (systemd)<br>
-        File System Navigation<br>
-        System Monitoring<br>
-        Shell Scripting
-      </div>
-      <div class="tech-card">
-        <strong>Security</strong>
-        DNS Sinkhole Implementation<br>
-        Access Control<br>
-        SSL/TLS Configuration<br>
-        Fail2Ban Setup<br>
-        System Hardening
-      </div>
-      <div class="tech-card">
-        <strong>Hardware</strong>
-        Raspberry Pi Configuration<br>
-        Embedded Systems<br>
-        Network Appliances<br>
-        IoT Security
-      </div>
-    </div>
-
-    <div class="footer">
-      <p>&copy; 2025 Karim Zouaki | Network Security & Infrastructure</p>
-    </div>
-  </section>
-</body>
-</html>
+        <section class="section">
+            <h2>🚀 Future Enhancements</h2>
+            <ul>
+                <li>Implement
