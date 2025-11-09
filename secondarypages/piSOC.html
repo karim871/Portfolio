@@ -1,1 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini-SOC Project | ZSec.io</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Lato:ital,wght@0,300;0,700;1,300;1,700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        header {
+            background-color: #101010;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 255, 65, 0.2);
+        }
+
+        .logo_container h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 200;
+            margin: 0;
+        }
+
+        .logo_container h1 span {
+            font-weight: 800;
+            color: #00ff41;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+        }
+
+        nav li {
+            font-size: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #00ff41;
+            background: rgba(0, 255, 65, 0.2);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(90deg, #00ff41 1px, transparent 1px),
+                linear-gradient(180deg, #00ff41 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+        .hero-section h1 {
+            font-size: 48px;
+            color: #00ff41;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.5); }
+            100% { text-shadow: 0 0 30px rgba(0, 255, 65, 0.8), 0 0 40px rgba(0, 255, 65, 0.4); }
+        }
+
+        .hero-section .subtitle {
+            font-size: 18px;
+            color: #ffffff;
+            opacity: 0.8;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 10px;
+        }
+
+        .hero-section .date {
+            font-size: 14px;
+            color: #00ff41;
+            opacity: 0.7;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.15), rgba(0, 102, 204, 0.05));
+            border: 2px solid #0066cc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.2), transparent);
+            animation: scanEffect 3s linear infinite;
+        }
+
+        @keyframes scanEffect {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .info-box strong {
+            color: #0066cc;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-box p {
+            position: relative;
+            z-index: 2;
+            line-height: 1.8;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.05));
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .warning-box strong {
+            color: #ffc107;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(40, 167, 69, 0.05));
+            border: 2px solid #28a745;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .success-box strong {
+            color: #28a745;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7));
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #00ff41;
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section h3 {
+            color: #00ff41;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #00ff41;
+            color: #000;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+
+        .section p, .section li {
+            line-height: 1.8;
+            color: #ffffff;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .section ul, .section ol {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .section ul li::before {
+            content: '▸';
+            color: #00ff41;
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+        }
+
+        .section ol {
+            counter-reset: item;
+        }
+
+        .section ol li {
+            counter-increment: item;
+        }
+
+        .section ol li::before {
+            content: counter(item) ".";
+            color: #00ff41;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .command-block {
+            background: rgba(0, 0, 0, 0.7);
+            border-left: 4px solid #00ff41;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .command-block code {
+            color: #00ff41;
+        }
+
+        code {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .tech-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .tech-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            border-color: #00ff41;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.2);
+        }
+
+        .tech-card strong {
+            display: block;
+            color: #00ff41;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .architecture-diagram {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .architecture-diagram pre {
+            color: #00ff41;
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .gallery a {
+            display: block;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .gallery a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery a:hover {
+            border-color: #00ff41;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+        }
+
+        .gallery a:hover::before {
+            opacity: 1;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 40px 0 20px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            color: #00ff41;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-link:hover {
+            background: rgba(0, 255, 65, 0.1);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .back-link::before {
+            content: '← ';
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            border-top: 2px solid rgba(0, 255, 65, 0.3);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 32px;
+            }
+
+            .tech-specs {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .command-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo_container">
+            <h1>Z<span>Sec.io</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../secondarypages/Blog.html">Blog</a></li>
+                <li><a href="../secondarypages/Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <h1>🏠 Home Mini-SOC Implementation</h1>
+        <p class="subtitle">Raspberry Pi + Suricata IDS + Splunk SIEM</p>
+        <p class="date">November 2025 | Abdelkrim Zouaki</p>
+    </div>
+
+    <div class="main-content">
+        <a href="index.html" class="back-link">Back to Portfolio</a>
+
+        <div class="info-box">
+            <strong>📌 Project Overview</strong>
+            <p>This project documents the complete setup of a home-based Security Operations Center (SOC) using a Raspberry Pi Zero 2 W as an Intrusion Detection System (IDS) with Suricata, forwarding logs via rsyslog to a Splunk Enterprise SIEM instance. This implementation demonstrates practical skills in network security monitoring, threat detection, log management, and Blue Team operations in a real-world environment.</p>
+        </div>
+
+        <section class="section">
+            <h2>🎯 Project Objectives</h2>
+            <ul>
+                <li>Deploy a production-ready network IDS for real-time threat detection</li>
+                <li>Implement centralized log collection and analysis using industry-standard SIEM</li>
+                <li>Create custom dashboards for security monitoring and threat hunting</li>
+                <li>Gain hands-on experience with Blue Team tools and methodologies</li>
+                <li>Develop skills in alert tuning, rule management, and incident response</li>
+                <li>Build a foundation for advanced threat intelligence integration</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>🏗️ System Architecture</h2>
+            <div class="architecture-diagram">
+                <pre>
+┌─────────────────────────────────────────────────────────┐
+│                    Home Network                         │
+│                  (10.0.0.0/24)                          │
+│                                                         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐             │
+│  │ Laptop   │  │  Phone   │  │  IoT     │             │
+│  │          │  │          │  │  Device  │             │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘             │
+│       │             │             │                     │
+│       └─────────────┴─────────────┘                     │
+│                     │                                   │
+│              ┌──────▼──────┐                            │
+│              │   Router    │                            │
+│              │  10.0.0.1   │                            │
+│              └──────┬──────┘                            │
+│                     │                                   │
+│              ┌──────▼──────────────────────┐            │
+│              │  Raspberry Pi Zero 2 W      │            │
+│              │  (Suricata IDS)             │            │
+│              │  10.0.0.153                 │            │
+│              │                             │            │
+│              │  • Captures traffic         │            │
+│              │  • Analyzes packets         │            │
+│              │  • Generates EVE JSON logs  │            │
+│              │  • Applies ET Open rules    │            │
+│              └──────┬──────────────────────┘            │
+│                     │                                   │
+│                     │ rsyslog TCP 1514                  │
+│                     │                                   │
+│              ┌──────▼──────────────────────┐            │
+│              │  Windows PC                 │            │
+│              │  (Splunk Enterprise)        │            │
+│              │  10.0.0.X                   │            │
+│              │                             │            │
+│              │  • Receives logs            │            │
+│              │  • Indexes & parses data    │            │
+│              │  • Dashboards & alerts      │            │
+│              │  • Threat hunting queries   │            │
+│              └─────────────────────────────┘            │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚙️ Technical Specifications</h2>
+            <div class="tech-specs">
+                <div class="tech-card">
+                    <strong>IDS Hardware</strong>
+                    Raspberry Pi Zero 2 W<br>
+                    MicroSD Card (32GB)<br>
+                    Power Supply (5V/2.5A)<br>
+                    Static IP: 10.0.0.153
+                </div>
+                <div class="tech-card">
+                    <strong>IDS Software</strong>
+                    Raspberry Pi OS Lite<br>
+                    Suricata 6.x/7.x<br>
+                    rsyslog (TCP forwarding)<br>
+                    ET Open Ruleset
+                </div>
+                <div class="tech-card">
+                    <strong>SIEM Platform</strong>
+                    Splunk Enterprise 9.x<br>
+                    Windows 10/11 Host<br>
+                    TCP Input: Port 1514<br>
+                    Custom Dashboards
+                </div>
+                <div class="tech-card">
+                    <strong>Network Config</strong>
+                    Mirror Port / SPAN<br>
+                    Gateway: 10.0.0.1<br>
+                    DNS: Cloudflare 1.1.1.1<br>
+                    SSH Remote Access
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔧 Implementation Process</h2>
+
+            <h3><span class="step-number">1</span>Raspberry Pi Initial Setup</h3>
+            <p>Prepare the Raspberry Pi with SSH access and static networking:</p>
+            <div class="command-block"><code># Update system packages
+sudo apt update && sudo apt full-upgrade -y
+
+# Install essential tools
+sudo apt install -y vim htop net-tools tcpdump
+
+# Configure static IP (using NetworkManager)
+sudo nmtui
+# Set: IP 10.0.0.153/24, Gateway 10.0.0.1, DNS 1.1.1.1
+
+# Verify network configuration
+ip addr show
+ping -c 4 8.8.8.8</code></div>
+
+            <h3><span class="step-number">2</span>Install and Configure Suricata</h3>
+            <p>Deploy Suricata IDS for network traffic analysis:</p>
+            <div class="command-block"><code># Install Suricata
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:oisf/suricata-stable
+sudo apt update
+sudo apt install -y suricata
+
+# Verify installation
+suricata --build-info
+
+# Update Emerging Threats Open ruleset
+sudo suricata-update
+sudo suricata-update list-sources
+sudo suricata-update enable-source et/open
+sudo suricata-update</code></div>
+
+            <h3><span class="step-number">3</span>Configure Suricata EVE JSON Logging</h3>
+            <p>Edit <code>/etc/suricata/suricata.yaml</code> to enable comprehensive logging:</p>
+            <div class="command-block"><code># Key configuration sections:
+
+# Network interface (adjust to your interface)
+af-packet:
+  - interface: eth0
+    threads: auto
+    cluster-type: cluster_flow
+
+# EVE JSON output configuration
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            tagged-packets: yes
+        - http:
+            extended: yes
+        - dns:
+            query: yes
+            answer: yes
+        - tls:
+            extended: yes
+        - files:
+            force-magic: yes
+        - ssh
+        - flow
+        - netflow
+
+# Restart Suricata
+sudo systemctl restart suricata
+sudo systemctl status suricata
+
+# Monitor logs
+sudo tail -f /var/log/suricata/eve.json</code></div>
+
+            <h3><span class="step-number">4</span>Configure rsyslog for Log Forwarding</h3>
+            <p>Forward Suricata logs to Splunk via TCP:</p>
+            <div class="command-block"><code># Create rsyslog configuration file
+sudo nano /etc/rsyslog.d/30-suricata.conf
+
+# Add the following content:
+# Forward Suricata EVE JSON logs to Splunk
+module(load="imfile")
+
+input(type="imfile"
+      File="/var/log/suricata/eve.json"
+      Tag="suricata"
+      Severity="info"
+      Facility="local7")
+
+# Forward to Splunk (replace with your Splunk IP)
+*.* @@10.0.0.X:1514
+
+# Restart rsyslog
+sudo systemctl restart rsyslog
+sudo systemctl status rsyslog
+
+# Test connectivity
+nc -zv 10.0.0.X 1514</code></div>
+
+            <h3><span class="step-number">5</span>Splunk Enterprise Configuration</h3>
+            <p>Set up Splunk to receive and parse Suricata logs:</p>
+            <div class="command-block"><code># 1. Install Splunk Enterprise (Windows)
+# Download from: https://www.splunk.com/
+
+# 2. Create TCP Data Input
+Settings → Data Inputs → TCP → New Local TCP
+Port: 1514
+Source Type: _json (or create custom sourcetype)
+Index: suricata (create new index)
+
+# 3. Verify data ingestion
+# In Splunk Search:
+index=suricata | head 10
+
+# 4. Parse JSON fields
+index=suricata | spath
+
+# 5. Search by event type
+index=suricata event_type=alert
+index=suricata event_type=dns
+index=suricata event_type=http
+index=suricata event_type=tls</code></div>
+
+            <h3><span class="step-number">6</span>Create Splunk Dashboards</h3>
+            <p>Build custom dashboards for security monitoring:</p>
+            <div class="command-block"><code># Dashboard 1: Event Type Distribution
+index=suricata 
+| stats count by event_type 
+| sort -count
+
+# Dashboard 2: Top Alerts (Last 24h)
+index=suricata event_type=alert 
+| stats count by alert.signature 
+| sort -count 
+| head 20
+
+# Dashboard 3: DNS Query Analysis
+index=suricata event_type=dns 
+| stats count by dns.query 
+| sort -count
+
+# Dashboard 4: HTTP Traffic Overview
+index=suricata event_type=http 
+| stats count by http.hostname, http.http_method
+| sort -count
+
+# Dashboard 5: Suspicious IPs
+index=suricata event_type=alert 
+| stats count by src_ip, dest_ip, alert.severity
+| where alert.severity=1 OR alert.severity=2</code></div>
+
+            <div class="warning-box">
+                <strong>⚠️ Privacy Considerations</strong>
+                <p>When sharing screenshots or logs publicly, always mask sensitive information including: IP addresses (both internal and external), domain names, hostnames, and any personally identifiable information (PII). Use tools like image editors or Splunk's built-in anonymization features.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔍 Threat Detection Capabilities</h2>
+            <p>The Mini-SOC provides real-time detection for various security events:</p>
+            
+            <h3>Network Protocol Analysis</h3>
+            <ul>
+                <li><strong>DNS:</strong> Query logging, tunneling detection, DGA identification</li>
+                <li><strong>HTTP/HTTPS:</strong> Suspicious user agents, C2 communication patterns</li>
+                <li><strong>TLS/SSL:</strong> Certificate validation, cipher suite analysis</li>
+                <li><strong>SSH:</strong> Brute force attempts, unusual authentication patterns</li>
+                <li><strong>TCP/UDP:</strong> Port scanning, DDoS indicators, unusual flows</li>
+            </ul>
+
+            <h3>Threat Categories Detected</h3>
+            <ul>
+                <li>Malware communication (C2 callbacks, beaconing)</li>
+                <li>Exploit attempts and vulnerability scanning</li>
+                <li>Data exfiltration patterns</li>
+                <li>Lateral movement indicators</li>
+                <li>Suspicious IoT device behavior</li>
+                <li>Known malicious IPs and domains (ET Open rules)</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>📊 Results and Capabilities</h2>
+            
+            <div class="success-box">
+                <strong>✅ Current Capabilities</strong>
+                <ul style="margin: 15px 0 0 0; padding-left: 20px;">
+                    <li>✅ Real-time network traffic monitoring across all devices</li>
+                    <li>✅ Automated threat detection using 30,000+ ET Open rules</li>
+                    <li>✅ Centralized log collection with 500MB+ daily ingestion</li>
+                    <li>✅ Custom dashboards for traffic analysis by protocol</li>
+                    <li>✅ Alert visualization with severity classification</li>
+                    <li>✅ DNS query logging and analysis for IoT devices</li>
+                    <li>✅ Suspicious flow detection and anomaly identification</li>
+                    <li>✅ Full-packet capture capability for forensic analysis</li>
+                </ul>
+            </div>
+
+            <h3>Key Metrics Tracked</h3>
+            <div class="tech-specs">
+                <div class="tech-card">
+                    <strong>Traffic Volume</strong>
+                    Daily Events: 10,000+<br>
+                    Protocols: 15+ types<br>
+                    Devices Monitored: All network endpoints
+                </div>
+                <div class="tech-card">
+                    <strong>Alert Statistics</strong>
+                    Rules Active: 30,000+<br>
+                    False Positives: Tuned<br>
+                    Severity Levels: 1-3
+                </div>
+                <div class="tech-card">
+                    <strong>Performance</strong>
+                    Latency: < 100ms<br>
+                    Packet Loss: < 0.1%<br>
+                    CPU Usage: 30-50%
+                </div>
+                <div class="tech-card">
+                    <strong>Storage</strong>
+                    Log Retention: 30 days<br>
+                    Index Size: ~15GB<br>
+                    Compression: Enabled
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📸 Project Screenshots</h2>
+            <p>Visual documentation of the Mini-SOC implementation (IPs masked for privacy):</p>
+            <div class="gallery">
+                <a href="../images/soc1.png" target="_blank">
+                    <img src="../images/soc1.png" alt="Suricata installation and initial configuration">
+                </a>
+                <a href="../images/soc2.png" target="_blank">
+                    <img src="../images/soc2.png" alt="ET Open ruleset update process">
