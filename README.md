@@ -1,4 +1,4 @@
-# 💼 Abdelkrim's Cybersecurity Portfolio
+# 💼 Karim's Cybersecurity Portfolio
 
 Welcome to my personal portfolio website hosted with **GitHub Pages**.
 
