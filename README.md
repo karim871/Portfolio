@@ -1,13 +1,13 @@
-# 💼 Karim's Cybersecurity Portfolio
+# 💼 My Cybersecurity Portfolio
 
-Welcome to my personal portfolio website hosted with **GitHub Pages**.
+Welcome to my personal portfolio website on GitHub.
 
-Here you'll find:
+Here you'll find a summary of my:
 
 - 🔐 Cybersecurity projects
-- 🧪 CTF walkthroughs (Hack The Box, TryHackMe)
 - 🛠️ Tools I’ve built
 - 📚 Certifications and learning paths
+- 🧪 CTF walkthroughs (Hack The Box, TryHackMe)
 
 ## 🌐 Live Website
 
