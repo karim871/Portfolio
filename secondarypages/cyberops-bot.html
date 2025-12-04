@@ -127,14 +127,38 @@
             margin: 20px 0 10px 0;
         }
 
+        /* --- UPDATED SCREENSHOT STYLE (THUMBNAILS) --- */
         .screenshot {
-            width: 100%;
-            max-width: 800px;
+            width: 260px;
             border: 2px solid #00ff41;
             border-radius: 10px;
             margin: 20px auto;
             display: block;
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.07);
+        }
+
+        /* --- POPUP FULLSCREEN IMAGE VIEWER --- */
+        #imgPopup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #imgPopup img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #00ff41;
+            border-radius: 10px;
         }
 
         .tech-stack {
@@ -203,6 +227,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="logo_container">
@@ -231,31 +256,19 @@
         </div>
 
         <div class="section">
-            <h2>🎯 Project Overview</h2>
-            <p>CyberOps Sidekick is an intelligent, automated threat intelligence bot that provides instant security analysis via Telegram. Simply message the bot with an IP address and receive comprehensive threat intelligence from multiple sources with an intelligent risk score.</p>
-            
-            <h3>Key Features</h3>
-            <ul>
-                <li>📊 <strong>Multi-Source Intelligence</strong>: Aggregates data from AbuseIPDB, VirusTotal, and AlienVault OTX</li>
-                <li>🎯 <strong>Intelligent Risk Scoring</strong>: Weighted algorithm calculating 0-100 risk scores</li>
-                <li>🔴🟠🟢 <strong>Visual Risk Indicators</strong>: Color-coded threat levels with emoji meters</li>
-                <li>💡 <strong>Actionable Recommendations</strong>: Context-aware security advice</li>
-                <li>⚡ <strong>Real-Time Analysis</strong>: Instant responses via Telegram</li>
-                <li>🤖 <strong>Fully Automated</strong>: No manual intervention required</li>
-            </ul>
-        </div>
-
-        <div class="section">
             <h2>📸 Live Demonstrations</h2>
             
             <h3>Clean IP Analysis (Google DNS - 8.8.4.4)</h3>
             <p>Risk Score: 0/100 - LOW 🟢</p>
             <img src="../images/cleanip.png" alt="Clean IP Result" class="screenshot">
-            
+
             <h3>Malicious IP Detection (Tor Exit Node - 185.220.101.1)</h3>
             <p>Risk Score: 100/100 - CRITICAL 🔴</p>
             <img src="../images/malicious-ip-result2.png" alt="Malicious IP Result" class="screenshot">
-            
+
+            <h3>Initial Workflow Prototype</h3>
+            <img src="../images/protocol.png" alt="Initial Workflow Prototype Screenshot" class="screenshot">
+
             <h3>n8n Workflow Architecture</h3>
             <img src="../images/14-complete-workflow.png" alt="Workflow Architecture" class="screenshot">
         </div>
@@ -294,66 +307,68 @@ Telegram Message → IP Extraction → Parallel API Calls → Risk Engine → Re
 
         <div class="section">
             <h2>📊 Risk Scoring Algorithm</h2>
-            <p>The bot uses a weighted scoring system combining multiple threat intelligence sources:</p>
-            
             <ul>
                 <li><strong>AbuseIPDB</strong> (40 points max): Abuse confidence × 0.4</li>
                 <li><strong>VirusTotal</strong> (40 points max): (Malicious × 3) + (Suspicious × 1.5)</li>
                 <li><strong>AlienVault OTX</strong> (20 points max): Threat pulses × 5</li>
             </ul>
-            
+
             <h3>Risk Levels</h3>
             <ul>
-                <li>🟢 <strong>LOW (0-24)</strong>: No immediate action needed</li>
-                <li>🟡 <strong>MEDIUM (25-49)</strong>: Keep on watchlist</li>
-                <li>🟠 <strong>HIGH (50-74)</strong>: Monitor closely, review activity</li>
-                <li>🔴 <strong>CRITICAL (75-100)</strong>: Block immediately, investigate connections</li>
+                <li>🟢 <strong>LOW (0-24)</strong></li>
+                <li>🟡 <strong>MEDIUM (25-49)</strong></li>
+                <li>🟠 <strong>HIGH (50-74)</strong></li>
+                <li>🔴 <strong>CRITICAL (75-100)</strong></li>
             </ul>
         </div>
 
         <div class="section">
             <h2>🎓 Skills Demonstrated</h2>
-            
             <h3>Technical Skills</h3>
             <ul>
                 <li>Workflow automation with n8n</li>
-                <li>RESTful API integration (3 threat intel sources)</li>
-                <li>JavaScript/Node.js for data transformation</li>
-                <li>Docker containerization and orchestration</li>
-                <li>Webhook configuration and ngrok tunneling</li>
-                <li>Error handling and rate limit management</li>
+                <li>RESTful API integration</li>
+                <li>JavaScript / Node.js</li>
+                <li>Docker & Webhooks</li>
             </ul>
-            
+
             <h3>Cybersecurity Skills</h3>
             <ul>
-                <li>Threat intelligence analysis and correlation</li>
-                <li>Indicator of Compromise (IOC) enrichment</li>
-                <li>Risk assessment and scoring methodologies</li>
+                <li>Threat intelligence & IOC enrichment</li>
+                <li>Risk scoring methodologies</li>
                 <li>SOC workflow automation</li>
-                <li>OSINT data aggregation</li>
             </ul>
         </div>
 
         <div class="section">
             <h2>🚀 Project Timeline</h2>
             <ul>
-                <li><strong>Phase 1</strong>: Basic IP lookup with single source ✅</li>
-                <li><strong>Phase 2</strong>: Multi-source threat intelligence ✅</li>
-                <li><strong>Phase 3</strong>: Intelligent risk scoring engine ✅</li>
-                <li><strong>Phase 4</strong>: Full Telegram bot automation ✅</li>
+                <li><strong>Phase 1</strong>: Single-source lookup</li>
+                <li><strong>Phase 2</strong>: Multi-source TI</li>
+                <li><strong>Phase 3</strong>: Full risk engine</li>
+                <li><strong>Phase 4</strong>: Telegram bot automation</li>
             </ul>
-            <p><strong>Total Development Time</strong>: 2 days</p>
-            <p><strong>Status</strong>: Production Ready</p>
         </div>
-<!-- 
-        <div class="section" style="text-align: center;">
-            <h2>📂 View Full Documentation</h2>
-            <p>Complete source code, setup instructions, and technical documentation available on GitHub</p>
-            <a href="https://github.com/yourusername/n8n-cyberops" class="github-link" target="_blank">
-                View on GitHub →
-            </a>
-        </div>
--->
     </div>
+
+    <!-- POPUP VIEWER -->
+    <div id="imgPopup" onclick="closeImg()">
+        <img id="popupImg">
+    </div>
+
+    <!-- IMAGE POPUP SCRIPT -->
+    <script>
+        document.querySelectorAll('.screenshot').forEach(img => {
+            img.addEventListener('click', () => {
+                document.getElementById('popupImg').src = img.src;
+                document.getElementById('imgPopup').style.display = 'flex';
+            });
+        });
+
+        function closeImg() {
+            document.getElementById('imgPopup').style.display = 'none';
+        }
+    </script>
+
 </body>
 </html>
