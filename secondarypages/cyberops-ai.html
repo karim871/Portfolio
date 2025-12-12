@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberOps AI Assistant | Abdelkrim Zouaki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Courier+New&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #101010;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #00ff41;
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 200;
+        }
+
+        .logo h1 span {
+            font-weight: 800;
+            color: #00ff41;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            color: #00ff41;
+            background: rgba(0, 255, 65, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(0, 255, 65, 0.05));
+            border-radius: 20px;
+            margin-bottom: 60px;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: #00ff41;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero .subtitle {
+            font-size: 20px;
+            color: #cccccc;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            background: rgba(0, 255, 65, 0.2);
+            color: #00ff41;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #00ff41;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #00ff41;
+            font-size: 32px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #ffffff;
+            font-size: 24px;
+            margin: 30px 0 15px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(0, 255, 65, 0.05));
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+            border-color: #00ff41;
+        }
+
+        .feature-card h4 {
+            color: #00ff41;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            font-size: 14px;
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #00ff41;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'BASH';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #00ff41;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .code-block pre {
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .architecture-diagram {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.1), rgba(0, 102, 204, 0.05));
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #0066cc;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            color: #cccccc;
+            overflow-x: auto;
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+            border: 2px solid #ff6b6b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            color: #00ff41;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-size: 14px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tech-item {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.2), rgba(0, 102, 204, 0.1));
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid #0066cc;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #00ff41;
+            color: #000;
+            border-color: #00ff41;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: #00ff41;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #0066cc;
+            border-color: #0066cc;
+        }
+
+        .btn-secondary:hover {
+            background: #0066cc;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 102, 204, 0.5);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #cccccc;
+        }
+
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00ff41;
+            font-size: 18px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #101010;
+            border-top: 2px solid #00ff41;
+            margin-top: 60px;
+        }
+
+        footer p {
+            color: #cccccc;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Z<span>Sec.io</span></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../secondarypages/accomp.html">Back</a></li>
+                <li><a href="../secondarypages/Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🤖 CyberOps AI Assistant</h1>
+            <p class="subtitle">AI-Powered Threat Intelligence & Log Analysis Automation</p>
+            <div class="badges">
+                <span class="badge">Python 3.13</span>
+                <span class="badge">Google Gemini AI</span>
+                <span class="badge">Threat Intel</span>
+                <span class="badge">n8n Compatible</span>
+                <span class="badge">Open Source</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📖 Project Overview</h2>
+            <p>CyberOps AI Assistant is a cutting-edge security automation tool that combines traditional threat intelligence gathering with Google Gemini AI to provide comprehensive, context-aware analysis of suspicious IP addresses and security events.</p>
+            
+            <h3>The Problem</h3>
+            <p>Security analysts waste 15-20 minutes per investigation gathering data from multiple sources, correlating logs, and writing reports. Junior analysts often miss critical context clues. Manual processes don't scale during incidents.</p>
+            
+            <h3>The Solution</h3>
+            <p>An intelligent automation system that:</p>
+            <ul>
+                <li>Aggregates threat intelligence from multiple sources automatically</li>
+                <li>Searches system logs for correlated activity</li>
+                <li>Uses AI to provide expert-level analysis and recommendations</li>
+                <li>Generates professional, timestamped reports instantly</li>
+                <li>Reduces investigation time from 15+ minutes to under 60 seconds</li>
+            </ul>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Time Reduction</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">&lt;60s</span>
+                    <span class="stat-label">Full Analysis</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Automated Reports</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">5+</span>
+                    <span class="stat-label">Intel Sources</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✨ Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>🔍 Automated OSINT</h4>
+                    <p>Gathers WHOIS data, checks Tor exit nodes, performs geolocation lookups, and correlates with threat feeds automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📋 Log Correlation</h4>
+                    <p>Searches auth.log, syslog, apache2, nginx, and Suricata logs to identify all activity from suspicious IPs.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🤖 AI-Powered Analysis</h4>
+                    <p>Google Gemini AI provides expert-level threat assessment, risk scoring, and actionable recommendations.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📄 Professional Reports</h4>
+                    <p>Generates timestamped, formatted security reports suitable for management and compliance documentation.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Three Analysis Modes</h4>
+                    <p>Quick (30s), Deep (60s), and Full (90s) analysis options to match urgency and investigation depth needs.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔗 n8n Integration</h4>
+                    <p>Seamlessly integrates with workflow automation platforms for hands-free SOC operations.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏗️ Architecture</h2>
+            <div class="architecture-diagram">
+                <pre>
+┌─────────────────────────────────────────────────────────┐
+│              User Input / n8n Workflow                   │
+│                   (IP Address + Type)                    │
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────┐
+│         threat_analyzer.py (Main Engine)                 │
+├─────────────────────────────────────────────────────────┤
+│  • Input validation & sanitization                       │
+│  • Multi-threaded data collection                        │
+│  • Report generation pipeline                            │
+└────────────────────────┬────────────────────────────────┘
+                         │
+         ┌───────────────┼───────────────┐
+         ▼               ▼               ▼
+    ┌─────────┐    ┌──────────┐    ┌──────────┐
+    │ WHOIS   │    │   Tor    │    │   Log    │
+    │ Lookup  │    │  Check   │    │  Search  │
+    └────┬────┘    └────┬─────┘    └────┬─────┘
+         │              │               │
+         └──────────────┼───────────────┘
+                        ▼
+            ┌───────────────────────────┐
+            │   Google Gemini AI API    │
+            │  • Threat assessment      │
+            │  • Risk scoring           │
+            │  • Recommendations        │
+            └────────────┬──────────────┘
+                         ▼
+            ┌────────────────────────────┐
+            │    Report Generation       │
+            │  /tmp/cyberops_reports/    │
+            │  • Timestamped files       │
+            │  • Formatted output        │
+            └────────────────────────────┘
+                </pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💻 Technology Stack</h2>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3.13</span>
+                <span class="tech-item">Google Gemini AI</span>
+                <span class="tech-item">google-genai SDK</span>
+                <span class="tech-item">python-dotenv</span>
+                <span class="tech-item">Bash Scripting</span>
+                <span class="tech-item">Linux System Tools</span>
+                <span class="tech-item">n8n Workflow</span>
+                <span class="tech-item">Virtual Environments</span>
+            </div>
+        </div>
+
+        <div class="section demo-section">
+            <h2>🎬 Usage Examples</h2>
+            
+            <h3>Quick Analysis (30 seconds)</h3>
+            <p>Perfect for initial triage and rapid threat assessment:</p>
+            <div class="code-block">
+                <pre>./run_analysis.sh 8.8.8.8 quick
+
+# Output includes:
+# - WHOIS registration data
+# - Tor exit node check
+# - AI threat assessment
+# - Risk level determination</pre>
+            </div>
+
+            <h3>Deep Analysis (60 seconds)</h3>
+            <p>Includes comprehensive log correlation:</p>
+            <div class="code-block">
+                <pre>./run_analysis.sh 185.220.101.1 deep
+
+# Output includes:
+# - Everything from quick analysis
+# - System-wide log search
+# - Activity timeline
+# - Pattern recognition</pre>
+            </div>
+
+            <h3>Full Analysis (90 seconds)</h3>
+            <p>Complete investigation with executive summary:</p>
+            <div class="code-block">
+                <pre>./run_analysis.sh 1.2.3.4 full
+
+# Output includes:
+# - Everything from deep analysis
+# - AI executive summary
+# - Risk scoring (1-10)
+# - Recommended actions
+# - Management-ready report</pre>
+            </div>
+
+            <h3>Python Direct Execution</h3>
+            <div class="code-block">
+                <pre>source venv/bin/activate
+python threat_analyzer.py 192.168.1.100 quick</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Installation & Setup</h2>
+            
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Kali Linux / Ubuntu / Debian</li>
+                <li>Python 3.13+ with venv support</li>
+                <li>Google Gemini API key (free tier available)</li>
+                <li>sudo access for log file reading</li>
+            </ul>
+
+            <h3>Quick Start</h3>
+            <div class="code-block">
+                <pre># Clone repository
+git clone https://github.com/yourusername/cyberops-ai.git
+cd cyberops-ai
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install google-genai python-dotenv
+
+# Configure API key
+echo "GOOGLE_API_KEY=your_key_here" > .env
+
+# Make executable
+chmod +x threat_analyzer.py run_analysis.sh
+
+# Test installation
+./run_analysis.sh 8.8.8.8 quick</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Technical Achievements</h2>
+            <ul>
+                <li>Successfully integrated Google Gemini AI API with proper error handling</li>
+                <li>Implemented multi-source threat intelligence aggregation</li>
+                <li>Created efficient log parsing without external dependencies</li>
+                <li>Designed modular architecture for easy feature expansion</li>
+                <li>Built n8n workflow integration for SOC automation</li>
+                <li>Overcame Python externally-managed environment constraints on Kali Linux</li>
+                <li>Implemented proper virtual environment isolation</li>
+                <li>Resolved Google Cloud billing and quota configuration challenges</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔮 Future Enhancements</h2>
+            <ul>
+                <li>Multi-threaded analysis for faster execution</li>
+                <li>VirusTotal API integration for malware reputation checks</li>
+                <li>Shodan integration for exposed services discovery</li>
+                <li>AbuseIPDB integration for abuse reporting</li>
+                <li>MITRE ATT&CK framework mapping in AI analysis</li>
+                <li>JSON output format for enhanced automation</li>
+                <li>Telegram bot interface for mobile SOC operations</li>
+                <li>Real-time dashboard with historical trending</li>
+                <li>Email/Slack alerting for critical threats</li>
+                <li>Machine learning for behavioral analysis</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📚 Lessons Learned</h2>
+            <ul>
+                <li><strong>API Integration Complexity:</strong> Managing authentication, rate limits, and error handling requires careful planning</li>
+                <li><strong>Environment Management:</strong> Virtual environments are essential for dependency isolation on security-focused distributions</li>
+                <li><strong>Cloud Billing:</strong> Free tiers often require billing account setup even when usage remains free</li>
+                <li><strong>Modular Design:</strong> Breaking analysis into discrete functions enables easier testing and feature expansion</li>
+                <li><strong>User Experience:</strong> Clear progress indicators and error messages are critical for automation tools</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Get Started</h2>
+            <p>Ready to automate your security operations? Access the full source code, documentation, and setup guides:</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/yourusername/cyberops-ai" class="btn btn-primary" target="_blank">View on GitHub</a>
+                <a href="https://github.com/yourusername/cyberops-ai/blob/main/README.md" class="btn btn-secondary" target="_blank">Read Documentation</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Abdelkrim Zouaki | CyberOps AI Assistant Project</p>
+        <p>CompTIA CySA+ | Security+ | CCNA Certified</p>
+    </footer>
+</body>
+</html>
