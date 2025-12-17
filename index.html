@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta property="og:title" content="Karim Zouaki — Portfolio" />
-    <meta property="og:description" content="My cybersecurity-themed portfolio showcasing web projects built with HTML, CSS, and GitHub Pages." />
+    <meta property="og:title" content="Karim Zouaki — Cybersecurity Portfolio" />
+    <meta property="og:description" content="SOC Analyst | Threat Detection Specialist. CompTIA CySA+, Security+, CCNA certified with hands-on SIEM, IDS, and automation experience." />
     <meta property="og:image" content="https://karim871.github.io/Portfolio/images/thumbnail.webp" />
     <meta property="og:url" content="https://karim871.github.io/Portfolio/" />
     <meta property="og:type" content="website" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZSec.io - Cybersecurity Excellence</title>
+    <title>Abdelkrim Zouaki - Cybersecurity Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Courier+New&display=swap" rel="stylesheet">
     <style>
         * {
@@ -22,6 +22,7 @@
         html {
             font-size: 20px;
             font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -104,7 +105,7 @@
         }
 
         .navigation li {
-            list-style: none; /* No bullets before Home/blog/contact */
+            list-style: none;
             color: white;
             font-size: 18px;
             font-weight: 400;
@@ -144,6 +145,7 @@
             position: relative;
             z-index: 1;
             animation: backgroundMove 20s linear infinite;
+            padding: 60px 20px;
         }
 
         @keyframes backgroundMove {
@@ -155,15 +157,17 @@
             text-align: center;
             position: relative;
             z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         #hero h1 {
             display: block;
             width: fit-content;
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(2rem, 4vw, 3.5rem);
             position: relative;
             color: white;
-            margin: 25px auto;
+            margin: 15px auto;
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInUp 0.8s ease forwards;
@@ -172,17 +176,54 @@
 
         #hero h1:nth-child(1) {
             animation-delay: 0.2s;
+            color: #00ff41;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
         }
 
         #hero h1:nth-child(2) {
             animation-delay: 0.4s;
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
         }
 
-        #hero h1:nth-child(3) {
-            color: #00ff41;
-            margin-bottom: 0px;
+        #hero .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin: 20px auto;
+            max-width: 800px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
             animation-delay: 0.6s;
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+        }
+
+        #hero .credentials {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px auto;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.7s;
+        }
+
+        #hero .credential-badge {
+            background: rgba(0, 255, 65, 0.15);
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        #hero .credential-badge:hover {
+            background: rgba(0, 255, 65, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
         }
 
         @keyframes fadeInUp {
@@ -192,23 +233,30 @@
             }
         }
 
+        #hero .cta-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.8s;
+        }
+
         #hero .cta {
             display: inline-block;
             padding: 15px 40px;
             background: transparent;
             border: 3px solid #00ff41;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             text-transform: uppercase;
             letter-spacing: 3px;
-            margin-top: 40px;
             transition: all 0.3s ease;
             border-radius: 50px;
             color: #00ff41;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.8s;
         }
 
         #hero .cta::before {
@@ -231,6 +279,297 @@
 
         #hero .cta:hover::before {
             left: 100%;
+        }
+
+        #hero .cta.secondary {
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid rgba(0, 255, 65, 0.5);
+        }
+
+        /* About Section */
+        #about {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7));
+            padding: 80px 20px;
+            margin-top: -1px;
+        }
+
+        #about .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #about h2 {
+            color: #00ff41;
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        #about .about-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto 30px;
+            text-align: center;
+        }
+
+        #about .highlight-box {
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 900px;
+        }
+
+        #about .highlight-box strong {
+            color: #00ff41;
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        #about .highlight-box p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Projects Section */
+        #projects {
+            background: #0a0a0a;
+            padding: 80px 20px;
+        }
+
+        #projects h2 {
+            color: #00ff41;
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .project-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: #00ff41;
+            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.3);
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-card h3 {
+            color: #00ff41;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tech-tags span {
+            background: rgba(0, 255, 65, 0.2);
+            border: 1px solid rgba(0, 255, 65, 0.4);
+            color: #00ff41;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .project-card a {
+            color: #00ff41;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-card a:hover {
+            transform: translateX(5px);
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        /* Skills Section */
+        #skills {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7));
+            padding: 80px 20px;
+        }
+
+        #skills h2 {
+            color: #00ff41;
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .skills-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-category {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            border-color: #00ff41;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+        }
+
+        .skill-category h3 {
+            color: #00ff41;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-category ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .skill-category li {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .skill-category li::before {
+            content: '▸';
+            color: #00ff41;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        /* Certifications Section */
+        #certifications {
+            background: #0a0a0a;
+            padding: 80px 20px;
+        }
+
+        #certifications h2 {
+            color: #00ff41;
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .cert-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .cert {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .cert:hover {
+            border-color: #00ff41;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.3);
+        }
+
+        .cert img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        .cert h3 {
+            color: #00ff41;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .cert p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .valid-until {
+            color: rgba(0, 255, 65, 0.8);
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         /* Pulse animation for logo */
@@ -280,14 +619,32 @@
             }
 
             #hero h1 {
-                font-size: 2.5rem;
-                margin: 15px auto;
+                margin: 10px auto;
+            }
+
+            #hero .cta-container {
+                flex-direction: column;
+                align-items: center;
             }
 
             #hero .cta {
-                font-size: 1.2rem;
+                font-size: 1rem;
                 padding: 12px 30px;
                 letter-spacing: 2px;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cert-showcase {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -300,26 +657,10 @@
                 font-size: 14px;
             }
 
-            #hero h1 {
-                font-size: 2rem;
+            #hero .credential-badge {
+                font-size: 0.8rem;
+                padding: 6px 15px;
             }
-
-            #hero .cta {
-                font-size: 1rem;
-                padding: 10px 25px;
-            }
-        }
-
-        /* Additional cybersecurity-themed elements */
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.1;
         }
 
         /* Scrollbar styling */
@@ -351,7 +692,10 @@
                 <h1>Z<span>Sec.io</span></h1>
             </div>
             <ul class="navigation">
-                <a href="./index.html" class="active"><li>Home</li></a>
+                <a href="#hero"><li>Home</li></a>
+                <a href="#projects"><li>Projects</li></a>
+                <a href="#skills"><li>Skills</li></a>
+                <a href="#certifications"><li>Certifications</li></a>
                 <a href="./secondarypages/Blog.html"><li>Blog</li></a>
                 <a href="./secondarypages/Contact.html"><li>Contact</li></a>
             </ul>
@@ -362,32 +706,213 @@
     <section id="hero">
         <div class="hero container">
             <div>
-                <h1>A Cybersecurity Journal by </h1>
-                <h1> Abdelkrim Zouaki </h1>
-                <a href="#about" type="button" class="cta">PORTFOLIO</a>
+                <h1>SOC Analyst | Threat Detection Specialist</h1>
+                <h1>Abdelkrim Zouaki</h1>
+                <p class="subtitle">Building automated security operations with SIEM, IDS, and threat intelligence integration. Experienced in real-time threat detection, log analysis, and security automation.</p>
+                
+                <div class="credentials">
+                    <span class="credential-badge">CompTIA CySA+ ✓</span>
+                    <span class="credential-badge">Security+ ✓</span>
+                    <span class="credential-badge">CCNA ✓</span>
+                </div>
+
+                <div class="cta-container">
+                    <a href="#projects" class="cta">View Projects</a>
+                    <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" class="cta secondary">LinkedIn</a>
+                    <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="cta secondary">Contact Me</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <script>
-        // Add smooth scrolling for CTA button
-        document.querySelector('.cta').addEventListener('click', function(e) {
-            e.preventDefault();
-            // Add your scroll behavior or navigation here
-            console.log('CTA clicked - add your navigation logic');
-        });
+    <!-- About Section -->
+    <section id="about">
+        <div class="content-wrapper">
+            <h2>About Me</h2>
+            <p class="about-text">
+                Recent cybersecurity graduate (DCS Computer Security & Networking) with hands-on experience in SOC operations, threat intelligence automation, and network security monitoring. Built production-grade security systems including a Mini-SOC with Suricata IDS and Splunk SIEM, demonstrating ability to design, deploy, and maintain enterprise-level security infrastructure.
+            </p>
+            <p class="about-text">
+                Specialized in automating security workflows using Python, n8n, and AI integration to reduce incident response times and improve threat detection accuracy. Proven ability to analyze complex security events, correlate logs across multiple sources, and provide actionable intelligence for security operations teams.
+            </p>
+            <div class="highlight-box">
+                <strong>🎯 Currently Seeking</strong>
+                <p>SOC Analyst, Security Operations, Threat Intelligence Analyst, or Junior Security Engineer roles in Toronto, Vancouver, Calgary, or remote positions. Open to both contract and permanent opportunities.</p>
+            </div>
+        </div>
+    </section>
 
-        // Add header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
-                header.style.backdropFilter = 'blur(10px)';
-            } else {
-                header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
-                header.style.backdropFilter = 'none';
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2>Featured Security Projects</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <h3>🏠 Home Mini-SOC</h3>
+                <p>Production IDS deployment with Suricata + Splunk SIEM. Real-time threat detection across home network with 30,000+ Emerging Threats rules. Monitors all traffic, correlates logs, and provides dashboard analytics for security events.</p>
+                <div class="tech-tags">
+                    <span>Suricata</span>
+                    <span>Splunk</span>
+                    <span>rsyslog</span>
+                    <span>Raspberry Pi</span>
+                    <span>Linux</span>
+                </div>
+                <a href="./secondarypages/piSOC.html">View Project Details →</a>
+            </div>
+
+            <div class="project-card">
+                <h3>🤖 CyberOps Sidekick</h3>
+                <p>Automated threat intelligence bot using n8n workflow automation. Aggregates data from AbuseIPDB, VirusTotal, and AlienVault OTX APIs. Implements custom risk scoring algorithm and delivers instant threat analysis via Telegram bot interface.</p>
+                <div class="tech-tags">
+                    <span>n8n</span>
+                    <span>APIs</span>
+                    <span>Docker</span>
+                    <span>Telegram</span>
+                    <span>JavaScript</span>
+                </div>
+                <a href="./secondarypages/cyberops-bot.html">View Project Details →</a>
+            </div>
+
+            <div class="project-card">
+                <h3>🧠 CyberOps AI Assistant</h3>
+                <p>AI-powered threat analysis tool using Google Gemini API. Automates OSINT gathering, log correlation, and security report generation. Reduces investigation time from 15+ minutes to under 60 seconds with comprehensive threat intelligence integration.</p>
+                <div class="tech-tags">
+                    <span>Python</span>
+                    <span>Gemini AI</span>
+                    <span>Bash</span>
+                    <span>APIs</span>
+                    <span>OSINT</span>
+                </div>
+                <a href="./secondarypages/cyberops-ai.html">View Project Details →</a>
+            </div>
+
+            <div class="project-card">
+                <h3>🛡️ Network-Wide Ad Blocker</h3>
+                <p>DNS sinkhole implementation with Pi-hole for network security and privacy protection. Blocks malicious domains, tracking, and telemetry across all network devices. Demonstrates understanding of DNS security and network-level filtering.</p>
+                <div class="tech-tags">
+                    <span>DNS</span>
+                    <span>Linux</span>
+                    <span>Pi-hole</span>
+                    <span>Networking</span>
+                </div>
+                <a href="./secondarypages/pihole.html">View Project Details →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>🔍 Security Operations</h3>
+                <ul>
+                    <li>SIEM (Splunk Enterprise)</li>
+                    <li>IDS/IPS (Suricata)</li>
+                    <li>Log Analysis (rsyslog, syslog)</li>
+                    <li>Threat Intelligence (OSINT)</li>
+                    <li>Incident Response</li>
+                    <li>Security Automation</li>
+                    <li>Vulnerability Assessment</li>
+                </ul>
+            </div>
+
+            <div class="skill-category">
+                <h3>🌐 Networking</h3>
+                <ul>
+                    <li>TCP/IP, DNS, DHCP</li>
+                    <li>Network Traffic Analysis</li>
+                    <li>Packet Capture (tcpdump, Wireshark)</li>
+                    <li>Firewall Configuration</li>
+                    <li>VLANs, Routing (CCNA)</li>
+                    <li>Network Security Monitoring</li>
+                </ul>
+            </div>
+
+            <div class="skill-category">
+                <h3>💻 Technical Tools</h3>
+                <ul>
+                    <li>Python (Scripting, Automation)</li>
+                    <li>Bash/Shell Scripting</li>
+                    <li>Docker, Virtualization</li>
+                    <li>n8n Workflow Automation</li>
+                    <li>Git/GitHub</li>
+                    <li>AI/ML Integration (Gemini)</li>
+                </ul>
+            </div>
+
+            <div class="skill-category">
+                <h3>🐧 Operating Systems</h3>
+                <ul>
+                    <li>Kali Linux</li>
+                    <li>Ubuntu/Debian</li>
+                    <li>Raspberry Pi OS</li>
+                    <li>Windows 10/11</li>
+                    <li>Linux System Administration</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Certifications Section -->
+<section id="certifications">
+    <h2>Professional Certifications</h2>
+    <div class="cert-showcase">
+        <div class="cert">
+            <img src="./images/CySA+-png.webp" alt="CompTIA CySA+" loading="lazy">
+            <h3>CompTIA CySA+</h3>
+            <p>Cybersecurity Analyst</p>
+            <span class="valid-until">Valid: 2025-2028</span>
+        </div>
+        
+        <div class="cert">
+            <img src="./images/Security+-png.webp" alt="CompTIA Security+" loading="lazy">
+            <h3>CompTIA Security+</h3>
+            <p>Security Professional</p>
+            <span class="valid-until">Valid: 2025-2028</span>
+        </div>
+        
+        <div class="cert">
+            <h3>Cisco CCNA</h3>
+            <p>Enterprise Networking & Security</p>
+            <span class="valid-until">Certified</span>
+        </div>
+        
+        <div class="cert">
+            <h3>Microsoft Azure (AZ-900)</h3>
+            <p>Cloud Fundamentals</p>
+            <span class="valid-until">Certified</span>
+        </div>
+
+        <div class="cert">
+            <h3>Microsoft SC-900</h3>
+            <p>Security, Compliance & Identity</p>
+            <span class="valid-until">Certified</span>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Add smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
         });
-    </script>
-</body>
-</html>
+    });
+
+    // Add header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('.header');
+        if (window.scrollY > 100) {
+            header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
+            header.style.backdropFilter = 'blur(10px)';
+        } else {
+            header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
+            header.style.backdropFilter = 'none';
+        }
+    });
+</script>
