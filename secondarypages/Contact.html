@@ -28,7 +28,6 @@
             flex-direction: column;
         }
 
-        /* Header - matches index.html */
         .header {
             width: 100%;
             height: 100px;
@@ -121,15 +120,10 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
-                text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-            }
-            50% {
-                text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.3);
-            }
+            0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.3); }
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             padding-top: 140px;
@@ -189,7 +183,6 @@
             z-index: 2;
         }
 
-        /* Contact Grid */
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -197,7 +190,6 @@
             margin-bottom: 40px;
         }
 
-        /* Contact Form */
         .contact-form-container {
             background: linear-gradient(135deg, #16213e, #0f3460);
             border: 2px solid rgba(0, 255, 65, 0.3);
@@ -214,9 +206,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image:
-                linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px),
-                linear-gradient(180deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+            background-image: linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(180deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
             background-size: 20px 20px;
             opacity: 0.3;
         }
@@ -327,7 +317,6 @@
             cursor: not-allowed;
         }
 
-        /* Contact Info Cards */
         .contact-info-container {
             display: flex;
             flex-direction: column;
@@ -405,6 +394,17 @@
             transform: translateX(5px);
         }
 
+        .contact-method .info-text {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .contact-method .info-highlight {
+            color: #00ff41;
+            font-weight: 600;
+        }
+
         .social-links {
             display: flex;
             gap: 15px;
@@ -433,7 +433,6 @@
             box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
         }
 
-        /* Status Indicator */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -456,12 +455,8 @@
         }
 
         @keyframes statusPulse {
-            0%, 100% {
-                box-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 15px rgba(0, 255, 65, 0.8);
-            }
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 65, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(0, 255, 65, 0.8); }
         }
 
         .status-badge span {
@@ -470,7 +465,6 @@
             font-size: 0.9rem;
         }
 
-        /* Messages */
         .message {
             padding: 15px 20px;
             border-radius: 10px;
@@ -482,331 +476,3 @@
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message.success {
-            background: rgba(0, 255, 65, 0.1);
-            border: 2px solid #00ff41;
-            color: #00ff41;
-        }
-
-        .message.error {
-            background: rgba(255, 65, 65, 0.1);
-            border: 2px solid #ff4141;
-            color: #ff4141;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                height: 80px;
-            }
-
-            .inner_header {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem;
-            }
-
-            .logo_container h1 {
-                font-size: 24px;
-                margin-bottom: 0.5rem;
-            }
-
-            .navigation {
-                gap: 0.5rem;
-            }
-
-            .navigation li {
-                font-size: 16px;
-            }
-
-            .main-content {
-                padding-top: 100px;
-            }
-
-            .contact-form-container,
-            .info-card {
-                padding: 25px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .page-hero h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #00ff41;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00cc33;
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <div class="header">
-        <div class="inner_header">
-            <div class="logo_container">
-                <h1>Z<span>Sec.io</span></h1>
-            </div>
-            <ul class="navigation">
-                <a href="../index.html"><li>Home</li></a>
-                <a href="../index.html#projects"><li>Projects</li></a>
-                <a href="../index.html#skills"><li>Skills</li></a>
-                <a href="../index.html#certifications"><li>Certifications</li></a>
-                <a href="Blog.html"><li>Blog</li></a>
-                <a href="Contact.html"><li>Contact</li></a>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Page Hero -->
-        <div class="page-hero">
-            <h1>Let's Connect</h1>
-            <p>Interested in collaboration, job opportunities, or cybersecurity consulting? I'm always open to discussing security projects and career opportunities.</p>
-        </div>
-
-        <!-- Contact Grid -->
-        <div class="contact-grid">
-            <!-- Contact Form -->
-            <div class="contact-form-container">
-                <h2>Send a Message</h2>
-                
-                <div class="message success" id="successMessage">
-                    ✓ Message sent successfully! I'll get back to you within 24-48 hours.
-                </div>
-                
-                <div class="message error" id="errorMessage">
-                    ✗ Please fill in all required fields correctly.
-                </div>
-
-                <form id="contactForm" action="https://formspree.io/f/mblqpkdo" method="POST">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Name *</label>
-                            <input type="text" id="name" name="name" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="_replyto" placeholder="your@email.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" placeholder="What's this about?">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message">Message *</label>
-                        <textarea id="message" name="message" placeholder="Tell me about your project, job opportunity, or question..." required></textarea>
-                    </div>
-
-                    <input type="hidden" name="_subject" value="New Contact from ZSec.io Portfolio">
-                    
-                    <button type="submit" id="submitBtn">
-                        <span>Send Message</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Contact Info -->
-            <div class="contact-info-container">
-                <!-- Direct Contact -->
-                <div class="info-card">
-                    <h3><span class="icon">📧</span> Direct Contact</h3>
-                    <div class="contact-method">
-                        <p>Email</p>
-                        <a href="mailto:abdelkrim.zouaki.ti@gmail.com">abdelkrim.zouaki.ti@gmail.com</a>
-                    </div>
-                    <div class="contact-method">
-                        <p>Location</p>
-                        <a>Montréal, QC • Open to relocate</a>
-                    </div>
-                    <div class="status-badge">
-                        <div class="status-indicator"></div>
-                        <span>Actively seeking SOC Analyst/IT roles</span>
-                    </div>
-                </div>
-
-                <!-- Professional Networks -->
-                <div class="info-card">
-                    <h3><span class="icon">🌐</span> Connect Online</h3>
-                    <div class="contact-method">
-                        <p>LinkedIn</p>
-                        <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank">Abdelkrim Zouaki</a>
-                    </div>
-                    <div class="contact-method">
-                        <p>GitHub</p>
-                        <a href="https://github.com/karim871" target="_blank">@karim871</a>
-                    </div>
-                    <div class="contact-method">
-                        <p>TryHackMe</p>
-                        <a href="https://tryhackme.com/p/karimwq" target="_blank">@karimwq</a>
-                    </div>
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" class="social-link" title="LinkedIn">💼</a>
-                        <a href="https://github.com/karim871" target="_blank" class="social-link" title="GitHub">🔗</a>
-                        <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="social-link" title="Email">📧</a>
-                    </div>
-                </div>
-
-                <!-- Response Info -->
-                <div class="info-card">
-                    <h3><span class="icon">⚡</span> What to Expect</h3>
-                    <div class="contact-method">
-                        <p>Response Time</p>
-                        <a>24-48 hours</a>
-                    </div>
-                    <div class="contact-method">
-                        <p>Best For</p>
-                        <a>Job opportunities, collaborations, consulting</a>
-                    </div>
-                    <div class="contact-method">
-                        <p>Languages</p>
-                        <a>English, French</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const form = document.getElementById('contactForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMsg = document.getElementById('successMessage');
-        const errorMsg = document.getElementById('errorMessage');
-
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Hide previous messages
-            successMsg.style.display = 'none';
-            errorMsg.style.display = 'none';
-            
-            // Basic validation
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-            
-            if (!name || !email || !message) {
-                errorMsg.textContent = '✗ Please fill in all required fields correctly.';
-                errorMsg.style.display = 'block';
-                errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                errorMsg.textContent = '✗ Please enter a valid email address.';
-                errorMsg.style.display = 'block';
-                errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                return;
-            }
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            const originalText = submitBtn.querySelector('span').textContent;
-            submitBtn.querySelector('span').textContent = 'Sending...';
-            
-            try {
-                // Submit form using fetch
-                const formData = new FormData(form);
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                submitBtn.disabled = false;
-                submitBtn.querySelector('span').textContent = originalText;
-                
-                if (response.ok) {
-                    successMsg.style.display = 'block';
-                    form.reset();
-                    successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                } else {
-                    errorMsg.textContent = '✗ Oops! There was a problem submitting your form. Please try again.';
-                    errorMsg.style.display = 'block';
-                    errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            } catch (error) {
-                submitBtn.disabled = false;
-                submitBtn.querySelector('span').textContent = originalText;
-                
-                errorMsg.textContent = '✗ Network error. Please check your connection and try again.';
-                errorMsg.style.display = 'block';
-                errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        });
-
-        // Real-time validation
-        const inputs = document.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            input.addEventListener('blur', function() {
-                if (this.value.trim() !== '') {
-                    if (this.checkValidity()) {
-                        this.style.borderColor = 'rgba(0, 255, 65, 0.6)';
-                    } else {
-                        this.style.borderColor = 'rgba(255, 65, 65, 0.6)';
-                    }
-                } else {
-                    this.style.borderColor = 'rgba(0, 255, 65, 0.3)';
-                }
-            });
-            
-            input.addEventListener('focus', function() {
-                this.style.borderColor = '#00ff41';
-            });
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
-                header.style.backdropFilter = 'blur(10px)';
-            } else {
-                header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
-                header.style.backdropFilter = 'none';
-            }
-        });
-    </script>
-</body>
-</html>
-
