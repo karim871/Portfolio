@@ -424,6 +424,7 @@
             justify-content: center;
             font-size: 1.5rem;
             transition: all 0.3s ease;
+            color: #00ff41;
         }
 
         .social-link:hover {
@@ -476,3 +477,171 @@
         }
 
         @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid #00ff41;
+            color: #00ff41;
+        }
+
+        .message.error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+        }
+
+        @media (max-width: 968px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .inner_header {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+
+            .header {
+                height: auto;
+            }
+
+            .navigation {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="inner_header">
+            <div class="logo_container">
+                <h1>Abdelkrim<span>Zouaki</span></h1>
+            </div>
+            <ul class="navigation">
+                <a href="index.html"><li>Home</li></a>
+                <a href="about.html"><li>About</li></a>
+                <a href="projects.html"><li>Projects</li></a>
+                <a href="contact.html"><li>Contact</li></a>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-hero">
+            <h1>Get In Touch</h1>
+            <p>Have a project in mind or want to discuss cybersecurity? Feel free to reach out using the form below or through any of the contact methods.</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-form-container">
+                <h2>Send a Message</h2>
+                <div id="formMessage" class="message"></div>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john.doe@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Project Inquiry" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell me about your project or inquiry..." required></textarea>
+                    </div>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+
+            <div class="contact-info-container">
+                <div class="info-card">
+                    <h3><span class="icon">📧</span> Email</h3>
+                    <div class="contact-method">
+                        <p>Professional Inquiries</p>
+                        <a href="mailto:contact@abdelkrimzouaki.com">contact@abdelkrimzouaki.com</a>
+                    </div>
+                    <div class="status-badge">
+                        <div class="status-indicator"></div>
+                        <span>Available for Projects</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3><span class="icon">📍</span> Location</h3>
+                    <div class="contact-method">
+                        <p>Based in</p>
+                        <span class="info-text">Montreal, <span class="info-highlight">Canada</span></span>
+                    </div>
+                    <div class="contact-method">
+                        <p>Timezone</p>
+                        <span class="info-text"><span class="info-highlight">EST</span> (UTC-5)</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3><span class="icon">🌐</span> Connect</h3>
+                    <div class="social-links">
+                        <a href="https://linkedin.com" class="social-link" target="_blank">💼</a>
+                        <a href="https://github.com" class="social-link" target="_blank">💻</a>
+                        <a href="https://twitter.com" class="social-link" target="_blank">🐦</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('contactForm');
+        const messageDiv = document.getElementById('formMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            showMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
+            form.reset();
+        });
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
