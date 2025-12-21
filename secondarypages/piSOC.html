@@ -20,16 +20,32 @@
             color: #ffffff;
         }
 
-        header {
-            background-color: #101010;
-            padding: 1rem 2rem;
+        /* Header - matches index.html */
+        .header {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #101010, #1a1a1a);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .inner_header {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 255, 65, 0.2);
+            padding: 0 2rem;
+        }
+
+        .logo_container {
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
 
         .logo_container h1 {
@@ -37,12 +53,16 @@
             font-size: 32px;
             font-weight: 200;
             margin: 0;
+            transition: all 0.3s ease;
         }
 
         .logo_container h1 span {
             font-weight: 800;
             color: #00ff41;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+            animation: pulse 2s ease-in-out infinite;
         }
+
 
         nav ul {
             list-style: none;
