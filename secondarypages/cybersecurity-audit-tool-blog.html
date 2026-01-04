@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Cybersecurity Audit Tool | ZSec.io Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        html {
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0a0a0a;
+            overflow-x: hidden;
+            color: #e0e0e0;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #101010, #1a1a1a);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .inner_header {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo_container h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 200;
+        }
+
+        .logo_container h1 span {
+            font-weight: 800;
+            color: #00ff41;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navigation a {
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navigation li {
+            list-style: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .navigation a:hover {
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+        }
+
+        .navigation a:hover li {
+            color: #00ff41;
+        }
+
+        @keyframes pulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.8); }
+        }
+
+        /* Blog Container */
+        .blog-container {
+            max-width: 900px;
+            margin: 120px auto 60px;
+            padding: 0 20px;
+        }
+
+        /* Article Header */
+        .article-header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid rgba(0, 255, 65, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .article-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: #00ff41;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            background: rgba(0, 255, 65, 0.15);
+            color: #00ff41;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Article Content */
+        .article-content {
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .article-content h2 {
+            color: #00ff41;
+            font-size: 2rem;
+            margin: 50px 0 25px;
+            font-weight: 700;
+            border-left: 4px solid #00ff41;
+            padding-left: 20px;
+        }
+
+        .article-content h3 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin: 35px 0 20px;
+            font-weight: 600;
+        }
+
+        .article-content p {
+            color: #d0d0d0;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+
+        .article-content strong {
+            color: #00ff41;
+            font-weight: 600;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(0, 255, 65, 0.05));
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-left: 5px solid #00ff41;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .highlight-box h3 {
+            color: #00ff41;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .highlight-box p {
+            margin-bottom: 15px;
+        }
+
+        .highlight-box:last-child p {
+            margin-bottom: 0;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+            border: 2px solid rgba(255, 107, 107, 0.4);
+            border-left: 5px solid #ff6b6b;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .warning-box h4 {
+            color: #ff6b6b;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #0d0d0d;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            margin: 25px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            background: #00ff41;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .code-block pre {
+            color: #00ff41;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Lists */
+        .article-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 25px 0;
+        }
+
+        .article-content ul li {
+            padding: 10px 0 10px 35px;
+            position: relative;
+            color: #d0d0d0;
+        }
+
+        .article-content ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00ff41;
+            font-size: 20px;
+        }
+
+        .article-content ol {
+            padding-left: 25px;
+            margin: 25px 0;
+        }
+
+        .article-content ol li {
+            padding: 10px 0;
+            color: #d0d0d0;
+        }
+
+        /* Image Container */
+        .image-container {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .image-caption {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Stats Grid */
+        .stats-mini {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .stat-mini {
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-mini-number {
+            font-size: 2rem;
+            color: #00ff41;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stat-mini-label {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        /* Share Section */
+        .share-section {
+            margin: 60px 0;
+            padding: 30px;
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .share-section h3 {
+            color: #00ff41;
+            margin-bottom: 20px;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: 2px solid;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .share-btn.github {
+            border-color: #00ff41;
+            color: #00ff41;
+        }
+
+        .share-btn.github:hover {
+            background: #00ff41;
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .share-btn.linkedin {
+            border-color: #0077b5;
+            color: #0077b5;
+        }
+
+        .share-btn.linkedin:hover {
+            background: #0077b5;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #101010, #1a1a1a);
+            border-top: 3px solid #00ff41;
+            margin-top: 80px;
+        }
+
+        footer p {
+            color: #b0b0b0;
+            font-size: 15px;
+            margin: 8px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .article-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .highlight-box, .warning-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="inner_header">
+            <div class="logo_container">
+                <h1>Z<span>Sec.io</span></h1>
+            </div>
+            <ul class="navigation">
+                <a href="../index.html"><li>Home</li></a>
+                <a href="../index.html#projects"><li>Projects</li></a>
+                <a href="../index.html#skills"><li>Skills</li></a>
+                <a href="../index.html#certifications"><li>Certifications</li></a>
+                <a href="Blog.html"><li>Blog</li></a>
+                <a href="Contact.html"><li>Contact</li></a>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Blog Content -->
+    <div class="blog-container">
+        <!-- Article Header -->
+        <div class="article-header">
+            <h1>Building a Cybersecurity Audit Tool: A Python Learning Journey</h1>
+            <div class="article-meta">
+                <span>📅 January 3, 2025</span>
+                <span>⏱️ 8 min read</span>
+                <span class="tag">Python</span>
+                <span class="tag">Security</span>
+                <span class="tag">Learning</span>
+            </div>
+        </div>
+
+        <!-- Article Content -->
+        <div class="article-content">
+            <h2>Welcome to My Security Audit Tool!</h2>
+            
+            <p>This project started as a simple learning exercise to explore Python's networking capabilities and quickly evolved into something much more ambitious. What began as a script to test theoretical IP generation turned into a fully-featured security audit tool with threading, API integration, and vulnerability detection.</p>
+
+            <div class="highlight-box">
+                <h3>🎯 The Initial Goal</h3>
+                <p>When I first started this project, my primary question was: <strong>"Can I generate and scan theoretical IP addresses efficiently?"</strong> After proving the concept worked, I wanted to take it further. Threading allowed me to scan thousands of IPs in seconds, and integrating the ipinfo.io API gave me real-time geolocation data for discovered hosts.</p>
+            </div>
+
+            <h2>The Evolution of the Project</h2>
+
+            <h3>Phase 1: Proof of Concept</h3>
+            <p>The journey began with basic socket programming. I needed to understand how to:</p>
+            <ul>
+                <li>Validate and generate IP addresses programmatically</li>
+                <li>Establish TCP connections to remote ports</li>
+                <li>Handle network timeouts gracefully</li>
+                <li>Parse service banners for identification</li>
+            </ul>
+
+            <p>The first version was straightforward but slow—scanning ports sequentially meant waiting several minutes for even a small range. That's when I discovered Python's <strong>concurrent.futures</strong> module.</p>
+
+            <h3>Phase 2: Threading Implementation</h3>
+            <p>Implementing multi-threading was a game-changer. With <strong>ThreadPoolExecutor</strong>, I could launch hundreds of connection attempts simultaneously. What previously took minutes now completed in seconds.</p>
+
+            <div class="code-block" data-lang="PYTHON">
+                <pre>with concurrent.futures.ThreadPoolExecutor(max_workers=200) as executor:
+    futures = {executor.submit(self.scan_port, target, port): port 
+              for port in port_range}
+    
+    for future in concurrent.futures.as_completed(futures):
+        port, is_open, banner = future.result()
+        if is_open:
+            print(f"[+] Port {port} open - {service}")</pre>
+            </div>
+
+            <div class="stats-mini">
+                <div class="stat-mini">
+                    <span class="stat-mini-number">200x</span>
+                    <span class="stat-mini-label">Speed Increase</span>
+                </div>
+                <div class="stat-mini">
+                    <span class="stat-mini-number">&lt;10s</span>
+                    <span class="stat-mini-label">Scan 1000 Ports</span>
+                </div>
+                <div class="stat-mini">
+                    <span class="stat-mini-number">100%</span>
+                    <span class="stat-mini-label">Automated</span>
+                </div>
+            </div>
+
+            <h3>Phase 3: API Integration & Intelligence</h3>
+            <p>Once I had reliable port scanning working, I wanted context. An open port is just a number—what matters is <em>where</em> it is and <em>what</em> it's running. Integrating the ipinfo.io API gave me:</p>
+            <ul>
+                <li>Geographic location of discovered hosts</li>
+                <li>ISP and organization information</li>
+                <li>Network ownership details</li>
+                <li>Timezone and regional context</li>
+            </ul>
+
+            <h3>Phase 4: Vulnerability Detection</h3>
+            <p>The final major feature was basic vulnerability detection. By analyzing service banners and cross-referencing known dangerous configurations, the tool can flag potential security issues:</p>
+
+            <div class="code-block" data-lang="PYTHON">
+                <pre># Check for dangerous ports
+if port in [23, 445, 3389]:  # Telnet, SMB, RDP
+    vulnerabilities.append({
+        'port': port,
+        'severity': 'HIGH',
+        'description': f'Port {port} exposed - potentially dangerous service'
+    })
+
+# Check for outdated versions
+if 'openssh_4' in banner or 'openssh_5' in banner:
+    vulnerabilities.append({
+        'severity': 'MEDIUM',
+        'description': 'Potentially outdated SSH version detected'
+    })</pre>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Ethical Usage Warning</h4>
+                <p><strong>IMPORTANT:</strong> This tool is for educational purposes and authorized testing only. Scanning networks you don't own or don't have explicit permission to test is illegal and unethical.</p>
+                <p>Always test on:</p>
+                <ul style="margin-top: 10px;">
+                    <li>Your own local systems (127.0.0.1)</li>
+                    <li>Authorized test environments</li>
+                    <li>Legitimate testing platforms like scanme.nmap.org</li>
+                </ul>
+            </div>
+
+            <h2>Technical Challenges & Solutions</h2>
+
+            <h3>Challenge 1: False Positives</h3>
+            <p>Network scanning inherently produces false positives. A port might appear open due to network latency, firewall behavior, or temporary states. My solution was implementing configurable timeouts and verbose output that shows actual server responses, allowing users to verify results manually.</p>
+
+            <h3>Challenge 2: Code Organization</h3>
+            <p>Admittedly, when I started this project, I was new to using classes and object-oriented design in Python. The initial code was functional but messy—everything in one file, minimal separation of concerns, and difficult to extend.</p>
+
+            <p>The current version uses a modular class-based architecture:</p>
+            <ul>
+                <li><strong>PortScanner</strong> - Handles all port scanning logic</li>
+                <li><strong>VulnerabilityDetector</strong> - Analyzes results for security issues</li>
+                <li><strong>GeolocationLookup</strong> - Manages API integration</li>
+                <li><strong>ReportGenerator</strong> - Creates structured JSON reports</li>
+            </ul>
+
+            <h3>Challenge 3: Error Handling</h3>
+            <p>Network operations are unpredictable. Hosts can be unreachable, connections can timeout, APIs can be rate-limited. Robust error handling was essential:</p>
+
+            <div class="code-block" data-lang="PYTHON">
+                <pre>try:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(self.timeout)
+        result = sock.connect_ex((ip, port))
+        if result == 0:
+            banner = sock.recv(1024).decode('utf-8', errors='ignore').strip()
+            return (port, True, banner)
+except Exception as e:
+    # Silently fail and continue - network errors are expected
+    pass
+return (port, False, "")</pre>
+            </div>
+
+            <h2>Real-World Testing Results</h2>
+
+            <p>Testing on my local Kali Linux system revealed interesting insights:</p>
+
+            <div class="highlight-box">
+                <h3>📊 Test Results - Localhost Scan</h3>
+                <p><strong>Target:</strong> 127.0.0.1 (localhost)<br>
+                <strong>Port Range:</strong> 1-1000<br>
+                <strong>Scan Time:</strong> ~8 seconds<br>
+                <strong>Open Ports:</strong> 1 (SSH on port 22)</p>
+                
+                <p style="margin-top: 15px;"><strong>Detected Service:</strong></p>
+                <p>SSH-2.0-OpenSSH_10.0p2 Debian-8 (Current version, no vulnerabilities)</p>
+                
+                <p style="margin-top: 15px;">This clean result demonstrates proper system hardening—only essential services exposed, modern software versions, and minimal attack surface.</p>
+            </div>
+
+            <h2>What I Learned</h2>
+
+            <p>This project taught me invaluable lessons about both Python development and cybersecurity:</p>
+
+            <h3>Technical Skills</h3>
+            <ul>
+                <li><strong>Concurrent Programming:</strong> Understanding threading, race conditions, and parallel execution</li>
+                <li><strong>Network Protocols:</strong> TCP/IP fundamentals, socket programming, and service identification</li>
+                <li><strong>API Integration:</strong> RESTful APIs, JSON parsing, and rate limiting</li>
+                <li><strong>Error Handling:</strong> Graceful failures, timeout management, and user feedback</li>
+                <li><strong>Code Organization:</strong> Class design, modularity, and maintainability</li>
+            </ul>
+
+            <h3>Security Concepts</h3>
+            <ul>
+                <li><strong>Port Scanning Methodology:</strong> How security professionals discover exposed services</li>
+                <li><strong>Service Fingerprinting:</strong> Identifying software versions from banner information</li>
+                <li><strong>Vulnerability Assessment:</strong> Recognizing dangerous configurations and outdated software</li>
+                <li><strong>Ethical Considerations:</strong> The legal and moral boundaries of security testing</li>
+            </ul>
+
+            <h2>Looking Ahead: Version 2.0</h2>
+
+            <p>I'm currently working on a complete rewrite to address the limitations I've discovered:</p>
+
+            <h3>Planned Improvements</h3>
+            <ul>
+                <li><strong>Cleaner Architecture:</strong> Better separation of concerns and testability</li>
+                <li><strong>Enhanced Detection:</strong> Integration with CVE databases and threat intelligence feeds</li>
+                <li><strong>Export Options:</strong> HTML reports with visualizations and charts</li>
+                <li><strong>Configuration Files:</strong> User-defined scan profiles and custom vulnerability checks</li>
+                <li><strong>Real-time Updates:</strong> Live progress bars and status indicators</li>
+                <li><strong>Extensibility:</strong> Plugin system for custom modules</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>🤝 Community Contributions Welcome!</h3>
+                <p>This is a learning project, and I welcome any and all help to improve it. Whether you're a Python expert or fellow beginner, contributions, suggestions, and feedback are greatly appreciated.</p>
+                <p style="margin-top: 15px;">Areas where I'd love help:</p>
+                <ul style="margin-top: 10px;">
+                    <li>Code review and best practices feedback</li>
+                    <li>Additional vulnerability detection signatures</li>
+                    <li>Performance optimization suggestions</li>
+                    <li>Documentation improvements</li>
+                    <li>Feature ideas and enhancement requests</li>
+                </ul>
+            </div>
+
+            <h2>Try It Yourself</h2>
+
+            <p>The tool is open source and available on GitHub. Here's how to get started:</p>
+
+            <div class="code-block" data-lang="BASH">
+                <pre># Clone the repository
+git clone https://github.com/karim871/Portfolio/new/main/secondarypages/cybersecurity-audit-tool.git
+cd cybersecurity-audit-tool
+
+# Set up virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run a basic scan (localhost only!)
+python src/main.py 127.0.0.1 -p 1-100
+
+# Advanced scan with report
+python src/main.py 127.0.0.1 -p 1-1000 -o reports/scan.json -w 200</pre>
+            </div>
+
+            <h2>Final Thoughts</h2>
+
+            <p>Building this tool has been an incredible learning experience. It's messy, it has limitations, and there's definitely a high likelihood of false positives—but that's okay. Every security professional started somewhere, and every project has room for improvement.</p>
+
+            <p>The key takeaway isn't just the tool itself, but the journey of building it: understanding networking fundamentals, learning to handle errors gracefully, discovering the importance of clean code organization, and most importantly, respecting the ethical boundaries of security work.</p>
+
+            <p>If you're learning Python or interested in cybersecurity, I encourage you to build something similar. Start simple, iterate constantly, and don't be afraid to share messy code—that's how we all grow.</p>
+
+            <div class="warning-box">
+                <h4>🔒 Remember: With Great Power...</h4>
+                <p>Security tools are powerful and must be used responsibly. Always get explicit permission before scanning any network or system. When in doubt, test only on systems you own and control.</p>
+            </div>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section">
+            <h3>🚀 Check Out the Project</h3>
+            <div class="share-buttons">
+                <a href="https://github.com/karim871/Portfolio/new/main/secondarypages/cybersecurity-audit-tool" class="share-btn github" target="_blank">View on GitHub</a>
+                <a href="../index.html#projects" class="share-btn linkedin">Back to Portfolio</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Abdelkrim Zouaki | Cybersecurity Portfolio</p>
+        <p>CompTIA CySA+ | Security+ | CCNA Certified</p>
+    </footer>
+</body>
+</html>
