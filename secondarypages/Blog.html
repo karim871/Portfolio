@@ -25,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* Header - matches index.html */
         .header {
             width: 100%;
             height: 100px;
@@ -126,7 +125,6 @@
             }
         }
 
-        /* Main Content */
         .main-content {
             padding-top: 140px;
             min-height: 100vh;
@@ -163,7 +161,6 @@
             line-height: 1.6;
         }
 
-        /* Blog Grid */
         .blog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -180,6 +177,7 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
+            height: fit-content;
         }
 
         .blog-card::before {
@@ -291,7 +289,6 @@
             transform: translateX(5px);
         }
 
-        /* Featured Post */
         .featured-post {
             background: linear-gradient(135deg, rgba(0, 255, 65, 0.15), rgba(0, 255, 65, 0.05));
             border: 3px solid #00ff41;
@@ -328,7 +325,6 @@
             margin-bottom: 25px;
         }
 
-        /* Coming Soon Section */
         .coming-soon {
             text-align: center;
             padding: 60px 20px;
@@ -349,7 +345,6 @@
             font-size: 1.1rem;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .header {
                 height: 80px;
@@ -397,7 +392,6 @@
             }
         }
 
-        /* Scrollbar styling */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -417,7 +411,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <div class="inner_header">
             <div class="logo_container">
@@ -434,15 +427,12 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Page Hero -->
         <div class="page-hero">
             <h1>Security Blog</h1>
             <p>Insights, tutorials, and experiences from the cybersecurity trenches</p>
         </div>
 
-          <!-- Featured Post - Linux+ -->
         <div class="featured-post blog-card">
             <span class="featured-badge">⭐ FEATURED</span>
             <div class="blog-meta">
@@ -463,10 +453,8 @@
             <a href="linux-plus-journey.html" class="read-more">Read Full Journey</a>
         </div>
 
-        
-<!-- Blog Grid -->
-
-         <div class="blog-grid">
+        <!-- ALL BLOG CARDS SHOULD BE INSIDE THIS SINGLE blog-grid div -->
+        <div class="blog-grid">
             <!-- PowerShell Investigation -->
             <div class="blog-card">
                 <div class="blog-meta">
@@ -487,8 +475,7 @@
                 <a href="incident-response-powershell.html" class="read-more">Read Investigation</a>
             </div>
 
-             
-        <div class="blog-grid">
+            <!-- Audit Tool -->
             <div class="blog-card">
                 <div class="blog-meta">
                     <span class="blog-date">January 2025</span>
@@ -507,9 +494,7 @@
                 <a href="cybersecurity-audit-tool-blog.html" class="read-more">Read Journey</a>
             </div>
 
-
-
-                <!-- Mini-SOC -->
+            <!-- Mini-SOC -->
             <div class="blog-card">
                 <div class="blog-meta">
                     <span class="blog-date">December 2024</span>
@@ -529,7 +514,7 @@
                 <a href="piSOC.html" class="read-more">Read Documentation</a>
             </div>
 
-            
+            <!-- CyberOps Bot -->
             <div class="blog-card">
                 <div class="blog-meta">
                     <span class="blog-date">December 2024</span>
@@ -548,6 +533,7 @@
                 <a href="cyberops-bot.html" class="read-more">View Project</a>
             </div>
 
+            <!-- AI Project -->
             <div class="blog-card">
                 <div class="blog-meta">
                     <span class="blog-date">December 2024</span>
@@ -566,6 +552,7 @@
                 <a href="cyberops-ai.html" class="read-more">View Project</a>
             </div>
 
+            <!-- Pi-hole -->
             <div class="blog-card">
                 <div class="blog-meta">
                     <span class="blog-date">November 2024</span>
@@ -582,10 +569,9 @@
                     <span>Privacy</span>
                 </div>
                 <a href="pihole.html" class="read-more">View Project</a>
-            
-            
             </div>
 
+            <!-- CompTIA Certs -->
             <div class="blog-card">
                 <div class="blog-meta">
                     <span class="blog-date">2025</span>
@@ -603,10 +589,9 @@
                 </div>
                 <a href="accomp.html" class="read-more">Read More</a>
             </div>
-        </div>
 
-
-              <div class="blog-card">
+            <!-- Azure Certs -->
+            <div class="blog-card">
                 <div class="blog-meta">
                     <span class="blog-date">2024</span>
                     <span class="blog-category">Certifications</span>
@@ -624,11 +609,12 @@
                 </div>
                 <a href="azure-certifications-journey.html" class="read-more">Read Journey</a>
             </div>
+        </div>
+        <!-- blog-grid closing tag is HERE -->
 
+    </div>
 
-             
     <script>
-        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -642,7 +628,6 @@
             });
         });
 
-        // Header scroll effect
         window.addEventListener('scroll', function() {
             const header = document.querySelector('.header');
             if (window.scrollY > 100) {
