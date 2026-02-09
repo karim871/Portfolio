@@ -789,4 +789,58 @@ git clone https://github.com/karim871/cybersecurity-audit-tool.git
 cd cybersecurity-audit-tool
 
 # Set up virtual environment
-python3 -m venv
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run a basic scan (localhost only!)
+python src/main.py 127.0.0.1 -p 1-100
+
+# Advanced scan with CVE intelligence (v2.0+)
+python src/main.py 127.0.0.1 -p 1-1000 -v --enable-cve -o reports/scan.json
+
+# AI-assisted scan with orchestration (v2.1+)
+python src/main.py 127.0.0.1 -p 1-1000 --enable-cve --ai-analysis -v</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💭 Final Thoughts</h2>
+            <p>Building this tool has been an incredible learning experience. It's messy, it has limitations, and there's definitely a high likelihood of false positives—but that's okay because I know every project has room for improvement, and every security professional started somewhere.</p>
+
+            <p>The key takeaway isn't just the tool itself, but the journey of building it: understanding networking fundamentals, learning to handle errors, discovering the importance of clean code organization, integrating threat intelligence, and most importantly, respecting the ethical boundaries of security work.</p>
+
+            <p>If you're learning Python or interested in cybersecurity, I encourage you to build something similar. Start simple, iterate constantly, and don't be afraid to share messy code - that's how we all grow.</p>
+
+            <h3>🔮 What's Next</h3>
+            <p>This project continues to evolve as a sandbox for learning:</p>
+            <ul>
+                <li><strong>Security tooling architecture:</strong> Building production-grade security platforms</li>
+                <li><strong>Automation pipelines:</strong> Event-driven security workflows with OpenClaw</li>
+                <li><strong>AI-assisted workflows:</strong> Intelligent threat analysis and remediation</li>
+                <li><strong>Scalable design:</strong> Cloud-native security automation</li>
+                <li><strong>Integration patterns:</strong> SIEM, SOAR, and threat intelligence platforms</li>
+            </ul>
+
+            <p>Each iteration teaches something new — and that's the real purpose of the project. From basic port scanning to AI-powered security automation, the journey mirrors the evolution of modern cybersecurity practices.</p>
+
+            <div class="warning-box">
+                <h4>🔒 Remember: With Great Power...</h4>
+                <p>Security tools are powerful and must be used responsibly. Always get explicit permission before scanning any network or system. When in doubt, test only on systems you own and control.</p>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="https://github.com/karim871/cybersecurity-audit-tool" class="btn btn-primary" target="_blank">View on GitHub</a>
+                <a href="Blog.html" class="btn btn-secondary">Back to Blog</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Abdelkrim Zouaki | Cybersecurity Portfolio</p>
+        <p>CompTIA CySA+ | Security+ | CCNA Certified</p>
+    </footer>
+</body>
+</html>
