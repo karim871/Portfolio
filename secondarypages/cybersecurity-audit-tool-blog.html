@@ -592,16 +592,7 @@ if 'openssh_4' in banner or 'openssh_5' in banner:
     })</pre>
             </div>
 
-            <div class="warning-box">
-                <h4>⚠️ Ethical Usage Warning</h4>
-                <p><strong>IMPORTANT:</strong> This tool is for educational purposes and authorized testing only. Scanning networks you don't own or don't have explicit permission to test is illegal and unethical.</p>
-                <p>Always test on:</p>
-                <ul style="margin-top: 10px;">
-                    <li>Your own local systems (127.0.0.1)</li>
-                    <li>Authorized test environments</li>
-                    <li>Legitimate testing platforms like scanme.nmap.org</li>
-                </ul>
-            </div>
+            
 
             <div class="screenshot-container">
                 <img src="../images/04-json-report.png" alt="JSON report output">
@@ -609,6 +600,18 @@ if 'openssh_4' in banner or 'openssh_5' in banner:
             </div>
         </div>
 
+        
+        <div class="warning-box">
+                <h4>⚠️ Ethical Usage Warning</h4>
+                <p><strong>IMPORTANT:</strong> This tool is for educational purposes and authorized testing only. Scanning networks you don't own or don't have explicit permission to test is illegal and unethical.</p>
+                <p>Always test on:</p>
+                <ul style="margin-top: 10px;">
+                    <li>Your own local systems (127.0.0.1 aka. localhost)</li>
+                    <li>Authorized test environments</li>
+                    <li>Legitimate testing platforms like scanme.nmap.org</li>
+                </ul>
+            </div>
+        
         <div class="section">
             <h2>💪 Technical Challenges & Solutions</h2>
 
@@ -616,9 +619,15 @@ if 'openssh_4' in banner or 'openssh_5' in banner:
             <p>Network scanning inherently produces false positives. A port might appear open due to network latency, firewall behavior, or temporary states. My solution was implementing configurable timeouts and verbose output that shows actual server responses, allowing users to verify results manually.</p>
 
             <h3>Challenge 2: Code Organization</h3>
-            <p>Admittedly, when I started this project, I was new to using classes and object-oriented design in Python. The initial code was functional but messy—everything in one file, minimal separation of concerns, and difficult to extend.</p>
+            <p>Admittedly, when I started this project, I was new to using classes and object-oriented design in Python. The initial code was functional but messy.</p>
 
             <p>The current version uses a modular class-based architecture:</p>
+            
+            <div class="screenshot-container">
+                <img src="../images/05-project-structure.png" alt="Project directory structure">
+                <p class="screenshot-caption">Well-organized project structure with separation of concerns</p>
+            </div>
+            
             <ul>
                 <li><strong>PortScanner</strong> - Handles all port scanning logic</li>
                 <li><strong>VulnerabilityDetector</strong> - Analyzes results for security issues</li>
@@ -627,13 +636,9 @@ if 'openssh_4' in banner or 'openssh_5' in banner:
                 <li><strong>ReportGenerator</strong> - Creates structured JSON reports</li>
             </ul>
 
-            <div class="screenshot-container">
-                <img src="../images/05-project-structure.png" alt="Project directory structure">
-                <p class="screenshot-caption">Well-organized project structure with separation of concerns</p>
-            </div>
 
             <h3>Challenge 3: Error Handling</h3>
-            <p>Network operations are unpredictable. Hosts can be unreachable, connections can timeout, APIs can be rate-limited. Robust error handling was essential:</p>
+            <p> Robust error handling was essential: Network operations are unpredictable. Hosts can be unreachable, connections can timeout, APIs can be rate-limited.</p>
 
             <div class="code-block">
                 <pre>try:
@@ -735,7 +740,7 @@ return (port, False, "")</pre>
             </ul>
 
             <div class="screenshot-container">
-                <img src="../images/cve-intelligence-output.png" alt="CVE Intelligence Output">
+                <img src="../images/json-report-cve-enriched.png" alt="CVE Intelligence Output">
                 <p class="screenshot-caption">Real-time CVE enrichment showing CVSS scores and vulnerability details</p>
             </div>
 
