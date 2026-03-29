@@ -23,14 +23,14 @@
                             light: '#112240',
                             lighter: '#233554',
                         },
-                        slate: {
+n                        slate: {
                             DEFAULT: '#8892b0',
                             light: '#a8b2d1',
                             lighter: '#ccd6f6',
                         },
                         accent: {
-                            DEFAULT: '#64ffda',
-                            hover: '#4cccb5',
+                            DEFAULT: '#38bdf8',
+                            hover: '#0ea5e9',
                         },
                     },
                     fontFamily: {
@@ -57,6 +57,53 @@
     </script>
 
     <style>
+        /* Custom Cursor Styles */
+        body {
+            cursor: none;
+        }
+        
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+        
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid #38bdf8;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0.5;
+        }
+        
+        .cursor-circle.hover {
+            width: 60px;
+            height: 60px;
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        
+        /* Hide custom cursor on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            body {
+                cursor: auto;
+            }
+            .cursor-dot, .cursor-circle {
+                display: none !important;
+            }
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -69,7 +116,7 @@
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #64ffda;
+            background: #38bdf8;
         }
 
         /* Utilities */
@@ -102,18 +149,18 @@
             transform: translateY(-50%);
             width: 2px;
             height: 0;
-            background-color: #64ffda;
+            background-color: #38bdf8;
             transition: height 0.3s ease;
         }
         .nav-link.active {
-            color: #64ffda;
+            color: #38bdf8;
             padding-left: 40px;
         }
         .nav-link.active::before {
             height: 100%;
         }
         .nav-link:hover {
-            color: #64ffda;
+            color: #38bdf8;
             padding-left: 40px;
         }
         .nav-link:hover::before {
@@ -129,11 +176,15 @@
             box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
         }
         .project-card:hover .project-title {
-            color: #64ffda;
+            color: #38bdf8;
         }
     </style>
 </head>
-<body class="bg-navy text-slate font-sans antialiased selection:bg-accent selection:text-navy overflow-x-hidden">
+<body class="bg-navy text-slate font-sans antialiased selection:bg-[#38bdf8] selection:text-navy overflow-x-hidden">
+
+    <!-- Custom Cursor Elements -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-circle" id="cursor-circle"></div>
 
     <div class="flex flex-col lg:flex-row min-h-screen">
         
@@ -144,17 +195,12 @@
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-lighter mb-4 tracking-tight">
                     Abdelkrim Zouaki<span class="text-accent animate-cursor-blink">_</span>
                 </h1>
-                <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-slate mb-6" id="typewriter">
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-slate mb-12" id="typewriter">
                     <!-- Typewriter text injected here -->
                 </h2>
-                
-                <p class="mt-4 max-w-lg text-lg leading-relaxed">
-                    I'm a cybersecurity specialist focused on building and operating security monitoring infrastructure. 
-                    Currently, I'm running a personal <span class="text-accent">Mini-SOC</span> to detect threats and automate incident response.
-                </p>
 
                 <!-- Desktop Navigation -->
-                <nav class="hidden lg:flex flex-col gap-6 mt-12 font-mono text-sm">
+                <nav class="hidden lg:flex flex-col gap-6 font-mono text-sm">
                     <a href="#about" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">About</a>
                     <a href="#experience" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Experience</a>
                     <a href="#projects" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Projects</a>
@@ -171,7 +217,12 @@
                     <a href="#certifications" class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Certs</a>
                 </nav>
 
-                <div class="mt-12">
+                <!-- Description moved below nav -->
+                <p class="mt-12 max-w-lg text-lg leading-relaxed">
+                    Trilingual cybersecurity professional based in Montreal — I build detection infrastructure, automate threat intelligence pipelines, and hunt for what hides in logs. CompTIA CySA+ | Security+ | CCNA certified. Open to SOC Analyst and IT Security roles across Canada.
+                </p>
+
+                <div class="mt-8">
                     <a href="#contact" class="inline-block border border-accent text-accent px-8 py-4 rounded font-mono text-sm hover:bg-accent/10 transition-all duration-300">
                         Get In Touch
                     </a>
@@ -243,54 +294,126 @@
                 <div class="flex flex-col md:flex-row gap-4">
                     <!-- Tabs -->
                     <div class="flex md:flex-col overflow-x-auto md:overflow-visible border-b md:border-b-0 md:border-l border-navy-lighter min-w-[200px]">
-                        <button onclick="switchTab('cosior')" id="tab-cosior" class="tab-btn text-left px-4 py-3 text-sm font-mono text-accent bg-navy-light border-l-2 border-accent transition-all whitespace-nowrap">
+                        <button onclick="switchTab('alorica')" id="tab-alorica" class="tab-btn text-left px-4 py-3 text-sm font-mono text-accent bg-navy-light border-l-2 border-accent transition-all whitespace-nowrap">
+                            Alorica
+                        </button>
+                        <button onclick="switchTab('cosior')" id="tab-cosior" class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">
                             Groupe Cosior TI
                         </button>
-                        <button onclick="switchTab('alorica')" id="tab-alorica" class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">
-                            Alorica
+                        <button onclick="switchTab('dollarama')" id="tab-dollarama" class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">
+                            Dollarama
+                        </button>
+                        <button onclick="switchTab('ikea')" id="tab-ikea" class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">
+                            IKEA
+                        </button>
+                        <button onclick="switchTab('ssense')" id="tab-ssense" class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">
+                            Ssense
                         </button>
                     </div>
 
                     <!-- Content -->
                     <div class="flex-grow py-2 md:px-4">
-                        <div id="content-cosior" class="tab-content">
+                        <div id="content-alorica" class="tab-content">
                             <h3 class="text-xl font-bold text-slate-lighter">
-                                IT Support Technician <span class="text-accent">@ Groupe Cosior TI</span>
+                                IT Support Technician <span class="text-accent">@ Alorica</span>
                             </h3>
-                            <p class="font-mono text-sm text-slate mb-4">Montreal, Canada</p>
+                            <p class="font-mono text-sm text-slate mb-4">July 2025 – December 2025 | Montreal, QC</p>
                             <ul class="space-y-4">
                                 <li class="flex items-start">
                                     <span class="text-accent mr-2 mt-1.5">▹</span>
-                                    <span>Provided comprehensive technical support for hardware and software issues across enterprise environments, ensuring minimal downtime for critical business operations.</span>
+                                    <span>Resolved 25–35 technical incidents per day in a high-volume bilingual support environment (French/English) for a major client (Costco).</span>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="text-accent mr-2 mt-1.5">▹</span>
-                                    <span>Performed network troubleshooting and configuration, including VLAN setup and firewall rule verification to maintain secure network segmentation.</span>
+                                    <span>Diagnosed and resolved Windows 10/11, Office 365, VPN, and network peripheral issues with structured documentation in CRM systems.</span>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="text-accent mr-2 mt-1.5">▹</span>
-                                    <span>Collaborated with security teams to identify and remediate endpoint vulnerabilities during routine maintenance windows.</span>
+                                    <span>Escalated complex incidents to L2/L3 teams with clear triage notes, maintaining SLA compliance under pressure.</span>
                                 </li>
                             </ul>
                         </div>
 
-                        <div id="content-alorica" class="tab-content hidden">
+                        <div id="content-cosior" class="tab-content hidden">
                             <h3 class="text-xl font-bold text-slate-lighter">
-                                Customer Support / IT Support <span class="text-accent">@ Alorica</span>
+                                IT Support Intern <span class="text-accent">@ Groupe Cosior TI</span>
                             </h3>
-                            <p class="font-mono text-sm text-slate mb-4">Montreal, Canada</p>
+                            <p class="font-mono text-sm text-slate mb-4">January 2025 – April 2025 | Montreal, QC</p>
                             <ul class="space-y-4">
                                 <li class="flex items-start">
                                     <span class="text-accent mr-2 mt-1.5">▹</span>
-                                    <span>Delivered trilingual technical support (English, French, Arabic) for a diverse client base, resolving complex technical issues with high customer satisfaction scores.</span>
+                                    <span>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</span>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="text-accent mr-2 mt-1.5">▹</span>
-                                    <span>Managed ticket handling and escalation workflows, ensuring critical security incidents were routed to specialized teams within SLA timeframes.</span>
+                                    <span>Supported the cybersecurity team with network traffic monitoring and vulnerability tracking.</span>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="text-accent mr-2 mt-1.5">▹</span>
-                                    <span>Documented recurring technical issues to build an internal knowledge base, reducing resolution time by 25% for common problems.</span>
+                                    <span>Documented configurations and incidents to maintain accurate infrastructure records.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="content-dollarama" class="tab-content hidden">
+                            <h3 class="text-xl font-bold text-slate-lighter">
+                                Retail Associate <span class="text-accent">@ Dollarama</span>
+                            </h3>
+                            <p class="font-mono text-sm text-slate mb-4">July 2024 – September 2024 | Montreal, QC</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Delivered customer service in a fast-paced bilingual (FR/EN) retail environment.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Managed inventory organization and store stock procedures.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Maintained operational standards and cleanliness across the store floor.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="content-ikea" class="tab-content hidden">
+                            <h3 class="text-xl font-bold text-slate-lighter">
+                                Warehouse Associate <span class="text-accent">@ IKEA</span>
+                            </h3>
+                            <p class="font-mono text-sm text-slate mb-4">June 2023 – August 2023 | Montreal, QC</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Performed warehouse logistics, product handling, and organized stock movement in a large-scale distribution environment.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Operated safely in compliance with workplace health and safety regulations.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Collaborated with team members to meet daily operational targets.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="content-ssense" class="tab-content hidden">
+                            <h3 class="text-xl font-bold text-slate-lighter">
+                                Inventory Associate <span class="text-accent">@ Ssense</span>
+                            </h3>
+                            <p class="font-mono text-sm text-slate mb-4">February 2022 – May 2022 | Montreal, QC</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Processed inbound merchandise including receiving, picking, packing, labeling, and returns for a luxury fashion e-commerce platform.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Used scanning tools and computer systems to track and enter inventory data accurately.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Monitored and resolved daily stock issues including damage reports and inventory discrepancies.</span>
                                 </li>
                             </ul>
                         </div>
@@ -398,6 +521,37 @@
                         </div>
                     </div>
 
+                    <!-- Project 4 - pfSense -->
+                    <div class="group relative grid md:grid-cols-12 gap-4 items-center project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
+                        <div class="md:col-span-5">
+                            <div class="relative rounded overflow-hidden border-2 border-navy-lighter group-hover:border-accent/50 transition-colors">
+                                <div class="absolute inset-0 bg-accent/20 group-hover:bg-transparent transition-colors z-10"></div>
+                                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80" alt="Firewall Network" class="w-full h-48 object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500">
+                            </div>
+                        </div>
+                        <div class="md:col-span-7 text-right">
+                            <p class="font-mono text-accent text-sm mb-2">Featured Project</p>
+                            <h3 class="project-title text-2xl font-bold text-slate-lighter mb-4 transition-colors">pfSense Firewall — Secure Network Architecture</h3>
+                            <div class="bg-navy p-4 rounded text-sm leading-relaxed mb-4 shadow-xl text-left">
+                                Deployed a full LAN/WAN segmented network using pfSense with VLAN isolation, site-to-site VPN, and OpenVPN client access. Configured advanced filtering policies, NAT, DNS Resolver, DHCP, and integrated Suricata in inline IDS mode for active traffic inspection and logging.
+                            </div>
+                            <ul class="flex flex-wrap justify-end gap-3 font-mono text-xs text-slate-light mb-6">
+                                <li>pfSense</li>
+                                <li>OpenVPN</li>
+                                <li>VLANs</li>
+                                <li>Suricata</li>
+                                <li>NAT</li>
+                                <li>DNS</li>
+                                <li>Linux</li>
+                            </ul>
+                            <div class="flex justify-end gap-4">
+                                <a href="#" class="text-slate hover:text-accent transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -414,13 +568,14 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                             Security Operations
                         </h3>
-                        <ul class="space-y-2 text-slate-light">
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Splunk Enterprise</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Suricata IDS/IPS</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Wazuh / ELK Stack</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>MITRE ATT&CK Framework</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Log Analysis & OSINT</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Incident Response</li>
+                        <ul class="space-y-2 text-slate-light text-sm">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Splunk Enterprise, Wazuh, ELK Stack</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Suricata IDS/IPS, Snort, Wireshark, tcpdump</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Sysmon, Windows Event Logs</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Nessus, OpenVAS</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>MITRE ATT&CK, Incident Response</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>IOC Triage, Alert Handling & Escalation</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Threat Intelligence (AbuseIPDB, VirusTotal, OTX)</li>
                         </ul>
                     </div>
 
@@ -429,35 +584,47 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Networking
                         </h3>
-                        <ul class="space-y-2 text-slate-light">
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>TCP/IP & DNS</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>DHCP & VLANs</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Wireshark & tcpdump</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Firewall Configuration</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Network Security Monitoring</li>
+                        <ul class="space-y-2 text-slate-light text-sm">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>TCP/IP, VLAN, Trunking</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>OSPF, BGP, RIP, MPLS</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>VPN (OpenVPN, Site-to-Site)</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>DHCP, DNS, NAT, QoS, VoIP</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Cisco IOS (ACL, Routing, Switching)</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>pfSense Firewall</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Wireshark, tcpdump</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                            Systems & Tools
+                        </h3>
+                        <ul class="space-y-2 text-slate-light text-sm">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Linux (Arch, Kali, Debian, Ubuntu, CentOS)</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Windows Server (AD, GPO, DNS, DHCP)</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>VMware, Hyper-V, VirtualBox</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Docker</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>n8n Automation</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Nmap, Netcat</li>
                         </ul>
                     </div>
 
                     <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
                         <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                            Tools & Dev
+                            Scripting & Dev
                         </h3>
-                        <ul class="space-y-2 text-slate-light">
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Python & Bash Scripting</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Docker</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Nmap & Netcat</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>n8n Automation</li>
-                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Linux (Arch, Kali, Ubuntu)</li>
+                        <ul class="space-y-2 text-slate-light text-sm">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Bash, PowerShell, Python</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>SQL, C, Java, PHP</li>
                         </ul>
-                    </div>
-
-                    <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-center items-center text-center">
-                        <h3 class="text-accent font-mono text-lg mb-2">Want to see more?</h3>
-                        <p class="text-slate-light text-sm mb-4">Check out my CTF writeups and blog posts.</p>
-                        <div class="flex gap-4">
-                            <a href="#" class="text-slate hover:text-accent transition-colors font-mono text-sm border border-slate hover:border-accent px-4 py-2 rounded">CTF Writeups</a>
-                            <a href="#" class="text-slate hover:text-accent transition-colors font-mono text-sm border border-slate hover:border-accent px-4 py-2 rounded">Blog</a>
+                        <div class="mt-6 pt-4 border-t border-navy-lighter">
+                            <p class="text-slate-light text-sm mb-4">Want to see more?</p>
+                            <div class="flex gap-4">
+                                <a href="ctf.html" class="text-slate hover:text-accent transition-colors font-mono text-xs border border-slate hover:border-accent px-3 py-2 rounded">CTF Writeups</a>
+                                <a href="blog.html" class="text-slate hover:text-accent transition-colors font-mono text-xs border border-slate hover:border-accent px-3 py-2 rounded">Blog</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -470,7 +637,7 @@
                     <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
                 </h2>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
                     <!-- CompTIA CySA+ -->
                     <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
                         <div class="w-24 h-24 mb-4 relative">
@@ -537,6 +704,37 @@
                         <h4 class="text-slate-lighter font-bold text-center text-sm">Microsoft SC-900</h4>
                     </div>
                 </div>
+
+                <!-- Language Certifications Subsection -->
+                <h3 class="text-xl font-bold text-slate-lighter mb-6 flex items-center">
+                    <span class="text-accent font-mono text-lg mr-2">05.1</span> Language Certifications
+                </h3>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- TEF Canada -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative flex items-center justify-center">
+                            <svg class="w-16 h-16 text-slate group-hover:text-accent transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">TEF Canada</h4>
+                        <p class="text-xs text-slate-light text-center mt-1">Test d'Évaluation de Français</p>
+                        <p class="text-xs text-accent font-mono mt-1">French Proficiency — Certified</p>
+                    </div>
+
+                    <!-- IELTS -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative flex items-center justify-center">
+                            <svg class="w-16 h-16 text-slate group-hover:text-accent transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">IELTS</h4>
+                        <p class="text-xs text-slate-light text-center mt-1">International English Language Testing System</p>
+                        <p class="text-xs text-accent font-mono mt-1">English Proficiency — Certified</p>
+                    </div>
+                </div>
             </section>
 
             <!-- CONTACT SECTION -->
@@ -571,14 +769,15 @@
     </div>
 
     <script>
-        // Typewriter Effect
+        // Typewriter Effect - SLOWED DOWN
         const titles = ["SOC Analyst", "Cybersecurity Specialist", "Threat Hunter"];
         let titleIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        const typeSpeed = 100;
-        const deleteSpeed = 50;
-        const pauseTime = 2000;
+        const typeSpeed = 180;  // Was 100
+        const deleteSpeed = 80; // Was 50
+        const pauseTime = 3500; // Was 2000
+        const pauseBeforeDelete = 4000; // New: pause before starting to delete
         const typewriterElement = document.getElementById('typewriter');
 
         function typeWriter() {
@@ -595,12 +794,12 @@
             let typeDelay = isDeleting ? deleteSpeed : typeSpeed;
 
             if (!isDeleting && charIndex === currentTitle.length) {
-                typeDelay = pauseTime;
+                typeDelay = pauseBeforeDelete; // Wait before deleting
                 isDeleting = true;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 titleIndex = (titleIndex + 1) % titles.length;
-                typeDelay = 500;
+                typeDelay = pauseTime; // Wait before typing next
             }
 
             setTimeout(typeWriter, typeDelay);
@@ -608,6 +807,52 @@
 
         // Start typewriter on load
         document.addEventListener('DOMContentLoaded', typeWriter);
+
+        // Custom Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorCircle = document.getElementById('cursor-circle');
+        
+        let mouseX = 0, mouseY = 0;
+        let circleX = 0, circleY = 0;
+        
+        // Check if touch device
+        const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        
+        if (!isTouchDevice) {
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                // Dot follows immediately
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top = mouseY + 'px';
+            });
+            
+            // Circle follows with delay (animation loop)
+            function animateCircle() {
+                // Smooth follow with easing
+                circleX += (mouseX - circleX) * 0.15;
+                circleY += (mouseY - circleY) * 0.15;
+                
+                cursorCircle.style.left = circleX + 'px';
+                cursorCircle.style.top = circleY + 'px';
+                
+                requestAnimationFrame(animateCircle);
+            }
+            animateCircle();
+            
+            // Hover effects on interactive elements
+            const interactiveElements = document.querySelectorAll('a, button, .project-card, .nav-link, .tab-btn');
+            
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorCircle.classList.add('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorCircle.classList.remove('hover');
+                });
+            });
+        }
 
         // Tab Switching Logic
         function switchTab(tabName) {
