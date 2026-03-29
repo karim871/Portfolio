@@ -1,938 +1,674 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta property="og:title" content="Karim Zouaki — Cybersecurity Portfolio" />
-    <meta property="og:description" content="SOC Analyst | Cybersecurity Specialist. CompTIA CySA+, Security+, CCNA certified with hands-on SIEM, IDS, and automation experience." />
-    <meta property="og:image" content="https://karim871.github.io/Portfolio/images/thumbnail.webp" />
-    <meta property="og:url" content="https://karim871.github.io/Portfolio/" />
-    <meta property="og:type" content="website" />
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdelkrim Zouaki - Cybersecurity Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Courier+New&display=swap" rel="stylesheet">
+    <title>Abdelkrim Zouaki | SOC Analyst</title>
+    <meta name="description" content="Abdelkrim Zouaki is a SOC Analyst and Cybersecurity Specialist based in Montreal, Canada.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0a192f',
+                            light: '#112240',
+                            lighter: '#233554',
+                        },
+                        slate: {
+                            DEFAULT: '#8892b0',
+                            light: '#a8b2d1',
+                            lighter: '#ccd6f6',
+                        },
+                        accent: {
+                            DEFAULT: '#64ffda',
+                            hover: '#4cccb5',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'cursor-blink': 'blink 1s step-end infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-        }
-
-        html {
-            font-size: 20px;
-            font-family: 'Montserrat', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: #0a0a0a;
-            overflow-x: hidden;
-        }
-
-        /* Enhanced Header */
-        .header {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(135deg, #101010, #1a1a1a);
-            position: fixed;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
-            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
-        }
-
-        .inner_header {
-            max-width: 1400px;
-            height: 100%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo_container {
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo_container h1 {
-            color: white;
-            font-size: 32px;
-            font-weight: 200;
-            margin: 0;
-            transition: all 0.3s ease;
-        }
-
-        .logo_container h1 span {
-            font-weight: 800;
-            color: #00ff41;
-            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .logo_container:hover h1 span {
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
-        }
-
-        .navigation {
-            display: flex;
-            height: 100%;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .navigation a {
-            height: auto;
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .navigation a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
-            transition: left 0.3s ease;
-        }
-
-        .navigation li {
-            list-style: none;
-            color: white;
-            font-size: 18px;
-            font-weight: 400;
-            transition: all 0.3s ease;
-        }
-
-        .navigation a:hover {
-            background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .navigation a:hover::before {
-            left: 100%;
-        }
-
-        .navigation a:hover li {
-            color: #00ff41;
-        }
-
-        /* Hero Section */
-        .container {
-            min-height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: auto;
-            padding-top: 100px;
-        }
-
-        #hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
-                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><g stroke="%2300ff41" stroke-width="0.5" opacity="0.3"><path d="M10,10 L90,10 M10,30 L90,30 M10,50 L90,50 M10,70 L90,70 M10,90 L90,90"/><path d="M10,10 L10,90 M30,10 L30,90 M50,10 L50,90 M70,10 L70,90 M90,10 L90,90"/><circle cx="20" cy="20" r="2" fill="%2300ff41" opacity="0.6"/><circle cx="80" cy="40" r="1.5" fill="%2300ff41" opacity="0.4"/><circle cx="40" cy="80" r="2" fill="%2300ff41" opacity="0.7"/></g></svg>');
-            background-size: cover, 200px 200px;
-            background-position: center, center;
-            position: relative;
-            z-index: 1;
-            animation: backgroundMove 20s linear infinite;
-            padding: 60px 20px;
-        }
-
-        @keyframes backgroundMove {
-            0% { background-position: center, 0 0; }
-            100% { background-position: center, 200px 200px; }
-        }
-
-        .hero {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        #hero h1 {
-            display: block;
-            width: fit-content;
-            font-size: clamp(2rem, 4vw, 3.5rem);
-            position: relative;
-            color: white;
-            margin: 15px auto;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        #hero h1:nth-child(1) {
-            animation-delay: 0.2s;
-            color: #00ff41;
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
-        }
-
-        #hero h1:nth-child(2) {
-            animation-delay: 0.4s;
-            font-size: clamp(1.8rem, 3.5vw, 3rem);
-        }
-
-        #hero .subtitle {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: rgba(255, 255, 255, 0.8);
-            margin: 20px auto;
-            max-width: 800px;
-            line-height: 1.6;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.6s;
-        }
-
-        #hero .credentials {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 25px auto;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.7s;
-        }
-
-        #hero .credential-badge {
-            background: rgba(0, 255, 65, 0.15);
-            border: 2px solid #00ff41;
-            color: #00ff41;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-
-        #hero .credential-badge:hover {
-            background: rgba(0, 255, 65, 0.25);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        #hero .cta-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 40px;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.8s;
-        }
-
-        #hero .cta {
-            display: inline-block;
-            padding: 15px 40px;
-            background: transparent;
-            border: 3px solid #00ff41;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            transition: all 0.3s ease;
-            border-radius: 50px;
-            color: #00ff41;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #hero .cta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        #hero .cta:hover {
-            color: #000;
-            background: #00ff41;
-            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.4);
-            transform: translateY(-5px);
-        }
-
-        #hero .cta:hover::before {
-            left: 100%;
-        }
-
-        #hero .cta.secondary {
-            background: rgba(0, 255, 65, 0.1);
-            border: 2px solid rgba(0, 255, 65, 0.5);
-        }
-
-        /* About Section */
-        #about {
-            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7));
-            padding: 80px 20px;
-            margin-top: -1px;
-        }
-
-        #about .content-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        #about h2 {
-            color: #00ff41;
-            font-size: clamp(2rem, 4vw, 3rem);
-            text-align: center;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        #about .about-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            max-width: 900px;
-            margin: 0 auto 30px;
-            text-align: center;
-        }
-
-        #about .highlight-box {
-            background: rgba(0, 255, 65, 0.1);
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px auto;
-            max-width: 900px;
-        }
-
-        #about .highlight-box strong {
-            color: #00ff41;
-            font-size: 1.3rem;
-            display: block;
-            margin-bottom: 15px;
-        }
-
-        #about .highlight-box p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        /* Projects Section */
-        #projects {
-            background: #0a0a0a;
-            padding: 80px 20px;
-        }
-
-        #projects h2 {
-            color: #00ff41;
-            font-size: clamp(2rem, 4vw, 3rem);
-            text-align: center;
-            margin-bottom: 60px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .project-grid {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .project-card {
-            background: linear-gradient(135deg, #16213e, #0f3460);
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: #00ff41;
-            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.3);
-        }
-
-        .project-card:hover::before {
-            left: 100%;
-        }
-
-        .project-card h3 {
-            color: #00ff41;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .project-card p {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .tech-tags span {
-            background: rgba(0, 255, 65, 0.2);
-            border: 1px solid rgba(0, 255, 65, 0.4);
-            color: #00ff41;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .project-card a {
-            color: #00ff41;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .project-card a:hover {
-            transform: translateX(5px);
-            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-        }
-
-        /* Skills Section */
-        #skills {
-            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(15, 52, 96, 0.7));
-            padding: 80px 30px;
-        }
-
-        #skills h2 {
-            color: #00ff41;
-            font-size: clamp(2rem, 4vw, 3rem);
-            text-align: center;
-            margin-bottom: 60px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .skills-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .skill-category {
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .skill-category:hover {
-            border-color: #00ff41;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
-        }
-
-        .skill-category h3 {
-            color: #00ff41;
-            font-size: 1.4rem;
-            margin-bottom: 60px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .skill-category ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .skill-category li {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 8px 0;
-            padding-left: 20px;
-            position: relative;
-            line-height: 1.5;
-        }
-
-        .skill-category li::before {
-            content: '▸';
-            color: #00ff41;
-            position: absolute;
-            left: 0;
-            font-size: 1.2rem;
-        }
-
-        /* Certifications Section */
-        #certifications {
-            background: #0a0a0a;
-            padding: 80px 20px;
-        }
-
-        #certifications h2 {
-            color: #00ff41;
-            font-size: clamp(2rem, 4vw, 3rem);
-            text-align: center;
-            margin-bottom: 60px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .cert-showcase {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-
-        .cert {
-            background: linear-gradient(135deg, #16213e, #0f3460);
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .cert:hover {
-            border-color: #00ff41;
-            transform: translateY(-10px);
-            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.3);
-        }
-
-        .cert img {
-            width: 150px;
-            height: 150px;
-            object-fit: contain;
-            margin-bottom: 20px;
-        }
-
-        .cert h3 {
-            color: #00ff41;
-            font-size: 1.5rem;
-            
-            margin-bottom: 10px;
-        }
-
-        .cert p {
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 10px;
-        }
-
-        .valid-until {
-            color: rgba(0, 255, 65, 0.8);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* Pulse animation for logo */
-        @keyframes pulse {
-            0%, 100% {
-                text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-            }
-            50% {
-                text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.3);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .inner_header {
-                max-width: 100%;
-                padding: 0 1rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                height: 80px;
-            }
-
-            .inner_header {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem;
-            }
-
-            .logo_container h1 {
-                font-size: 24px;
-                margin-bottom: 0.5rem;
-            }
-
-            .navigation {
-                gap: 0.5rem;
-            }
-
-            .navigation li {
-                font-size: 16px;
-            }
-
-            .container {
-                padding-top: 80px;
-            }
-
-            #hero h1 {
-                margin: 10px auto;
-            }
-
-            #hero .cta-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            #hero .cta {
-                font-size: 1rem;
-                padding: 12px 30px;
-                letter-spacing: 2px;
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .project-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cert-showcase {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navigation a {
-                padding: 0.3rem 1rem;
-            }
-
-            .navigation li {
-                font-size: 14px;
-            }
-
-            #hero .credential-badge {
-                font-size: 0.8rem;
-                padding: 6px 15px;
-            }
-        }
-
-        /* Scrollbar styling */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-
         ::-webkit-scrollbar-track {
-            background: #1a1a1a;
+            background: #0a192f;
         }
-
         ::-webkit-scrollbar-thumb {
-            background: #00ff41;
+            background: #233554;
             border-radius: 4px;
         }
-
         ::-webkit-scrollbar-thumb:hover {
-            background: #00cc33;
+            background: #64ffda;
+        }
+
+        /* Utilities */
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        /* Fade in animation class */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Nav Indicator */
+        .nav-link {
+            position: relative;
+            padding-left: 30px;
+            transition: all 0.3s ease;
+        }
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 0;
+            background-color: #64ffda;
+            transition: height 0.3s ease;
+        }
+        .nav-link.active {
+            color: #64ffda;
+            padding-left: 40px;
+        }
+        .nav-link.active::before {
+            height: 100%;
+        }
+        .nav-link:hover {
+            color: #64ffda;
+            padding-left: 40px;
+        }
+        .nav-link:hover::before {
+            height: 100%;
+        }
+
+        /* Project Card Hover */
+        .project-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+        }
+        .project-card:hover .project-title {
+            color: #64ffda;
         }
     </style>
 </head>
-<body>
-    <div class="matrix-bg"></div>
-    
-    <!-- Enhanced Header -->
-    <div class="header">
-        <div class="inner_header">
-            <div class="logo_container">
-                <h1>Z<span>Sec.io</span></h1>
-            </div>
-            <ul class="navigation">
-                <a href="#hero"><li>Home</li></a>
-                <a href="#projects"><li>Projects</li></a>
-                <a href="#skills"><li>Skills</li></a>
-                <a href="#certifications"><li>Certifications</li></a>
-                <a href="./secondarypages/Blog.html"><li>Blog</li></a>
-                <a href="./secondarypages/Contact.html"><li>Contact</li></a>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- Enhanced Main Section -->
-    <section id="hero">
-        <div class="hero container">
-            <div>
-                <h1>SOC Analyst | IT Security Specialist</h1>
-                <h1>Abdelkrim Zouaki</h1>
-                <p class="subtitle">I build and test security monitoring setups using SIEM, IDS, and threat intelligence tools. My work focuses on real-time detection, log analysis, and automation.</p>
+<body class="bg-navy text-slate font-sans antialiased selection:bg-accent selection:text-navy overflow-x-hidden">
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        
+        <!-- LEFT SIDEBAR (Fixed on Desktop) -->
+        <header class="lg:w-[48%] lg:fixed lg:h-screen flex flex-col justify-between px-6 py-12 lg:px-12 lg:py-0 lg:pl-[10%] z-20 bg-navy">
+            <div class="flex flex-col justify-center h-full">
+                <p class="text-accent font-mono mb-4 text-sm tracking-wider">Hi, my name is</p>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-lighter mb-4 tracking-tight">
+                    Abdelkrim Zouaki<span class="text-accent animate-cursor-blink">_</span>
+                </h1>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-slate mb-6" id="typewriter">
+                    <!-- Typewriter text injected here -->
+                </h2>
                 
-                <div class="credentials">
-                    <span class="credential-badge">CompTIA CySA+ ✓</span>
-                    <span class="credential-badge">Security+ ✓</span>
-                    <span class="credential-badge">CCNA ✓</span>
-                </div>
+                <p class="mt-4 max-w-lg text-lg leading-relaxed">
+                    I'm a cybersecurity specialist focused on building and operating security monitoring infrastructure. 
+                    Currently, I'm running a personal <span class="text-accent">Mini-SOC</span> to detect threats and automate incident response.
+                </p>
 
-                <div class="cta-container">
-                    <a href="#projects" class="cta">View Projects</a>
-                    <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" class="cta secondary">LinkedIn</a>
-                    <a href="mailto:abdelkrim.zouaki.ti@gmail.com" target="_blank" class="cta secondary">Contact Me</a>
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex flex-col gap-6 mt-12 font-mono text-sm">
+                    <a href="#about" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">About</a>
+                    <a href="#experience" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Experience</a>
+                    <a href="#projects" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Projects</a>
+                    <a href="#skills" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Skills</a>
+                    <a href="#certifications" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Certifications</a>
+                </nav>
+
+                <!-- Mobile Navigation (Horizontal) -->
+                <nav class="flex lg:hidden flex-wrap gap-4 mt-8 font-mono text-xs">
+                    <a href="#about" class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">About</a>
+                    <a href="#experience" class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Experience</a>
+                    <a href="#projects" class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Projects</a>
+                    <a href="#skills" class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Skills</a>
+                    <a href="#certifications" class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Certs</a>
+                </nav>
+
+                <div class="mt-12">
+                    <a href="#contact" class="inline-block border border-accent text-accent px-8 py-4 rounded font-mono text-sm hover:bg-accent/10 transition-all duration-300">
+                        Get In Touch
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="content-wrapper">
-            <h2>About Me</h2>
-            <p class="about-text">
-                I'm a recent Computer Security & Networking graduate who enjoys building and testing security systems in home lab environments. One of my main projects is a Mini-SOC using Suricata and Splunk, where I monitor network traffic and experiment with detection rules and dashboards.
-            </p>
-            <p class="about-text">
-                Most of my recent work has been in security automation — using Python, n8n, kalilinux and AI tools. I've documented several investigations including PowerShell-based attacks, DNS tunneling and IoT device anomalies/penetration testing.
-            </p>
-            <p class="about-text">I managed to reduce false positives by about 40% Through custom rule tuning in my home SOC,  which taught me a lot about balancing alert fatigue with detection coverage. </p>
+            <!-- Social Icons (Fixed Left Bottom) -->
+            <div class="hidden lg:flex flex-col gap-6 fixed bottom-0 left-12 after:content-[''] after:block after:w-[1px] after:h-24 after:bg-slate after:mx-auto after:mt-6">
+                <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" class="text-slate hover:text-accent hover:-translate-y-1 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><title>GitHub</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" rel="noopener noreferrer" class="text-slate hover:text-accent hover:-translate-y-1 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><title>LinkedIn</title><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="text-slate hover:text-accent hover:-translate-y-1 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><title>Email</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </a>
+            </div>
             
-            <div class="highlight-box">
-                <strong>🎯 Currently Seeking</strong>
-                <p>Open to Threat Intelligence, SOC Analyst and Security Operations roles in Canada. Available for contract or permanent positions.</p>
+            <!-- Mobile Socials -->
+            <div class="flex lg:hidden gap-6 mt-8 mb-8">
+                <a href="https://github.com/karim871" target="_blank" class="text-slate hover:text-accent"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" class="text-slate hover:text-accent"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
             </div>
-        </div>
-    </section>
-    
-    <!-- Projects Section -->
-    <section id="projects">
-        <h2>Featured Security Projects</h2>
-       <div class="project-grid"> 
-        <div class="project-card">
-                <h3>🐍 Cybersecurity Audit Tool</h3>
-                <p>What started as a simple learning exercise to explore Python's networking capabilities quickly evolved into an ambitious fully functional port scanner with, AI-assisted analysis and automated workflows.</p>
-                <div class="tech-tags">
-                    <span>Python</span>
-                    <span>Bash</span>
-                    <span>APIs</span>
-                    <span>OSINT</span>
-                    <span>Linux</span>
-                </div>
-                <a href="./secondarypages/cybersecurity-audit-tool-blog.html">View Project Details →</a>
-            </div>
-        
+        </header>
+
+        <!-- RIGHT CONTENT (Scrollable) -->
+        <main class="lg:w-[52%] lg:ml-[48%] px-6 py-12 lg:px-12 lg:py-24 lg:pr-[10%]">
             
-            <div class="project-card">
-                <h3>🏠 Home Mini-SOC</h3>
-                <p>A home SOC lab where I use Suricata with Splunk to monitor my network traffic. It runs the Emerging Threats ruleset (30,000+ rules) and helped me learn alert tuning, log correlation, and dashboard creation for real-time security monitoring.</p>
-                <div class="tech-tags">
-                    <span>Suricata</span>
-                    <span>Splunk</span>
-                    <span>rsyslog</span>
-                    <span>Raspberry Pi</span>
-                    <span>Linux</span>
+            <!-- ABOUT SECTION -->
+            <section id="about" class="mb-24 reveal">
+                <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
+                    <span class="text-accent font-mono text-xl mr-2">01.</span> About Me
+                    <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+                </h2>
+                
+                <div class="space-y-4 text-lg leading-relaxed">
+                    <p>
+                        Hello! I'm Karim (Abdelkrim), a recent Computer Security & Networking graduate from 
+                        <span class="text-accent">Collège Bois-de-Boulogne</span> with a passion for defending digital infrastructure.
+                    </p>
+                    <p>
+                        My journey into cybersecurity started with a fascination for how systems communicate—and how they break. 
+                        Today, I run a personal <span class="text-accent">Mini-SOC</span> using Suricata, Splunk, and the ELK Stack, 
+                        where I simulate real-world attacks and tune detection rules. I managed to reduce false positives by ~40% 
+                        through custom Suricata rule optimization.
+                    </p>
+                    <p>
+                        I specialize in building automation tools that bridge the gap between threat intelligence and response. 
+                        My Python bots integrate with AbuseIPDB, VirusTotal, and OTX to enrich IOCs in real-time.
+                    </p>
+                    <p>
+                        When I'm not analyzing packets or writing detection logic, you can find me exploring new CVEs, 
+                        contributing to open-source security tools, or hiking in the Montreal area.
+                    </p>
+                    <p class="font-mono text-sm text-accent mt-4">
+                        Trilingual: English | French | Arabic
+                    </p>
                 </div>
-                <a href="./secondarypages/piSOC.html">View Project Details →</a>
-            </div>
+            </section>
 
-            <div class="project-card">
-                <h3>🛡️ Network-Wide Ad Blocker</h3>
-                <p>A Pi-hole DNS sinkhole setup that blocks ads and malicious domains across my entire network. It gave me hands-on experience with DNS security, network filtering, and understanding how DNS can be used as a security layer.</p>
-                <div class="tech-tags">
-                    <span>DNS</span>
-                    <span>Linux</span>
-                    <span>Pi-hole</span>
-                    <span>Networking</span>
+            <!-- EXPERIENCE SECTION -->
+            <section id="experience" class="mb-24 reveal">
+                <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
+                    <span class="text-accent font-mono text-xl mr-2">02.</span> Where I've Worked
+                    <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+                </h2>
+
+                <div class="flex flex-col md:flex-row gap-4">
+                    <!-- Tabs -->
+                    <div class="flex md:flex-col overflow-x-auto md:overflow-visible border-b md:border-b-0 md:border-l border-navy-lighter min-w-[200px]">
+                        <button onclick="switchTab('cosior')" id="tab-cosior" class="tab-btn text-left px-4 py-3 text-sm font-mono text-accent bg-navy-light border-l-2 border-accent transition-all whitespace-nowrap">
+                            Groupe Cosior TI
+                        </button>
+                        <button onclick="switchTab('alorica')" id="tab-alorica" class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">
+                            Alorica
+                        </button>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-grow py-2 md:px-4">
+                        <div id="content-cosior" class="tab-content">
+                            <h3 class="text-xl font-bold text-slate-lighter">
+                                IT Support Technician <span class="text-accent">@ Groupe Cosior TI</span>
+                            </h3>
+                            <p class="font-mono text-sm text-slate mb-4">Montreal, Canada</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Provided comprehensive technical support for hardware and software issues across enterprise environments, ensuring minimal downtime for critical business operations.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Performed network troubleshooting and configuration, including VLAN setup and firewall rule verification to maintain secure network segmentation.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Collaborated with security teams to identify and remediate endpoint vulnerabilities during routine maintenance windows.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="content-alorica" class="tab-content hidden">
+                            <h3 class="text-xl font-bold text-slate-lighter">
+                                Customer Support / IT Support <span class="text-accent">@ Alorica</span>
+                            </h3>
+                            <p class="font-mono text-sm text-slate mb-4">Montreal, Canada</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Delivered trilingual technical support (English, French, Arabic) for a diverse client base, resolving complex technical issues with high customer satisfaction scores.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Managed ticket handling and escalation workflows, ensuring critical security incidents were routed to specialized teams within SLA timeframes.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-2 mt-1.5">▹</span>
+                                    <span>Documented recurring technical issues to build an internal knowledge base, reducing resolution time by 25% for common problems.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <a href="./secondarypages/pihole.html">View Project Details →</a>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- Skills Section -->
-    <section id="skills">
-        <h2>Technical Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-category">
-                <h3>🔍 Security Operations</h3>
-                <ul>
-                    <li>SIEM (Splunk Enterprise)</li>
-                    <li>IDS/IPS (Suricata)</li>
-                    <li>Log Analysis (rsyslog, syslog)</li>
-                    <li>Threat Intelligence (OSINT)</li>
-                    <li>Incident Response</li>
-                    <li>Security Automation</li>
-                    <li>Vulnerability Assessment</li>
-                </ul>
-            </div>
+            <!-- PROJECTS SECTION -->
+            <section id="projects" class="mb-24 reveal">
+                <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
+                    <span class="text-accent font-mono text-xl mr-2">03.</span> Some Things I've Built
+                    <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+                </h2>
 
-            <div class="skill-category">
-                <h3>🌐 Networking</h3>
-                <ul>
-                    <li>TCP/IP, DNS, DHCP</li>
-                    <li>Network Traffic Analysis</li>
-                    <li>Packet Capture (tcpdump, Wireshark)</li>
-                    <li>Firewall Configuration</li>
-                    <li>VLANs, Routing </li>
-                    <li>Network Security Monitoring</li>
-                </ul>
-            </div>
+                <div class="space-y-12">
+                    
+                    <!-- Project 1 -->
+                    <div class="group relative grid md:grid-cols-12 gap-4 items-center project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
+                        <div class="md:col-span-7 order-2 md:order-1">
+                            <p class="font-mono text-accent text-sm mb-2">Featured Project</p>
+                            <h3 class="project-title text-2xl font-bold text-slate-lighter mb-4 transition-colors">Threat Intelligence Automation Bot</h3>
+                            <div class="bg-navy p-4 rounded text-sm leading-relaxed mb-4 shadow-xl">
+                                A Python-based automation framework that integrates AbuseIPDB, VirusTotal, and AlienVault OTX APIs. 
+                                It automates the enrichment of Indicators of Compromise (IOCs), calculates threat scores, 
+                                and generates automated reports for SOC analysts.
+                            </div>
+                            <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light mb-6">
+                                <li>Python</li>
+                                <li>REST APIs</li>
+                                <li>JSON Parsing</li>
+                                <li>Linux</li>
+                                <li>Automation</li>
+                            </ul>
+                            <div class="flex gap-4">
+                                <a href="https://karim871.github.io/Portfolio/secondarypages/cybersecurity-audit-tool-blog.html" target="_blank" class="text-slate hover:text-accent transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md:col-span-5 order-1 md:order-2">
+                            <div class="relative rounded overflow-hidden border-2 border-navy-lighter group-hover:border-accent/50 transition-colors">
+                                <div class="absolute inset-0 bg-accent/20 group-hover:bg-transparent transition-colors z-10"></div>
+                                <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80" alt="Code Editor" class="w-full h-48 object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500">
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="skill-category">
-                <h3>💻 Technical Tools</h3>
-                <ul>
-                    <li>Packet Analysis</li>
-                    <li>Traffic Capture(tcpdump)</li>
-                    <li>Network Debugging(Netcat)</li>
-                    <li>Docker, Virtualization</li>
-                    <li>n8n Workflow Automation</li>
-                    <li>Nmap (Network Scanning)</li>
-                    <li>Python (Scripting, Automation)</li>
-                    <li>Bash/Shell Scripting</li>
-                </ul>
-            </div>
-     </div>
-        
-       <!-- Certifications Section -->
-<section id="certifications">
-    <h2>Professional Certifications</h2>
-    <div class="cert-showcase">
+                    <!-- Project 2 -->
+                    <div class="group relative grid md:grid-cols-12 gap-4 items-center project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
+                        <div class="md:col-span-5">
+                            <div class="relative rounded overflow-hidden border-2 border-navy-lighter group-hover:border-accent/50 transition-colors">
+                                <div class="absolute inset-0 bg-accent/20 group-hover:bg-transparent transition-colors z-10"></div>
+                                <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80" alt="Server Rack" class="w-full h-48 object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500">
+                            </div>
+                        </div>
+                        <div class="md:col-span-7 text-right">
+                            <p class="font-mono text-accent text-sm mb-2">Featured Project</p>
+                            <h3 class="project-title text-2xl font-bold text-slate-lighter mb-4 transition-colors">Home Mini-SOC Lab</h3>
+                            <div class="bg-navy p-4 rounded text-sm leading-relaxed mb-4 shadow-xl text-left">
+                                A full-scale Security Operations Center built on a Raspberry Pi. Features Suricata IDS with the 
+                                Emerging Threats ruleset (30,000+ rules) feeding into Splunk SIEM for real-time detection, 
+                                log correlation, and custom dashboard visualization.
+                            </div>
+                            <ul class="flex flex-wrap justify-end gap-3 font-mono text-xs text-slate-light mb-6">
+                                <li>Suricata</li>
+                                <li>Splunk</li>
+                                <li>Raspberry Pi</li>
+                                <li>rsyslog</li>
+                                <li>Linux</li>
+                            </ul>
+                            <div class="flex justify-end gap-4">
+                                <a href="https://karim871.github.io/Portfolio/secondarypages/piSOC.html" target="_blank" class="text-slate hover:text-accent transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- CompTIA CySA+ -->
-        <div class="cert">
-            <img src="./images/CySA+-png.webp" alt="CompTIA CySA+" loading="lazy">
-            <h3>CompTIA CySA+</h3>
-            <p>Cybersecurity Analyst</p>
-            <span class="valid-until">Valid: 2025–2028</span>
-        </div>
+                    <!-- Project 3 -->
+                    <div class="group relative grid md:grid-cols-12 gap-4 items-center project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
+                        <div class="md:col-span-7 order-2 md:order-1">
+                            <p class="font-mono text-accent text-sm mb-2">Featured Project</p>
+                            <h3 class="project-title text-2xl font-bold text-slate-lighter mb-4 transition-colors">Network-Wide DNS Security Layer</h3>
+                            <div class="bg-navy p-4 rounded text-sm leading-relaxed mb-4 shadow-xl">
+                                Implementation of Pi-hole as a DNS sinkhole to block advertisements and malicious domains across the entire 
+                                home network. Includes custom blocklists, regex filtering, and whitelist management for operational security.
+                            </div>
+                            <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light mb-6">
+                                <li>Pi-hole</li>
+                                <li>DNS Security</li>
+                                <li>Network Filtering</li>
+                                <li>Linux</li>
+                            </ul>
+                            <div class="flex gap-4">
+                                <a href="https://karim871.github.io/Portfolio/secondarypages/pihole.html" target="_blank" class="text-slate hover:text-accent transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md:col-span-5 order-1 md:order-2">
+                            <div class="relative rounded overflow-hidden border-2 border-navy-lighter group-hover:border-accent/50 transition-colors">
+                                <div class="absolute inset-0 bg-accent/20 group-hover:bg-transparent transition-colors z-10"></div>
+                                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" alt="Network Globe" class="w-full h-48 object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500">
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- CompTIA Security+ -->
-        <div class="cert">
-            <img src="./images/Security+-png.webp" alt="CompTIA Security+" loading="lazy">
-            <h3>CompTIA Security+</h3>
-            <p>Security Professional</p>
-            <span class="valid-until">Valid: 2025–2028</span>
-        </div>
+                </div>
+            </section>
 
-        <!-- CCNA: Introduction to Networks -->
-        <div class="cert">
-            <img src="./images/CCNA_ITN.png" alt="CCNA Introduction to Networks" loading="lazy">
-            <h3>CCNA</h3>
-            <p>Introduction to Networks</p>
-            <span class="valid-until">Cisco Networking Academy</span>
-        </div>
+            <!-- SKILLS SECTION -->
+            <section id="skills" class="mb-24 reveal">
+                <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
+                    <span class="text-accent font-mono text-xl mr-2">04.</span> Technical Skills
+                    <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+                </h2>
 
-        <!-- CCNA: Switching, Routing & Wireless Essentials -->
-        <div class="cert">
-            <img src="./images/CCNA_SRWE.png" alt="CCNA Switching Routing Wireless" loading="lazy">
-            <h3>CCNA</h3>
-            <p>Switching, Routing & Wireless Essentials</p>
-            <span class="valid-until">Cisco Networking Academy</span>
-        </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            Security Operations
+                        </h3>
+                        <ul class="space-y-2 text-slate-light">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Splunk Enterprise</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Suricata IDS/IPS</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Wazuh / ELK Stack</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>MITRE ATT&CK Framework</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Log Analysis & OSINT</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Incident Response</li>
+                        </ul>
+                    </div>
 
-        <!-- CCNA: Enterprise Networking, Security & Automation -->
-        <div class="cert">
-            <img src="./images/CCNA_ENSA.png" alt="CCNA Enterprise Networking Security Automation" loading="lazy">
-            <h3>CCNA</h3>
-            <p>Enterprise Networking, Security & Automation</p>
-            <span class="valid-until">Cisco Networking Academy</span>
-        </div>
+                    <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Networking
+                        </h3>
+                        <ul class="space-y-2 text-slate-light">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>TCP/IP & DNS</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>DHCP & VLANs</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Wireshark & tcpdump</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Firewall Configuration</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Network Security Monitoring</li>
+                        </ul>
+                    </div>
 
-        <!-- Network Defense -->
-        <div class="cert">
-            <img src="./images/NetworkDefense.png" alt="Cisco Network Defense" loading="lazy">
-            <h3>Network Defense</h3>
-            <p>Network Security Fundamentals</p>
-            <span class="valid-until">Cisco Networking Academy</span>
-        </div>
+                    <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                            Tools & Dev
+                        </h3>
+                        <ul class="space-y-2 text-slate-light">
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Python & Bash Scripting</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Docker</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Nmap & Netcat</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>n8n Automation</li>
+                            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2"></span>Linux (Arch, Kali, Ubuntu)</li>
+                        </ul>
+                    </div>
 
-        <!-- Azure -->
-        <div class="cert">
-            <img src="./images/AZ-900.png" alt="Microsoft Azure AZ-900" loading="lazy">
-            <h3>Microsoft AZ-900</h3>
-            <p>Azure Fundamentals</p>
-            <span class="valid-until">Certified</span>
-        </div>
+                    <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-center items-center text-center">
+                        <h3 class="text-accent font-mono text-lg mb-2">Want to see more?</h3>
+                        <p class="text-slate-light text-sm mb-4">Check out my CTF writeups and blog posts.</p>
+                        <div class="flex gap-4">
+                            <a href="#" class="text-slate hover:text-accent transition-colors font-mono text-sm border border-slate hover:border-accent px-4 py-2 rounded">CTF Writeups</a>
+                            <a href="#" class="text-slate hover:text-accent transition-colors font-mono text-sm border border-slate hover:border-accent px-4 py-2 rounded">Blog</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <!-- SC-900 -->
-        <div class="cert">
-            <img src="./images/SC-900.png" alt="Microsoft SC-900" loading="lazy">
-            <h3>Microsoft SC-900</h3>
-            <p>Security, Compliance & Identity</p>
-            <span class="valid-until">Certified</span>
-        </div>
+            <!-- CERTIFICATIONS SECTION -->
+            <section id="certifications" class="mb-24 reveal">
+                <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
+                    <span class="text-accent font-mono text-xl mr-2">05.</span> Certifications
+                    <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+                </h2>
 
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- CompTIA CySA+ -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/CySA+-png.webp" alt="CompTIA CySA+" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">CompTIA CySA+</h4>
+                        <p class="text-xs text-accent font-mono mt-1">Valid 2025-2028</p>
+                    </div>
+
+                    <!-- CompTIA Security+ -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/Security+-png.webp" alt="CompTIA Security+" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">CompTIA Security+</h4>
+                        <p class="text-xs text-accent font-mono mt-1">Valid 2025-2028</p>
+                    </div>
+
+                    <!-- CCNA ITN -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/CCNA_ITN.png" alt="CCNA ITN" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco CCNA ITN</h4>
+                    </div>
+
+                    <!-- CCNA SRWE -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/CCNA_SRWE.png" alt="CCNA SRWE" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco CCNA SRWE</h4>
+                    </div>
+
+                    <!-- CCNA ENSA -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/CCNA_ENSA.png" alt="CCNA ENSA" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco CCNA ENSA</h4>
+                    </div>
+
+                    <!-- Network Defense -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/NetworkDefense.png" alt="Network Defense" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco Network Defense</h4>
+                    </div>
+
+                    <!-- AZ-900 -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/AZ-900.png" alt="AZ-900" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">Microsoft AZ-900</h4>
+                    </div>
+
+                    <!-- SC-900 -->
+                    <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
+                        <div class="w-24 h-24 mb-4 relative">
+                            <img src="https://karim871.github.io/Portfolio/images/SC-900.png" alt="SC-900" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <h4 class="text-slate-lighter font-bold text-center text-sm">Microsoft SC-900</h4>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT SECTION -->
+            <section id="contact" class="mb-24 py-12 text-center reveal">
+                <p class="text-accent font-mono mb-4">06. What's Next?</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-lighter mb-6">Get In Touch</h2>
+                <p class="text-slate max-w-md mx-auto mb-12 text-lg">
+                    I'm currently looking for new opportunities in SOC Analysis, Threat Intelligence, and IT Security. 
+                    Whether you have a question or just want to say hi, my inbox is always open!
+                </p>
+                <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="inline-block border border-accent text-accent px-8 py-4 rounded font-mono text-lg hover:bg-accent/10 transition-all duration-300 transform hover:-translate-y-1">
+                    Say Hello
+                </a>
+                
+                <div class="mt-12 flex justify-center gap-8 lg:hidden">
+                    <a href="https://github.com/karim871" target="_blank" class="text-slate hover:text-accent transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" class="text-slate hover:text-accent transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="text-center py-8 text-slate font-mono text-xs">
+                <p class="mb-2">Designed with inspiration from <a href="https://brittanychiang.com/" target="_blank" class="text-accent hover:underline">Brittany Chiang</a>.</p>
+                <p>Built by Abdelkrim Zouaki</p>
+            </footer>
+
+        </main>
     </div>
-</section>
 
+    <script>
+        // Typewriter Effect
+        const titles = ["SOC Analyst", "Cybersecurity Specialist", "Threat Hunter"];
+        let titleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typeSpeed = 100;
+        const deleteSpeed = 50;
+        const pauseTime = 2000;
+        const typewriterElement = document.getElementById('typewriter');
 
-<script>
-    // Add smooth scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+        function typeWriter() {
+            const currentTitle = titles[titleIndex];
+            
+            if (isDeleting) {
+                typewriterElement.textContent = currentTitle.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typewriterElement.textContent = currentTitle.substring(0, charIndex + 1);
+                charIndex++;
             }
-        });
-    });
 
-    // Add header scroll effect
-    window.addEventListener('scroll', function() {
-        const header = document.querySelector('.header');
-        if (window.scrollY > 100) {
-            header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
-            header.style.backdropFilter = 'blur(10px)';
-        } else {
-            header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
-            header.style.backdropFilter = 'none';
+            let typeDelay = isDeleting ? deleteSpeed : typeSpeed;
+
+            if (!isDeleting && charIndex === currentTitle.length) {
+                typeDelay = pauseTime;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                titleIndex = (titleIndex + 1) % titles.length;
+                typeDelay = 500;
+            }
+
+            setTimeout(typeWriter, typeDelay);
         }
-    });
-</script>
+
+        // Start typewriter on load
+        document.addEventListener('DOMContentLoaded', typeWriter);
+
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Show selected content
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            
+            // Reset all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-accent', 'bg-navy-light', 'border-accent');
+                btn.classList.add('text-slate', 'border-transparent');
+            });
+            
+            // Highlight active button
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.remove('text-slate', 'border-transparent');
+            activeBtn.classList.add('text-accent', 'bg-navy-light', 'border-accent');
+        }
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Update navigation highlighting
+                    const id = entry.target.getAttribute('id');
+                    if (id) {
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
