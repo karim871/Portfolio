@@ -1,643 +1,1016 @@
-<!DOCTYPE html>
+html_content = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Abdelkrim Zouaki | Cybersecurity Insights</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Courier+New&display=swap" rel="stylesheet">
+    <title>CTF Writeups | Abdelkrim Zouaki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0a192f',
+                            light: '#112240',
+                            lighter: '#233554',
+                        },
+                        slate: {
+                            DEFAULT: '#8892b0',
+                            light: '#a8b2d1',
+                            lighter: '#ccd6f6',
+                        },
+                        accent: '#38bdf8',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
     <style>
         * {
-            padding: 0;
             margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            text-decoration: none;
-        }
-
-        html {
-            font-size: 16px;
-            font-family: 'Montserrat', sans-serif;
-            scroll-behavior: smooth;
         }
 
         body {
-            background: #0a0a0a;
+            background-color: #0a192f;
+            color: #8892b0;
+            font-family: 'Inter', sans-serif;
+            cursor: none;
             overflow-x: hidden;
         }
 
-        .header {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(135deg, #101010, #1a1a1a);
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #38bdf8;
+            border-radius: 50%;
             position: fixed;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
-            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
         }
 
-        .inner_header {
-            max-width: 1400px;
-            height: 100%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid #38bdf8;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s ease-out;
         }
 
-        .logo_container {
-            height: 100%;
-            display: flex;
-            align-items: center;
+        .cursor-circle.hover {
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
         }
 
-        .logo_container h1 {
-            color: white;
-            font-size: 32px;
-            font-weight: 200;
-            margin: 0;
-            transition: all 0.3s ease;
+        @media (hover: none) and (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor-dot, .cursor-circle { display: none; }
         }
 
-        .logo_container h1 span {
-            font-weight: 800;
-            color: #00ff41;
-            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .navigation {
-            display: flex;
-            height: 100%;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .navigation a {
-            height: auto;
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .navigation a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
-            transition: left 0.3s ease;
-        }
-
-        .navigation li {
-            list-style: none;
-            color: white;
-            font-size: 18px;
-            font-weight: 400;
-            transition: all 0.3s ease;
-        }
-
-        .navigation a:hover {
-            background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .navigation a:hover::before {
-            left: 100%;
-        }
-
-        .navigation a:hover li {
-            color: #00ff41;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-            }
-            50% {
-                text-shadow: 0 0 20px rgba(0, 255, 65, 0.8), 0 0 30px rgba(0, 255, 65, 0.3);
-            }
-        }
-
-        .main-content {
-            padding-top: 140px;
-            min-height: 100vh;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-bottom: 60px;
-        }
-
-        .page-hero {
-            text-align: center;
-            margin-bottom: 60px;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, rgba(22, 33, 62, 0.5), rgba(15, 52, 96, 0.5));
-            border-radius: 15px;
-            border: 2px solid rgba(0, 255, 65, 0.3);
-        }
-
-        .page-hero h1 {
-            color: #00ff41;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
-        }
-
-        .page-hero p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .blog-card {
-            background: linear-gradient(135deg, #16213e, #0f3460);
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            height: fit-content;
-        }
-
-        .blog-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .blog-card:hover {
-            transform: translateY(-10px);
-            border-color: #00ff41;
-            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.3);
-        }
-
-        .blog-card:hover::before {
-            left: 100%;
-        }
-
-        .blog-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .blog-date {
-            color: rgba(0, 255, 65, 0.8);
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .blog-category {
-            background: rgba(0, 255, 65, 0.2);
-            border: 1px solid rgba(0, 255, 65, 0.4);
-            color: #00ff41;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .blog-card h2 {
-            color: #00ff41;
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 2;
-            line-height: 1.3;
-        }
-
-        .blog-excerpt {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .blog-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .blog-tags span {
-            background: rgba(0, 102, 204, 0.2);
-            border: 1px solid rgba(0, 102, 204, 0.4);
-            color: #0099ff;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .read-more {
-            color: #00ff41;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-            font-size: 0.95rem;
-        }
-
-        .read-more::after {
-            content: '→';
-            transition: transform 0.3s ease;
-        }
-
-        .blog-card:hover .read-more {
-            transform: translateX(5px);
-        }
-
-        .blog-card:hover .read-more::after {
-            transform: translateX(5px);
-        }
-
-        .featured-post {
-            background: linear-gradient(135deg, rgba(0, 255, 65, 0.15), rgba(0, 255, 65, 0.05));
-            border: 3px solid #00ff41;
-            padding: 40px;
-            margin-bottom: 50px;
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .featured-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #00ff41;
-            color: #000;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
-        }
-
-        .featured-post h2 {
-            color: #00ff41;
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-        }
-
-        .featured-post .blog-excerpt {
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-        }
-
-        .coming-soon {
-            text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, rgba(22, 33, 62, 0.3), rgba(15, 52, 96, 0.3));
-            border-radius: 15px;
-            border: 2px dashed rgba(0, 255, 65, 0.3);
-            margin-top: 40px;
-        }
-
-        .coming-soon h3 {
-            color: #00ff41;
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        .coming-soon p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                height: 80px;
-            }
-
-            .inner_header {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem;
-            }
-
-            .logo_container h1 {
-                font-size: 24px;
-                margin-bottom: 0.5rem;
-            }
-
-            .navigation {
-                gap: 0.5rem;
-            }
-
-            .navigation li {
-                font-size: 16px;
-            }
-
-            .main-content {
-                padding-top: 100px;
-            }
-
-            .blog-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-hero h1 {
-                font-size: 2rem;
-            }
-
-            .featured-post {
-                padding: 25px;
-            }
-
-            .featured-badge {
-                position: static;
-                display: inline-block;
-                margin-bottom: 15px;
-            }
-        }
-
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-
         ::-webkit-scrollbar-track {
-            background: #1a1a1a;
+            background: #0a192f;
         }
-
         ::-webkit-scrollbar-thumb {
-            background: #00ff41;
+            background: #233554;
             border-radius: 4px;
         }
-
         ::-webkit-scrollbar-thumb:hover {
-            background: #00cc33;
+            background: #38bdf8;
+        }
+
+        /* Animations */
+        @keyframes drift {
+            0% { transform: translateY(0) translateX(0); opacity: 0.03; }
+            50% { transform: translateY(-20px) translateX(10px); opacity: 0.06; }
+            100% { transform: translateY(0) translateX(0); opacity: 0.03; }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+            50% { text-shadow: 0 0 20px rgba(56, 189, 248, 0.6), 0 0 30px rgba(56, 189, 248, 0.3); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100%); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .animate-drift {
+            animation: drift 8s ease-in-out infinite;
+        }
+
+        .animate-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        .animate-glow {
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Terminal Banner */
+        .terminal-bg {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(180deg, transparent 0%, rgba(56, 189, 248, 0.03) 50%, transparent 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(56, 189, 248, 0.02) 2px,
+                    rgba(56, 189, 248, 0.02) 4px
+                );
+            pointer-events: none;
+        }
+
+        .hex-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hex-char {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            color: #38bdf8;
+            opacity: 0.03;
+            animation: drift 10s ease-in-out infinite;
+            user-select: none;
+        }
+
+        /* Card Hover Effects */
+        .writeup-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .writeup-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(56, 189, 248, 0.15);
+        }
+
+        .writeup-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        .card-glow {
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), transparent, rgba(56, 189, 248, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        /* Difficulty Badges */
+        .difficulty-easy { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .difficulty-medium { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
+        .difficulty-hard { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .difficulty-insane { background: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+        /* Status Indicators */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1px solid currentColor;
+            animation: pulse-ring 2s ease-out infinite;
+        }
+
+        .status-rooted { background: #22c55e; color: #22c55e; }
+        .status-in-progress { background: #eab308; color: #eab308; }
+
+        /* Filter Buttons */
+        .filter-btn {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #38bdf8;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-btn:hover::before,
+        .filter-btn.active::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .filter-btn.active {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Search Input */
+        .search-input {
+            background: rgba(17, 34, 64, 0.8);
+            border: 1px solid #233554;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+            outline: none;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            backdrop-filter: blur(8px);
+            background: rgba(10, 25, 47, 0.9);
+        }
+
+        .modal-content {
+            background: #112240;
+            border: 1px solid #233554;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Code Block Styling */
+        .code-block {
+            background: #0d1b2a;
+            border: 1px solid #233554;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(180deg, rgba(56, 189, 248, 0.05), transparent);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #233554;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-content {
+            padding: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #a8b2d1;
+        }
+
+        .code-keyword { color: #c792ea; }
+        .code-string { color: #c3e88d; }
+        .code-comment { color: #546e7a; font-style: italic; }
+        .code-function { color: #82aaff; }
+        .code-number { color: #f78c6c; }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background: #233554;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #22d3ee);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        /* Tag Styling */
+        .tech-tag {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.2s ease;
+        }
+
+        .tech-tag:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        /* Sidebar vertical line */
+        .vertical-line {
+            width: 1px;
+            height: 100px;
+            background: linear-gradient(180deg, transparent, #233554, transparent);
+        }
+
+        /* Selection color */
+        ::selection {
+            background: rgba(56, 189, 248, 0.3);
+            color: #ccd6f6;
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <div class="inner_header">
-            <div class="logo_container">
-                <h1>Z<span>Sec.io</span></h1>
-            </div>
-            <ul class="navigation">
-                <a href="../index.html"><li>Home</li></a>
-                <a href="../index.html#projects"><li>Projects</li></a>
-                <a href="../index.html#skills"><li>Skills</li></a>
-                <a href="../index.html#certifications"><li>Certifications</li></a>
-                <a href="Blog.html"><li>Blog</li></a>
-                <a href="Contact.html"><li>Contact</li></a>
-            </ul>
-        </div>
-    </div>
+<body class="min-h-screen">
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-circle" id="cursor-circle"></div>
 
-    <div class="main-content">
-        <div class="page-hero">
-            <h1>A Security Blog</h1>
-            <p>CTFs, Walkthroughs and findings | Insights, tutorials and experiences.</p>
-        </div>
+    <!-- LEFT SIDEBAR -->
+    <aside class="fixed left-0 top-0 h-screen w-[40%] lg:w-[35%] bg-[#0a192f] border-r border-[#233554] flex flex-col justify-between p-8 lg:p-12 z-40 hidden md:flex">
+        <div>
+            <!-- Back Link -->
+            <a href="index.html" class="group flex items-center gap-2 text-[#38bdf8] hover:text-[#ccd6f6] transition-colors mb-16 interactive">
+                <svg class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span class="font-mono text-sm tracking-wider">Back to Portfolio</span>
+            </a>
 
-        <div class="featured-post blog-card">
-            <span class="featured-badge">⭐ FEATURED</span>
-            <div class="blog-meta">
-                <span class="blog-date">January 2025</span>
-                <span class="blog-category">Certifications</span>
+            <!-- Name & Title -->
+            <div class="space-y-4">
+                <h1 class="text-4xl lg:text-5xl font-bold text-[#ccd6f6] tracking-tight">
+                    Abdelkrim<br/>Zouaki
+                </h1>
+                <div class="flex items-center gap-2 text-[#38bdf8] font-mono text-lg">
+                    <span class="text-[#8892b0]">//</span>
+                    <span>CTF Writeups</span>
+                </div>
+                <p class="text-[#8892b0] text-sm font-mono mt-6 max-w-xs leading-relaxed">
+                    "Breaking things to understand them."
+                </p>
             </div>
-            <h2>How I Prepared and Passed CompTIA Linux+</h2>
-            <p class="blog-excerpt">
-                My complete journey to earning the CompTIA Linux+ certification. From study strategies and hands-on lab exercises to exam tips and lessons learned. Discover the resources, practice techniques, and real-world scenarios that helped me master Linux system administration and security fundamentals.
-            </p>
-            <div class="blog-tags">
-                <span>Linux+</span>
-                <span>CompTIA</span>
-                <span>Career Development</span>
-                <span>Study Guide</span>
-                <span>System Administration</span>
-            </div>
-            <a href="linux-plus-journey.html" class="read-more">Read Full Journey</a>
         </div>
 
-        <!-- ALL BLOG CARDS SHOULD BE INSIDE THIS SINGLE blog-grid div -->
-        <div class="blog-grid">
-            <!-- PowerShell Investigation -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">December 2024</span>
-                    <span class="blog-category">Incident Response</span>
-                </div>
-                <h2>Detecting Suspicious PowerShell Activity: A Real SOC Investigation</h2>
-                <p class="blog-excerpt">
-                    Complete incident response walkthrough from detection through containment. Documents PowerShell threat detection, log correlation across Wazuh/Suricata/Sysmon, and MITRE ATT&CK mapping.
-                </p>
-                <div class="blog-tags">
-                    <span>Incident Response</span>
-                    <span>PowerShell</span>
-                    <span>MITRE ATT&CK</span>
-                    <span>Wazuh</span>
-                    <span>Suricata</span>
-                </div>
-                <a href="incident-response-powershell.html" class="read-more">Read Investigation</a>
-            </div>
-
-            <!-- Audit Tool -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">January 2025</span>
-                    <span class="blog-category">Learning</span>
-                </div>
-                <h2>Building a Cybersecurity Audit Tool</h2>
-                <p class="blog-excerpt">
-                    A Python learning journey: from basic port scanning to multi-threaded security automation. Threading, API integration, and vulnerability detection explained.
-                </p>
-                <div class="blog-tags">
-                    <span>Python</span>
-                    <span>Security</span>
-                    <span>Learning</span>
-                    <span>Threading</span>
-                </div>
-                <a href="cybersecurity-audit-tool-blog.html" class="read-more">Read Journey</a>
-            </div>
-
-            <!-- Mini-SOC -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">December 2024</span>
-                    <span class="blog-category">Project Showcase</span>
-                </div>
-                <h2>Building a Home Mini-SOC with Suricata and Splunk</h2>
-                <p class="blog-excerpt">
-                    A deep dive into setting up a production-grade Security Operations Center at home. Deployed Suricata IDS with 30,000+ threat detection rules and integrated Splunk SIEM on Raspberry Pi 4.
-                </p>
-                <div class="blog-tags">
-                    <span>Suricata</span>
-                    <span>Splunk</span>
-                    <span>SIEM</span>
-                    <span>IDS</span>
-                    <span>Raspberry Pi</span>
-                </div>
-                <a href="piSOC.html" class="read-more">Read Documentation</a>
-            </div>
-
-            <!-- CyberOps Bot -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">December 2024</span>
-                    <span class="blog-category">Automation</span>
-                </div>
-                <h2>CyberOps Sidekick: Automated Threat Intelligence</h2>
-                <p class="blog-excerpt">
-                    How I built an n8n-powered threat intelligence bot that aggregates data from multiple APIs and delivers instant security analysis via Telegram.
-                </p>
-                <div class="blog-tags">
-                    <span>n8n</span>
-                    <span>APIs</span>
-                    <span>Threat Intel</span>
-                    <span>Docker</span>
-                </div>
-                <a href="cyberops-bot.html" class="read-more">View Project</a>
-            </div>
-
-            <!-- AI Project -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">December 2024</span>
-                    <span class="blog-category">AI/ML</span>
-                </div>
-                <h2>AI-Powered Security Analysis with Gemini</h2>
-                <p class="blog-excerpt">
-                    Leveraging Google's Gemini AI to automate OSINT gathering, log correlation, and security report generation. Reduced investigation time from 15 minutes to under 60 seconds.
-                </p>
-                <div class="blog-tags">
-                    <span>Python</span>
-                    <span>Gemini AI</span>
-                    <span>OSINT</span>
-                    <span>Automation</span>
-                </div>
-                <a href="cyberops-ai.html" class="read-more">View Project</a>
-            </div>
-
-            <!-- Pi-hole -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">November 2024</span>
-                    <span class="blog-category">Network Security</span>
-                </div>
-                <h2>Network-Wide Ad Blocking with Pi-hole</h2>
-                <p class="blog-excerpt">
-                    Implementing DNS sinkhole technology for network security and privacy protection. Learn how to block malicious domains, tracking, and telemetry at the network level.
-                </p>
-                <div class="blog-tags">
-                    <span>DNS</span>
-                    <span>Pi-hole</span>
-                    <span>Network Security</span>
-                    <span>Privacy</span>
-                </div>
-                <a href="pihole.html" class="read-more">View Project</a>
-            </div>
-
-            <!-- CompTIA Certs -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">2025</span>
-                    <span class="blog-category">Certifications</span>
-                </div>
-                <h2>CompTIA CySA+ & Security+ Journey</h2>
-                <p class="blog-excerpt">
-                    My path to earning both CompTIA certifications. Study strategies, lab exercises, and insights for aspiring cybersecurity analysts.
-                </p>
-                <div class="blog-tags">
-                    <span>CySA+</span>
-                    <span>Security+</span>
-                    <span>Career</span>
-                    <span>Study Tips</span>
-                </div>
-                <a href="accomp.html" class="read-more">Read More</a>
-            </div>
-
-            <!-- Azure Certs -->
-            <div class="blog-card">
-                <div class="blog-meta">
-                    <span class="blog-date">2024</span>
-                    <span class="blog-category">Certifications</span>
-                </div>
-                <h2>Microsoft Azure Certifications Journey: AZ-900 & SC-900</h2>
-                <p class="blog-excerpt">
-                    My path to earning Microsoft Azure Fundamentals (AZ-900) and Security, Compliance & Identity Fundamentals (SC-900). Study strategies, exam experiences, and cloud security insights.
-                </p>
-                <div class="blog-tags">
-                    <span>AZ-900</span>
-                    <span>SC-900</span>
-                    <span>Azure</span>
-                    <span>Cloud Security</span>
-                    <span>Microsoft</span>
-                </div>
-                <a href="azure-certifications-journey.html" class="read-more">Read Journey</a>
+        <!-- Social Links -->
+        <div class="flex flex-col items-start gap-6">
+            <div class="vertical-line"></div>
+            <div class="flex gap-4">
+                <a href="https://github.com/karim871" target="_blank" class="text-[#8892b0] hover:text-[#38bdf8] transition-all hover:-translate-y-1 interactive">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" class="text-[#8892b0] hover:text-[#38bdf8] transition-all hover:-translate-y-1 interactive">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+                <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="text-[#8892b0] hover:text-[#38bdf8] transition-all hover:-translate-y-1 interactive">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                </a>
             </div>
         </div>
-        <!-- blog-grid closing tag is HERE -->
+    </aside>
 
+    <!-- Mobile Header -->
+    <header class="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#0a192f]/95 backdrop-blur-md border-b border-[#233554] flex items-center justify-between px-6 z-50">
+        <a href="index.html" class="text-[#38bdf8] font-mono text-sm">← Back</a>
+        <span class="text-[#ccd6f6] font-bold">CTF Writeups</span>
+        <div class="w-8"></div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="md:ml-[40%] lg:ml-[35%] min-h-screen">
+        <!-- HERO BANNER -->
+        <section class="relative min-h-[50vh] flex flex-col justify-center px-6 md:px-12 lg:px-20 py-20 terminal-bg border-b border-[#38bdf8]/20">
+            <!-- Animated Hex Background -->
+            <div class="hex-bg" id="hex-bg"></div>
+            
+            <!-- Scanline Effect -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute w-full h-px bg-gradient-to-r from-transparent via-[#38bdf8]/10 to-transparent animate-scanline" style="animation: scanline 8s linear infinite;"></div>
+            </div>
+
+            <div class="relative z-10 max-w-4xl">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-[#38bdf8] font-mono text-sm tracking-widest">[ROOT@CTF]</span>
+                    <div class="h-px flex-1 bg-gradient-to-r from-[#38bdf8]/30 to-transparent"></div>
+                </div>
+                
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[#ccd6f6] mb-6 animate-glow tracking-tight">
+                    CTF Writeups
+                </h1>
+                
+                <p class="font-mono text-[#8892b0] text-lg md:text-xl mb-8 max-w-2xl leading-relaxed">
+                    <span class="text-[#38bdf8]">&gt;</span> Documented intrusions. Understood vulnerabilities. Lessons compiled.
+                </p>
+
+                <!-- Stats Pills -->
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center gap-3 bg-[#112240] border border-[#233554] rounded-full px-5 py-2.5">
+                        <div class="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse"></div>
+                        <span class="text-[#ccd6f6] font-mono text-sm">Machines Rooted: <span class="text-[#38bdf8] font-bold" id="rooted-count">1</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-[#112240] border border-[#233554] rounded-full px-5 py-2.5">
+                        <svg class="w-4 h-4 text-[#38bdf8]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        <span class="text-[#ccd6f6] font-mono text-sm">Platform: <span class="text-[#38bdf8] font-bold">HackTheBox</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Glow -->
+            <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#38bdf8]/50 to-transparent"></div>
+        </section>
+
+        <!-- WRITEUP SELECTOR -->
+        <section class="px-6 md:px-12 lg:px-20 py-16">
+            <!-- Section Header -->
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-[#38bdf8] font-mono text-lg tracking-wider">[ SELECT WRITEUP ]</span>
+                <span class="text-[#38bdf8] animate-blink">_</span>
+                <div class="h-px flex-1 bg-[#233554]"></div>
+            </div>
+
+            <!-- Filter & Search Bar -->
+            <div class="flex flex-col lg:flex-row gap-6 mb-10">
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active px-4 py-2 rounded font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="all">
+                        ALL
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="easy">
+                        EASY
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="medium">
+                        MEDIUM
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="hard">
+                        HARD
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="insane">
+                        INSANE
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <div class="flex-1 max-w-md">
+                    <div class="relative">
+                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8892b0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <input type="text" placeholder="Search writeups..." class="search-input w-full pl-12 pr-4 py-3 rounded-lg text-[#ccd6f6] font-mono text-sm placeholder-[#8892b0]/50 interactive">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Writeup Cards Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="writeups-grid">
+                
+                <!-- Writeup Card 1: Meow -->
+                <article class="writeup-card relative bg-[#112240] rounded-xl p-6 cursor-pointer interactive" data-difficulty="easy" data-name="meow" onclick="openWriteup('meow')">
+                    <div class="card-glow rounded-xl"></div>
+                    
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-lg bg-[#0a192f] border border-[#233554] flex items-center justify-center">
+                                <svg class="w-6 h-6 text-[#38bdf8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.131A8 8 0 008 3.239c-5.34 2.266-9.174 7.152-9.174 13.239 0 2.472.345 4.865.99 7.131"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-[#ccd6f6] font-bold text-xl">Meow</h3>
+                                <p class="text-[#8892b0] font-mono text-sm">HackTheBox • Starting Point</p>
+                            </div>
+                        </div>
+                        <span class="difficulty-easy px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">Easy</span>
+                    </div>
+
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Telnet exploitation on a misconfigured Linux server. My first box on HackTheBox — a gentle introduction to CTF methodology and basic enumeration.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">Telnet</span>
+                        <span class="tech-tag">Linux</span>
+                        <span class="tech-tag">Enumeration</span>
+                        <span class="tech-tag">Default Credentials</span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-[#233554]">
+                        <div class="flex items-center gap-2">
+                            <span class="status-dot status-rooted"></span>
+                            <span class="text-[#22c55e] font-mono text-sm">Rooted</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-[#8892b0] font-mono text-xs">
+                            <span class="flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                15 min
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                                1,247
+                            </span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Placeholder Cards for Future Writeups -->
+                <article class="writeup-card relative bg-[#112240]/50 rounded-xl p-6 border border-dashed border-[#233554] opacity-60" data-difficulty="medium">
+                    <div class="flex items-center justify-center h-full min-h-[200px]">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[#0a192f] border border-[#233554] flex items-center justify-center">
+                                <svg class="w-8 h-8 text-[#38bdf8]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                            </div>
+                            <p class="text-[#8892b0] font-mono text-sm">More writeups coming soon...</p>
+                            <p class="text-[#38bdf8]/50 font-mono text-xs mt-2">Currently working on: Dancing</p>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- METHODOLOGY SECTION -->
+        <section class="px-6 md:px-12 lg:px-20 py-16 border-t border-[#233554]">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-[#38bdf8] font-mono text-lg tracking-wider">[ METHODOLOGY ]</span>
+                <div class="h-px flex-1 bg-[#233554]"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">01</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Enumeration</h4>
+                    <p class="text-[#8892b0] text-sm">Nmap scans, service detection, and initial reconnaissance to map the attack surface.</p>
+                </div>
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">02</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Exploitation</h4>
+                    <p class="text-[#8892b0] text-sm">Identifying vulnerabilities and crafting payloads to gain initial access.</p>
+                </div>
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">03</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Privilege Escalation</h4>
+                    <p class="text-[#8892b0] text-sm">Local enumeration and exploiting misconfigurations to achieve root.</p>
+                </div>
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">04</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Documentation</h4>
+                    <p class="text-[#8892b0] text-sm">Comprehensive writeups with lessons learned and remediation advice.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="px-6 md:px-12 lg:px-20 py-12 border-t border-[#233554]">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-[#8892b0] font-mono text-sm">
+                    <span class="text-[#38bdf8]">©</span> 2026 Abdelkrim Zouaki. Built with 
+                    <span class="text-[#38bdf8]">&lt;code/&gt;</span> and curiosity.
+                </p>
+                <div class="flex items-center gap-6">
+                    <a href="https://app.hackthebox.com/profile/2174024" target="_blank" class="text-[#8892b0] hover:text-[#38bdf8] font-mono text-sm transition-colors interactive">
+                        HackTheBox Profile →
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- WRITEUP MODAL -->
+    <div id="writeup-modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeWriteup()"></div>
+        <div class="absolute inset-4 md:inset-8 lg:inset-16 overflow-hidden">
+            <div class="modal-content w-full h-full rounded-2xl overflow-hidden flex flex-col">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between px-6 py-4 border-b border-[#233554] bg-[#0a192f]">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[#38bdf8] font-mono text-sm">[WRITEUP]</span>
+                        <h2 id="modal-title" class="text-[#ccd6f6] font-bold text-lg">Meow</h2>
+                        <span id="modal-difficulty" class="difficulty-easy px-2 py-0.5 rounded text-xs font-mono font-bold uppercase">Easy</span>
+                    </div>
+                    <button onclick="closeWriteup()" class="text-[#8892b0] hover:text-[#38bdf8] transition-colors interactive">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Content -->
+                <div class="flex-1 overflow-y-auto p-6" id="modal-body">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+        // Custom Cursor
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorCircle = document.getElementById('cursor-circle');
+        let mouseX = 0, mouseY = 0;
+        let circleX = 0, circleY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        function animateCursor() {
+            circleX += (mouseX - circleX) * 0.15;
+            circleY += (mouseY - circleY) * 0.15;
+            cursorCircle.style.left = circleX + 'px';
+            cursorCircle.style.top = circleY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effect on interactive elements
+        document.querySelectorAll('.interactive').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorCircle.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorCircle.classList.remove('hover'));
+        });
+
+        // Generate Hex Background
+        const hexBg = document.getElementById('hex-bg');
+        const hexChars = '0123456789ABCDEF';
+        for (let i = 0; i < 50; i++) {
+            const span = document.createElement('span');
+            span.className = 'hex-char';
+            span.textContent = hexChars[Math.floor(Math.random() * 16)];
+            span.style.left = Math.random() * 100 + '%';
+            span.style.top = Math.random() * 100 + '%';
+            span.style.animationDelay = Math.random() * 5 + 's';
+            span.style.animationDuration = (8 + Math.random() * 4) + 's';
+            hexBg.appendChild(span);
+        }
+
+        // Filter Functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const writeupCards = document.querySelectorAll('.writeup-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                writeupCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.difficulty === filter) {
+                        card.style.display = 'block';
+                        card.classList.add('animate-fade-in');
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Search Functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            writeupCards.forEach(card => {
+                const name = card.dataset.name || '';
+                const text = card.textContent.toLowerCase();
+                if (text.includes(query) || name.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
                 }
             });
         });
 
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.95), rgba(26, 26, 26, 0.95))';
-                header.style.backdropFilter = 'blur(10px)';
-            } else {
-                header.style.background = 'linear-gradient(135deg, #101010, #1a1a1a)';
-                header.style.backdropFilter = 'none';
+        // Writeup Data
+        const writeups = {
+            meow: {
+                title: 'Meow',
+                difficulty: 'easy',
+                platform: 'HackTheBox',
+                category: 'Starting Point',
+                time: '15 minutes',
+                os: 'Linux',
+                ip: '10.129.1.17',
+                content: `
+                    <div class="space-y-8">
+                        <!-- Overview -->
+                        <div class="bg-[#0a192f] rounded-xl p-6 border border-[#233554]">
+                            <h3 class="text-[#38bdf8] font-mono text-lg mb-4 flex items-center gap-2">
+                                <span class="w-2 h-2 bg-[#38bdf8] rounded-full"></span>
+                                Machine Overview
+                            </h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <p class="text-[#8892b0] font-mono text-xs mb-1">OS</p>
+                                    <p class="text-[#ccd6f6] font-medium">Linux</p>
+                                </div>
+                                <div>
+                                    <p class="text-[#8892b0] font-mono text-xs mb-1">IP Address</p>
+                                    <p class="text-[#ccd6f6] font-medium font-mono">10.129.1.17</p>
+                                </div>
+                                <div>
+                                    <p class="text-[#8892b0] font-mono text-xs mb-1">Difficulty</p>
+                                    <p class="text-[#22c55e] font-medium">Easy</p>
+                                </div>
+                                <div>
+                                    <p class="text-[#8892b0] font-mono text-xs mb-1">Points</p>
+                                    <p class="text-[#ccd6f6] font-medium">20</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recon -->
+                        <div>
+                            <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 flex items-center gap-3">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] font-mono text-sm">01</span>
+                                Reconnaissance
+                            </h3>
+                            <p class="text-[#8892b0] mb-4 leading-relaxed">
+                                Started with a basic Nmap scan to identify open ports and services. The target appeared to be a Linux machine with minimal exposed services.
+                            </p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <div class="code-dot bg-[#ff5f56]"></div>
+                                    <div class="code-dot bg-[#ffbd2e]"></div>
+                                    <div class="code-dot bg-[#27c93f]"></div>
+                                    <span class="ml-3 text-[#8892b0] font-mono text-xs">bash</span>
+                                </div>
+                                <div class="code-content">
+                                    <span class="code-comment"># Nmap scan to identify open ports</span><br/>
+                                    <span class="code-keyword">nmap</span> -sV -sC <span class="code-number">10.129.1.17</span><br/><br/>
+                                    <span class="code-comment"># Results showed port 23/tcp open - Telnet</span>
+                                </div>
+                            </div>
+
+                            <p class="text-[#8892b0] mt-4 leading-relaxed">
+                                The scan revealed that <span class="text-[#38bdf8] font-mono">port 23 (Telnet)</span> was open. Telnet is an outdated protocol that transmits data in plaintext, making it inherently insecure.
+                            </p>
+                        </div>
+
+                        <!-- Exploitation -->
+                        <div>
+                            <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 flex items-center gap-3">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] font-mono text-sm">02</span>
+                                Initial Access
+                            </h3>
+                            <p class="text-[#8892b0] mb-4 leading-relaxed">
+                                Attempted to connect via Telnet. The service banner indicated it was a standard Linux telnetd. Tried common default credentials — root with no password worked immediately.
+                            </p>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <div class="code-dot bg-[#ff5f56]"></div>
+                                    <div class="code-dot bg-[#ffbd2e]"></div>
+                                    <div class="code-dot bg-[#27c93f]"></div>
+                                    <span class="ml-3 text-[#8892b0] font-mono text-xs">telnet</span>
+                                </div>
+                                <div class="code-content">
+                                    <span class="code-keyword">telnet</span> <span class="code-number">10.129.1.17</span> <span class="code-number">23</span><br/><br/>
+                                    Trying <span class="code-number">10.129.1.17</span>...<br/>
+                                    Connected to <span class="code-number">10.129.1.17</span>.<br/>
+                                    Escape character is <span class="code-string">'^]'</span>.<br/><br/>
+                                    <span class="code-keyword">Ubuntu</span> <span class="code-number">20.04</span> LTS<br/><br/>
+                                    meow login: <span class="code-string" style="color: #fff;">root</span><br/>
+                                    Password: <span class="code-comment">[empty/blank]</span><br/><br/>
+                                    <span class="code-comment"># Successfully logged in as root!</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-4 mt-4">
+                                <p class="text-[#22c55e] font-mono text-sm flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Root access obtained via default/blank credentials
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Flag -->
+                        <div>
+                            <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 flex items-center gap-3">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] font-mono text-sm">03</span>
+                                Capturing the Flag
+                            </h3>
+                            <p class="text-[#8892b0] mb-4 leading-relaxed">
+                                With root access established, the flag was located in the standard location for HackTheBox machines — the root user's home directory.
+                            </p>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <div class="code-dot bg-[#ff5f56]"></div>
+                                    <div class="code-dot bg-[#ffbd2e]"></div>
+                                    <div class="code-dot bg-[#27c93f]"></div>
+                                    <span class="ml-3 text-[#8892b0] font-mono text-xs">root@meow</span>
+                                </div>
+                                <div class="code-content">
+                                    <span class="code-keyword">whoami</span><br/>
+                                    <span class="code-string">root</span><br/><br/>
+                                    <span class="code-keyword">cat</span> /root/flag.txt<br/>
+                                    <span class="code-string" style="color: #22c55e;">b40abdfe23665f766f9c61ecba8a4c19</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lessons -->
+                        <div class="bg-[#112240] rounded-xl p-6 border border-[#233554]">
+                            <h3 class="text-[#38bdf8] font-mono text-lg mb-4">[ LESSONS LEARNED ]</h3>
+                            <ul class="space-y-3 text-[#8892b0]">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-[#38bdf8] mt-1">→</span>
+                                    <span>Default credentials remain a critical vulnerability in many systems</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-[#38bdf8] mt-1">→</span>
+                                    <span>Telnet should never be used in production — always prefer SSH</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-[#38bdf8] mt-1">→</span>
+                                    <span>Always check for blank passwords on administrative accounts</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-[#38bdf8] mt-1">→</span>
+                                    <span>Service banners can reveal valuable information about the target</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Remediation -->
+                        <div class="bg-[#ef4444]/10 border border-[#ef4444]/30 rounded-xl p-6">
+                            <h3 class="text-[#ef4444] font-bold mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                                Remediation Advice
+                            </h3>
+                            <ul class="space-y-2 text-[#8892b0] text-sm">
+                                <li>• Disable Telnet and use SSH with key-based authentication</li>
+                                <li>• Enforce strong password policies for all accounts</li>
+                                <li>• Implement account lockout after failed login attempts</li>
+                                <li>• Regularly audit user accounts for weak or default credentials</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
             }
+        };
+
+        // Modal Functions
+        function openWriteup(id) {
+            const writeup = writeups[id];
+            if (!writeup) return;
+
+            document.getElementById('modal-title').textContent = writeup.title;
+            document.getElementById('modal-difficulty').textContent = writeup.difficulty;
+            document.getElementById('modal-difficulty').className = `difficulty-${writeup.difficulty} px-2 py-0.5 rounded text-xs font-mono font-bold uppercase`;
+            document.getElementById('modal-body').innerHTML = writeup.content;
+            
+            document.getElementById('writeup-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWriteup() {
+            document.getElementById('writeup-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeWriteup();
+        });
+
+        // Animate cards on load
+        window.addEventListener('load', () => {
+            writeupCards.forEach((card, i) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, i * 100);
+            });
         });
     </script>
 </body>
-</html>
+</html>'''
+
