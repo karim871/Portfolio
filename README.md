@@ -18,6 +18,6 @@ Here you'll find a summary of my:
 
 - ✉️ Email: abdelkrim.zouaki.ti@gmail.com 
 - 🌐 GitHub: [karim871](https://github.com/karim871)  
-- 🧑‍💼 LinkedIn: [linkedin.com/in/karim-zouaki](https://www.linkedin.com/in/abdelkrim-z-9a3782229)
+- 🧑‍💼 LinkedIn: [linkedin.com/in/Abdelkrim-zouaki](https://www.linkedin.com/in/abdelkrim-z-9a3782229)
 
 
