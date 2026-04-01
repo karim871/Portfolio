@@ -1,1 +1,869 @@
 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog & Writeups | Abdelkrim Zouaki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0a192f',
+                            light: '#112240',
+                            lighter: '#233554',
+                        },
+                        slate: {
+                            DEFAULT: '#8892b0',
+                            light: '#a8b2d1',
+                            lighter: '#ccd6f6',
+                        },
+                        accent: '#38bdf8',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a192f;
+            color: #8892b0;
+            font-family: 'Inter', sans-serif;
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-circle {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid #38bdf8;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s ease-out;
+        }
+
+        .cursor-circle.hover {
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor-dot, .cursor-circle { display: none; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a192f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #233554;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+
+        /* Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(56, 189, 248, 0.02) 2px,
+                rgba(56, 189, 248, 0.02) 4px
+            );
+            pointer-events: none;
+            z-index: 9990;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: #38bdf8;
+            z-index: 10000;
+            transition: width 0.1s ease;
+        }
+
+        /* Animations */
+        @keyframes drift {
+            0% { transform: translateY(0) translateX(0); opacity: 0.03; }
+            50% { transform: translateY(-20px) translateX(10px); opacity: 0.06; }
+            100% { transform: translateY(0) translateX(0); opacity: 0.03; }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+            50% { text-shadow: 0 0 20px rgba(56, 189, 248, 0.6), 0 0 30px rgba(56, 189, 248, 0.3); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-drift {
+            animation: drift 8s ease-in-out infinite;
+        }
+
+        .animate-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        .animate-glow {
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Reveal on Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hex Background */
+        .hex-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hex-char {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            color: #38bdf8;
+            opacity: 0.03;
+            animation: drift 10s ease-in-out infinite;
+            user-select: none;
+        }
+
+        /* Filter Buttons */
+        .filter-btn {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #38bdf8;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-btn:hover::before,
+        .filter-btn.active::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .filter-btn.active {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Cards */
+        .blog-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(56, 189, 248, 0.15);
+        }
+
+        .blog-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        .card-glow {
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), transparent, rgba(56, 189, 248, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        /* Category Pills */
+        .pill-project { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .pill-incident { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .pill-cert { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .pill-lab { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
+
+        /* Tech Tags */
+        .tech-tag {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.2s ease;
+        }
+
+        .tech-tag:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        /* Featured Card */
+        .featured-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(17, 34, 64, 0.8));
+            border-left: 4px solid #ef4444;
+        }
+
+        /* Vertical Line */
+        .vertical-line {
+            width: 1px;
+            height: 100px;
+            background: linear-gradient(180deg, transparent, #233554, transparent);
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(56, 189, 248, 0.3);
+            color: #ccd6f6;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-circle" id="cursor-circle"></div>
+
+    <!-- Scanline Overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="fixed left-0 top-0 h-screen w-[40%] bg-[#0a192f] border-r border-[#233554] flex flex-col justify-between p-12 z-40 hidden lg:flex">
+        <div>
+            <!-- Back Link -->
+            <a href="index.html" class="group flex items-center gap-2 text-[#38bdf8] hover:text-[#ccd6f6] transition-colors mb-16 interactive">
+                <svg class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span class="font-mono text-sm tracking-wider">Back to Portfolio</span>
+            </a>
+
+            <!-- Name & Title -->
+            <div class="space-y-4">
+                <h1 class="text-5xl font-bold text-[#ccd6f6] tracking-tight">
+                    Abdelkrim<br/>Zouaki
+                </h1>
+                <div class="flex items-center gap-2 text-[#38bdf8] font-mono text-lg">
+                    <span class="text-[#8892b0]">//</span>
+                    <span>Blog & Writeups</span>
+                </div>
+                <p class="text-[#8892b0] text-sm font-mono mt-6 max-w-xs leading-relaxed">
+                    "Everything I've built, broken, and learned."
+                </p>
+            </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="flex flex-col items-start gap-6">
+            <div class="vertical-line"></div>
+            <div class="flex gap-4">
+                <a href="https://github.com/karim871" target="_blank" class="text-[#8892b0] hover:text-[#38bdf8] transition-all hover:-translate-y-1 interactive">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" class="text-[#8892b0] hover:text-[#38bdf8] transition-all hover:-translate-y-1 interactive">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+                <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="text-[#8892b0] hover:text-[#38bdf8] transition-all hover:-translate-y-1 interactive">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#0a192f]/95 backdrop-blur-md border-b border-[#233554] flex items-center justify-between px-6 z-50">
+        <a href="index.html" class="text-[#38bdf8] font-mono text-sm interactive">← Back</a>
+        <span class="text-[#ccd6f6] font-bold">Blog & Writeups</span>
+        <div class="w-8"></div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="lg:ml-[40%] min-h-screen">
+        
+        <!-- HERO BANNER -->
+        <section class="relative min-h-[50vh] flex flex-col justify-center px-6 lg:px-20 py-20 bg-[#0a192f] border-b border-[#233554]">
+            <!-- Hex Background -->
+            <div class="hex-bg" id="hex-bg"></div>
+
+            <div class="relative z-10 max-w-4xl">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-[#38bdf8] font-mono text-sm tracking-widest">[BLOG@PORTFOLIO]</span>
+                    <div class="h-px flex-1 bg-gradient-to-r from-[#38bdf8]/30 to-transparent"></div>
+                </div>
+                
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[#ccd6f6] mb-6 animate-glow tracking-tight">
+                    Blog & Writeups
+                </h1>
+                
+                <p class="font-mono text-[#8892b0] text-lg md:text-xl mb-8 max-w-2xl leading-relaxed">
+                    <span class="text-[#38bdf8]">&gt;</span> Projects. Investigations. Certification journals. All documented.
+                </p>
+
+                <!-- Stats Pills -->
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center gap-3 bg-[#112240] border border-[#233554] rounded-full px-5 py-2.5">
+                        <div class="w-2 h-2 rounded-full bg-[#38bdf8] animate-pulse"></div>
+                        <span class="text-[#ccd6f6] font-mono text-sm">Articles: <span class="text-[#38bdf8] font-bold">9</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-[#112240] border border-[#233554] rounded-full px-5 py-2.5">
+                        <span class="text-[#ccd6f6] font-mono text-sm">Projects Documented: <span class="text-[#38bdf8] font-bold">5</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-[#112240] border border-[#233554] rounded-full px-5 py-2.5">
+                        <span class="text-[#ccd6f6] font-mono text-sm">Certifications Covered: <span class="text-[#38bdf8] font-bold">4</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Glow -->
+            <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#38bdf8]/50 to-transparent"></div>
+        </section>
+
+        <!-- CATEGORY FILTER BAR -->
+        <section class="px-6 lg:px-20 py-8 border-b border-[#233554] bg-[#0a192f]/50 backdrop-blur-sm sticky top-0 lg:top-0 z-30">
+            <div class="flex flex-wrap gap-2">
+                <button class="filter-btn active px-5 py-2.5 rounded-lg font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="all">
+                    ALL
+                </button>
+                <button class="filter-btn px-5 py-2.5 rounded-lg font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="projects">
+                    PROJECTS
+                </button>
+                <button class="filter-btn px-5 py-2.5 rounded-lg font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="incident-reports">
+                    INCIDENT REPORTS
+                </button>
+                <button class="filter-btn px-5 py-2.5 rounded-lg font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="certifications">
+                    CERTIFICATIONS
+                </button>
+                <button class="filter-btn px-5 py-2.5 rounded-lg font-mono text-sm text-[#8892b0] hover:text-[#ccd6f6] interactive" data-filter="lab-notes">
+                    LAB NOTES
+                </button>
+            </div>
+        </section>
+
+        <!-- CONTENT GRID -->
+        <section class="px-6 lg:px-20 py-16">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" id="content-grid">
+                
+                <!-- CARD 1: Pi-hole -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="projects">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-project px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">PROJECT</span>
+                        <span class="text-[#8892b0] font-mono text-xs">October 2025</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">Network-Wide DNS Security — Pi-hole</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Deployed a Pi-hole DNS sinkhole on Raspberry Pi Zero 2 W to block ads, trackers, and malicious domains across the entire home network. Documents the full installation, static IP config, router DHCP changes, and security hardening steps.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">Pi-hole</span>
+                        <span class="tech-tag">DNS</span>
+                        <span class="tech-tag">Raspberry Pi</span>
+                        <span class="tech-tag">Linux</span>
+                        <span class="tech-tag">Networking</span>
+                    </div>
+                    <a href="secondarypages/pihole.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 2: Mini-SOC -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="projects">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-project px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">PROJECT</span>
+                        <span class="text-[#8892b0] font-mono text-xs">November 2025</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">Home Mini-SOC — Suricata + Splunk</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Full home Security Operations Center built on Raspberry Pi. Suricata IDS running 30,000+ ET Open rules feeding logs via rsyslog to Splunk Enterprise SIEM. Includes architecture diagram, dashboards, and threat detection capabilities.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">Suricata</span>
+                        <span class="tech-tag">Splunk</span>
+                        <span class="tech-tag">IDS</span>
+                        <span class="tech-tag">SIEM</span>
+                        <span class="tech-tag">Raspberry Pi</span>
+                        <span class="tech-tag">rsyslog</span>
+                    </div>
+                    <a href="secondarypages/piSOC.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 3: CyberOps Sidekick -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="projects">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-project px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">PROJECT</span>
+                        <span class="text-[#8892b0] font-mono text-xs">2025</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">CyberOps Sidekick — Threat Intelligence Bot</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Automated threat intel bot built with n8n and Docker. Queries AbuseIPDB, VirusTotal, and AlienVault OTX in parallel, calculates a weighted risk score (0–100), and delivers formatted reports to Telegram in real-time.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">n8n</span>
+                        <span class="tech-tag">Docker</span>
+                        <span class="tech-tag">AbuseIPDB</span>
+                        <span class="tech-tag">VirusTotal</span>
+                        <span class="tech-tag">OTX</span>
+                        <span class="tech-tag">Telegram API</span>
+                    </div>
+                    <a href="secondarypages/cybersecurity-audit-tool-blog.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 4: Python Port Scanner -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="projects">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-project px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">PROJECT</span>
+                        <span class="text-[#8892b0] font-mono text-xs">2025</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">Cybersecurity Audit Tool — Python Port Scanner</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Evolved from a basic port scanner into a full security platform. v1: threaded TCP scanner. v2: CVE intelligence via NVD API with CVSS scoring and 95% cache hit rate. v2.1: AI-assisted analysis with OpenClaw orchestration.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Threading</span>
+                        <span class="tech-tag">NVD API</span>
+                        <span class="tech-tag">CVE Intelligence</span>
+                        <span class="tech-tag">AI</span>
+                        <span class="tech-tag">Linux</span>
+                    </div>
+                    <a href="secondarypages/cybersecurity-audit-tool-blog.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 5: CyberOps AI Assistant -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="projects">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-project px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">PROJECT</span>
+                        <span class="text-[#8892b0] font-mono text-xs">2025</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">CyberOps AI Assistant — Gemini-Powered Analysis</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        AI security automation tool combining OSINT, log correlation, and Google Gemini AI for expert-level threat assessment. Reduces investigation time from 15+ minutes to under 60 seconds. Three modes: Quick (30s), Deep (60s), Full (90s).
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Google Gemini AI</span>
+                        <span class="tech-tag">OSINT</span>
+                        <span class="tech-tag">Log Analysis</span>
+                        <span class="tech-tag">n8n</span>
+                    </div>
+                    <a href="secondarypages/cybersecurity-audit-tool-blog.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 6: PowerShell Investigation (INCIDENT) -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="incident-reports">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-incident px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">INCIDENT REPORT</span>
+                        <span class="text-[#8892b0] font-mono text-xs">December 2024</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">Detecting Suspicious PowerShell Activity — SOC Investigation</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Full incident response walkthrough from my home Mini-SOC. Wazuh detected encoded PowerShell execution attempting payload download and scheduled task persistence. Documented triage, Base64 decode, log correlation, threat intel enrichment, MITRE ATT&CK mapping, and containment.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">PowerShell</span>
+                        <span class="tech-tag">MITRE ATT&CK</span>
+                        <span class="tech-tag">Wazuh</span>
+                        <span class="tech-tag">Splunk</span>
+                        <span class="tech-tag">Incident Response</span>
+                        <span class="tech-tag">IOC</span>
+                    </div>
+                    <a href="secondarypages/powershell-investigation.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 7: CompTIA Certs -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="certifications">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-cert px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">CERTIFICATION</span>
+                        <span class="text-[#8892b0] font-mono text-xs">2025</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">CompTIA CySA+ & Security+ — Study Guide & Notes</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Deep-dive into both exams including the Incident Response Lifecycle, IOC types (network/host/application), HTTP status codes, Nmap scan types, firewall evasion, CVSS scoring, syslog levels, and exam strategy. 6–8 hours/day for 3 weeks.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">CySA+</span>
+                        <span class="tech-tag">Security+</span>
+                        <span class="tech-tag">CompTIA</span>
+                        <span class="tech-tag">Incident Response</span>
+                        <span class="tech-tag">Threat Detection</span>
+                    </div>
+                    <a href="secondarypages/comptia-certifications.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 8: Azure Certs -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="certifications">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-cert px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">CERTIFICATION</span>
+                        <span class="text-[#8892b0] font-mono text-xs">2024</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">Microsoft Azure AZ-900 & SC-900 Journey</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Five-week study path for both Azure exams. AZ-900 covered cloud fundamentals, Azure architecture and governance. SC-900 focused on Zero Trust, identity management, Microsoft Defender suite, and Sentinel SIEM. Passed both on first attempt.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">AZ-900</span>
+                        <span class="tech-tag">SC-900</span>
+                        <span class="tech-tag">Azure</span>
+                        <span class="tech-tag">Microsoft</span>
+                        <span class="tech-tag">Cloud Security</span>
+                        <span class="tech-tag">Zero Trust</span>
+                    </div>
+                    <a href="secondarypages/azure-certifications.html" class="inline-flex items-center gap-2 text-[#38bdf8] font-mono text-sm hover:gap-3 transition-all interactive">
+                        Read More →
+                    </a>
+                </article>
+
+                <!-- CARD 9: Linux+ (IN PROGRESS) -->
+                <article class="blog-card relative bg-[#112240] rounded-xl p-6 reveal" data-category="lab-notes">
+                    <div class="card-glow rounded-xl"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="pill-lab px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">LAB NOTES</span>
+                        <span class="text-[#8892b0] font-mono text-xs">In Progress</span>
+                    </div>
+                    <h3 class="text-[#ccd6f6] font-bold text-xl mb-3">CompTIA Linux+ — Journey In Progress 🔒</h3>
+                    <p class="text-[#8892b0] text-sm leading-relaxed mb-4">
+                        Currently deep in study for Linux+ certification — system administration, security hardening, shell scripting, automation, and exam prep. Full writeup coming once complete. Active since January 2026.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="tech-tag">Linux+</span>
+                        <span class="tech-tag">CompTIA</span>
+                        <span class="tech-tag">System Administration</span>
+                        <span class="tech-tag">Bash</span>
+                        <span class="tech-tag">Exam Prep</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[#eab308] font-mono text-sm">
+                        <span class="w-2 h-2 rounded-full bg-[#eab308] animate-pulse"></span>
+                        IN PROGRESS
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- FEATURED HIGHLIGHT -->
+        <section class="px-6 lg:px-20 pb-16">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-[#ef4444] font-mono text-lg tracking-wider">[ FEATURED INCIDENT ]</span>
+                <div class="h-px flex-1 bg-[#233554]"></div>
+            </div>
+
+            <a href="secondarypages/powershell-investigation.html" class="featured-card block rounded-xl p-8 reveal interactive hover:opacity-90 transition-opacity">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30 px-3 py-1 rounded-full text-xs font-mono font-bold">🚨 HIGH SEVERITY</span>
+                        <span class="text-[#ef4444] font-mono text-sm">December 2024</span>
+                    </div>
+                    <span class="pill-incident px-3 py-1 rounded-full text-xs font-mono font-bold uppercase">INCIDENT REPORT</span>
+                </div>
+
+                <h3 class="text-[#ccd6f6] font-bold text-2xl mb-4">Detecting Suspicious PowerShell Activity — SOC Investigation</h3>
+                
+                <p class="text-[#8892b0] leading-relaxed mb-6 max-w-3xl">
+                    A real-world incident response walkthrough from my home Mini-SOC. Wazuh detected encoded PowerShell execution attempting to download a remote payload and establish persistence via scheduled tasks. This writeup documents the complete investigation from initial alert through containment — including Base64 decoding, log correlation across multiple sources, threat intelligence enrichment, MITRE ATT&CK mapping, and lessons learned for improving detection capabilities.
+                </p>
+
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <span class="tech-tag">PowerShell</span>
+                    <span class="tech-tag">MITRE ATT&CK</span>
+                    <span class="tech-tag">Wazuh</span>
+                    <span class="tech-tag">Splunk</span>
+                    <span class="tech-tag">Incident Response</span>
+                    <span class="tech-tag">IOC</span>
+                    <span class="tech-tag">Threat Intel</span>
+                </div>
+
+                <div class="flex items-center gap-2 text-[#ef4444] font-mono text-sm">
+                    Read Full Investigation
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </div>
+            </a>
+        </section>
+
+        <!-- METHODOLOGY STRIP -->
+        <section class="px-6 lg:px-20 py-16 border-t border-[#233554]">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-[#38bdf8] font-mono text-lg tracking-wider">[ METHODOLOGY ]</span>
+                <div class="h-px flex-1 bg-[#233554]"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors reveal">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">01</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Document Everything</h4>
+                    <p class="text-[#8892b0] text-sm">If it's not written down, it didn't happen. Every command, every finding, every lesson.</p>
+                </div>
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors reveal">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">02</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Understand the Why</h4>
+                    <p class="text-[#8892b0] text-sm">Don't just follow steps — know why they work. Deep understanding beats memorization.</p>
+                </div>
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors reveal">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">03</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Lab Before Prod</h4>
+                    <p class="text-[#8892b0] text-sm">Test in home lab before applying anywhere else. Breaking your own stuff is how you learn.</p>
+                </div>
+                <div class="bg-[#112240] rounded-xl p-6 border border-[#233554] hover:border-[#38bdf8]/30 transition-colors reveal">
+                    <div class="w-10 h-10 rounded-lg bg-[#38bdf8]/10 flex items-center justify-center mb-4">
+                        <span class="text-[#38bdf8] font-mono font-bold">04</span>
+                    </div>
+                    <h4 class="text-[#ccd6f6] font-bold mb-2">Iterate</h4>
+                    <p class="text-[#8892b0] text-sm">Every project has a v2, every writeup has lessons learned. Continuous improvement.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="px-6 lg:px-20 py-12 border-t border-[#233554]">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-[#8892b0] font-mono text-sm">
+                    Abdelkrim Zouaki <span class="text-[#38bdf8]">·</span> Blog & Writeups
+                </p>
+                <a href="index.html" class="text-[#38bdf8] hover:text-[#ccd6f6] font-mono text-sm transition-colors interactive">
+                    Back to Portfolio →
+                </a>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Custom Cursor
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorCircle = document.getElementById('cursor-circle');
+        let mouseX = 0, mouseY = 0;
+        let circleX = 0, circleY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        function animateCursor() {
+            circleX += (mouseX - circleX) * 0.15;
+            circleY += (mouseY - circleY) * 0.15;
+            cursorCircle.style.left = circleX + 'px';
+            cursorCircle.style.top = circleY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effect on interactive elements
+        document.querySelectorAll('.interactive').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorCircle.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorCircle.classList.remove('hover'));
+        });
+
+        // Generate Hex Background
+        const hexBg = document.getElementById('hex-bg');
+        const hexChars = '0123456789ABCDEF';
+        for (let i = 0; i < 50; i++) {
+            const span = document.createElement('span');
+            span.className = 'hex-char';
+            span.textContent = hexChars[Math.floor(Math.random() * 16)];
+            span.style.left = Math.random() * 100 + '%';
+            span.style.top = Math.random() * 100 + '%';
+            span.style.animationDelay = Math.random() * 5 + 's';
+            span.style.animationDuration = (8 + Math.random() * 4) + 's';
+            hexBg.appendChild(span);
+        }
+
+        // Scroll Progress Bar
+        const scrollProgress = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+        });
+
+        // Category Filter
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const blogCards = document.querySelectorAll('.blog-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                blogCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Reveal on Scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Staggered Card Animation on Load
+        window.addEventListener('load', () => {
+            blogCards.forEach((card, i) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.5s ease';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, i * 100);
+            });
+        });
+    </script>
+</body>
+</html>'''
