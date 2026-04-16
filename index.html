@@ -62,9 +62,41 @@ tailwind.config = {
   .form-input:focus{outline:none;border-color:var(--accent)} .form-input::placeholder{color:var(--text)}
   @keyframes subtle-pulse{0%,100%{box-shadow:0 0 0 0 rgba(56,189,248,.3)}50%{box-shadow:0 0 0 6px rgba(56,189,248,0)}}
   .cv-btn{animation:subtle-pulse 3s infinite}
+
+  /* ── Custom Cursor ── */
+  body { cursor: none; }
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background-color: var(--accent);
+    border-radius: 50%; position: fixed;
+    pointer-events: none; z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-circle {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%; position: fixed;
+    pointer-events: none; z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0.5;
+  }
+  .cursor-circle.hover {
+    width: 60px; height: 60px; opacity: 1;
+    box-shadow: 0 0 20px rgba(56,189,248,0.4);
+  }
+  @media (hover: none) and (pointer: coarse) {
+    body { cursor: auto; }
+    .cursor-dot, .cursor-circle { display: none !important; }
+  }
 </style>
 </head>
 <body class="bg-navy text-slate font-sans antialiased selection:bg-[#38bdf8] selection:text-navy overflow-x-hidden">
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-circle" id="cursor-circle"></div>
 
 <div id="progress-bar"></div>
 <button id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme"><span id="theme-icon">☀️</span></button>
@@ -245,11 +277,11 @@ tailwind.config = {
           </div>
           <p class="text-sm leading-relaxed mb-4">Python framework querying <span class="text-accent">AbuseIPDB, VirusTotal, and AlienVault OTX</span> to automate IOC enrichment and risk scoring. Generates structured JSON threat reports for SOC workflows — cutting manual lookup time from minutes per IOC to seconds, with automated severity classification across all three feeds.</p>
           <div class="screenshot-gallery mb-4">
-            <img src="https://karim871.github.io/Portfolio/images/01-help-command.png"          alt="CLI help command"          onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/clean-ip-result.webp"         alt="Clean IP scan result"      onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/malicious-ip-result.webp"     alt="Malicious IP detection"    onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/cve-intelligence-output.png"  alt="CVE intelligence output"   onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/json-report-cve-enriched.png" alt="JSON threat report"        onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/01-help-command.png"          alt="CLI help command"         onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/clean-ip-result.webp"         alt="Clean IP scan result"     onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/malicious-ip-result.webp"     alt="Malicious IP detection"   onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/cve-intelligence-output.png"  alt="CVE intelligence output"  onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/json-report-cve-enriched.png" alt="JSON threat report"       onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
           <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
           <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light">
@@ -270,12 +302,12 @@ tailwind.config = {
           </div>
           <p class="text-sm leading-relaxed mb-4">Full Security Operations Center on a <span class="text-accent">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset (<span class="text-accent font-semibold">30,000+ rules</span>) feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Custom rule tuning reduced false positives by <span class="text-accent font-semibold">~40%</span>.</p>
           <div class="screenshot-gallery mb-4">
-            <img src="https://karim871.github.io/Portfolio/images/raspberrypi.jpg"   alt="Raspberry Pi hardware"     onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/Screenshot1.webp" alt="SOC dashboard"              onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/Screenshot2.webp" alt="Suricata alert stream"      onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/Screenshot3.webp" alt="Splunk SIEM dashboard"      onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/Screenshot4.webp" alt="Log correlation view"       onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/Screenshot5.webp" alt="Alert detail"               onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/raspberrypi.jpg"   alt="Raspberry Pi hardware"    onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/Screenshot1.webp" alt="SOC dashboard"             onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/Screenshot2.webp" alt="Suricata alert stream"     onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/Screenshot3.webp" alt="Splunk SIEM dashboard"     onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/Screenshot4.webp" alt="Log correlation view"      onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/Screenshot5.webp" alt="Alert detail"              onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
           <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
           <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light">
@@ -296,10 +328,10 @@ tailwind.config = {
           </div>
           <p class="text-sm leading-relaxed mb-4">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="text-accent font-semibold">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
           <div class="screenshot-gallery mb-4">
-            <img src="https://karim871.github.io/Portfolio/images/cleanip.webp"          alt="Pi-hole dashboard"      onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/clean-ip-result2.webp" alt="DNS query log"           onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/clean-ip-result3.webp" alt="Blocked domain stats"    onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/protocol.webp"         alt="Network protocol view"   onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/cleanip.webp"          alt="Pi-hole dashboard"     onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/clean-ip-result2.webp" alt="DNS query log"          onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/clean-ip-result3.webp" alt="Blocked domain stats"   onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/protocol.webp"         alt="Network protocol view"  onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
           <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
           <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light">
@@ -317,8 +349,8 @@ tailwind.config = {
           </div>
           <p class="text-sm leading-relaxed mb-4">LAN/WAN segmented lab across <span class="text-accent font-semibold">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
           <div class="screenshot-gallery mb-4">
-            <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"          onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP config"  onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"           onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP config"   onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/screen3.png" alt="Windows client receiving DHCP from pfSense" onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
           <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
@@ -470,7 +502,6 @@ tailwind.config = {
       <h2 class="text-4xl md:text-5xl font-bold text-slate-lighter mb-6 text-center">Get In Touch</h2>
       <p class="text-slate max-w-md mx-auto mb-12 text-lg text-center">Actively seeking SOC Analyst, IT Support, and Security Operations roles in Montreal. I typically respond within 24 hours.</p>
 
-      <!-- formspree.io -->
       <div class="max-w-lg mx-auto bg-navy-light p-8 rounded-lg border border-navy-lighter">
         <form id="contact-form" action="https://formspree.io/f/mblqpkdo" method="POST" novalidate>
           <div class="mb-5">
@@ -551,7 +582,7 @@ function switchTab(name) {
 }
 
 // Reveal + nav highlight
-new IntersectionObserver((entries) => {
+const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('active');
@@ -559,17 +590,8 @@ new IntersectionObserver((entries) => {
       if (id) document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
     }
   });
-}, { threshold: 0.1 }).observe && document.querySelectorAll('.reveal').forEach(el =>
-  new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-        const id = entry.target.id;
-        if (id) document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
-      }
-    });
-  }, { threshold: 0.1 }).observe(el)
-);
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -611,6 +633,29 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     btn.textContent = 'Send Message →'; btn.disabled = false;
   }
 });
+
+// ── Custom Cursor ──────────────────────────────────────────
+const cursorDot    = document.getElementById('cursor-dot');
+const cursorCircle = document.getElementById('cursor-circle');
+let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursorDot.style.left = mouseX + 'px';
+    cursorDot.style.top  = mouseY + 'px';
+  });
+  (function animateCircle() {
+    circleX += (mouseX - circleX) * 0.15;
+    circleY += (mouseY - circleY) * 0.15;
+    cursorCircle.style.left = circleX + 'px';
+    cursorCircle.style.top  = circleY + 'px';
+    requestAnimationFrame(animateCircle);
+  })();
+  document.querySelectorAll('a, button, .project-card, .nav-link, .tab-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => cursorCircle.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursorCircle.classList.remove('hover'));
+  });
+}
 </script>
 </body>
 </html>
