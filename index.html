@@ -74,14 +74,71 @@ tailwind.config = {
   ::-webkit-scrollbar-thumb { background: rgba(79,195,247,0.25); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(79,195,247,0.5); }
 
-  /* background handled entirely by canvas */
-
-  /* ── Starry Night canvas ── */
-  #starry-night-canvas {
+  /* ── NASA nebula background ── */
+  body::before {
+    content: '';
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
+    background:
+      /* Milky Way arc — faint diagonal band */
+      radial-gradient(ellipse 200% 30% at 60% 45%, rgba(20,50,90,0.18) 0%, transparent 60%),
+      /* Nebula cluster top-left — deep teal */
+      radial-gradient(ellipse 60% 50% at -10% 10%, rgba(0,60,100,0.35) 0%, transparent 55%),
+      /* Nebula cluster bottom-right — steel blue */
+      radial-gradient(ellipse 55% 45% at 110% 90%, rgba(10,40,80,0.4) 0%, transparent 55%),
+      /* Mid nebula — dark navy bloom */
+      radial-gradient(ellipse 70% 40% at 50% 60%, rgba(5,20,50,0.5) 0%, transparent 65%),
+      /* Faint cold blue center haze */
+      radial-gradient(ellipse 40% 30% at 75% 25%, rgba(79,195,247,0.04) 0%, transparent 60%),
+      /* Deep space base */
+      #030508;
+  }
+
+  /* ── Ambient nebula orbs (slow drift) ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift linear infinite;
+  }
+  .orb-1 {
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(0,80,140,0.14) 0%, transparent 70%);
+    top: -80px; left: -200px;
+    animation-duration: 38s;
+  }
+  .orb-2 {
+    width: 500px; height: 350px;
+    background: radial-gradient(ellipse, rgba(79,195,247,0.07) 0%, transparent 70%);
+    bottom: 10%; right: -150px;
+    animation-duration: 45s;
+    animation-direction: reverse;
+  }
+  .orb-3 {
+    width: 350px; height: 350px;
+    background: radial-gradient(ellipse, rgba(0,30,70,0.2) 0%, transparent 70%);
+    top: 40%; left: 35%;
+    animation-duration: 55s;
+  }
+  @keyframes drift {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(25px, -18px); }
+    50%  { transform: translate(10px, 15px); }
+    75%  { transform: translate(-20px, 5px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* ── Canvas particles ── */
+  #particle-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
   }
 
   /* ── Progress bar ── */
@@ -589,8 +646,13 @@ tailwind.config = {
 </head>
 <body>
 
-<!-- Van Gogh Starry Night canvas -->
-<canvas id="starry-night-canvas" aria-hidden="true"></canvas>
+<!-- Ambient orbs -->
+<div class="orb orb-1" aria-hidden="true"></div>
+<div class="orb orb-2" aria-hidden="true"></div>
+<div class="orb orb-3" aria-hidden="true"></div>
+
+<!-- Particle canvas -->
+<canvas id="particle-canvas" aria-hidden="true"></canvas>
 
 <!-- Cursor -->
 <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
@@ -1256,370 +1318,80 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
   });
 }
 
-// ── Van Gogh Starry Night ─────────────────────────────────────
-(function initStarryNight() {
-  const canvas = document.getElementById('starry-night-canvas');
+// ── Particle canvas ───────────────────────────────────────────
+(function initParticles() {
+  const canvas = document.getElementById('particle-canvas');
   const ctx = canvas.getContext('2d');
-
-  // Vortex centres (normalised 0-1) — mirrors the painting's sweeping gyres
-  const VORTICES = [
-    { nx:0.22, ny:0.24, str:1.6, r:0.34, cw: 1 },
-    { nx:0.52, ny:0.14, str:1.2, r:0.28, cw:-1 },
-    { nx:0.76, ny:0.27, str:1.0, r:0.24, cw: 1 },
-    { nx:0.36, ny:0.44, str:0.8, r:0.40, cw:-1 },
-    { nx:0.09, ny:0.50, str:0.7, r:0.30, cw: 1 },
-    { nx:0.63, ny:0.47, str:0.6, r:0.32, cw:-1 },
-  ];
-
-  // Prussian blue / cobalt / teal palette
-  const BLUE_TONES = [
-    '#0a1628','#0d1f3c','#122348','#15294f',
-    '#1a3a6b','#1e4480','#1b5e7b','#1d6a8a',
-    '#205070','#163858','#0e2744','#17325a',
-    '#1c4060','#244870','#2a5078','#0f2d55',
-    '#133065','#1a4575','#0c2240','#1f3d72',
-  ];
-
-  // ── Flow field ────────────────────────────────────────────────
-  function flow(x, y, t) {
-    const nx = x / canvas.width;
-    const ny = y / canvas.height;
-    let vx = 0.28, vy = 0;
-    for (const v of VORTICES) {
-      const dx = nx - v.nx, dy = ny - v.ny;
-      const d2 = dx*dx + dy*dy;
-      const r2 = v.r * v.r;
-      if (d2 < r2 && d2 > 1e-6) {
-        const d   = Math.sqrt(d2);
-        const inf = (1 - d/v.r) * v.str;
-        const ang = Math.atan2(dy, dx) + v.cw * (Math.PI/2);
-        vx += Math.cos(ang) * inf;
-        vy += Math.sin(ang) * inf;
-      }
-    }
-    vx += Math.sin(ny * 6.5 + t * 0.11) * 0.24;
-    vy += Math.cos(nx * 6.5 + t * 0.09) * 0.20;
-    return { vx, vy };
-  }
-
-  // ── Stars ─────────────────────────────────────────────────────
-  let stars = [];
-  function buildStars() {
-    stars = [];
-    const n = Math.max(22, Math.floor(canvas.width * canvas.height / 12000));
-    for (let i = 0; i < n; i++) {
-      const large = Math.random() < 0.14;
-      stars.push({
-        x:     Math.random() * canvas.width,
-        y:     Math.random() * canvas.height * 0.78,
-        r:     large ? 5 + Math.random()*5 : 0.9 + Math.random()*2.5,
-        phase: Math.random() * Math.PI * 2,
-        freq:  0.007 + Math.random() * 0.016,
-        halo:  large ? 14 + Math.random()*16 : 5 + Math.random()*9,
-        rays:  large,
-        large,
-      });
-    }
-  }
-
-  // ── Brushstroke flow particles ────────────────────────────────
-  const STROKE_COUNT = 1100;
-  let strokes = [];
-
-  function resetStroke(s) {
-    s.x      = Math.random() * canvas.width;
-    s.y      = Math.random() * canvas.height;
-    s.age    = Math.random() * 160;
-    s.maxAge = 160 + Math.random() * 260;
-    s.speed  = 0.8 + Math.random() * 1.7;
-    s.width  = 1.5 + Math.random() * 5.5;
-    s.color  = BLUE_TONES[Math.floor(Math.random() * BLUE_TONES.length)];
-    s.opacity= 0.30 + Math.random() * 0.62;
-    return s;
-  }
-
-  function buildStrokes() {
-    strokes = [];
-    for (let i = 0; i < STROKE_COUNT; i++) resetStroke(strokes[i] = {});
-  }
-
-  // ── Persistent rotating arc strokes — the Van Gogh swirl ─────
-  // Concentric arc segments orbiting each vortex, slowly rotating.
-  // These are the visible swirls that define the painting's look.
-  let arcs = [];
-
-  function buildArcs() {
-    arcs = [];
-    for (const v of VORTICES) {
-      const rings = 7 + Math.floor(Math.random() * 4);
-      for (let ring = 1; ring <= rings; ring++) {
-        const rNorm = ring * 0.038 + Math.random() * 0.018;
-        const segs  = 2 + Math.floor(Math.random() * 2);
-        for (let s = 0; s < segs; s++) {
-          arcs.push({
-            v,
-            rNorm,
-            startAngle: (s / segs) * Math.PI * 2 + Math.random() * 0.8,
-            span:       0.55 + Math.random() * 1.4,
-            width:      2.5 + Math.random() * 6,
-            color:      BLUE_TONES[Math.floor(Math.random() * BLUE_TONES.length)],
-            alpha:      0.10 + Math.random() * 0.18,
-            rotSpeed:   (0.0025 + Math.random() * 0.005) * v.cw,
-          });
-        }
-      }
-    }
-  }
-
-  // ── Sky gradient ──────────────────────────────────────────────
-  function drawSky() {
-    const g = ctx.createLinearGradient(0, 0, canvas.width * 0.55, canvas.height);
-    g.addColorStop(0.00, '#03060d');
-    g.addColorStop(0.15, '#050c18');
-    g.addColorStop(0.35, '#081428');
-    g.addColorStop(0.55, '#0a1a35');
-    g.addColorStop(0.75, '#0d1e3c');
-    g.addColorStop(0.92, '#101f38');
-    g.addColorStop(1.00, '#0a1425');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Warm cobalt blush near horizon
-    const hg = ctx.createRadialGradient(
-      canvas.width*0.65, canvas.height*0.82, 0,
-      canvas.width*0.65, canvas.height*0.82, canvas.width*0.52
-    );
-    hg.addColorStop(0,   'rgba(26,58,107,0.42)');
-    hg.addColorStop(0.5, 'rgba(14,32,68,0.16)');
-    hg.addColorStop(1,   'transparent');
-    ctx.fillStyle = hg;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-
-  // ── Rotating swirl arcs ───────────────────────────────────────
-  function drawArcs(t) {
-    ctx.save();
-    ctx.lineCap = 'round';
-    for (const arc of arcs) {
-      const cx = arc.v.nx * canvas.width;
-      const cy = arc.v.ny * canvas.height;
-      const r  = arc.rNorm * Math.min(canvas.width, canvas.height);
-      const a0 = arc.startAngle + t * arc.rotSpeed;
-      ctx.globalAlpha = arc.alpha;
-      ctx.strokeStyle = arc.color;
-      ctx.lineWidth   = arc.width;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, a0, a0 + arc.span);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-    ctx.restore();
-  }
-
-  // ── Moon ──────────────────────────────────────────────────────
-  function drawMoon(t) {
-    const mx = canvas.width  * 0.83;
-    const my = canvas.height * 0.11;
-    const pulse = Math.sin(t * 0.006) * 0.08;
-
-    const corona = ctx.createRadialGradient(mx, my, 0, mx, my, 140*(1+pulse));
-    corona.addColorStop(0,   'rgba(249,168,37,0.14)');
-    corona.addColorStop(0.35,'rgba(249,168,37,0.06)');
-    corona.addColorStop(1,   'transparent');
-    ctx.fillStyle = corona;
-    ctx.beginPath(); ctx.arc(mx, my, 140*(1+pulse), 0, Math.PI*2); ctx.fill();
-
-    const halo = ctx.createRadialGradient(mx, my, 0, mx, my, 62*(1+pulse));
-    halo.addColorStop(0,   '#fffde7');
-    halo.addColorStop(0.30,'#fff9c4');
-    halo.addColorStop(0.62,'rgba(249,168,37,0.60)');
-    halo.addColorStop(1,   'transparent');
-    ctx.fillStyle = halo;
-    ctx.beginPath(); ctx.arc(mx, my, 62*(1+pulse), 0, Math.PI*2); ctx.fill();
-
-    ctx.fillStyle = '#fffde7';
-    ctx.beginPath(); ctx.arc(mx, my, 26, 0, Math.PI*2); ctx.fill();
-
-    ctx.strokeStyle = 'rgba(255,253,231,0.12)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.arc(mx, my, 32, 0, Math.PI*2); ctx.stroke();
-    ctx.beginPath(); ctx.arc(mx, my, 42, 0, Math.PI*2); ctx.stroke();
-  }
-
-  // ── Stars ─────────────────────────────────────────────────────
-  function drawStar(s, t) {
-    const pulse = Math.sin(t * s.freq + s.phase);
-    const glow  = s.r   * (1 + pulse * 0.32);
-    const haloR = s.halo * (1 + pulse * 0.22);
-    const { x, y } = s;
-
-    const og = ctx.createRadialGradient(x, y, 0, x, y, haloR*4.2);
-    og.addColorStop(0,   'rgba(249,168,37,'+(0.34+pulse*0.10)+')');
-    og.addColorStop(0.28,'rgba(249,168,37,0.09)');
-    og.addColorStop(1,   'transparent');
-    ctx.fillStyle = og;
-    ctx.beginPath(); ctx.arc(x, y, haloR*4.2, 0, Math.PI*2); ctx.fill();
-
-    const ig = ctx.createRadialGradient(x, y, 0, x, y, haloR);
-    ig.addColorStop(0,   '#fffde7');
-    ig.addColorStop(0.42,'rgba(249,168,37,0.78)');
-    ig.addColorStop(1,   'transparent');
-    ctx.fillStyle = ig;
-    ctx.beginPath(); ctx.arc(x, y, haloR, 0, Math.PI*2); ctx.fill();
-
-    ctx.fillStyle = '#fffde7';
-    ctx.beginPath(); ctx.arc(x, y, glow, 0, Math.PI*2); ctx.fill();
-
-    if (s.rays) {
-      const rayLen = haloR * 3.4 * (1 + pulse*0.14);
-      const alpha  = 0.14 + pulse*0.10;
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(t * 0.004);
-      for (let k = 0; k < 4; k++) {
-        const a = k * Math.PI/2;
-        const grad = ctx.createLinearGradient(0, 0, Math.cos(a)*rayLen, Math.sin(a)*rayLen);
-        grad.addColorStop(0,   'rgba(255,253,231,'+alpha+')');
-        grad.addColorStop(1,   'transparent');
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(Math.cos(a)*rayLen, Math.sin(a)*rayLen);
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-  }
-
-  // ── Brushstroke flow particles ────────────────────────────────
-  function drawStrokes(t) {
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    ctx.lineCap = 'round';
-
-    for (let i = 0; i < strokes.length; i++) {
-      const s = strokes[i];
-      s.age++;
-      if (s.age > s.maxAge) { resetStroke(s); continue; }
-
-      const { vx, vy } = flow(s.x, s.y, t);
-      const nx = s.x + vx * s.speed;
-      const ny = s.y + vy * s.speed;
-
-      const life  = s.age / s.maxAge;
-      const alpha = (life < 0.08 ? life/0.08 : life > 0.88 ? (1-life)/0.12 : 1) * s.opacity * 0.55;
-
-      if (alpha > 0.006) {
-        ctx.globalAlpha = alpha;
-        ctx.strokeStyle = s.color;
-        ctx.lineWidth   = s.width;
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(nx, ny);
-        ctx.stroke();
-      }
-
-      s.x = nx; s.y = ny;
-      if (s.x < -20) s.x = canvas.width  + 20;
-      if (s.x > canvas.width  + 20) s.x = -20;
-      if (s.y < -20) s.y = canvas.height + 20;
-      if (s.y > canvas.height + 20) s.y = -20;
-    }
-
-    ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.restore();
-  }
-
-  // ── Village / hill silhouette ─────────────────────────────────
-  function drawSilhouette() {
-    const w = canvas.width, h = canvas.height;
-    ctx.save();
-
-    ctx.fillStyle = '#030912';
-    ctx.beginPath();
-    ctx.moveTo(0, h);
-    ctx.lineTo(0, h*0.83);
-    ctx.quadraticCurveTo(w*0.06, h*0.77, w*0.13, h*0.81);
-    ctx.quadraticCurveTo(w*0.20, h*0.85, w*0.26, h*0.79);
-    ctx.quadraticCurveTo(w*0.33, h*0.73, w*0.40, h*0.80);
-    ctx.quadraticCurveTo(w*0.46, h*0.85, w*0.52, h*0.80);
-    ctx.quadraticCurveTo(w*0.60, h*0.74, w*0.67, h*0.81);
-    ctx.quadraticCurveTo(w*0.74, h*0.87, w*0.80, h*0.81);
-    ctx.quadraticCurveTo(w*0.88, h*0.75, w,      h*0.83);
-    ctx.lineTo(w, h);
-    ctx.closePath();
-    ctx.fill();
-
-    const villageX = w * 0.58, villageY = h * 0.80;
-    const buildings = [
-      { x:0, y:0, w:18, h:32 }, { x:22, y:4, w:14, h:26 },
-      { x:38, y:-2, w:20, h:38 }, { x:62, y:6, w:12, h:22 },
-      { x:76, y:2, w:16, h:28 }, { x:95, y:-4, w:10, h:18 },
-    ];
-    ctx.fillStyle = '#040c1c';
-    for (const b of buildings) ctx.fillRect(villageX + b.x - b.w/2, villageY - b.h, b.w, b.h);
-
-    for (const b of buildings) {
-      if (Math.random() > 0.3) {
-        const wg = ctx.createRadialGradient(
-          villageX + b.x, villageY - b.h*0.6, 0,
-          villageX + b.x, villageY - b.h*0.6, 18
-        );
-        wg.addColorStop(0, 'rgba(255,200,80,0.18)');
-        wg.addColorStop(1, 'transparent');
-        ctx.fillStyle = wg;
-        ctx.fillRect(villageX + b.x - 18, villageY - b.h*0.6 - 18, 36, 36);
-      }
-    }
-
-    // Cypress tree — tall dark flame shape
-    const cx = w*0.09, cy = h*0.83;
-    ctx.fillStyle = '#020810';
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.bezierCurveTo(cx-18, cy-70,  cx-28, cy-160, cx-2,  cy-240);
-    ctx.bezierCurveTo(cx+28, cy-160, cx+18, cy-70,  cx,    cy);
-    ctx.fill();
-    const cg = ctx.createLinearGradient(cx-28, cy-240, cx+28, cy);
-    cg.addColorStop(0, 'rgba(15,60,50,0.3)');
-    cg.addColorStop(1, 'transparent');
-    ctx.fillStyle = cg;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.bezierCurveTo(cx-18, cy-70, cx-28, cy-160, cx-2,  cy-240);
-    ctx.bezierCurveTo(cx+28, cy-160, cx+18, cy-70, cx,    cy);
-    ctx.fill();
-
-    ctx.restore();
-  }
-
-  // ── Main loop ─────────────────────────────────────────────────
-  let t = 0;
+  let particles = [];
+  const COUNT = 55;
+  const MAX_DIST = 140;
 
   function resize() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
-    buildStars();
-    buildStrokes();
-    buildArcs();
   }
-
-  function frame() {
-    drawSky();
-    drawArcs(t);
-    drawStrokes(t);
-    for (const s of stars) drawStar(s, t);
-    drawMoon(t);
-    drawSilhouette();
-    t += 0.5;
-    requestAnimationFrame(frame);
-  }
-
   resize();
   window.addEventListener('resize', resize, { passive: true });
-  requestAnimationFrame(frame);
+
+  /* Star-like particles: mostly white/ice, some cold blue, rare bright sky */
+  const colorPool = [
+    'rgba(224,247,250,',  /* ice white — most common */
+    'rgba(224,247,250,',
+    'rgba(224,247,250,',
+    'rgba(144,202,249,',  /* steel blue */
+    'rgba(144,202,249,',
+    'rgba(79,195,247,',   /* sky blue — rare */
+  ];
+
+  for (let i = 0; i < COUNT; i++) {
+    particles.push({
+      x:  Math.random() * window.innerWidth,
+      y:  Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      r:  Math.random() * 1.2 + 0.3,
+      c:  colorPool[Math.floor(Math.random() * colorPool.length)],
+      twinkle: Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.02 + Math.random() * 0.03,
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      p.twinkle += p.twinkleSpeed;
+      const brightness = 0.4 + Math.sin(p.twinkle) * 0.35;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c + brightness + ')';
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MAX_DIST) {
+          const alpha = (1 - dist / MAX_DIST) * 0.07;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = 'rgba(144,202,249,' + alpha + ')';
+          ctx.lineWidth = 0.4;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
 })();
 
 // ── prefers-reduced-motion: disable animations ────────────────
