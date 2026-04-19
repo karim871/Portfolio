@@ -17,688 +17,1350 @@
 <meta property="twitter:image" content="https://karim871.github.io/Portfolio/images/thumbnail.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        navy: { DEFAULT:'#0a192f', light:'#112240', lighter:'#233554' },
-        slate: { DEFAULT:'#8892b0', light:'#a8b2d1', lighter:'#ccd6f6' },
-        accent: { DEFAULT:'#38bdf8', hover:'#0ea5e9' },
+        base:    '#060b16',
+        surface: 'rgba(255,255,255,0.04)',
+        sky:     '#38bdf8',
+        violet:  '#a78bfa',
+        amber:   '#fbbf24',
       },
-      fontFamily: { sans:['Inter','sans-serif'], mono:['Fira Code','monospace'] },
-      animation: { 'cursor-blink':'blink 1s step-end infinite' },
-      keyframes: { blink:{ '0%,100%':{opacity:'1'},'50%':{opacity:'0'} } }
+      fontFamily: {
+        display: ['"Cormorant Garamond"', 'serif'],
+        sans:    ['Inter', 'sans-serif'],
+        mono:    ['"Fira Code"', 'monospace'],
+      },
     }
   }
 }
 </script>
 <style>
-  :root { --bg:#0a192f;--bg-light:#112240;--bg-lighter:#233554;--text:#8892b0;--text-light:#a8b2d1;--text-lighter:#ccd6f6;--accent:#38bdf8; }
-  .light-mode { --bg:#f0f4f8;--bg-light:#dde3ec;--bg-lighter:#c0cad8;--text:#4a5568;--text-light:#2d3748;--text-lighter:#1a202c;--accent:#0284c7; }
-  body { background:var(--bg);color:var(--text); }
-  ::-webkit-scrollbar{width:8px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:var(--bg-lighter);border-radius:4px} ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
-  #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--accent);z-index:9999;transition:width .1s linear}
-  .reveal{opacity:0;transform:translateY(30px);transition:all .8s ease-out} .reveal.active{opacity:1;transform:translateY(0)}
-  .nav-link{position:relative;padding-left:30px;transition:all .3s ease}
-  .nav-link::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:0;background-color:var(--accent);transition:height .3s ease}
-  .nav-link.active,.nav-link:hover{color:var(--accent);padding-left:40px} .nav-link.active::before,.nav-link:hover::before{height:100%}
-  .project-card{transition:transform .3s ease,box-shadow .3s ease} .project-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px -15px rgba(2,12,27,.7)} .project-card:hover .project-title{color:var(--accent)}
-  .screenshot-gallery{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}
-  .screenshot-gallery img{height:140px;width:auto;min-width:200px;object-fit:cover;border-radius:4px;border:1px solid var(--bg-lighter);cursor:pointer;transition:all .3s ease;filter:grayscale(30%)}
-  .screenshot-gallery img:hover{filter:grayscale(0%);transform:scale(1.02)}
-  #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:10000;align-items:center;justify-content:center}
-  #lightbox.open{display:flex} #lightbox img{max-width:90vw;max-height:90vh;border-radius:8px}
-  #lightbox-close{position:absolute;top:20px;right:28px;color:#fff;font-size:2rem;cursor:pointer;background:none;border:none;line-height:1}
-  #theme-toggle{position:fixed;top:20px;right:20px;z-index:1000;background:var(--bg-light);border:1px solid var(--bg-lighter);color:var(--accent);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;font-size:1.1rem}
-  #theme-toggle:hover{background:var(--accent);color:var(--bg)}
-  .light-mode .bg-navy{background-color:var(--bg)!important} .light-mode .bg-navy-light{background-color:var(--bg-light)!important} .light-mode .bg-navy-lighter{background-color:var(--bg-lighter)!important}
-  .light-mode .text-slate{color:var(--text)!important} .light-mode .text-slate-light{color:var(--text-light)!important} .light-mode .text-slate-lighter{color:var(--text-lighter)!important}
-  .light-mode .text-accent{color:var(--accent)!important} .light-mode .border-accent{border-color:var(--accent)!important} .light-mode header{background-color:var(--bg)!important}
-  .form-input{width:100%;padding:12px 16px;background:var(--bg-light);border:1px solid var(--bg-lighter);color:var(--text-lighter);border-radius:6px;font-family:'Inter',sans-serif;font-size:.9rem;transition:border-color .3s}
-  .form-input:focus{outline:none;border-color:var(--accent)} .form-input::placeholder{color:var(--text)}
-  @keyframes subtle-pulse{0%,100%{box-shadow:0 0 0 0 rgba(56,189,248,.3)}50%{box-shadow:0 0 0 6px rgba(56,189,248,0)}}
-  .cv-btn{animation:subtle-pulse 3s infinite}
-
-  /* ── Custom Cursor ── */
-  body { cursor: none; }
-  .cursor-dot {
-    width: 6px; height: 6px;
-    background-color: var(--accent);
-    border-radius: 50%; position: fixed;
-    pointer-events: none; z-index: 99999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
+  /* ── Base ── */
+  :root {
+    --base: #060b16;
+    --surface: rgba(255,255,255,0.045);
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(167,139,250,0.4);
+    --text: #94a3b8;
+    --text-light: #cbd5e1;
+    --text-bright: #e2e8f0;
+    --sky: #38bdf8;
+    --violet: #a78bfa;
+    --amber: #fbbf24;
+    --glow-sky: rgba(56,189,248,0.15);
+    --glow-violet: rgba(167,139,250,0.15);
   }
-  .cursor-circle {
-    width: 40px; height: 40px;
-    border: 1.5px solid var(--accent);
-    border-radius: 50%; position: fixed;
-    pointer-events: none; z-index: 99998;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--base);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.6); }
+
+  /* ── Ambient background orbs ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift linear infinite;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 70%);
+    top: -100px; left: -150px;
+    animation-duration: 25s;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+    bottom: 20%; right: -100px;
+    animation-duration: 32s;
+    animation-direction: reverse;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 70%);
+    top: 50%; left: 40%;
+    animation-duration: 40s;
+  }
+  @keyframes drift {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    33%  { transform: translate(30px, -20px) rotate(120deg); }
+    66%  { transform: translate(-20px, 15px) rotate(240deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+  }
+
+  /* ── Canvas particles ── */
+  #particle-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
     opacity: 0.5;
   }
-  .cursor-circle.hover {
-    width: 60px; height: 60px; opacity: 1;
-    box-shadow: 0 0 20px rgba(56,189,248,0.4);
+
+  /* ── Progress bar ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 1px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--violet), var(--sky));
+    z-index: 9999;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px var(--violet);
+  }
+
+  /* ── Custom cursor ── */
+  .cursor-glow {
+    position: fixed;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 99997;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+  }
+  .cursor-dot {
+    position: fixed;
+    width: 5px; height: 5px;
+    background: var(--violet);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--violet), 0 0 20px rgba(167,139,250,0.5);
+    transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(167,139,250,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+  }
+  .cursor-ring.hovering {
+    width: 56px; height: 56px;
+    border-color: rgba(167,139,250,0.9);
+    box-shadow: 0 0 16px rgba(167,139,250,0.3);
   }
   @media (hover: none) and (pointer: coarse) {
     body { cursor: auto; }
-    .cursor-dot, .cursor-circle { display: none !important; }
+    .cursor-glow, .cursor-dot, .cursor-ring { display: none !important; }
   }
+
+  /* ── Glass surface ── */
+  .glass {
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .glass:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 0 30px rgba(167,139,250,0.06), inset 0 0 30px rgba(167,139,250,0.02);
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    background: rgba(6,11,22,0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-right: 1px solid var(--border);
+  }
+
+  /* ── Nav links ── */
+  .nav-link {
+    position: relative;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    padding: 6px 0 6px 20px;
+    transition: color 0.3s ease, padding-left 0.3s ease;
+  }
+  .nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, var(--violet), var(--sky));
+    transition: width 0.3s ease;
+    box-shadow: 0 0 6px var(--violet);
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--text-bright);
+    padding-left: 28px;
+  }
+  .nav-link:hover::before, .nav-link.active::before { width: 18px; }
+
+  /* ── Section headings ── */
+  .section-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    font-weight: 500;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 2.5rem;
+  }
+  .section-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    color: var(--violet);
+    opacity: 0.8;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+  }
+
+  /* ── Reveal animations ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── Accent text ── */
+  .accent-sky    { color: var(--sky); }
+  .accent-violet { color: var(--violet); }
+  .accent-amber  { color: var(--amber); }
+
+  /* ── Hero name ── */
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-light);
+    min-height: 2.5rem;
+  }
+  .hero-sub {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    color: var(--violet);
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+  }
+
+  /* ── CTA buttons ── */
+  .btn-outline {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    padding: 10px 24px;
+    border: 1px solid rgba(167,139,250,0.4);
+    color: var(--violet);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: transparent;
+    cursor: pointer;
+  }
+  .btn-outline:hover {
+    background: rgba(167,139,250,0.08);
+    border-color: var(--violet);
+    box-shadow: 0 0 20px rgba(167,139,250,0.15);
+  }
+  .btn-primary {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(56,189,248,0.15));
+    border: 1px solid rgba(167,139,250,0.3);
+    color: var(--text-bright);
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    animation: pulse-glow 3s ease-in-out infinite;
+    cursor: pointer;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, rgba(167,139,250,0.3), rgba(56,189,248,0.25));
+    box-shadow: 0 0 24px rgba(167,139,250,0.2);
+  }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,0.2); }
+    50%      { box-shadow: 0 0 0 6px rgba(167,139,250,0); }
+  }
+
+  /* ── Social icons ── */
+  .social-icon {
+    color: var(--text);
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  .social-icon:hover { color: var(--violet); transform: translateY(-3px); }
+
+  /* ── Social column ── */
+  .social-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: fixed;
+    bottom: 0; left: 40px;
+  }
+  .social-column::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+    margin-top: 8px;
+  }
+
+  /* ── Project cards ── */
+  .project-card {
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.4s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-4px);
+  }
+  .project-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    background: rgba(167,139,250,0.08);
+    border: 1px solid rgba(167,139,250,0.2);
+    color: var(--violet);
+    border-radius: 100px;
+  }
+
+  /* ── Screenshot gallery ── */
+  .screenshot-gallery {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(167,139,250,0.3) transparent;
+    padding-bottom: 6px;
+  }
+  .screenshot-gallery img {
+    height: 130px;
+    width: auto;
+    min-width: 190px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: saturate(0.7) brightness(0.85);
+  }
+  .screenshot-gallery img:hover {
+    filter: saturate(1) brightness(1);
+    border-color: rgba(167,139,250,0.5);
+    box-shadow: 0 0 20px rgba(167,139,250,0.15);
+    transform: scale(1.02);
+  }
+
+  /* ── Lightbox ── */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(6,11,22,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 60px rgba(167,139,250,0.1);
+  }
+  #lightbox-close {
+    position: absolute;
+    top: 24px; right: 32px;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+  }
+  #lightbox-close:hover { color: var(--violet); border-color: var(--violet); }
+
+  /* ── Tabs ── */
+  .tab-btn {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-align: left;
+    padding: 10px 16px;
+    color: var(--text);
+    border-left: 2px solid transparent;
+    background: transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text-light); background: rgba(255,255,255,0.03); }
+  .tab-btn.active {
+    color: var(--violet);
+    border-left-color: var(--violet);
+    background: rgba(167,139,250,0.06);
+  }
+  .tab-border { border-left: 1px solid var(--border); }
+
+  /* ── Cert cards ── */
+  .cert-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.4s ease;
+    cursor: default;
+  }
+  .cert-card:hover {
+    border-color: rgba(167,139,250,0.35);
+    box-shadow: 0 0 24px rgba(167,139,250,0.08);
+    transform: translateY(-3px);
+  }
+  .cert-card img { filter: grayscale(60%) brightness(0.9); transition: filter 0.4s ease; }
+  .cert-card:hover img { filter: grayscale(0%) brightness(1); }
+
+  /* ── Skill cards ── */
+  .skill-card {
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.4s ease;
+  }
+  .skill-card:hover {
+    border-color: rgba(56,189,248,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(56,189,248,0.05);
+  }
+  .skill-icon { color: var(--sky); }
+  .skill-heading {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--sky);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    padding: 4px 0;
+  }
+  .skill-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--sky);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  /* ── Contact form ── */
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .form-input::placeholder { color: var(--text); opacity: 0.6; }
+  .form-input:focus {
+    outline: none;
+    border-color: rgba(167,139,250,0.5);
+    box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* ── Experience bullet ── */
+  .exp-bullet {
+    color: var(--violet);
+    margin-right: 10px;
+    margin-top: 5px;
+    flex-shrink: 0;
+    font-size: 0.6rem;
+  }
+
+  /* ── Featured label ── */
+  .featured-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--violet);
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+
+  /* ── Ghost section number ── */
+  .ghost-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 7rem;
+    font-weight: 700;
+    position: absolute;
+    top: -1.5rem;
+    left: -1rem;
+    color: rgba(167,139,250,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  /* ── Gradient section dividers ── */
+  .section-fade {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 0 6rem;
+  }
+
+  /* ── Typewriter cursor ── */
+  .tw-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--violet);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1.1s step-end infinite;
+    border-radius: 1px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── Mobile nav pills ── */
+  .mobile-nav-pill {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 100px;
+    transition: all 0.3s ease;
+  }
+  .mobile-nav-pill:hover {
+    border-color: rgba(167,139,250,0.4);
+    color: var(--violet);
+    background: rgba(167,139,250,0.06);
+  }
+
+  /* ── Education card ── */
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.4s ease;
+  }
+  .edu-card:hover { border-color: rgba(56,189,248,0.25); }
+
+  /* ── Z-index management ── */
+  /* 0: canvas/orbs, 10: content, 20: sidebar, 30: progress/cursor, 50+: overlays */
 </style>
 </head>
-<body class="bg-navy text-slate font-sans antialiased selection:bg-[#38bdf8] selection:text-navy overflow-x-hidden">
+<body>
 
-<!-- Custom Cursor -->
-<div class="cursor-dot" id="cursor-dot"></div>
-<div class="cursor-circle" id="cursor-circle"></div>
+<!-- Ambient orbs -->
+<div class="orb orb-1" aria-hidden="true"></div>
+<div class="orb orb-2" aria-hidden="true"></div>
+<div class="orb orb-3" aria-hidden="true"></div>
 
-<div id="progress-bar"></div>
-<button id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme"><span id="theme-icon">☀️</span></button>
+<!-- Particle canvas -->
+<canvas id="particle-canvas" aria-hidden="true"></canvas>
 
+<!-- Cursor -->
+<div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+
+<!-- Progress bar -->
+<div id="progress-bar" aria-hidden="true"></div>
+
+<!-- Lightbox -->
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
-  <button id="lightbox-close" aria-label="Close image">✕</button>
+  <button id="lightbox-close" aria-label="Close image">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l12 12M13 1L1 13"/></svg>
+  </button>
   <img id="lightbox-img" src="" alt="Full size screenshot">
 </div>
 
-<div class="flex flex-col lg:flex-row min-h-screen">
+<div class="flex flex-col lg:flex-row min-h-screen relative z-10">
 
-  <!-- SIDEBAR — 40% -->
-  <header class="lg:w-[40%] lg:fixed lg:h-screen flex flex-col justify-between px-6 py-12 lg:px-12 lg:py-0 lg:pl-[8%] z-20 bg-navy">
+  <!-- ─── SIDEBAR ─── -->
+  <header id="sidebar" class="lg:w-[40%] lg:fixed lg:h-screen flex flex-col justify-between px-6 py-12 lg:px-12 lg:py-0 lg:pl-[8%] z-20">
     <div class="flex flex-col justify-center h-full">
-      <p class="text-accent font-mono mb-4 text-sm tracking-wider">Hi, my name is</p>
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-lighter mb-4 tracking-tight">
-        Abdelkrim Zouaki<span class="text-accent animate-cursor-blink">_</span>
+
+      <p class="hero-sub mb-5 reveal">Hi, my name is</p>
+
+      <h1 class="hero-name mb-3 reveal reveal-delay-1">
+        Abdelkrim Zouaki
       </h1>
-      <h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-slate mb-4" id="typewriter"></h2>
 
-      <!-- CHANGE 1: Language moved up, bilingual prominence added -->
-      <p class="font-mono text-sm text-accent mb-8">Fluent: English &amp; French (bilingual) · Native: Moroccan Arabic</p>
+      <div class="hero-title mb-4 reveal reveal-delay-2">
+        <span id="typewriter"></span><span class="tw-cursor"></span>
+      </div>
 
-      <nav class="hidden lg:flex flex-col gap-5 font-mono text-sm" aria-label="Main navigation">
-        <a href="#about"          class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">About</a>
-        <a href="#education"      class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Education</a>
-        <a href="#experience"     class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Experience</a>
-        <a href="#projects"       class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Projects</a>
-        <a href="#skills"         class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Skills</a>
-        <a href="#certifications" class="nav-link text-slate-light hover:text-accent uppercase tracking-widest">Certifications</a>
+      <p class="hero-sub mb-10 reveal reveal-delay-3">Fluent: English &amp; French · Native: Moroccan Arabic</p>
+
+      <!-- Desktop nav -->
+      <nav class="hidden lg:flex flex-col gap-2 mb-10 reveal" aria-label="Main navigation">
+        <a href="#about"          class="nav-link">About</a>
+        <a href="#education"      class="nav-link">Education</a>
+        <a href="#experience"     class="nav-link">Experience</a>
+        <a href="#projects"       class="nav-link">Projects</a>
+        <a href="#skills"         class="nav-link">Skills</a>
+        <a href="#certifications" class="nav-link">Certifications</a>
       </nav>
 
-      <nav class="flex lg:hidden flex-wrap gap-3 mt-8 font-mono text-xs" aria-label="Main navigation">
-        <a href="#about"          class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">About</a>
-        <a href="#education"      class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Education</a>
-        <a href="#experience"     class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Experience</a>
-        <a href="#projects"       class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Projects</a>
-        <a href="#skills"         class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Skills</a>
-        <a href="#certifications" class="text-accent border border-accent px-3 py-1 rounded hover:bg-accent/10">Certs</a>
+      <!-- Mobile nav -->
+      <nav class="flex lg:hidden flex-wrap gap-2 mb-8" aria-label="Main navigation">
+        <a href="#about"          class="mobile-nav-pill">About</a>
+        <a href="#education"      class="mobile-nav-pill">Education</a>
+        <a href="#experience"     class="mobile-nav-pill">Experience</a>
+        <a href="#projects"       class="mobile-nav-pill">Projects</a>
+        <a href="#skills"         class="mobile-nav-pill">Skills</a>
+        <a href="#certifications" class="mobile-nav-pill">Certs</a>
       </nav>
 
-      <div class="mt-8 flex flex-wrap gap-4">
-        <a href="#contact" class="inline-block border border-accent text-accent px-6 py-3 rounded font-mono text-sm hover:bg-accent/10 transition-all duration-300">Get In Touch</a>
-        <a href="https://karim871.github.io/Portfolio/Abdelkrim_Zouaki_CV.pdf" download
-           class="cv-btn inline-flex items-center gap-2 bg-accent text-navy px-6 py-3 rounded font-mono text-sm font-bold hover:bg-accent/80 transition-all duration-300">
+      <div class="flex flex-wrap gap-3 reveal">
+        <a href="#contact" class="btn-outline">Get In Touch</a>
+        <a href="https://karim871.github.io/Portfolio/Abdelkrim_Zouaki_CV.pdf" download class="btn-primary">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>
           Download CV
         </a>
       </div>
     </div>
 
-    <div class="hidden lg:flex flex-col gap-6 fixed bottom-0 left-10 after:content-[''] after:block after:w-[1px] after:h-24 after:bg-slate after:mx-auto after:mt-6">
-      <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-slate hover:text-accent hover:-translate-y-1 transition-all duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+    <!-- Desktop social -->
+    <div class="social-column hidden lg:flex" aria-label="Social links">
+      <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
       </a>
-      <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-slate hover:text-accent hover:-translate-y-1 transition-all duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+      <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
       </a>
-      <a href="mailto:abdelkrim.zouaki.ti@gmail.com" aria-label="Email" class="text-slate hover:text-accent hover:-translate-y-1 transition-all duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      <a href="mailto:abdelkrim.zouaki.ti@gmail.com" aria-label="Email" class="social-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </a>
     </div>
 
+    <!-- Mobile social -->
     <div class="flex lg:hidden gap-6 mt-8 mb-8">
-      <a href="https://github.com/karim871" target="_blank" aria-label="GitHub" class="text-slate hover:text-accent">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      <a href="https://github.com/karim871" target="_blank" aria-label="GitHub" class="social-icon">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
       </a>
-      <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" aria-label="LinkedIn" class="text-slate hover:text-accent">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+      <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" aria-label="LinkedIn" class="social-icon">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:abdelkrim.zouaki.ti@gmail.com" aria-label="Email" class="social-icon">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </a>
     </div>
   </header>
 
-  <!-- MAIN CONTENT — 60% -->
-  <main class="lg:w-[60%] lg:ml-[40%] px-6 py-12 lg:px-14 lg:py-24 lg:pr-[8%]">
+  <!-- ─── MAIN CONTENT ─── -->
+  <main class="lg:w-[60%] lg:ml-[40%] px-6 py-16 lg:px-14 lg:py-28 lg:pr-[8%]">
 
     <!-- 01 ABOUT -->
-    <section id="about" class="mb-24 reveal">
-      <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
-        <span class="text-accent font-mono text-xl mr-2">01.</span> About Me
-        <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+    <section id="about" class="mb-28 relative reveal">
+      <span class="ghost-num" aria-hidden="true">01</span>
+      <h2 class="section-heading">
+        <span class="section-num">01.</span>
+        About Me
+        <span class="section-line"></span>
       </h2>
-      <div class="space-y-4 text-lg leading-relaxed">
-        <p>I'm Abdelkrim — I built a working SOC on a Raspberry Pi before I had my first IT job. That <span class="text-accent">Mini-SOC (Suricata + Splunk + ELK)</span> isn't a classroom exercise: it runs against real traffic, and tuning it taught me more about detection engineering than any course.</p>
-        <p>I'm a <span class="text-accent">Computer Security &amp; Networking graduate</span> based in Montreal, specializing in threat detection, network security, and automation pipelines that turn raw IOCs into actionable intelligence. My focus is on reducing noise — getting alerts that mean something — and acting on them fast.</p>
+      <div class="space-y-5 text-[0.95rem] leading-[1.85] text-slate-400">
+        <p>I'm Abdelkrim — I built a working SOC on a Raspberry Pi before I had my first IT job. That <span class="accent-sky font-medium">Mini-SOC (Suricata + Splunk + ELK)</span> isn't a classroom exercise: it runs against real traffic, and tuning it taught me more about detection engineering than any course.</p>
+        <p>I'm a <span class="accent-sky font-medium">Computer Security &amp; Networking graduate</span> based in Montreal, specializing in threat detection, network security, and automation pipelines that turn raw IOCs into actionable intelligence. My focus is on reducing noise — getting alerts that mean something — and acting on them fast.</p>
         <p>Outside the lab I hike, which keeps me methodical and disciplined — two things that transfer directly to incident response work.</p>
-        <!-- CHANGE 2: Removed duplicate language line here (now lives in sidebar, more prominent) -->
       </div>
     </section>
 
+    <div class="section-fade"></div>
+
     <!-- 02 EDUCATION -->
-    <section id="education" class="mb-24 reveal">
-      <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
-        <span class="text-accent font-mono text-xl mr-2">02.</span> Education
-        <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+    <section id="education" class="mb-28 relative reveal">
+      <span class="ghost-num" aria-hidden="true">02</span>
+      <h2 class="section-heading">
+        <span class="section-num">02.</span>
+        Education
+        <span class="section-line"></span>
       </h2>
-      <div class="bg-navy-light p-6 rounded-lg border border-navy-lighter">
-        <div class="flex items-start justify-between flex-wrap gap-2 mb-4">
+      <div class="edu-card">
+        <div class="flex items-start justify-between flex-wrap gap-3 mb-5">
           <div>
-            <h3 class="text-xl font-bold text-slate-lighter">DEC — Computer Security &amp; Networking</h3>
-            <p class="text-accent font-mono text-sm mt-1">Collège de Bois-de-Boulogne · Montreal, QC</p>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">DEC — Computer Security &amp; Networking</h3>
+            <p class="accent-violet font-mono text-xs mt-1 tracking-wide">Collège de Bois-de-Boulogne · Montreal, QC</p>
           </div>
-          <p class="font-mono text-sm text-slate whitespace-nowrap">Graduated 2025</p>
+          <p class="font-mono text-xs" style="color:var(--text);">Graduated 2025</p>
         </div>
-        <ul class="space-y-2">
-          <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Core focus: network security, ethical hacking, incident response, and system administration.</span></li>
-          <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Ran lab environments with Suricata, Splunk, pfSense, and ELK Stack throughout the program.</span></li>
-          <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Coursework in cryptography, vulnerability assessment, Windows/Linux hardening, and CCNA-level networking.</span></li>
+        <ul class="space-y-2.5 text-sm" style="color:var(--text-light);">
+          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Core focus: network security, ethical hacking, incident response, and system administration.</span></li>
+          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Ran lab environments with Suricata, Splunk, pfSense, and ELK Stack throughout the program.</span></li>
+          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Coursework in cryptography, vulnerability assessment, Windows/Linux hardening, and CCNA-level networking.</span></li>
         </ul>
       </div>
     </section>
 
+    <div class="section-fade"></div>
+
     <!-- 03 EXPERIENCE -->
-    <section id="experience" class="mb-24 reveal">
-      <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
-        <span class="text-accent font-mono text-xl mr-2">03.</span> Where I've Worked
-        <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+    <section id="experience" class="mb-28 relative reveal">
+      <span class="ghost-num" aria-hidden="true">03</span>
+      <h2 class="section-heading">
+        <span class="section-num">03.</span>
+        Where I've Worked
+        <span class="section-line"></span>
       </h2>
-      <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex md:flex-col overflow-x-auto md:overflow-visible border-b md:border-b-0 md:border-l border-navy-lighter min-w-[180px]">
-          <button onclick="switchTab('alorica')" id="tab-alorica" class="tab-btn text-left px-4 py-3 text-sm font-mono text-accent bg-navy-light border-l-2 border-accent transition-all whitespace-nowrap">Alorica</button>
-          <button onclick="switchTab('cosior')"  id="tab-cosior"  class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">Groupe Cosior TI</button>
-          <button onclick="switchTab('other')"   id="tab-other"   class="tab-btn text-left px-4 py-3 text-sm font-mono text-slate hover:text-accent hover:bg-navy-light border-l-2 border-transparent transition-all whitespace-nowrap">Prior Work</button>
+      <div class="flex flex-col md:flex-row gap-0">
+        <div class="flex md:flex-col overflow-x-auto md:overflow-visible tab-border min-w-[180px] md:min-w-[160px]">
+          <button onclick="switchTab('alorica')" id="tab-alorica" class="tab-btn active">Alorica</button>
+          <button onclick="switchTab('cosior')"  id="tab-cosior"  class="tab-btn">Groupe Cosior TI</button>
+          <button onclick="switchTab('other')"   id="tab-other"   class="tab-btn">Prior Work</button>
         </div>
-        <div class="flex-grow py-2 md:px-4">
+        <div class="flex-grow py-2 md:px-6">
           <div id="content-alorica" class="tab-content">
-            <h3 class="text-xl font-bold text-slate-lighter">IT Support Technician <span class="text-accent">@ Alorica</span></h3>
-            <!-- CHANGE 3:  -->
-            <p class="font-mono text-sm text-slate mb-4">July 2025 – December 2025 · Montreal, QC</p>
-            <ul class="space-y-3">
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Resolved 25–35 daily technical incidents in a high-volume bilingual (FR/EN) support environment.</span></li>
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Diagnosed Windows 10/11, Office 365, VPN, and network peripheral issues with structured CRM documentation.</span></li>
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Escalated complex incidents to L2/L3 with clear triage notes, maintaining SLA compliance under pressure.</span></li>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Technician <span class="accent-violet">@ Alorica</span></h3>
+            <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">July 2025 – December 2025 · Montreal, QC</p>
+            <ul class="space-y-3 text-sm" style="color:var(--text-light);">
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Resolved 25–35 daily technical incidents in a high-volume bilingual (FR/EN) support environment.</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Diagnosed Windows 10/11, Office 365, VPN, and network peripheral issues with structured CRM documentation.</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Escalated complex incidents to L2/L3 with clear triage notes, maintaining SLA compliance under pressure.</span></li>
             </ul>
           </div>
           <div id="content-cosior" class="tab-content hidden">
-            <h3 class="text-xl font-bold text-slate-lighter">IT Support Intern <span class="text-accent">@ Groupe Cosior TI</span></h3>
-            <p class="font-mono text-sm text-slate mb-4">January – May 2025 · Montreal, QC</p>
-            <ul class="space-y-3">
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</span></li>
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Supported the cybersecurity team with network traffic monitoring and vulnerability tracking.</span></li>
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Documented configurations and incidents to maintain accurate infrastructure records.</span></li>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Intern <span class="accent-violet">@ Groupe Cosior TI</span></h3>
+            <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">January – May 2025 · Montreal, QC</p>
+            <ul class="space-y-3 text-sm" style="color:var(--text-light);">
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Supported the cybersecurity team with network traffic monitoring and vulnerability tracking.</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Documented configurations and incidents to maintain accurate infrastructure records.</span></li>
             </ul>
           </div>
           <div id="content-other" class="tab-content hidden">
-            <h3 class="text-xl font-bold text-slate-lighter">Prior Work Experience</h3>
-            <p class="font-mono text-sm text-slate mb-4">2022 – 2024</p>
-            <p class="text-slate-light text-sm leading-relaxed mb-4">Before entering IT, I worked in high-volume operations environments — roles that built reliability, attention to process, and composure under pressure. The same qualities I bring to alert triage and incident response.</p>
-            <ul class="space-y-2 text-sm text-slate">
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Retail Associate — Dollarama (2024)</span></li>
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Warehouse Associate — IKEA (2023)</span></li>
-              <li class="flex items-start"><span class="text-accent mr-2 mt-1.5">▹</span><span>Inventory Associate — SSENSE (2022–2023)</span></li>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">Prior Work Experience</h3>
+            <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">2022 – 2024</p>
+            <p class="text-sm leading-relaxed mb-5" style="color:var(--text-light);">Before entering IT, I worked in high-volume operations environments — roles that built reliability, attention to process, and composure under pressure. The same qualities I bring to alert triage and incident response.</p>
+            <ul class="space-y-2 text-sm" style="color:var(--text);">
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Retail Associate — Dollarama (2024)</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Warehouse Associate — IKEA (2023)</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Inventory Associate — SSENSE (2022–2023)</span></li>
             </ul>
           </div>
         </div>
       </div>
     </section>
 
+    <div class="section-fade"></div>
+
     <!-- 04 PROJECTS -->
-    <section id="projects" class="mb-24 reveal">
-      <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
-        <span class="text-accent font-mono text-xl mr-2">04.</span> Some Things I've Built
-        <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+    <section id="projects" class="mb-28 relative reveal">
+      <span class="ghost-num" aria-hidden="true">04</span>
+      <h2 class="section-heading">
+        <span class="section-num">04.</span>
+        Some Things I've Built
+        <span class="section-line"></span>
       </h2>
-      <div class="space-y-12">
+      <div class="space-y-8">
 
         <!-- Threat Intel Bot -->
-        <div class="group project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
-          <div class="flex items-start justify-between mb-3">
+        <div class="glass project-card p-6">
+          <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="font-mono text-accent text-sm mb-1">Featured Project</p>
-              <h3 class="project-title text-2xl font-bold text-slate-lighter transition-colors">Threat Intelligence Automation Bot</h3>
+              <p class="featured-label">Featured Project</p>
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Threat Intelligence Automation Bot</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
-              <!-- GitHub link already existed for this project -->
-              <a href="https://github.com/karim871/threat-intelligence-bot" target="_blank" rel="noopener noreferrer" aria-label="GitHub repo" class="text-slate hover:text-accent transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <a href="https://github.com/karim871/threat-intelligence-bot" target="_blank" rel="noopener noreferrer" aria-label="GitHub repo" class="social-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
               </a>
-              <a href="https://karim871.github.io/Portfolio/secondarypages/cybersecurity-audit-tool-blog.html" target="_blank" aria-label="Project writeup" class="text-slate hover:text-accent transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              <a href="https://karim871.github.io/Portfolio/secondarypages/cybersecurity-audit-tool-blog.html" target="_blank" aria-label="Project writeup" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               </a>
             </div>
           </div>
-          <p class="text-sm leading-relaxed mb-4">Python framework querying <span class="text-accent">AbuseIPDB, VirusTotal, and AlienVault OTX</span> to automate IOC enrichment and risk scoring. Generates structured JSON threat reports for SOC workflows — cutting manual lookup time from minutes per IOC to seconds, with automated severity classification across all three feeds.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Python framework querying <span class="accent-sky font-medium">AbuseIPDB, VirusTotal, and AlienVault OTX</span> to automate IOC enrichment and risk scoring. Generates structured JSON threat reports for SOC workflows — cutting manual lookup time from minutes per IOC to seconds, with automated severity classification across all three feeds.</p>
           <div class="screenshot-gallery mb-4">
             <img src="https://karim871.github.io/Portfolio/images/01-help-command.png"          alt="CLI help command"         onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/clean-ip-result.webp"         alt="Clean IP scan result"     onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/malicious-ip-result.webp"     alt="Malicious IP detection"   onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/cve-intelligence-output.png"  alt="CVE intelligence output"  onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/json-report-cve-enriched.png" alt="JSON threat report"       onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/malicious-ip-result2.webp"    alt="Clean IP scan result"     onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/snippetcode.webp"             alt="Clean IP scan result"     onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/protocol.webp"             alt="Clean IP scan result"     onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/14-complete-workflow.webp"             alt="Clean IP scan result"     onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/malicious-ip-result2.webp"    alt="Malicious IP scan 2"      onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/snippetcode.webp"             alt="Code snippet"             onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/protocol.webp"               alt="Protocol analysis"        onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/14-complete-workflow.webp"   alt="Complete workflow"         onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
-          <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light">
-            <li>Python</li><li>REST APIs</li><li>JSON Parsing</li><li>Linux</li><li>Automation</li>
-          </ul>
+          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="project-tag">Python</span>
+            <span class="project-tag">REST APIs</span>
+            <span class="project-tag">JSON Parsing</span>
+            <span class="project-tag">Linux</span>
+            <span class="project-tag">Automation</span>
+          </div>
         </div>
 
         <!-- Mini-SOC -->
-        <div class="group project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
-          <div class="flex items-start justify-between mb-3">
+        <div class="glass project-card p-6">
+          <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="font-mono text-accent text-sm mb-1">Featured Project</p>
-              <h3 class="project-title text-2xl font-bold text-slate-lighter transition-colors">Home Mini-SOC Lab</h3>
+              <p class="featured-label">Featured Project</p>
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Home Mini-SOC Lab</h3>
             </div>
-            <!-- CHANGE 4: Added GitHub icon to Mini-SOC (replace URL with your actual repo if it exists) -->
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
-              <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="text-slate hover:text-accent transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="social-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
               </a>
-              <a href="https://karim871.github.io/Portfolio/secondarypages/piSOC.html" target="_blank" aria-label="Project writeup" class="text-slate hover:text-accent transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              <a href="https://karim871.github.io/Portfolio/secondarypages/piSOC.html" target="_blank" aria-label="Project writeup" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               </a>
             </div>
           </div>
-          <p class="text-sm leading-relaxed mb-4">Full Security Operations Center on a <span class="text-accent">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset (<span class="text-accent font-semibold">30,000+ rules</span>) feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Custom rule tuning reduced false positives by <span class="text-accent font-semibold">~40%</span>.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Full Security Operations Center on a <span class="accent-sky font-medium">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset (<span class="accent-amber font-semibold">30,000+ rules</span>) feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Custom rule tuning reduced false positives by <span class="accent-amber font-semibold">~40%</span>.</p>
           <div class="screenshot-gallery mb-4">
-            <img src="https://karim871.github.io/Portfolio/images/raspberrypi.jpg"   alt="Raspberry Pi hardware"    onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/Screenshot2025.webp" alt="Alert detail"              onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/Screenshot2026.webp" alt="Alert detail"              onclick="openLightbox(this.src)" title="Click to enlarge">
-            
-            
+            <img src="https://karim871.github.io/Portfolio/images/raspberrypi.jpg"     alt="Raspberry Pi hardware" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/Screenshot2025.webp" alt="Alert detail"          onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/Screenshot2026.webp" alt="Alert detail"          onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
-          <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light">
-            <li>Suricata</li><li>Splunk</li><li>Raspberry Pi</li><li>rsyslog</li><li>Linux</li>
-          </ul>
+          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="project-tag">Suricata</span>
+            <span class="project-tag">Splunk</span>
+            <span class="project-tag">Raspberry Pi</span>
+            <span class="project-tag">rsyslog</span>
+            <span class="project-tag">Linux</span>
+          </div>
         </div>
 
         <!-- Pi-hole -->
-        <div class="group project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
-          <div class="flex items-start justify-between mb-3">
+        <div class="glass project-card p-6">
+          <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="font-mono text-accent text-sm mb-1">Featured Project</p>
-              <h3 class="project-title text-2xl font-bold text-slate-lighter transition-colors">Network-Wide DNS Security Layer</h3>
+              <p class="featured-label">Featured Project</p>
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Network-Wide DNS Security Layer</h3>
             </div>
-            <!-- CHANGE 5: Added GitHub icon to Pi-hole project -->
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
-              <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="text-slate hover:text-accent transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="social-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
               </a>
-              <a href="https://karim871.github.io/Portfolio/secondarypages/pihole.html" target="_blank" aria-label="Project writeup" class="text-slate hover:text-accent transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              <a href="https://karim871.github.io/Portfolio/secondarypages/pihole.html" target="_blank" aria-label="Project writeup" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               </a>
             </div>
           </div>
-          <p class="text-sm leading-relaxed mb-4">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="text-accent font-semibold">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="accent-amber font-semibold">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
           <div class="screenshot-gallery mb-4">
-                    <img src="./images/Screenshot1.webp" alt="Pi-hole installation process - network detection" loading="lazy">
-                    <img src="./images/Screenshot2.webp" alt="Pi-hole installation - upstream DNS selection" loading="lazy">
-                    <img src="./images/Screenshot3.webp" alt="Pi-hole installation - blocklist configuration" loading="lazy">
-                    <img src="./images/Screenshot4.webp" alt="Pi-hole installation - web interface setup" loading="lazy">
-                    <img src="./images/Screenshot5.webp" alt="Pi-hole admin dashboard showing blocked queries" loading="lazy">
-                    <img src="./images/Screenshot6.png" alt="Query log showing DNS requests and blocks" loading="lazy">
-                    <img src="./images/Screenshot7.webp" alt="Statistics and analytics dashboard" loading="lazy">
-                    <img src="./images/Screenshot8.webp" alt="Additional Pi-hole configuration" loading="lazy">
-                    <img src="./images/Screenshot9.webp" alt="Network statistics" loading="lazy">
-                    <img src="./images/Screenshot10.webp" alt="Blocklist management" loading="lazy">
-                    <img src="./images/Screenshot11.webp" alt="Pi-hole performance metrics" loading="lazy">
-                    <img src="./images/Screenshot13.webp" alt="Advanced settings configuration" loading="lazy">
-                    <img src="./images/Screenshot14.webp" alt="Network-wide protection overview" loading="lazy">
-                    <img src="./images/Screenshot15.webp" alt="Mobile device ad-free browsing" loading="lazy">
-                    <img src="./images/phone.webp" alt="Mobile device DNS config" loading="lazy">
-
-
-            
+            <img src="./images/Screenshot1.webp"  alt="Pi-hole installation process"          loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot2.webp"  alt="Pi-hole upstream DNS selection"        loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot3.webp"  alt="Pi-hole blocklist configuration"       loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot4.webp"  alt="Pi-hole web interface setup"           loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot5.webp"  alt="Pi-hole admin dashboard"               loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot6.png"   alt="Query log showing DNS requests"        loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot7.webp"  alt="Statistics and analytics dashboard"    loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot8.webp"  alt="Additional Pi-hole configuration"      loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot9.webp"  alt="Network statistics"                    loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot10.webp" alt="Blocklist management"                  loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot11.webp" alt="Pi-hole performance metrics"           loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot13.webp" alt="Advanced settings configuration"       loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot14.webp" alt="Network-wide protection overview"      loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/Screenshot15.webp" alt="Mobile device ad-free browsing"        loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="./images/phone.webp"         alt="Mobile device DNS config"              loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
-          <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light">
-            <li>Pi-hole</li><li>DNS Security</li><li>Network Filtering</li><li>Linux</li>
-          </ul>
+          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="project-tag">Pi-hole</span>
+            <span class="project-tag">DNS Security</span>
+            <span class="project-tag">Network Filtering</span>
+            <span class="project-tag">Linux</span>
+          </div>
         </div>
 
         <!-- pfSense -->
-        <div class="group project-card bg-navy-light p-6 rounded-lg border border-navy-lighter">
-          <div class="flex items-start justify-between mb-3">
+        <div class="glass project-card p-6">
+          <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="font-mono text-accent text-sm mb-1">Featured Project</p>
-              <h3 class="project-title text-2xl font-bold text-slate-lighter transition-colors">pfSense Firewall — Secure Network Architecture</h3>
+              <p class="featured-label">Featured Project</p>
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">pfSense Firewall — Secure Network Architecture</h3>
             </div>
-            <!-- CHANGE 6: Added GitHub icon to pfSense project -->
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
-              <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="text-slate hover:text-accent transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="social-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
               </a>
             </div>
           </div>
-          <p class="text-sm leading-relaxed mb-4">LAN/WAN segmented lab across <span class="text-accent font-semibold">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">LAN/WAN segmented lab across <span class="accent-amber font-semibold">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
           <div class="screenshot-gallery mb-4">
-            <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"           onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP config"   onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/screen3.png" alt="Windows client receiving DHCP from pfSense" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"             onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP config"     onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/screen3.png" alt="Windows client receiving DHCP from pfSense"  onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="text-xs text-slate font-mono mb-3">↔ scroll to see more</p>
-          <ul class="flex flex-wrap gap-3 font-mono text-xs text-slate-light">
-            <li>pfSense</li><li>OPNsense</li><li>OpenVPN</li><li>VLANs</li><li>Suricata</li><li>NAT</li><li>DNS</li><li>VirtualBox</li>
-          </ul>
+          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="project-tag">pfSense</span>
+            <span class="project-tag">OPNsense</span>
+            <span class="project-tag">OpenVPN</span>
+            <span class="project-tag">VLANs</span>
+            <span class="project-tag">Suricata</span>
+            <span class="project-tag">NAT</span>
+            <span class="project-tag">DNS</span>
+            <span class="project-tag">VirtualBox</span>
+          </div>
         </div>
 
       </div>
     </section>
 
+    <div class="section-fade"></div>
+
     <!-- 05 SKILLS -->
-    <section id="skills" class="mb-24 reveal">
-      <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
-        <span class="text-accent font-mono text-xl mr-2">05.</span> Technical Skills
-        <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+    <section id="skills" class="mb-28 relative reveal">
+      <span class="ghost-num" aria-hidden="true">05</span>
+      <h2 class="section-heading">
+        <span class="section-num">05.</span>
+        Technical Skills
+        <span class="section-line"></span>
       </h2>
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
-          <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+      <div class="grid md:grid-cols-2 gap-4">
+
+        <div class="skill-card">
+          <div class="skill-heading">
+            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             Detection &amp; SIEM
-          </h3>
-          <ul class="space-y-2 text-slate-light text-sm">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Splunk Enterprise, Wazuh, ELK Stack</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Suricata IDS/IPS, Snort, Wireshark, tcpdump</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Sysmon, Windows Event Logs</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Nessus, OpenVAS</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>MITRE ATT&amp;CK, Incident Response</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>IOC Triage, Alert Handling &amp; Escalation</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Threat Intel (AbuseIPDB, VirusTotal, OTX)</li>
+          </div>
+          <ul class="space-y-1.5">
+            <li class="skill-item"><span class="skill-dot"></span>Splunk Enterprise, Wazuh, ELK Stack</li>
+            <li class="skill-item"><span class="skill-dot"></span>Suricata IDS/IPS, Snort, Wireshark, tcpdump</li>
+            <li class="skill-item"><span class="skill-dot"></span>Sysmon, Windows Event Logs</li>
+            <li class="skill-item"><span class="skill-dot"></span>Nessus, OpenVAS</li>
+            <li class="skill-item"><span class="skill-dot"></span>MITRE ATT&amp;CK, Incident Response</li>
+            <li class="skill-item"><span class="skill-dot"></span>IOC Triage, Alert Handling &amp; Escalation</li>
+            <li class="skill-item"><span class="skill-dot"></span>Threat Intel (AbuseIPDB, VirusTotal, OTX)</li>
           </ul>
         </div>
-        <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
-          <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+        <div class="skill-card">
+          <div class="skill-heading">
+            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             Network Security
-          </h3>
-          <ul class="space-y-2 text-slate-light text-sm">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>TCP/IP, VLAN, Trunking</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>OSPF, BGP, RIP, MPLS</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>VPN (OpenVPN, Site-to-Site)</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>DHCP, DNS, NAT, QoS, VoIP</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Cisco IOS (ACL, Routing, Switching)</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>pfSense / OPNsense Firewall</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Wireshark, tcpdump</li>
+          </div>
+          <ul class="space-y-1.5">
+            <li class="skill-item"><span class="skill-dot"></span>TCP/IP, VLAN, Trunking</li>
+            <li class="skill-item"><span class="skill-dot"></span>OSPF, BGP, RIP, MPLS</li>
+            <li class="skill-item"><span class="skill-dot"></span>VPN (OpenVPN, Site-to-Site)</li>
+            <li class="skill-item"><span class="skill-dot"></span>DHCP, DNS, NAT, QoS, VoIP</li>
+            <li class="skill-item"><span class="skill-dot"></span>Cisco IOS (ACL, Routing, Switching)</li>
+            <li class="skill-item"><span class="skill-dot"></span>pfSense / OPNsense Firewall</li>
+            <li class="skill-item"><span class="skill-dot"></span>Wireshark, tcpdump</li>
           </ul>
         </div>
-        <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
-          <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+
+        <div class="skill-card">
+          <div class="skill-heading">
+            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
             Systems
-          </h3>
-          <ul class="space-y-2 text-slate-light text-sm">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Linux (Arch, Kali, Debian, Ubuntu, CentOS)</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Windows Server (AD, GPO, DNS, DHCP)</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>VMware, Hyper-V, VirtualBox</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Docker</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>n8n Automation</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Nmap, Netcat</li>
+          </div>
+          <ul class="space-y-1.5">
+            <li class="skill-item"><span class="skill-dot"></span>Linux (Arch, Kali, Debian, Ubuntu, CentOS)</li>
+            <li class="skill-item"><span class="skill-dot"></span>Windows Server (AD, GPO, DNS, DHCP)</li>
+            <li class="skill-item"><span class="skill-dot"></span>VMware, Hyper-V, VirtualBox</li>
+            <li class="skill-item"><span class="skill-dot"></span>Docker</li>
+            <li class="skill-item"><span class="skill-dot"></span>n8n Automation</li>
+            <li class="skill-item"><span class="skill-dot"></span>Nmap, Netcat</li>
           </ul>
         </div>
-        <div class="bg-navy-light p-6 rounded-lg hover:-translate-y-1 transition-transform duration-300">
-          <h3 class="text-accent font-mono text-lg mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+
+        <div class="skill-card">
+          <div class="skill-heading">
+            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
             Scripting
-          </h3>
-          <!-- CHANGE 7: Removed Java and PHP — not relevant to SOC work, dilutes positioning -->
-          <ul class="space-y-2 text-slate-light text-sm">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>Bash, PowerShell, Python</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-accent rounded-full mr-2" aria-hidden="true"></span>SQL, C</li>
+          </div>
+          <ul class="space-y-1.5">
+            <li class="skill-item"><span class="skill-dot"></span>Bash, PowerShell, Python</li>
+            <li class="skill-item"><span class="skill-dot"></span>SQL, C</li>
           </ul>
-          <div class="mt-6 pt-4 border-t border-navy-lighter">
-            <p class="text-slate-light text-sm mb-4">Want to see more?</p>
-            <div class="flex gap-4">
-              <a href="https://karim871.github.io/Portfolio/secondarypages/CTF.html" class="text-slate hover:text-accent transition-colors font-mono text-xs border border-slate hover:border-accent px-3 py-2 rounded">CTF Writeups</a>
-              <a href="https://karim871.github.io/Portfolio/secondarypages/Blog.html" class="text-slate hover:text-accent transition-colors font-mono text-xs border border-slate hover:border-accent px-3 py-2 rounded">Blog</a>
+          <div class="mt-6 pt-4 border-t" style="border-color:var(--border);">
+            <p class="text-xs mb-3" style="color:var(--text);">Want to see more?</p>
+            <div class="flex gap-3">
+              <a href="https://karim871.github.io/Portfolio/secondarypages/CTF.html" class="btn-outline text-xs py-2 px-4 cursor-pointer">CTF Writeups</a>
+              <a href="https://karim871.github.io/Portfolio/secondarypages/Blog.html" class="btn-outline text-xs py-2 px-4 cursor-pointer">Blog</a>
             </div>
           </div>
         </div>
+
       </div>
     </section>
+
+    <div class="section-fade"></div>
 
     <!-- 06 CERTIFICATIONS -->
-    <section id="certifications" class="mb-24 reveal">
-      <h2 class="flex items-center text-2xl font-bold text-slate-lighter mb-8">
-        <span class="text-accent font-mono text-xl mr-2">06.</span> Certifications
-        <span class="h-[1px] bg-navy-lighter flex-grow ml-4"></span>
+    <section id="certifications" class="mb-28 relative reveal">
+      <span class="ghost-num" aria-hidden="true">06</span>
+      <h2 class="section-heading">
+        <span class="section-num">06.</span>
+        Certifications
+        <span class="section-line"></span>
       </h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/CySA+-png.webp" alt="CompTIA CySA+" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">CompTIA CySA+</h4>
-          <p class="text-xs text-accent font-mono mt-1">Valid 2025–2028</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CySA+-png.webp" alt="CompTIA CySA+" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA CySA+</h4>
+          <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/Security+-png.webp" alt="CompTIA Security+" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">CompTIA Security+</h4>
-          <p class="text-xs text-accent font-mono mt-1">Valid 2025–2028</p>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/Security+-png.webp" alt="CompTIA Security+" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA Security+</h4>
+          <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/CCNA_ITN.png" alt="Cisco CCNA ITN" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco CCNA ITN</h4>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ITN.png" alt="Cisco CCNA ITN" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ITN</h4>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/CCNA_SRWE.png" alt="Cisco CCNA SRWE" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco CCNA SRWE</h4>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_SRWE.png" alt="Cisco CCNA SRWE" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA SRWE</h4>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/CCNA_ENSA.png" alt="Cisco CCNA ENSA" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco CCNA ENSA</h4>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ENSA.png" alt="Cisco CCNA ENSA" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ENSA</h4>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/NetworkDefense.png" alt="Cisco Network Defense" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">Cisco Network Defense</h4>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/NetworkDefense.png" alt="Cisco Network Defense" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco Network Defense</h4>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/AZ-900.png" alt="Microsoft AZ-900" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">Microsoft AZ-900</h4>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/AZ-900.png" alt="Microsoft AZ-900" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft AZ-900</h4>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4"><img src="https://karim871.github.io/Portfolio/images/SC-900.png" alt="Microsoft SC-900" class="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"></div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">Microsoft SC-900</h4>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/SC-900.png" alt="Microsoft SC-900" class="w-full h-full object-contain"></div>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft SC-900</h4>
         </div>
       </div>
-      <h3 class="text-xl font-bold text-slate-lighter mb-6"><span class="text-accent font-mono text-lg mr-2">06.1</span> Language Certifications</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4 flex items-center justify-center">
-            <svg class="w-16 h-16 text-slate group-hover:text-accent transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--text-bright);" class="mb-5">
+        <span class="section-num">06.1</span> Language Certifications
+      </h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3 flex items-center justify-center">
+            <svg class="w-12 h-12" style="color:var(--text);" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
           </div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">TEF Canada</h4>
-          <p class="text-xs text-slate-light text-center mt-1">Test d'Évaluation de Français</p>
-          <!-- CHANGE 8: Added proficiency level label -->
-          <p class="text-xs text-accent font-mono mt-1">Fluent — French</p>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">TEF Canada</h4>
+          <p class="text-xs text-center mt-1" style="color:var(--text);">Test d'Évaluation de Français</p>
+          <p class="text-xs accent-violet font-mono mt-1">Fluent — French</p>
         </div>
-        <div class="group flex flex-col items-center p-4 bg-navy-light rounded-lg hover:bg-navy-lighter transition-colors">
-          <div class="w-24 h-24 mb-4 flex items-center justify-center">
-            <svg class="w-16 h-16 text-slate group-hover:text-accent transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <div class="cert-card">
+          <div class="w-20 h-20 mb-3 flex items-center justify-center">
+            <svg class="w-12 h-12" style="color:var(--text);" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
-          <h4 class="text-slate-lighter font-bold text-center text-sm">IELTS</h4>
-          <p class="text-xs text-slate-light text-center mt-1">International English Language Testing</p>
-          <!-- CHANGE 8 cont: Added proficiency level label -->
-          <p class="text-xs text-accent font-mono mt-1">Fluent — English</p>
+          <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">IELTS</h4>
+          <p class="text-xs text-center mt-1" style="color:var(--text);">International English Testing</p>
+          <p class="text-xs accent-violet font-mono mt-1">Fluent — English</p>
         </div>
       </div>
     </section>
 
-    <!-- 07 CONTACT -->
-    <section id="contact" class="mb-24 py-12 reveal">
-      <p class="text-accent font-mono mb-4 text-center">07. What's Next?</p>
-      <h2 class="text-4xl md:text-5xl font-bold text-slate-lighter mb-6 text-center">Get In Touch</h2>
-      <p class="text-slate max-w-md mx-auto mb-12 text-lg text-center">Actively seeking SOC Analyst, IT Support, and Security Operations roles in Montreal. I typically respond within 24 hours.</p>
+    <div class="section-fade"></div>
 
-      <!-- Contact form uses Formspree — already verified working -->
-      <div class="max-w-lg mx-auto bg-navy-light p-8 rounded-lg border border-navy-lighter">
+    <!-- 07 CONTACT -->
+    <section id="contact" class="mb-24 relative reveal">
+      <span class="ghost-num" aria-hidden="true">07</span>
+      <p class="font-mono text-xs tracking-widest text-center mb-3" style="color:var(--violet);opacity:0.8;">07. What's Next?</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,4rem);font-weight:500;color:var(--text-bright);text-align:center;letter-spacing:-0.02em;" class="mb-4">Get In Touch</h2>
+      <p class="text-sm leading-[1.8] max-w-md mx-auto mb-12 text-center" style="color:var(--text);">Actively seeking SOC Analyst, IT Support, and Security Operations roles in Montreal. I typically respond within 24 hours.</p>
+
+      <div class="max-w-lg mx-auto glass p-8">
         <form id="contact-form" action="https://formspree.io/f/mblqpkdo" method="POST" novalidate>
           <div class="mb-5">
-            <label for="name" class="block text-slate-light text-sm font-mono mb-2">Name</label>
+            <label for="name" class="block text-xs font-mono mb-2 tracking-wide" style="color:var(--text-light);">Name</label>
             <input type="text" id="name" name="name" required placeholder="Jane Smith" class="form-input" autocomplete="name">
           </div>
           <div class="mb-5">
-            <label for="email" class="block text-slate-light text-sm font-mono mb-2">Email</label>
+            <label for="email" class="block text-xs font-mono mb-2 tracking-wide" style="color:var(--text-light);">Email</label>
             <input type="email" id="email" name="email" required placeholder="jane@company.com" class="form-input" autocomplete="email">
           </div>
           <div class="mb-6">
-            <label for="message" class="block text-slate-light text-sm font-mono mb-2">Message</label>
+            <label for="message" class="block text-xs font-mono mb-2 tracking-wide" style="color:var(--text-light);">Message</label>
             <textarea id="message" name="message" required rows="5" placeholder="Hi Abdelkrim, I'd like to connect about…" class="form-input resize-none"></textarea>
           </div>
-          <button type="submit" class="w-full border border-accent text-accent py-4 rounded font-mono text-sm hover:bg-accent/10 transition-all duration-300">Send Message →</button>
-          <p id="form-status" class="text-center text-sm font-mono mt-4 hidden" role="status" aria-live="polite"></p>
+          <button type="submit" class="btn-outline w-full text-center cursor-pointer py-3">Send Message →</button>
+          <p id="form-status" class="text-center text-xs font-mono mt-4 hidden" role="status" aria-live="polite"></p>
         </form>
-        <p class="text-center text-slate text-xs mt-6 font-mono">
-          Or email directly: <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="text-accent hover:underline">abdelkrim.zouaki.ti@gmail.com</a>
+        <p class="text-center text-xs mt-6 font-mono" style="color:var(--text);">
+          Or directly: <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="accent-violet hover:underline">abdelkrim.zouaki.ti@gmail.com</a>
         </p>
       </div>
 
       <div class="mt-12 flex justify-center gap-8 lg:hidden">
-        <a href="https://github.com/karim871" target="_blank" aria-label="GitHub" class="text-slate hover:text-accent transition-colors">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <a href="https://github.com/karim871" target="_blank" aria-label="GitHub" class="social-icon">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
         </a>
-        <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" aria-label="LinkedIn" class="text-slate hover:text-accent transition-colors">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" aria-label="LinkedIn" class="social-icon">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
       </div>
     </section>
 
-    <footer class="text-center py-8 text-slate font-mono text-xs">
-      <p>Designed and built by Abdelkrim Zouaki.</p>
+    <footer class="text-center py-8 font-mono text-xs" style="color:var(--text);opacity:0.5;">
+      <p>Designed &amp; built by Abdelkrim Zouaki.</p>
     </footer>
+
   </main>
 </div>
 
 <script>
-// Progress bar
+// ── Progress bar ──────────────────────────────────────────────
 const progressBar = document.getElementById('progress-bar');
 window.addEventListener('scroll', () => {
   progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%';
-});
+}, { passive: true });
 
-// Typewriter
-const titles = ["SOC Analyst","Cybersecurity Specialist","Threat Hunter"];
-let ti = 0, ci = 0, del = false;
+// ── Typewriter ────────────────────────────────────────────────
+const titles = ['SOC Analyst', 'Cybersecurity Specialist', 'Threat Hunter'];
+let ti = 0, ci = 0, deleting = false;
 const tw = document.getElementById('typewriter');
 function typeWriter() {
   const t = titles[ti];
-  tw.textContent = del ? t.substring(0, ci-1) : t.substring(0, ci+1);
-  del ? ci-- : ci++;
-  let d = del ? 80 : 180;
-  if (!del && ci === t.length) { d = 4000; del = true; }
-  else if (del && ci === 0) { del = false; ti = (ti+1) % titles.length; d = 3500; }
-  setTimeout(typeWriter, d);
+  tw.textContent = deleting ? t.substring(0, ci - 1) : t.substring(0, ci + 1);
+  deleting ? ci-- : ci++;
+  let delay = deleting ? 70 : 160;
+  if (!deleting && ci === t.length) { delay = 3800; deleting = true; }
+  else if (deleting && ci === 0) { deleting = false; ti = (ti + 1) % titles.length; delay = 400; }
+  setTimeout(typeWriter, delay);
 }
 document.addEventListener('DOMContentLoaded', typeWriter);
 
-// Theme
-document.getElementById('theme-toggle').addEventListener('click', function() {
-  const light = document.body.classList.toggle('light-mode');
-  document.getElementById('theme-icon').textContent = light ? '🌙' : '☀️';
-});
-
-// Tabs
+// ── Tabs ──────────────────────────────────────────────────────
 function switchTab(name) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-  document.getElementById('content-'+name).classList.remove('hidden');
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('text-accent','bg-navy-light','border-accent');
-    btn.classList.add('text-slate','border-transparent');
-  });
-  const a = document.getElementById('tab-'+name);
-  a.classList.remove('text-slate','border-transparent');
-  a.classList.add('text-accent','bg-navy-light','border-accent');
+  document.getElementById('content-' + name).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
 }
 
-// Reveal + nav highlight
+// ── Reveal + nav highlight ────────────────────────────────────
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('active');
       const id = entry.target.id;
-      if (id) document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+      if (id) document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+document.querySelectorAll('section[id]').forEach(el => revealObserver.observe(el));
 
-// Smooth scroll
+// ── Smooth scroll ─────────────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', function(e) {
     e.preventDefault();
     const t = document.querySelector(this.getAttribute('href'));
-    if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
 
-// Lightbox
+// ── Lightbox ──────────────────────────────────────────────────
 function openLightbox(src) {
   document.getElementById('lightbox-img').src = src;
   document.getElementById('lightbox').classList.add('open');
-  document.getElementById('lightbox-close').focus();
 }
-document.getElementById('lightbox-close').addEventListener('click', () => document.getElementById('lightbox').classList.remove('open'));
-document.getElementById('lightbox').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); });
+document.getElementById('lightbox-close').addEventListener('click', () =>
+  document.getElementById('lightbox').classList.remove('open')
+);
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
+});
 
-// Contact form
+// ── Contact form ──────────────────────────────────────────────
 document.getElementById('contact-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = this.querySelector('button[type="submit"]');
   const status = document.getElementById('form-status');
   btn.textContent = 'Sending…'; btn.disabled = true;
   try {
-    const res = await fetch(this.action, { method:'POST', body:new FormData(this), headers:{'Accept':'application/json'} });
+    const res = await fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'Accept': 'application/json' } });
     if (res.ok) {
-      status.textContent = "✓ Message sent! I'll get back to you soon.";
-      status.className = 'text-center text-sm font-mono mt-4 text-accent';
+      status.textContent = "Message sent — I'll get back to you soon.";
+      status.className = 'text-center text-xs font-mono mt-4 accent-violet';
       this.reset();
     } else throw new Error();
   } catch {
-    status.textContent = '✗ Something went wrong. Please email me directly.';
-    status.className = 'text-center text-sm font-mono mt-4 text-red-400';
+    status.textContent = 'Something went wrong. Please email me directly.';
+    status.className = 'text-center text-xs font-mono mt-4 text-red-400';
   } finally {
     status.classList.remove('hidden');
     btn.textContent = 'Send Message →'; btn.disabled = false;
   }
 });
 
-// ── Custom Cursor ──────────────────────────────────────────
-const cursorDot    = document.getElementById('cursor-dot');
-const cursorCircle = document.getElementById('cursor-circle');
-let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+// ── Custom cursor ─────────────────────────────────────────────
+const cursorDot  = document.getElementById('cursor-dot');
+const cursorRing = document.getElementById('cursor-ring');
+const cursorGlow = document.getElementById('cursor-glow');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, glowX = 0, glowY = 0;
+
 if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX; mouseY = e.clientY;
     cursorDot.style.left = mouseX + 'px';
     cursorDot.style.top  = mouseY + 'px';
-  });
-  (function animateCircle() {
-    circleX += (mouseX - circleX) * 0.15;
-    circleY += (mouseY - circleY) * 0.15;
-    cursorCircle.style.left = circleX + 'px';
-    cursorCircle.style.top  = circleY + 'px';
-    requestAnimationFrame(animateCircle);
+  }, { passive: true });
+
+  (function animate() {
+    ringX += (mouseX - ringX) * 0.18;
+    ringY += (mouseY - ringY) * 0.18;
+    glowX += (mouseX - glowX) * 0.06;
+    glowY += (mouseY - glowY) * 0.06;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top  = ringY + 'px';
+    cursorGlow.style.left = glowX + 'px';
+    cursorGlow.style.top  = glowY + 'px';
+    requestAnimationFrame(animate);
   })();
-  document.querySelectorAll('a, button, .project-card, .nav-link, .tab-btn').forEach(el => {
-    el.addEventListener('mouseenter', () => cursorCircle.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursorCircle.classList.remove('hover'));
+
+  const hoverTargets = 'a, button, .project-card, .nav-link, .tab-btn, .cert-card, .skill-card, .screenshot-gallery img';
+  document.querySelectorAll(hoverTargets).forEach(el => {
+    el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
   });
+}
+
+// ── Particle canvas ───────────────────────────────────────────
+(function initParticles() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const COUNT = 55;
+  const MAX_DIST = 140;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  const colors = ['rgba(167,139,250,', 'rgba(56,189,248,', 'rgba(251,191,36,'];
+
+  for (let i = 0; i < COUNT; i++) {
+    particles.push({
+      x:  Math.random() * window.innerWidth,
+      y:  Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      r:  Math.random() * 1.5 + 0.5,
+      c:  colors[Math.floor(Math.random() * colors.length)],
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c + '0.6)';
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MAX_DIST) {
+          const alpha = (1 - dist / MAX_DIST) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = p.c + alpha + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── prefers-reduced-motion: disable animations ────────────────
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
 }
 </script>
 </body>
