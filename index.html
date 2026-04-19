@@ -17,21 +17,21 @@
 <meta property="twitter:image" content="https://karim871.github.io/Portfolio/images/thumbnail.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
   theme: {
     extend: {
       colors: {
-        base:    '#060b16',
-        surface: 'rgba(255,255,255,0.04)',
-        sky:     '#38bdf8',
-        violet:  '#a78bfa',
-        amber:   '#fbbf24',
+        base:    '#030508',
+        surface: 'rgba(10,20,40,0.6)',
+        sky:     '#4FC3F7',
+        ice:     '#E0F7FA',
+        steel:   '#90CAF9',
       },
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'serif'],
+        display: ['"Space Grotesk"', 'sans-serif'],
         sans:    ['Inter', 'sans-serif'],
         mono:    ['"Fira Code"', 'monospace'],
       },
@@ -42,18 +42,18 @@ tailwind.config = {
 <style>
   /* ── Base ── */
   :root {
-    --base: #060b16;
-    --surface: rgba(255,255,255,0.045);
-    --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(167,139,250,0.4);
-    --text: #94a3b8;
-    --text-light: #cbd5e1;
-    --text-bright: #e2e8f0;
-    --sky: #38bdf8;
-    --violet: #a78bfa;
-    --amber: #fbbf24;
-    --glow-sky: rgba(56,189,248,0.15);
-    --glow-violet: rgba(167,139,250,0.15);
+    --base: #030508;
+    --surface: rgba(8,18,38,0.65);
+    --border: rgba(79,195,247,0.1);
+    --border-hover: rgba(79,195,247,0.4);
+    --text: #7fa8c4;
+    --text-light: #b8d4e8;
+    --text-bright: #e8f4fd;
+    --sky: #4FC3F7;
+    --ice: #E0F7FA;
+    --steel: #90CAF9;
+    --glow-sky: rgba(79,195,247,0.18);
+    --glow-ice: rgba(224,247,250,0.1);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -71,42 +71,65 @@ tailwind.config = {
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.3); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.6); }
+  ::-webkit-scrollbar-thumb { background: rgba(79,195,247,0.25); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(79,195,247,0.5); }
 
-  /* ── Ambient background orbs ── */
+  /* ── NASA nebula background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      /* Milky Way arc — faint diagonal band */
+      radial-gradient(ellipse 200% 30% at 60% 45%, rgba(20,50,90,0.18) 0%, transparent 60%),
+      /* Nebula cluster top-left — deep teal */
+      radial-gradient(ellipse 60% 50% at -10% 10%, rgba(0,60,100,0.35) 0%, transparent 55%),
+      /* Nebula cluster bottom-right — steel blue */
+      radial-gradient(ellipse 55% 45% at 110% 90%, rgba(10,40,80,0.4) 0%, transparent 55%),
+      /* Mid nebula — dark navy bloom */
+      radial-gradient(ellipse 70% 40% at 50% 60%, rgba(5,20,50,0.5) 0%, transparent 65%),
+      /* Faint cold blue center haze */
+      radial-gradient(ellipse 40% 30% at 75% 25%, rgba(79,195,247,0.04) 0%, transparent 60%),
+      /* Deep space base */
+      #030508;
+  }
+
+  /* ── Ambient nebula orbs (slow drift) ── */
   .orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(100px);
     pointer-events: none;
     z-index: 0;
     animation: drift linear infinite;
   }
   .orb-1 {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 70%);
-    top: -100px; left: -150px;
-    animation-duration: 25s;
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(0,80,140,0.14) 0%, transparent 70%);
+    top: -80px; left: -200px;
+    animation-duration: 38s;
   }
   .orb-2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
-    bottom: 20%; right: -100px;
-    animation-duration: 32s;
+    width: 500px; height: 350px;
+    background: radial-gradient(ellipse, rgba(79,195,247,0.07) 0%, transparent 70%);
+    bottom: 10%; right: -150px;
+    animation-duration: 45s;
     animation-direction: reverse;
   }
   .orb-3 {
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 70%);
-    top: 50%; left: 40%;
-    animation-duration: 40s;
+    width: 350px; height: 350px;
+    background: radial-gradient(ellipse, rgba(0,30,70,0.2) 0%, transparent 70%);
+    top: 40%; left: 35%;
+    animation-duration: 55s;
   }
   @keyframes drift {
-    0%   { transform: translate(0, 0) rotate(0deg); }
-    33%  { transform: translate(30px, -20px) rotate(120deg); }
-    66%  { transform: translate(-20px, 15px) rotate(240deg); }
-    100% { transform: translate(0, 0) rotate(360deg); }
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(25px, -18px); }
+    50%  { transform: translate(10px, 15px); }
+    75%  { transform: translate(-20px, 5px); }
+    100% { transform: translate(0, 0); }
   }
 
   /* ── Canvas particles ── */
@@ -124,10 +147,10 @@ tailwind.config = {
     top: 0; left: 0;
     height: 1px;
     width: 0%;
-    background: linear-gradient(90deg, var(--violet), var(--sky));
+    background: linear-gradient(90deg, var(--steel), var(--sky), var(--ice));
     z-index: 9999;
     transition: width 0.1s linear;
-    box-shadow: 0 0 8px var(--violet);
+    box-shadow: 0 0 8px var(--sky);
   }
 
   /* ── Custom cursor ── */
@@ -135,7 +158,7 @@ tailwind.config = {
     position: fixed;
     width: 300px; height: 300px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(79,195,247,0.1) 0%, transparent 70%);
     pointer-events: none;
     z-index: 99997;
     transform: translate(-50%, -50%);
@@ -144,18 +167,18 @@ tailwind.config = {
   .cursor-dot {
     position: fixed;
     width: 5px; height: 5px;
-    background: var(--violet);
+    background: var(--ice);
     border-radius: 50%;
     pointer-events: none;
     z-index: 99999;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--violet), 0 0 20px rgba(167,139,250,0.5);
+    box-shadow: 0 0 10px var(--sky), 0 0 20px rgba(79,195,247,0.6);
     transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
   }
   .cursor-ring {
     position: fixed;
     width: 36px; height: 36px;
-    border: 1px solid rgba(167,139,250,0.5);
+    border: 1px solid rgba(79,195,247,0.4);
     border-radius: 50%;
     pointer-events: none;
     z-index: 99998;
@@ -164,8 +187,8 @@ tailwind.config = {
   }
   .cursor-ring.hovering {
     width: 56px; height: 56px;
-    border-color: rgba(167,139,250,0.9);
-    box-shadow: 0 0 16px rgba(167,139,250,0.3);
+    border-color: rgba(79,195,247,0.9);
+    box-shadow: 0 0 16px rgba(79,195,247,0.3);
   }
   @media (hover: none) and (pointer: coarse) {
     body { cursor: auto; }
@@ -174,24 +197,24 @@ tailwind.config = {
 
   /* ── Glass surface ── */
   .glass {
-    background: var(--surface);
+    background: rgba(5,15,35,0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
+    border: 1px solid rgba(79,195,247,0.1);
     border-radius: 16px;
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
   }
   .glass:hover {
-    border-color: var(--border-hover);
-    box-shadow: 0 0 30px rgba(167,139,250,0.06), inset 0 0 30px rgba(167,139,250,0.02);
+    border-color: rgba(79,195,247,0.3);
+    box-shadow: 0 0 30px rgba(79,195,247,0.05), inset 0 0 30px rgba(79,195,247,0.02);
   }
 
   /* ── Sidebar ── */
   #sidebar {
-    background: rgba(6,11,22,0.7);
+    background: rgba(3,5,8,0.75);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-right: 1px solid var(--border);
+    border-right: 1px solid rgba(79,195,247,0.08);
   }
 
   /* ── Nav links ── */
@@ -211,9 +234,9 @@ tailwind.config = {
     left: 0; top: 50%;
     transform: translateY(-50%);
     width: 0; height: 1px;
-    background: linear-gradient(90deg, var(--violet), var(--sky));
+    background: linear-gradient(90deg, var(--sky), var(--ice));
     transition: width 0.3s ease;
-    box-shadow: 0 0 6px var(--violet);
+    box-shadow: 0 0 6px var(--sky);
   }
   .nav-link:hover, .nav-link.active {
     color: var(--text-bright);
@@ -223,11 +246,11 @@ tailwind.config = {
 
   /* ── Section headings ── */
   .section-heading {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.6rem, 3vw, 2rem);
-    font-weight: 500;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 1.9rem);
+    font-weight: 700;
     color: var(--text-bright);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -235,8 +258,8 @@ tailwind.config = {
   }
   .section-num {
     font-family: 'Fira Code', monospace;
-    font-size: 0.875rem;
-    color: var(--violet);
+    font-size: 0.8rem;
+    color: var(--sky);
     opacity: 0.8;
   }
   .section-line {
@@ -257,33 +280,33 @@ tailwind.config = {
   .reveal-delay-3 { transition-delay: 0.3s; }
 
   /* ── Accent text ── */
-  .accent-sky    { color: var(--sky); }
-  .accent-violet { color: var(--violet); }
-  .accent-amber  { color: var(--amber); }
+  .accent-sky   { color: var(--sky); }
+  .accent-ice   { color: var(--ice); }
+  .accent-steel { color: var(--steel); }
 
   /* ── Hero name ── */
   .hero-name {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(2.4rem, 5vw, 3.8rem);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-bright);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
   }
   .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
     font-weight: 300;
-    font-style: italic;
     color: var(--text-light);
-    min-height: 2.5rem;
+    min-height: 2.2rem;
+    letter-spacing: -0.01em;
   }
   .hero-sub {
     font-family: 'Fira Code', monospace;
     font-size: 0.72rem;
-    color: var(--violet);
+    color: var(--sky);
     letter-spacing: 0.08em;
-    opacity: 0.85;
+    opacity: 0.8;
   }
 
   /* ── CTA buttons ── */
@@ -292,25 +315,25 @@ tailwind.config = {
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     padding: 10px 24px;
-    border: 1px solid rgba(167,139,250,0.4);
-    color: var(--violet);
+    border: 1px solid rgba(79,195,247,0.35);
+    color: var(--sky);
     border-radius: 8px;
     transition: all 0.3s ease;
     background: transparent;
     cursor: pointer;
   }
   .btn-outline:hover {
-    background: rgba(167,139,250,0.08);
-    border-color: var(--violet);
-    box-shadow: 0 0 20px rgba(167,139,250,0.15);
+    background: rgba(79,195,247,0.07);
+    border-color: var(--sky);
+    box-shadow: 0 0 20px rgba(79,195,247,0.15);
   }
   .btn-primary {
     font-family: 'Fira Code', monospace;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     padding: 10px 24px;
-    background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(56,189,248,0.15));
-    border: 1px solid rgba(167,139,250,0.3);
+    background: linear-gradient(135deg, rgba(79,195,247,0.18), rgba(144,202,249,0.12));
+    border: 1px solid rgba(79,195,247,0.3);
     color: var(--text-bright);
     border-radius: 8px;
     display: inline-flex;
@@ -321,12 +344,12 @@ tailwind.config = {
     cursor: pointer;
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, rgba(167,139,250,0.3), rgba(56,189,248,0.25));
-    box-shadow: 0 0 24px rgba(167,139,250,0.2);
+    background: linear-gradient(135deg, rgba(79,195,247,0.28), rgba(144,202,249,0.2));
+    box-shadow: 0 0 24px rgba(79,195,247,0.2);
   }
   @keyframes pulse-glow {
-    0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,0.2); }
-    50%      { box-shadow: 0 0 0 6px rgba(167,139,250,0); }
+    0%,100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.2); }
+    50%      { box-shadow: 0 0 0 6px rgba(79,195,247,0); }
   }
 
   /* ── Social icons ── */
@@ -334,7 +357,7 @@ tailwind.config = {
     color: var(--text);
     transition: color 0.3s ease, transform 0.3s ease;
   }
-  .social-icon:hover { color: var(--violet); transform: translateY(-3px); }
+  .social-icon:hover { color: var(--sky); transform: translateY(-3px); }
 
   /* ── Social column ── */
   .social-column {
@@ -366,9 +389,9 @@ tailwind.config = {
     font-size: 0.65rem;
     letter-spacing: 0.06em;
     padding: 4px 10px;
-    background: rgba(167,139,250,0.08);
-    border: 1px solid rgba(167,139,250,0.2);
-    color: var(--violet);
+    background: rgba(79,195,247,0.07);
+    border: 1px solid rgba(79,195,247,0.2);
+    color: var(--sky);
     border-radius: 100px;
   }
 
@@ -378,7 +401,7 @@ tailwind.config = {
     gap: 8px;
     overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(167,139,250,0.3) transparent;
+    scrollbar-color: rgba(79,195,247,0.25) transparent;
     padding-bottom: 6px;
   }
   .screenshot-gallery img {
@@ -387,15 +410,15 @@ tailwind.config = {
     min-width: 190px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(79,195,247,0.1);
     cursor: pointer;
     transition: all 0.3s ease;
-    filter: saturate(0.7) brightness(0.85);
+    filter: saturate(0.6) brightness(0.8);
   }
   .screenshot-gallery img:hover {
     filter: saturate(1) brightness(1);
-    border-color: rgba(167,139,250,0.5);
-    box-shadow: 0 0 20px rgba(167,139,250,0.15);
+    border-color: rgba(79,195,247,0.45);
+    box-shadow: 0 0 20px rgba(79,195,247,0.12);
     transform: scale(1.02);
   }
 
@@ -404,7 +427,7 @@ tailwind.config = {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(6,11,22,0.95);
+    background: rgba(3,5,8,0.96);
     backdrop-filter: blur(12px);
     z-index: 10000;
     align-items: center;
@@ -415,8 +438,8 @@ tailwind.config = {
     max-width: 90vw;
     max-height: 90vh;
     border-radius: 12px;
-    border: 1px solid var(--border);
-    box-shadow: 0 0 60px rgba(167,139,250,0.1);
+    border: 1px solid rgba(79,195,247,0.15);
+    box-shadow: 0 0 60px rgba(79,195,247,0.08);
   }
   #lightbox-close {
     position: absolute;
@@ -424,14 +447,14 @@ tailwind.config = {
     color: var(--text-light);
     font-size: 1.5rem;
     cursor: pointer;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: rgba(5,15,35,0.8);
+    border: 1px solid rgba(79,195,247,0.15);
     width: 40px; height: 40px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     transition: all 0.3s ease;
   }
-  #lightbox-close:hover { color: var(--violet); border-color: var(--violet); }
+  #lightbox-close:hover { color: var(--sky); border-color: var(--sky); }
 
   /* ── Tabs ── */
   .tab-btn {
@@ -449,9 +472,9 @@ tailwind.config = {
   }
   .tab-btn:hover { color: var(--text-light); background: rgba(255,255,255,0.03); }
   .tab-btn.active {
-    color: var(--violet);
-    border-left-color: var(--violet);
-    background: rgba(167,139,250,0.06);
+    color: var(--sky);
+    border-left-color: var(--sky);
+    background: rgba(79,195,247,0.06);
   }
   .tab-border { border-left: 1px solid var(--border); }
 
@@ -468,8 +491,8 @@ tailwind.config = {
     cursor: default;
   }
   .cert-card:hover {
-    border-color: rgba(167,139,250,0.35);
-    box-shadow: 0 0 24px rgba(167,139,250,0.08);
+    border-color: rgba(79,195,247,0.35);
+    box-shadow: 0 0 24px rgba(79,195,247,0.08);
     transform: translateY(-3px);
   }
   .cert-card img { filter: grayscale(60%) brightness(0.9); transition: filter 0.4s ease; }
@@ -530,14 +553,14 @@ tailwind.config = {
   .form-input::placeholder { color: var(--text); opacity: 0.6; }
   .form-input:focus {
     outline: none;
-    border-color: rgba(167,139,250,0.5);
-    box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
-    background: rgba(255,255,255,0.04);
+    border-color: rgba(79,195,247,0.5);
+    box-shadow: 0 0 0 3px rgba(79,195,247,0.08);
+    background: rgba(5,15,35,0.6);
   }
 
   /* ── Experience bullet ── */
   .exp-bullet {
-    color: var(--violet);
+    color: var(--sky);
     margin-right: 10px;
     margin-top: 5px;
     flex-shrink: 0;
@@ -550,20 +573,20 @@ tailwind.config = {
     font-size: 0.65rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--violet);
+    color: var(--sky);
     opacity: 0.7;
     margin-bottom: 4px;
   }
 
   /* ── Ghost section number ── */
   .ghost-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 7rem;
     font-weight: 700;
     position: absolute;
     top: -1.5rem;
     left: -1rem;
-    color: rgba(167,139,250,0.04);
+    color: rgba(79,195,247,0.035);
     line-height: 1;
     pointer-events: none;
     user-select: none;
@@ -582,7 +605,7 @@ tailwind.config = {
     display: inline-block;
     width: 2px;
     height: 1.1em;
-    background: var(--violet);
+    background: var(--sky);
     margin-left: 4px;
     vertical-align: middle;
     animation: blink 1.1s step-end infinite;
@@ -602,9 +625,9 @@ tailwind.config = {
     transition: all 0.3s ease;
   }
   .mobile-nav-pill:hover {
-    border-color: rgba(167,139,250,0.4);
-    color: var(--violet);
-    background: rgba(167,139,250,0.06);
+    border-color: rgba(79,195,247,0.4);
+    color: var(--sky);
+    background: rgba(79,195,247,0.06);
   }
 
   /* ── Education card ── */
@@ -752,7 +775,7 @@ tailwind.config = {
       <div class="edu-card">
         <div class="flex items-start justify-between flex-wrap gap-3 mb-5">
           <div>
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">DEC — Computer Security &amp; Networking</h3>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">DEC — Computer Security &amp; Networking</h3>
             <p class="accent-violet font-mono text-xs mt-1 tracking-wide">Collège de Bois-de-Boulogne · Montreal, QC</p>
           </div>
           <p class="font-mono text-xs" style="color:var(--text);">Graduated 2025</p>
@@ -783,7 +806,7 @@ tailwind.config = {
         </div>
         <div class="flex-grow py-2 md:px-6">
           <div id="content-alorica" class="tab-content">
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Technician <span class="accent-violet">@ Alorica</span></h3>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Technician <span class="accent-sky">@ Alorica</span></h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">July 2025 – December 2025 · Montreal, QC</p>
             <ul class="space-y-3 text-sm" style="color:var(--text-light);">
               <li class="flex items-start"><span class="exp-bullet">▹</span><span>Resolved 25–35 daily technical incidents in a high-volume bilingual (FR/EN) support environment.</span></li>
@@ -792,7 +815,7 @@ tailwind.config = {
             </ul>
           </div>
           <div id="content-cosior" class="tab-content hidden">
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Intern <span class="accent-violet">@ Groupe Cosior TI</span></h3>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Intern <span class="accent-sky">@ Groupe Cosior TI</span></h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">January – May 2025 · Montreal, QC</p>
             <ul class="space-y-3 text-sm" style="color:var(--text-light);">
               <li class="flex items-start"><span class="exp-bullet">▹</span><span>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</span></li>
@@ -801,7 +824,7 @@ tailwind.config = {
             </ul>
           </div>
           <div id="content-other" class="tab-content hidden">
-            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">Prior Work Experience</h3>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">Prior Work Experience</h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">2022 – 2024</p>
             <p class="text-sm leading-relaxed mb-5" style="color:var(--text-light);">Before entering IT, I worked in high-volume operations environments — roles that built reliability, attention to process, and composure under pressure. The same qualities I bring to alert triage and incident response.</p>
             <ul class="space-y-2 text-sm" style="color:var(--text);">
@@ -831,7 +854,7 @@ tailwind.config = {
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-label">Featured Project</p>
-              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Threat Intelligence Automation Bot</h3>
+              <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Threat Intelligence Automation Bot</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
               <a href="https://github.com/karim871/threat-intelligence-bot" target="_blank" rel="noopener noreferrer" aria-label="GitHub repo" class="social-icon">
@@ -869,7 +892,7 @@ tailwind.config = {
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-label">Featured Project</p>
-              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Home Mini-SOC Lab</h3>
+              <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Home Mini-SOC Lab</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
               <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="social-icon">
@@ -880,7 +903,7 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Full Security Operations Center on a <span class="accent-sky font-medium">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset (<span class="accent-amber font-semibold">30,000+ rules</span>) feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Custom rule tuning reduced false positives by <span class="accent-amber font-semibold">~40%</span>.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Full Security Operations Center on a <span class="accent-sky font-medium">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset (<span class="accent-ice font-semibold">30,000+ rules</span>) feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Custom rule tuning reduced false positives by <span class="accent-ice font-semibold">~40%</span>.</p>
           <div class="screenshot-gallery mb-4">
             <img src="https://karim871.github.io/Portfolio/images/raspberrypi.jpg"     alt="Raspberry Pi hardware" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/Screenshot2025.webp" alt="Alert detail"          onclick="openLightbox(this.src)" title="Click to enlarge">
@@ -901,7 +924,7 @@ tailwind.config = {
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-label">Featured Project</p>
-              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Network-Wide DNS Security Layer</h3>
+              <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Network-Wide DNS Security Layer</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
               <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="social-icon">
@@ -912,7 +935,7 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="accent-amber font-semibold">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="accent-ice font-semibold">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
           <div class="screenshot-gallery mb-4">
             <img src="./images/Screenshot1.webp"  alt="Pi-hole installation process"          loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="./images/Screenshot2.webp"  alt="Pi-hole upstream DNS selection"        loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
@@ -944,7 +967,7 @@ tailwind.config = {
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-label">Featured Project</p>
-              <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">pfSense Firewall — Secure Network Architecture</h3>
+              <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">pfSense Firewall — Secure Network Architecture</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
               <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="social-icon">
@@ -952,7 +975,7 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">LAN/WAN segmented lab across <span class="accent-amber font-semibold">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">LAN/WAN segmented lab across <span class="accent-ice font-semibold">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
           <div class="screenshot-gallery mb-4">
             <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"             onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP config"     onclick="openLightbox(this.src)" title="Click to enlarge">
@@ -1101,7 +1124,7 @@ tailwind.config = {
         </div>
       </div>
 
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--text-bright);" class="mb-5">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:500;color:var(--text-bright);" class="mb-5">
         <span class="section-num">06.1</span> Language Certifications
       </h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -1129,8 +1152,8 @@ tailwind.config = {
     <!-- 07 CONTACT -->
     <section id="contact" class="mb-24 relative reveal">
       <span class="ghost-num" aria-hidden="true">07</span>
-      <p class="font-mono text-xs tracking-widest text-center mb-3" style="color:var(--violet);opacity:0.8;">07. What's Next?</p>
-      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,4rem);font-weight:500;color:var(--text-bright);text-align:center;letter-spacing:-0.02em;" class="mb-4">Get In Touch</h2>
+      <p class="font-mono text-xs tracking-widest text-center mb-3" style="color:var(--sky);opacity:0.8;">07. What's Next?</p>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,6vw,4rem);font-weight:500;color:var(--text-bright);text-align:center;letter-spacing:-0.02em;" class="mb-4">Get In Touch</h2>
       <p class="text-sm leading-[1.8] max-w-md mx-auto mb-12 text-center" style="color:var(--text);">Actively seeking SOC Analyst, IT Support, and Security Operations roles in Montreal. I typically respond within 24 hours.</p>
 
       <div class="max-w-lg mx-auto glass p-8">
@@ -1310,16 +1333,26 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
   resize();
   window.addEventListener('resize', resize, { passive: true });
 
-  const colors = ['rgba(167,139,250,', 'rgba(56,189,248,', 'rgba(251,191,36,'];
+  /* Star-like particles: mostly white/ice, some cold blue, rare bright sky */
+  const colorPool = [
+    'rgba(224,247,250,',  /* ice white — most common */
+    'rgba(224,247,250,',
+    'rgba(224,247,250,',
+    'rgba(144,202,249,',  /* steel blue */
+    'rgba(144,202,249,',
+    'rgba(79,195,247,',   /* sky blue — rare */
+  ];
 
   for (let i = 0; i < COUNT; i++) {
     particles.push({
       x:  Math.random() * window.innerWidth,
       y:  Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: (Math.random() - 0.5) * 0.25,
-      r:  Math.random() * 1.5 + 0.5,
-      c:  colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      r:  Math.random() * 1.2 + 0.3,
+      c:  colorPool[Math.floor(Math.random() * colorPool.length)],
+      twinkle: Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.02 + Math.random() * 0.03,
     });
   }
 
@@ -1333,9 +1366,12 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
       if (p.y < 0) p.y = canvas.height;
       if (p.y > canvas.height) p.y = 0;
 
+      p.twinkle += p.twinkleSpeed;
+      const brightness = 0.4 + Math.sin(p.twinkle) * 0.35;
+
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.c + '0.6)';
+      ctx.fillStyle = p.c + brightness + ')';
       ctx.fill();
 
       for (let j = i + 1; j < particles.length; j++) {
@@ -1343,12 +1379,12 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
         const dx = p.x - q.x, dy = p.y - q.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < MAX_DIST) {
-          const alpha = (1 - dist / MAX_DIST) * 0.12;
+          const alpha = (1 - dist / MAX_DIST) * 0.07;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = p.c + alpha + ')';
-          ctx.lineWidth = 0.5;
+          ctx.strokeStyle = 'rgba(144,202,249,' + alpha + ')';
+          ctx.lineWidth = 0.4;
           ctx.stroke();
         }
       }
