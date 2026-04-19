@@ -686,7 +686,14 @@ tailwind.config = {
         <span id="typewriter"></span><span class="tw-cursor"></span>
       </div>
 
-      <p class="hero-sub mb-10 reveal reveal-delay-3">Fluent: English &amp; French · Native: Moroccan Arabic</p>
+      <p class="hero-sub mb-5 reveal reveal-delay-3">Fluent: English &amp; French · Native: Moroccan Arabic</p>
+
+      <div class="mb-8 reveal reveal-delay-3">
+        <span class="inline-flex items-center gap-2 font-mono text-xs px-3 py-1.5 rounded-full" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.22);color:#4ade80;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse-glow 2s ease-in-out infinite;flex-shrink:0;"></span>
+          Available for hire · Montreal, QC
+        </span>
+      </div>
 
       <!-- Desktop nav -->
       <nav class="hidden lg:flex flex-col gap-2 mb-10 reveal" aria-label="Main navigation">
@@ -756,9 +763,9 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
       <div class="space-y-5 text-[0.95rem] leading-[1.85] text-slate-400">
-        <p>I'm Abdelkrim — I built a working SOC on a Raspberry Pi before I had my first IT job. That <span class="accent-sky font-medium">Mini-SOC (Suricata + Splunk + ELK)</span> isn't a classroom exercise: it runs against real traffic, and tuning it taught me more about detection engineering than any course.</p>
-        <p>I'm a <span class="accent-sky font-medium">Computer Security &amp; Networking graduate</span> based in Montreal, specializing in threat detection, network security, and automation pipelines that turn raw IOCs into actionable intelligence. My focus is on reducing noise — getting alerts that mean something — and acting on them fast.</p>
-        <p>Outside the lab I hike, which keeps me methodical and disciplined — two things that transfer directly to incident response work.</p>
+        <p>I'm Abdelkrim — I built a working SOC on a Raspberry Pi before I had my first IT job. That <span class="accent-sky font-medium">Mini-SOC (Suricata + Splunk + Wazuh)</span> isn't a classroom exercise: it runs against real traffic and has produced real detections, including a <span class="accent-sky font-medium">documented PowerShell fileless attack</span> caught, investigated, and contained in 42 minutes.</p>
+        <p>I'm a <span class="accent-sky font-medium">Computer Security &amp; Networking graduate</span> based in Montreal, specializing in threat detection, network security, and automation pipelines that turn raw IOCs into actionable intelligence. My focus is on reducing noise — getting alerts that mean something — and acting on them fast. I operate fully in both <span class="accent-sky font-medium">English and French</span>, which matters in Montreal's bilingual IT support landscape.</p>
+        <p>I'm currently available and actively looking for SOC Analyst and IT Support roles in Montreal. If you're building a detection capability or need someone who can work a queue and escalate intelligently, let's talk.</p>
       </div>
     </section>
 
@@ -809,9 +816,9 @@ tailwind.config = {
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Technician <span class="accent-sky">@ Alorica</span></h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">July 2025 – December 2025 · Montreal, QC</p>
             <ul class="space-y-3 text-sm" style="color:var(--text-light);">
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Resolved 25–35 daily technical incidents in a high-volume bilingual (FR/EN) support environment.</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Diagnosed Windows 10/11, Office 365, VPN, and network peripheral issues with structured CRM documentation.</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Escalated complex incidents to L2/L3 with clear triage notes, maintaining SLA compliance under pressure.</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Provided Tier 1/2 IT support for Alorica's internal workforce — diagnosing Windows 10/11, Office 365, VPN, and network peripheral issues across a bilingual (FR/EN) environment at a pace of 25–35 tickets per day.</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Documented every incident with structured CRM notes to ensure clean handoff and audit trail for L2/L3 escalations.</span></li>
+              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Maintained SLA compliance under high ticket volume — same bilingual communication skills used daily here as in the lab environment.</span></li>
             </ul>
           </div>
           <div id="content-cosior" class="tab-content hidden">
@@ -903,7 +910,7 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Full Security Operations Center on a <span class="accent-sky font-medium">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset (<span class="accent-ice font-semibold">30,000+ rules</span>) feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Custom rule tuning reduced false positives by <span class="accent-ice font-semibold">~40%</span>.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Full Security Operations Center on a <span class="accent-sky font-medium">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Rule tuning — suppressing noisy scanner signatures and home-network baseline traffic — dropped alert volume from ~120 to ~72 daily alerts over a 3-week cycle (<span class="accent-ice font-semibold">~40% reduction</span>). This lab produced a real documented detection: a PowerShell-based fileless attack caught and contained in 42 minutes — see the IR writeup below.</p>
           <div class="screenshot-gallery mb-4">
             <img src="https://karim871.github.io/Portfolio/images/raspberrypi.jpg"     alt="Raspberry Pi hardware" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/Screenshot2025.webp" alt="Alert detail"          onclick="openLightbox(this.src)" title="Click to enlarge">
@@ -916,6 +923,37 @@ tailwind.config = {
             <span class="project-tag">Raspberry Pi</span>
             <span class="project-tag">rsyslog</span>
             <span class="project-tag">Linux</span>
+          </div>
+        </div>
+
+        <!-- PowerShell IR -->
+        <div class="glass project-card p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <p class="featured-label" style="color:#4ade80;border-color:rgba(74,222,128,0.25);background:rgba(74,222,128,0.06);">Real Detection</p>
+              <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Incident Response: PowerShell Threat Detection</h3>
+            </div>
+            <div class="flex gap-3 ml-4 mt-1 shrink-0">
+              <a href="https://karim871.github.io/Portfolio/secondarypages/incident-response-powershell.html" target="_blank" rel="noopener noreferrer" aria-label="Full IR writeup" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="text-sm leading-[1.8] mb-4" style="color:var(--text-light);">A live detection from my Mini-SOC: <span class="accent-sky font-medium">Wazuh flagged a Base64-encoded PowerShell command</span> (severity 12) on WIN-LAB-01 attempting a remote stage-2 payload download and scheduled-task persistence. I cross-correlated Wazuh HIDS alerts, Suricata network events, and Sysmon endpoint logs in Splunk, then enriched the C2 IP <code style="font-family:'Fira Code',monospace;font-size:0.82em;color:var(--sky);">185.220.101.42</code> via my Threat Intel Bot — 100/100 AbuseIPDB, 8/92 VirusTotal flags. Detection to containment: <span class="accent-ice font-semibold">42 minutes</span>. Host isolated, process terminated, malicious scheduled task removed, forensic artifacts preserved.</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--sky);opacity:0.8;">MITRE:</span>
+            <span class="project-tag">T1059.001 · PowerShell</span>
+            <span class="project-tag">T1027 · Obfuscation</span>
+            <span class="project-tag">T1053.005 · Sched. Task</span>
+            <span class="project-tag">T1105 · C2 Download</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="project-tag">Wazuh</span>
+            <span class="project-tag">Suricata</span>
+            <span class="project-tag">Splunk</span>
+            <span class="project-tag">Sysmon</span>
+            <span class="project-tag">Threat Intel Bot</span>
+            <span class="project-tag">Incident Response</span>
           </div>
         </div>
 
@@ -1032,12 +1070,10 @@ tailwind.config = {
           </div>
           <ul class="space-y-1.5">
             <li class="skill-item"><span class="skill-dot"></span>TCP/IP, VLAN, Trunking</li>
-            <li class="skill-item"><span class="skill-dot"></span>OSPF, BGP, RIP, MPLS</li>
             <li class="skill-item"><span class="skill-dot"></span>VPN (OpenVPN, Site-to-Site)</li>
-            <li class="skill-item"><span class="skill-dot"></span>DHCP, DNS, NAT, QoS, VoIP</li>
+            <li class="skill-item"><span class="skill-dot"></span>DHCP, DNS, NAT</li>
             <li class="skill-item"><span class="skill-dot"></span>Cisco IOS (ACL, Routing, Switching)</li>
             <li class="skill-item"><span class="skill-dot"></span>pfSense / OPNsense Firewall</li>
-            <li class="skill-item"><span class="skill-dot"></span>Wireshark, tcpdump</li>
           </ul>
         </div>
 
@@ -1050,8 +1086,6 @@ tailwind.config = {
             <li class="skill-item"><span class="skill-dot"></span>Linux (Arch, Kali, Debian, Ubuntu, CentOS)</li>
             <li class="skill-item"><span class="skill-dot"></span>Windows Server (AD, GPO, DNS, DHCP)</li>
             <li class="skill-item"><span class="skill-dot"></span>VMware, Hyper-V, VirtualBox</li>
-            <li class="skill-item"><span class="skill-dot"></span>Docker</li>
-            <li class="skill-item"><span class="skill-dot"></span>n8n Automation</li>
             <li class="skill-item"><span class="skill-dot"></span>Nmap, Netcat</li>
           </ul>
         </div>
@@ -1063,7 +1097,7 @@ tailwind.config = {
           </div>
           <ul class="space-y-1.5">
             <li class="skill-item"><span class="skill-dot"></span>Bash, PowerShell, Python</li>
-            <li class="skill-item"><span class="skill-dot"></span>SQL, C</li>
+            <li class="skill-item"><span class="skill-dot"></span>SQL</li>
           </ul>
           <div class="mt-6 pt-4 border-t" style="border-color:var(--border);">
             <p class="text-xs mb-3" style="color:var(--text);">Want to see more?</p>
