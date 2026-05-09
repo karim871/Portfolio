@@ -7,50 +7,84 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{fontFamily:{display:['"Space Grotesk"','sans-serif'],sans:['Inter','sans-serif'],mono:['"Fira Code"','monospace']}}}}</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 <style>
-:root{--base:#030508;--surface:rgba(8,18,38,0.65);--border:rgba(79,195,247,0.1);--text:#7fa8c4;--text-l:#b8d4e8;--text-b:#e8f4fd;--sky:#4FC3F7;--ice:#E0F7FA;--steel:#90CAF9;}
+:root{--bg:#121414;--surface:rgba(14,16,16,0.82);--border:rgba(0,255,136,0.10);--border-h:rgba(0,255,136,0.28);--text:#6b7575;--text-l:#a8b4b2;--text-h:#e3e2e2;--accent:#00ff88;--accent-d:rgba(0,255,136,0.07);}
 *,*::before,*::after{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--base);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;}
 #starry-night-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;}
-#progress-bar{position:fixed;top:0;left:0;height:1px;width:0%;background:linear-gradient(90deg,var(--steel),var(--sky),var(--ice));z-index:9999;transition:width 0.1s linear;box-shadow:0 0 8px var(--sky);}
-::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(79,195,247,0.25);border-radius:3px;}
-.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(3,5,8,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(79,195,247,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(0,255,136,0.4));z-index:9999;transition:width 0.1s linear;box-shadow:0 0 10px rgba(0,255,136,0.45);}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,255,136,0.18);border-radius:3px;}
+/* NAV */
+.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,136,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
-.nav-back:hover{color:var(--sky);}
-.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.45;letter-spacing:0.06em;}
+.nav-back:hover{color:var(--accent);}
+.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.4;letter-spacing:0.06em;}
 .nav-ext{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--text);text-decoration:none;transition:color 0.2s;}
-.nav-ext:hover{color:var(--sky);}
-.wrap{max-width:760px;margin:0 auto;padding:80px 5% 100px;}
-.glass{background:rgba(5,15,35,0.60);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
-.glass:hover{border-color:rgba(79,195,247,0.18);}
-.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:var(--text-b);margin-bottom:1.2rem;display:flex;align-items:center;gap:10px;letter-spacing:-0.01em;}
+.nav-ext:hover{color:var(--accent);}
+/* HERO */
+.hero-section{position:relative;min-height:88vh;display:flex;align-items:flex-end;padding:0 6% 5rem;}
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(18,20,20,0.10) 0%,rgba(18,20,20,0.52) 52%,rgba(18,20,20,0.97) 100%);z-index:1;pointer-events:none;}
+.hero-section::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.022) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0;}
+.hero-inner{position:relative;z-index:2;max-width:780px;margin:0 auto;width:100%;}
+.hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.14em;margin-bottom:1.25rem;opacity:0.8;display:block;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7.5vw,5.5rem);font-weight:700;color:var(--text-h);line-height:1.0;letter-spacing:-0.04em;margin-bottom:1.1rem;}
+.hero-sub{font-size:1.05rem;color:var(--text-l);font-weight:400;margin-bottom:2.5rem;line-height:1.65;max-width:580px;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.6;margin-bottom:2rem;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.75rem;}
+/* TAGS */
+.tag{font-family:'Fira Code',monospace;font-size:0.66rem;padding:3px 10px;background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;}
+/* WRAP */
+.wrap{max-width:760px;margin:0 auto;padding:3rem 5% 6rem;}
+/* GLASS */
+.glass{background:var(--surface);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
+.glass:hover{border-color:var(--border-h);}
+/* SECTION TITLE */
+.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-h);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;letter-spacing:-0.02em;}
+.s-num{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--accent);opacity:0.8;flex-shrink:0;}
 .s-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
-pre,.code-block{background:rgba(3,5,8,0.88);border:1px solid rgba(79,195,247,0.12);border-radius:10px;padding:1.1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.76rem;color:#b8d4e8;overflow-x:auto;line-height:1.8;margin:0.9rem 0;white-space:pre;}
-.tag{font-family:'Fira Code',monospace;font-size:0.67rem;padding:3px 10px;background:rgba(79,195,247,0.07);border:1px solid rgba(79,195,247,0.15);border-radius:4px;color:var(--sky);white-space:nowrap;display:inline-block;}
-.step-card{background:rgba(5,15,35,0.50);border:1px solid var(--border);border-radius:12px;padding:1.4rem;margin-bottom:1rem;}
-.step-num{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--sky);opacity:0.7;margin-bottom:5px;display:block;letter-spacing:0.06em;}
-.step-title{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text-b);margin-bottom:0.6rem;}
-.step-body{font-size:0.84rem;color:var(--text-l);line-height:1.7;}
-.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-@media(max-width:540px){.spec-grid{grid-template-columns:1fr;}}
-.spec-card{background:rgba(5,15,35,0.50);border:1px solid var(--border);border-radius:10px;padding:1.1rem;}
-.spec-label{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--sky);opacity:0.7;margin-bottom:8px;letter-spacing:0.06em;}
-.spec-item{font-size:0.82rem;color:var(--text-l);padding:3px 0;display:flex;align-items:center;gap:8px;}
-.spec-item::before{content:'▹';color:var(--sky);font-size:0.72rem;flex-shrink:0;}
+/* METRICS */
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
 @media(min-width:560px){.metric-grid{grid-template-columns:repeat(4,1fr);}}
-.metric-card{background:rgba(5,15,35,0.55);border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;}
-.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;color:var(--text-b);letter-spacing:-0.02em;}
-.metric-label{font-family:'Fira Code',monospace;font-size:0.62rem;color:var(--text);margin-top:4px;opacity:0.75;line-height:1.4;}
+.metric-card{background:rgba(14,16,16,0.75);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;transition:border-color 0.3s,transform 0.3s;}
+.metric-card:hover{border-color:var(--border-h);transform:translateY(-2px);}
+.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.65rem;font-weight:700;color:var(--text-h);letter-spacing:-0.03em;line-height:1;}
+.metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:6px;line-height:1.5;opacity:0.85;}
+/* PULL QUOTE */
+.pull-quote{border-left:3px solid var(--accent);margin:2rem 0;padding:1.25rem 1.75rem;background:rgba(0,255,136,0.04);border-radius:0 12px 12px 0;}
+.pull-quote p{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:500;color:var(--text-h);line-height:1.65;letter-spacing:-0.01em;font-style:italic;margin:0;}
+/* STEP CARDS */
+.step-card{background:rgba(14,16,16,0.55);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.step-card:hover{border-color:var(--border-h);}
+.step-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,var(--accent),transparent);}
+.step-num{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.75;margin-bottom:6px;display:block;letter-spacing:0.1em;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:var(--text-h);margin-bottom:0.65rem;letter-spacing:-0.02em;}
+.step-body{font-size:0.87rem;color:var(--text-l);line-height:1.75;}
+/* SPEC GRID */
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:540px){.spec-grid{grid-template-columns:1fr;}}
+.spec-card{background:rgba(14,16,16,0.55);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
+.spec-label{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.7;margin-bottom:10px;letter-spacing:0.1em;display:block;}
+.spec-item{font-size:0.83rem;color:var(--text-l);padding:3px 0;display:flex;align-items:center;gap:8px;}
+.spec-item::before{content:'▹';color:var(--accent);font-size:0.72rem;flex-shrink:0;}
+/* BULLETS */
 .bullet-list{list-style:none;padding:0;}
-.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.32rem 0;font-size:0.86rem;color:var(--text-l);line-height:1.6;}
-.bullet-list li::before{content:'▹';color:var(--sky);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
-.alert-info{background:rgba(79,195,247,0.07);border:1px solid rgba(79,195,247,0.2);border-radius:10px;padding:1rem 1.25rem;font-size:0.83rem;color:#7dd3fc;}
-.alert-warning{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.83rem;color:#fde68a;}
+.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.35rem 0;font-size:0.87rem;color:var(--text-l);line-height:1.65;}
+.bullet-list li::before{content:'▹';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
+/* ALERTS */
+.alert-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.18);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#9df5c5;}
+.alert-warning{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#fde68a;}
+/* CODE BLOCKS */
+pre[class*="language-"]{background:rgba(8,10,10,0.93)!important;border:1px solid rgba(0,255,136,0.12)!important;border-radius:10px!important;margin:1rem 0!important;font-size:0.75rem!important;line-height:1.85!important;overflow-x:auto;}
+code[class*="language-"]{font-family:'Fira Code',monospace!important;font-size:0.75rem!important;}
+:not(pre)>code{font-family:'Fira Code',monospace;font-size:0.82em;background:rgba(0,255,136,0.07);border:1px solid rgba(0,255,136,0.15);border-radius:4px;padding:1px 6px;color:var(--accent);}
+/* CTA */
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:11px 28px;border:1px solid rgba(0,255,136,0.35);color:var(--accent);border-radius:8px;transition:all 0.3s ease;display:inline-block;text-decoration:none;background:transparent;}
+.btn-outline:hover{background:rgba(0,255,136,0.08);border-color:rgba(0,255,136,0.55);}
+/* FOOTER */
 footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
+.mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
 </style>
 </head>
 <body>
@@ -67,31 +101,33 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" class="nav-ext">GitHub ↗</a>
 </nav>
 
-<main class="wrap">
-
-  <!-- HERO -->
-  <div class="mb-10">
-    <div class="flex flex-wrap items-center gap-3 mb-5">
+<!-- HERO -->
+<section class="hero-section">
+  <div class="hero-gradient"></div>
+  <div class="hero-inner">
+    <span class="hero-eyebrow">PROJECTS / DNS SECURITY</span>
+    <div class="hero-tags">
       <span class="tag">DNS Security</span>
       <span class="tag">Network Filtering</span>
       <span class="tag">Raspberry Pi</span>
       <span class="tag">Linux</span>
     </div>
-    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:700;color:var(--text-b);line-height:1.1;letter-spacing:-0.03em;margin-bottom:1rem;">
-      Network-Wide DNS Security Layer<br>
-      <span style="font-size:0.6em;font-weight:400;color:var(--text-l);">Pi-hole DNS Sinkhole on Raspberry Pi</span>
-    </h1>
-    <div class="flex flex-wrap gap-4 items-center" style="font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.7;">
+    <h1 class="hero-title" id="hero-title">Network-Wide DNS<br>Security Layer</h1>
+    <p class="hero-sub">Pi-hole DNS Sinkhole deployed on a Raspberry Pi Zero 2 WH — blocking threats across every device on the network before a single packet resolves.</p>
+    <div class="hero-meta">
       <span>October 2025</span>
-      <span>·</span>
+      <span style="opacity:0.35">·</span>
       <span>Raspberry Pi Zero 2 WH</span>
-      <span>·</span>
+      <span style="opacity:0.35">·</span>
       <span>Static IP 10.0.0.153</span>
     </div>
   </div>
+</section>
+
+<main class="wrap">
 
   <!-- METRICS -->
-  <div class="metric-grid mb-8">
+  <div class="metric-grid mb-8" id="metrics">
     <div class="metric-card">
       <div class="metric-val">~15k</div>
       <div class="metric-label">Domains<br>blocked daily</div>
@@ -112,42 +148,45 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 
   <!-- OVERVIEW -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">01.</span> Project Overview</div>
+    <div class="s-title"><span class="s-num">01.</span> Project Overview</div>
     <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">
-      A network-level DNS sinkhole deployed on a Raspberry Pi Zero 2 WH that intercepts DNS queries across the entire home network, blocking ads, trackers, and known malicious domains before they resolve. Every device — phones, laptops, smart TVs, IoT — is protected automatically with no per-device configuration required.
+      A network-level DNS sinkhole deployed on a Raspberry Pi Zero 2 WH, intercepting DNS queries across the entire home network before they resolve. Every device — phones, laptops, smart TVs, IoT sensors — is protected automatically with zero per-device configuration required.
     </p>
     <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">
-      Beyond ad-blocking, this project feeds DNS query logs directly into the Mini-SOC Splunk pipeline — when a device on the network queries a flagged domain, the event appears in the same dashboard as Suricata IDS alerts, enabling correlation between DNS behaviour and network intrusion data.
+      Beyond ad-blocking, DNS query logs feed directly into the Mini-SOC Splunk pipeline. When a device queries a flagged domain, the event appears alongside Suricata IDS alerts — enabling correlation between DNS behaviour and network intrusion data.
     </p>
+    <div class="pull-quote">
+      <p>"A single Raspberry Pi transforms from an ad-blocker into a network-wide threat sensor, feeding real intelligence into a production SIEM."</p>
+    </div>
   </div>
 
   <!-- TECH SPECS -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">02.</span> Technical Specifications</div>
+    <div class="s-title"><span class="s-num">02.</span> Technical Specifications</div>
     <div class="spec-grid">
       <div class="spec-card">
-        <div class="spec-label">HARDWARE</div>
+        <span class="spec-label">HARDWARE</span>
         <div class="spec-item">Raspberry Pi Zero 2 WH</div>
         <div class="spec-item">16 GB MicroSD card</div>
         <div class="spec-item">5V / 2.5A power supply</div>
         <div class="spec-item">Ethernet via USB adapter</div>
       </div>
       <div class="spec-card">
-        <div class="spec-label">SOFTWARE</div>
+        <span class="spec-label">SOFTWARE</span>
         <div class="spec-item">Raspberry Pi OS (Debian-based)</div>
         <div class="spec-item">Pi-hole v5.x</div>
         <div class="spec-item">Lighttpd web server</div>
         <div class="spec-item">NetworkManager</div>
       </div>
       <div class="spec-card">
-        <div class="spec-label">NETWORK CONFIG</div>
+        <span class="spec-label">NETWORK CONFIG</span>
         <div class="spec-item">Static IP: 10.0.0.153</div>
         <div class="spec-item">Gateway: 10.0.0.1</div>
         <div class="spec-item">Upstream DNS: Cloudflare 1.1.1.1</div>
         <div class="spec-item">Admin UI: 10.0.0.153/admin</div>
       </div>
       <div class="spec-card">
-        <div class="spec-label">SECURITY</div>
+        <span class="spec-label">SECURITY</span>
         <div class="spec-item">Fail2Ban installed</div>
         <div class="spec-item">SSH key auth only</div>
         <div class="spec-item">DNS-over-HTTPS enabled</div>
@@ -158,135 +197,125 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 
   <!-- INSTALLATION -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">03.</span> Installation Process</div>
+    <div class="s-title"><span class="s-num">03.</span> Installation Process</div>
 
     <div class="step-card">
-      <span class="step-num">STEP 01 — System Preparation</span>
+      <span class="step-num">STEP 01 — SYSTEM PREPARATION</span>
       <div class="step-title">Initial setup & network discovery</div>
-      <div class="step-body">Scan the local subnet to find the Pi's assigned DHCP address, then SSH in to begin configuration.</div>
-      <pre>sudo nmap -sn 10.0.0.0/24
-ssh pi@10.0.0.153</pre>
+      <div class="step-body">Scan the local subnet to find the Pi's DHCP address, then SSH in to begin configuration.</div>
+      <pre><code class="language-bash">sudo nmap -sn 10.0.0.0/24
+ssh pi@10.0.0.153</code></pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 02 — System Update & Tools</span>
+      <span class="step-num">STEP 02 — SYSTEM UPDATE & TOOLS</span>
       <div class="step-title">Harden and update before installing anything</div>
-      <div class="step-body">Change the default password, pull all OS updates, and install essential utilities.</div>
-      <pre>passwd
+      <div class="step-body">Change the default password, pull all OS updates, and install essential utilities. Never install software on an unpatched system.</div>
+      <pre><code class="language-bash">passwd
 sudo apt update && sudo apt full-upgrade -y
 sudo apt autoremove -y
-sudo apt install -y curl git htop vim net-tools</pre>
+sudo apt install -y curl git htop vim net-tools</code></pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 03 — Static IP via NetworkManager</span>
+      <span class="step-num">STEP 03 — STATIC IP VIA NETWORKMANAGER</span>
       <div class="step-title">Pin the Pi's address so router config stays stable</div>
-      <div class="step-body">Use <code style="font-family:'Fira Code',monospace;font-size:0.85em;">nmtui</code> (text UI) to set a static IP, or manually edit dhcpcd.conf:</div>
-      <pre># dhcpcd method (legacy, still works)
-# Add to /etc/dhcpcd.conf:
+      <div class="step-body">A static IP is critical — if the Pi's address changes, the router's DNS pointer breaks and the whole network loses filtering. Configure via dhcpcd.conf.</div>
+      <pre><code class="language-bash"># Add to /etc/dhcpcd.conf:
 interface eth0
 static ip_address=10.0.0.153/24
 static routers=10.0.0.1
 static domain_name_servers=1.1.1.1 8.8.8.8
 
 sudo systemctl restart dhcpcd
-ip -4 addr show eth0   # verify</pre>
+ip -4 addr show eth0   # verify</code></pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 04 — Install Pi-hole</span>
+      <span class="step-num">STEP 04 — INSTALL PI-HOLE</span>
       <div class="step-title">One-line automated installer</div>
-      <div class="step-body">The installer walks through interface selection, upstream DNS, blocklists, web UI, and logging. Selections used:</div>
-      <pre>curl -sSL https://install.pi-hole.net | bash</pre>
-      <ul class="bullet-list mt-3">
-        <li>Network interface: eth0</li>
-        <li>Upstream DNS: Cloudflare (1.1.1.1)</li>
-        <li>Default blocklist: StevenBlack (recommended)</li>
-        <li>Admin web interface: Yes</li>
-        <li>Query logging: Enabled (Show everything)</li>
-      </ul>
+      <div class="step-body">The installer walks through interface selection, upstream DNS, blocklists, web UI, and logging. Selections used: eth0, Cloudflare (1.1.1.1), StevenBlack blocklist, query logging enabled.</div>
+      <pre><code class="language-bash">curl -sSL https://install.pi-hole.net | bash</code></pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 05 — Set Admin Password & Router DNS</span>
-      <div class="step-title">Lock the web UI and redirect all network DNS through Pi-hole</div>
-      <div class="step-body">Set the web UI password, then point the router's DHCP DNS field to the Pi's IP. All devices on the network automatically use Pi-hole from this point.</div>
-      <pre>pihole -a -p   # set admin password</pre>
+      <span class="step-num">STEP 05 — ADMIN PASSWORD & ROUTER DNS</span>
+      <div class="step-title">Lock the web UI and redirect all network DNS</div>
+      <div class="step-body">Set the web UI password, then point the router's DHCP DNS field to 10.0.0.153. All devices on the network automatically use Pi-hole from this point — no per-device changes needed.</div>
+      <pre><code class="language-bash">pihole -a -p   # set admin password</code></pre>
       <div class="alert-info mt-3">Router admin panel → DHCP settings → Primary DNS: <strong>10.0.0.153</strong> → Save &amp; reboot router.</div>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 06 — Blocklist Tuning & Whitelist Management</span>
-      <div class="step-title">Reduce false positives, add custom lists</div>
-      <div class="step-body">Default lists block ~100k domains. Fine-tuning prevents legitimate sites from breaking while keeping malicious domains blocked.</div>
-      <pre>pihole -g              # update blocklists
+      <span class="step-num">STEP 06 — BLOCKLIST TUNING & WHITELIST</span>
+      <div class="step-title">Reduce false positives, add custom threat intel lists</div>
+      <div class="step-body">Default lists block ~100k domains. Fine-tuning prevents legitimate services from breaking while keeping malicious domains blocked. Custom entries from AbuseIPDB and OTX feeds supplement the defaults.</div>
+      <pre><code class="language-bash">pihole -g              # update blocklists
 pihole -w domain.com   # whitelist a false positive
-pihole -t              # live DNS query log (tail mode)</pre>
+pihole -t              # live DNS query log (tail mode)</code></pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 07 — Security Hardening</span>
-      <div class="step-title">Fail2Ban + HTTPS for the admin interface</div>
-      <div class="step-body">Install Fail2Ban to block brute-force SSH attempts. Optionally enable HTTPS for the web interface.</div>
-      <pre>sudo apt install fail2ban -y
+      <span class="step-num">STEP 07 — SECURITY HARDENING</span>
+      <div class="step-title">Fail2Ban + SSH key-only authentication</div>
+      <div class="step-body">Fail2Ban monitors /var/log/auth.log and bans IPs after repeated SSH failures. SSH key authentication was already configured; password auth is disabled.</div>
+      <pre><code class="language-bash">sudo apt install fail2ban -y
 sudo systemctl enable fail2ban
-sudo systemctl start fail2ban</pre>
+sudo systemctl start fail2ban</code></pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 08 — Verify & Test</span>
+      <span class="step-num">STEP 08 — VERIFY & TEST</span>
       <div class="step-title">Confirm DNS resolution is working through Pi-hole</div>
-      <div class="step-body">Query a known ad server — it should return 0.0.0.0 (blocked). Legitimate domains should resolve normally.</div>
-      <pre>nslookup google.com 10.0.0.153        # should resolve
-nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</pre>
+      <div class="step-body">Query a known ad server — it should return 0.0.0.0 (blocked). Legitimate domains must resolve normally to confirm no false positives in the critical path.</div>
+      <pre><code class="language-bash">nslookup google.com 10.0.0.153        # should resolve
+nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</code></pre>
     </div>
   </div>
 
   <!-- RESULTS -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">04.</span> Results</div>
-    <ul class="bullet-list">
+    <div class="s-title"><span class="s-num">04.</span> Results</div>
+    <ul class="bullet-list" style="margin-bottom:1.25rem;">
       <li>Network-wide ad and tracker blocking across all devices — phones, laptops, smart TVs, IoT sensors</li>
       <li>~15,000 DNS queries blocked daily from default + custom blocklists</li>
-      <li>Noticeable reduction in page load times (ad scripts no longer fetched)</li>
+      <li>Noticeable reduction in page load times — ad scripts are never fetched</li>
       <li>DNS query log feeds into Mini-SOC Splunk index for SIEM correlation</li>
       <li>Regex filtering catches DGA-pattern (algorithmically generated) domain queries</li>
       <li>Custom blocklist additions: known C2 domains from AbuseIPDB and OTX feeds</li>
     </ul>
-    <div class="alert-warning mt-4">
+    <div class="alert-warning">
       <strong style="font-family:'Fira Code',monospace;font-size:0.7rem;letter-spacing:0.06em;">SIEM INTEGRATION —</strong>
-      DNS query logs are forwarded via rsyslog to Splunk on the Windows PC. Blocked domain events appear in the same Splunk dashboard as Suricata IDS alerts, enabling detection of devices querying known-bad domains even when the payload is never downloaded.
+      DNS query logs are forwarded via rsyslog to Splunk on the Windows PC. Blocked domain events appear in the same dashboard as Suricata IDS alerts, enabling detection of devices querying known-bad domains even when the payload is never downloaded.
     </div>
   </div>
 
   <!-- KEY TAKEAWAYS -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">05.</span> Key Takeaways</div>
+    <div class="s-title"><span class="s-num">05.</span> Key Takeaways</div>
     <ul class="bullet-list">
       <li>DNS-level filtering intercepts threats before any network connection is established — earlier in the kill chain than IDS</li>
-      <li>A single Raspberry Pi running Pi-hole adds negligible latency (&lt;2ms) while protecting every device on the network</li>
+      <li>A single Raspberry Pi adds negligible latency (&lt;2ms) while protecting every device on the network</li>
       <li>Integrating Pi-hole logs into Splunk transforms a simple ad-blocker into a network visibility tool</li>
-      <li>Regular blocklist updates are essential — threat actors rotate domains frequently; static lists decay</li>
+      <li>Regular blocklist updates are essential — threat actors rotate domains frequently, static lists decay</li>
       <li>Whitelisting requires ongoing attention — aggressive blocklists break legitimate services regularly</li>
     </ul>
   </div>
 
   <!-- FUTURE -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">06.</span> Future Enhancements</div>
+    <div class="s-title"><span class="s-num">06.</span> Future Enhancements</div>
     <ul class="bullet-list">
       <li>Automated feed from AlienVault OTX: add newly flagged domains to Pi-hole blocklist daily</li>
-      <li>ML-based domain classification to catch DGA domains that aren't yet in any blocklist</li>
-      <li>Network segmentation with pfSense — apply different DNS policies per VLAN (IoT vs. laptop vs. guest)</li>
+      <li>ML-based domain classification to catch DGA domains not yet in any blocklist</li>
+      <li>Network segmentation with pfSense — different DNS policies per VLAN (IoT vs. laptop vs. guest)</li>
       <li>Dashboard in Splunk showing Pi-hole block rate alongside Suricata alert volume over time</li>
     </ul>
   </div>
 
   <!-- CTA -->
-  <div class="text-center mt-10">
-    <a href="../index.html#projects" style="font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:10px 28px;border:1px solid rgba(79,195,247,0.35);color:var(--sky);border-radius:8px;transition:all 0.3s ease;display:inline-block;text-decoration:none;" onmouseover="this.style.background='rgba(79,195,247,0.07)'" onmouseout="this.style.background='transparent'">
-      ← Back to Projects
-    </a>
+  <div style="text-align:center;margin-top:2.5rem;">
+    <a href="../index.html#projects" class="btn-outline">← Back to Projects</a>
   </div>
 
 </main>
@@ -295,12 +324,85 @@ nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</pre>
   <p>Abdelkrim Zouaki · <a href="https://github.com/karim871" style="color:inherit;text-decoration:none;">karim871</a> · Montreal, QC</p>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 <script>
+// Progress bar
 const progressBar = document.getElementById('progress-bar');
 window.addEventListener('scroll', () => {
   progressBar.style.width = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100, 100) + '%';
 }, { passive: true });
 
+// GSAP
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero title — word-split reveal
+(function() {
+  const el = document.getElementById('hero-title');
+  if (!el) return;
+  const parts = el.innerHTML.split(/(<br\s*\/?>)/i);
+  let out = '';
+  parts.forEach(part => {
+    if (/^<br/i.test(part)) { out += part; return; }
+    part.trim().split(/\s+/).filter(Boolean).forEach(w => {
+      out += `<span style="display:inline-block;overflow:hidden;vertical-align:bottom;"><span class="wi" style="display:inline-block;">${w}</span></span> `;
+    });
+  });
+  el.innerHTML = out;
+  gsap.from('.wi', { y: '108%', duration: 1.0, ease: 'power4.out', stagger: 0.08, delay: 0.1 });
+})();
+
+// Hero eyebrow + sub fade in
+gsap.from('.hero-eyebrow', { opacity: 0, y: 12, duration: 0.8, ease: 'power3.out', delay: 0.05 });
+gsap.from('.hero-sub',     { opacity: 0, y: 14, duration: 0.8, ease: 'power3.out', delay: 0.55 });
+gsap.from('.hero-tags',    { opacity: 0, y: 10, duration: 0.7, ease: 'power3.out', delay: 0.35 });
+gsap.from('.hero-meta',    { opacity: 0, y: 10, duration: 0.7, ease: 'power3.out', delay: 0.65 });
+
+// Hero parallax scrub
+gsap.to('.hero-inner', {
+  y: 70,
+  ease: 'none',
+  scrollTrigger: { trigger: '.hero-section', start: 'top top', end: 'bottom top', scrub: 1.2 }
+});
+gsap.to('.hero-inner', {
+  opacity: 0,
+  ease: 'none',
+  scrollTrigger: { trigger: '.hero-section', start: '55% top', end: 'bottom top', scrub: 1 }
+});
+
+// Metric cards
+gsap.from('.metric-card', {
+  y: 28, opacity: 0, duration: 0.65, ease: 'power3.out', stagger: 0.1,
+  scrollTrigger: { trigger: '#metrics', start: 'top 88%', once: true }
+});
+
+// Glass sections
+gsap.utils.toArray('.glass').forEach(el => {
+  gsap.from(el, {
+    y: 32, opacity: 0, duration: 0.75, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 90%', once: true }
+  });
+});
+
+// Pull quote
+gsap.from('.pull-quote', {
+  x: -18, opacity: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.pull-quote', start: 'top 88%', once: true }
+});
+
+// Step cards
+gsap.utils.toArray('.step-card').forEach(card => {
+  gsap.from(card, {
+    y: 22, opacity: 0, duration: 0.6, ease: 'power3.out',
+    scrollTrigger: { trigger: card, start: 'top 92%', once: true }
+  });
+});
+</script>
+
+<script>
+// Starry Night canvas
 (function() {
   const canvas = document.getElementById('starry-night-canvas');
   const ctx = canvas.getContext('2d');
