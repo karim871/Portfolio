@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,87 +9,140 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 <style>
-:root{--bg:#121414;--surface:rgba(14,16,16,0.82);--border:rgba(0,255,136,0.10);--border-h:rgba(0,255,136,0.28);--text:#6b7575;--text-l:#a8b4b2;--text-h:#e3e2e2;--accent:#00ff88;--accent-d:rgba(0,255,136,0.07);}
-*,*::before,*::after{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;}
-#starry-night-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;}
-#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(0,255,136,0.4));z-index:9999;transition:width 0.1s linear;box-shadow:0 0 10px rgba(0,255,136,0.45);}
-::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,255,136,0.18);border-radius:3px;}
+:root{--bg:#121414;--surface:#1a1a1a;--border:rgba(0,255,136,0.10);--border-h:rgba(0,255,136,0.30);--text:#6b7575;--text-l:#a8b4b2;--text-h:#e3e2e2;--accent:#00ff88;--red:#ff4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:auto;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;cursor:none;}
+
+/* CURSOR */
+#cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s,opacity 0.2s;mix-blend-mode:screen;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,255,136,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+#cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
+
+/* GRAIN */
+#grain{position:fixed;inset:-100%;width:400%;height:400%;z-index:9996;pointer-events:none;opacity:0.038;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.6s steps(1) infinite;}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
+
+/* PROGRESS */
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(0,255,136,0.3));z-index:10000;box-shadow:0 0 12px rgba(0,255,136,0.6);transition:width 0.1s linear;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,255,136,0.2);border-radius:2px;}
+
 /* NAV */
-.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,136,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
+.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,136,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
 .nav-back:hover{color:var(--accent);}
 .nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.4;letter-spacing:0.06em;}
 .nav-ext{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--text);text-decoration:none;transition:color 0.2s;}
 .nav-ext:hover{color:var(--accent);}
+
 /* HERO */
-.hero-section{position:relative;min-height:88vh;display:flex;align-items:flex-end;padding:0 6% 5rem;}
-.hero-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(18,20,20,0.10) 0%,rgba(18,20,20,0.52) 52%,rgba(18,20,20,0.97) 100%);z-index:1;pointer-events:none;}
-.hero-section::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.022) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0;}
-.hero-inner{position:relative;z-index:2;max-width:780px;margin:0 auto;width:100%;}
-.hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.14em;margin-bottom:1.25rem;opacity:0.8;display:block;}
-.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7.5vw,5.5rem);font-weight:700;color:var(--text-h);line-height:1.0;letter-spacing:-0.04em;margin-bottom:1.1rem;}
-.hero-sub{font-size:1.05rem;color:var(--text-l);font-weight:400;margin-bottom:2.5rem;line-height:1.65;max-width:580px;}
-.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.6;margin-bottom:2rem;}
-.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.75rem;}
+.hero-section{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding:0 6% 7rem;overflow:hidden;}
+.hero-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-section::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 30% 20%,rgba(0,255,136,0.05) 0%,transparent 65%),linear-gradient(to bottom,transparent 40%,var(--bg) 100%);pointer-events:none;}
+.hero-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,136,0.07) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none;animation:orb-drift 12s ease-in-out infinite alternate;}
+@keyframes orb-drift{0%{transform:translate(0,0);}100%{transform:translate(60px,40px);}}
+.hero-inner{position:relative;z-index:2;max-width:820px;margin:0 auto;width:100%;}
+.hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.18em;margin-bottom:1.5rem;opacity:0.8;display:block;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:700;color:var(--text-h);line-height:0.92;letter-spacing:-0.045em;margin-bottom:1.5rem;}
+.hero-title .line{display:block;overflow:hidden;}
+.word-w{display:inline-block;overflow:hidden;vertical-align:bottom;}
+.word-i{display:inline-block;}
+.hero-sub{font-size:1.05rem;color:var(--text-l);font-weight:400;margin-bottom:2.5rem;line-height:1.7;max-width:600px;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.55;margin-bottom:2rem;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;}
+
+/* HERO STAT */
+.hero-stat{position:absolute;right:6%;bottom:6rem;z-index:3;text-align:right;}
+.hero-stat-val{font-family:'Space Grotesk',sans-serif;font-size:clamp(4.5rem,10vw,8rem);font-weight:700;color:var(--accent);letter-spacing:-0.06em;line-height:1;text-shadow:0 0 80px rgba(0,255,136,0.25);}
+.hero-stat-label{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--text);opacity:0.55;letter-spacing:0.1em;margin-top:6px;text-transform:uppercase;}
+
+/* GLITCH */
+@keyframes glitch-skew{0%,90%,100%{clip-path:none;text-shadow:none;}91%{clip-path:polygon(0 25%,100% 25%,100% 40%,0 40%);text-shadow:-3px 0 #ff0066,3px 0 var(--accent);}93%{clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%);text-shadow:3px 0 #ff0066,-3px 0 var(--accent);}95%{clip-path:none;text-shadow:none;}}
+.hero-title{animation:glitch-skew 7s infinite;}
+
 /* TAGS */
-.tag{font-family:'Fira Code',monospace;font-size:0.66rem;padding:3px 10px;background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;}
+.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
+.tag:hover{background:rgba(0,255,136,0.12);border-color:rgba(0,255,136,0.35);}
+.tag-red{background:rgba(255,68,68,0.08);border-color:rgba(255,68,68,0.25);color:#ff8888;}
+
 /* WRAP */
-.wrap{max-width:760px;margin:0 auto;padding:3rem 5% 6rem;}
+.wrap{max-width:800px;margin:0 auto;padding:4rem 5% 8rem;}
+
 /* GLASS */
-.glass{background:var(--surface);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
-.glass:hover{border-color:var(--border-h);}
-/* SECTION TITLE */
+.glass{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.35s,box-shadow 0.35s;position:relative;overflow:hidden;}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,0.18),transparent);opacity:0;transition:opacity 0.35s;}
+.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(0,255,136,0.04);}
+.glass:hover::before{opacity:1;}
+
+/* S-TITLE */
 .s-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-h);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;letter-spacing:-0.02em;}
 .s-num{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--accent);opacity:0.8;flex-shrink:0;}
 .s-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
+
 /* METRICS */
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
 @media(min-width:560px){.metric-grid{grid-template-columns:repeat(4,1fr);}}
-.metric-card{background:rgba(14,16,16,0.75);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center;transition:border-color 0.3s,transform 0.3s;}
-.metric-card:hover{border-color:var(--border-h);transform:translateY(-2px);}
-.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.65rem;font-weight:700;color:var(--text-h);letter-spacing:-0.03em;line-height:1;}
-.metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:6px;line-height:1.5;opacity:0.85;}
+.metric-card{background:rgba(14,16,16,0.8);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;}
+.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,255,136,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
+.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,255,136,0.06);}
+.metric-card:hover::after{opacity:1;}
+.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text-h);letter-spacing:-0.04em;line-height:1;}
+.metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:8px;line-height:1.5;opacity:0.85;}
+
 /* PULL QUOTE */
 .pull-quote{border-left:3px solid var(--accent);margin:2rem 0;padding:1.25rem 1.75rem;background:rgba(0,255,136,0.04);border-radius:0 12px 12px 0;}
 .pull-quote p{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:500;color:var(--text-h);line-height:1.65;letter-spacing:-0.01em;font-style:italic;margin:0;}
+
 /* STEP CARDS */
-.step-card{background:rgba(14,16,16,0.55);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.step-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
 .step-card:hover{border-color:var(--border-h);}
 .step-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,var(--accent),transparent);}
 .step-num{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.75;margin-bottom:6px;display:block;letter-spacing:0.1em;}
 .step-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:var(--text-h);margin-bottom:0.65rem;letter-spacing:-0.02em;}
 .step-body{font-size:0.87rem;color:var(--text-l);line-height:1.75;}
+
 /* SPEC GRID */
 .spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 @media(max-width:540px){.spec-grid{grid-template-columns:1fr;}}
-.spec-card{background:rgba(14,16,16,0.55);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
+.spec-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
 .spec-label{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.7;margin-bottom:10px;letter-spacing:0.1em;display:block;}
 .spec-item{font-size:0.83rem;color:var(--text-l);padding:3px 0;display:flex;align-items:center;gap:8px;}
 .spec-item::before{content:'▹';color:var(--accent);font-size:0.72rem;flex-shrink:0;}
+
 /* BULLETS */
 .bullet-list{list-style:none;padding:0;}
 .bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.35rem 0;font-size:0.87rem;color:var(--text-l);line-height:1.65;}
 .bullet-list li::before{content:'▹';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
+
 /* ALERTS */
 .alert-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.18);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#9df5c5;}
 .alert-warning{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#fde68a;}
-/* CODE BLOCKS */
-pre[class*="language-"]{background:rgba(8,10,10,0.93)!important;border:1px solid rgba(0,255,136,0.12)!important;border-radius:10px!important;margin:1rem 0!important;font-size:0.75rem!important;line-height:1.85!important;overflow-x:auto;}
+
+/* CODE */
+pre[class*="language-"]{background:rgba(8,10,10,0.95)!important;border:1px solid rgba(0,255,136,0.12)!important;border-radius:10px!important;margin:1rem 0!important;font-size:0.75rem!important;line-height:1.85!important;overflow-x:auto;}
 code[class*="language-"]{font-family:'Fira Code',monospace!important;font-size:0.75rem!important;}
 :not(pre)>code{font-family:'Fira Code',monospace;font-size:0.82em;background:rgba(0,255,136,0.07);border:1px solid rgba(0,255,136,0.15);border-radius:4px;padding:1px 6px;color:var(--accent);}
-/* CTA */
-.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:11px 28px;border:1px solid rgba(0,255,136,0.35);color:var(--accent);border-radius:8px;transition:all 0.3s ease;display:inline-block;text-decoration:none;background:transparent;}
-.btn-outline:hover{background:rgba(0,255,136,0.08);border-color:rgba(0,255,136,0.55);}
+
+/* BTN */
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(0,255,136,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
+.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(0,255,136,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.btn-outline:hover::before{transform:scaleX(1);}
+.btn-outline:hover{border-color:rgba(0,255,136,0.6);box-shadow:0 0 24px rgba(0,255,136,0.12);}
+
 /* FOOTER */
 footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
+
 .mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
 </style>
 </head>
 <body>
 
-<canvas id="starry-night-canvas" aria-hidden="true"></canvas>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<canvas id="cursor-canvas"></canvas>
+<div id="grain" aria-hidden="true"></div>
 <div id="progress-bar" aria-hidden="true"></div>
 
 <nav class="page-nav">
@@ -101,9 +154,8 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" class="nav-ext">GitHub ↗</a>
 </nav>
 
-<!-- HERO -->
-<section class="hero-section">
-  <div class="hero-gradient"></div>
+<section class="hero-section" id="hero">
+  <div class="hero-orb"></div>
   <div class="hero-inner">
     <span class="hero-eyebrow">PROJECTS / DNS SECURITY</span>
     <div class="hero-tags">
@@ -112,21 +164,27 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
       <span class="tag">Raspberry Pi</span>
       <span class="tag">Linux</span>
     </div>
-    <h1 class="hero-title" id="hero-title">Network-Wide DNS<br>Security Layer</h1>
+    <h1 class="hero-title" id="hero-title">
+      <span class="line" id="hl1">Network-Wide DNS</span>
+      <span class="line" id="hl2">Security Layer</span>
+    </h1>
     <p class="hero-sub">Pi-hole DNS Sinkhole deployed on a Raspberry Pi Zero 2 WH — blocking threats across every device on the network before a single packet resolves.</p>
     <div class="hero-meta">
       <span>October 2025</span>
-      <span style="opacity:0.35">·</span>
+      <span style="opacity:0.3">·</span>
       <span>Raspberry Pi Zero 2 WH</span>
-      <span style="opacity:0.35">·</span>
+      <span style="opacity:0.3">·</span>
       <span>Static IP 10.0.0.153</span>
     </div>
+  </div>
+  <div class="hero-stat" id="hero-stat">
+    <div class="hero-stat-val" id="count-up-val">0</div>
+    <div class="hero-stat-label">Domains Blocked<br>Daily</div>
   </div>
 </section>
 
 <main class="wrap">
 
-  <!-- METRICS -->
   <div class="metric-grid mb-8" id="metrics">
     <div class="metric-card">
       <div class="metric-val">~15k</div>
@@ -146,21 +204,15 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
     </div>
   </div>
 
-  <!-- OVERVIEW -->
   <div class="glass">
     <div class="s-title"><span class="s-num">01.</span> Project Overview</div>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">
-      A network-level DNS sinkhole deployed on a Raspberry Pi Zero 2 WH, intercepting DNS queries across the entire home network before they resolve. Every device — phones, laptops, smart TVs, IoT sensors — is protected automatically with zero per-device configuration required.
-    </p>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">
-      Beyond ad-blocking, DNS query logs feed directly into the Mini-SOC Splunk pipeline. When a device queries a flagged domain, the event appears alongside Suricata IDS alerts — enabling correlation between DNS behaviour and network intrusion data.
-    </p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">A network-level DNS sinkhole deployed on a Raspberry Pi Zero 2 WH, intercepting DNS queries across the entire home network before they resolve. Every device — phones, laptops, smart TVs, IoT sensors — is protected automatically with zero per-device configuration required.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">Beyond ad-blocking, DNS query logs feed directly into the Mini-SOC Splunk pipeline. When a device queries a flagged domain, the event appears alongside Suricata IDS alerts — enabling correlation between DNS behaviour and network intrusion data.</p>
     <div class="pull-quote">
       <p>"A single Raspberry Pi transforms from an ad-blocker into a network-wide threat sensor, feeding real intelligence into a production SIEM."</p>
     </div>
   </div>
 
-  <!-- TECH SPECS -->
   <div class="glass">
     <div class="s-title"><span class="s-num">02.</span> Technical Specifications</div>
     <div class="spec-grid">
@@ -195,20 +247,17 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
     </div>
   </div>
 
-  <!-- INSTALLATION -->
   <div class="glass">
     <div class="s-title"><span class="s-num">03.</span> Installation Process</div>
-
     <div class="step-card">
       <span class="step-num">STEP 01 — SYSTEM PREPARATION</span>
-      <div class="step-title">Initial setup & network discovery</div>
+      <div class="step-title">Initial setup &amp; network discovery</div>
       <div class="step-body">Scan the local subnet to find the Pi's DHCP address, then SSH in to begin configuration.</div>
       <pre><code class="language-bash">sudo nmap -sn 10.0.0.0/24
 ssh pi@10.0.0.153</code></pre>
     </div>
-
     <div class="step-card">
-      <span class="step-num">STEP 02 — SYSTEM UPDATE & TOOLS</span>
+      <span class="step-num">STEP 02 — SYSTEM UPDATE &amp; TOOLS</span>
       <div class="step-title">Harden and update before installing anything</div>
       <div class="step-body">Change the default password, pull all OS updates, and install essential utilities. Never install software on an unpatched system.</div>
       <pre><code class="language-bash">passwd
@@ -216,11 +265,10 @@ sudo apt update && sudo apt full-upgrade -y
 sudo apt autoremove -y
 sudo apt install -y curl git htop vim net-tools</code></pre>
     </div>
-
     <div class="step-card">
       <span class="step-num">STEP 03 — STATIC IP VIA NETWORKMANAGER</span>
       <div class="step-title">Pin the Pi's address so router config stays stable</div>
-      <div class="step-body">A static IP is critical — if the Pi's address changes, the router's DNS pointer breaks and the whole network loses filtering. Configure via dhcpcd.conf.</div>
+      <div class="step-body">A static IP is critical — if the Pi's address changes, the router's DNS pointer breaks and the whole network loses filtering.</div>
       <pre><code class="language-bash"># Add to /etc/dhcpcd.conf:
 interface eth0
 static ip_address=10.0.0.153/24
@@ -230,31 +278,27 @@ static domain_name_servers=1.1.1.1 8.8.8.8
 sudo systemctl restart dhcpcd
 ip -4 addr show eth0   # verify</code></pre>
     </div>
-
     <div class="step-card">
       <span class="step-num">STEP 04 — INSTALL PI-HOLE</span>
       <div class="step-title">One-line automated installer</div>
-      <div class="step-body">The installer walks through interface selection, upstream DNS, blocklists, web UI, and logging. Selections used: eth0, Cloudflare (1.1.1.1), StevenBlack blocklist, query logging enabled.</div>
+      <div class="step-body">The installer walks through interface selection, upstream DNS, blocklists, web UI, and logging. Selections: eth0, Cloudflare (1.1.1.1), StevenBlack blocklist, query logging enabled.</div>
       <pre><code class="language-bash">curl -sSL https://install.pi-hole.net | bash</code></pre>
     </div>
-
     <div class="step-card">
-      <span class="step-num">STEP 05 — ADMIN PASSWORD & ROUTER DNS</span>
+      <span class="step-num">STEP 05 — ADMIN PASSWORD &amp; ROUTER DNS</span>
       <div class="step-title">Lock the web UI and redirect all network DNS</div>
-      <div class="step-body">Set the web UI password, then point the router's DHCP DNS field to 10.0.0.153. All devices on the network automatically use Pi-hole from this point — no per-device changes needed.</div>
+      <div class="step-body">Set the web UI password, then point the router's DHCP DNS field to 10.0.0.153. All devices on the network automatically use Pi-hole from this point.</div>
       <pre><code class="language-bash">pihole -a -p   # set admin password</code></pre>
       <div class="alert-info mt-3">Router admin panel → DHCP settings → Primary DNS: <strong>10.0.0.153</strong> → Save &amp; reboot router.</div>
     </div>
-
     <div class="step-card">
-      <span class="step-num">STEP 06 — BLOCKLIST TUNING & WHITELIST</span>
+      <span class="step-num">STEP 06 — BLOCKLIST TUNING &amp; WHITELIST</span>
       <div class="step-title">Reduce false positives, add custom threat intel lists</div>
-      <div class="step-body">Default lists block ~100k domains. Fine-tuning prevents legitimate services from breaking while keeping malicious domains blocked. Custom entries from AbuseIPDB and OTX feeds supplement the defaults.</div>
+      <div class="step-body">Default lists block ~100k domains. Fine-tuning prevents legitimate services from breaking. Custom entries from AbuseIPDB and OTX feeds supplement the defaults.</div>
       <pre><code class="language-bash">pihole -g              # update blocklists
 pihole -w domain.com   # whitelist a false positive
 pihole -t              # live DNS query log (tail mode)</code></pre>
     </div>
-
     <div class="step-card">
       <span class="step-num">STEP 07 — SECURITY HARDENING</span>
       <div class="step-title">Fail2Ban + SSH key-only authentication</div>
@@ -263,9 +307,8 @@ pihole -t              # live DNS query log (tail mode)</code></pre>
 sudo systemctl enable fail2ban
 sudo systemctl start fail2ban</code></pre>
     </div>
-
     <div class="step-card">
-      <span class="step-num">STEP 08 — VERIFY & TEST</span>
+      <span class="step-num">STEP 08 — VERIFY &amp; TEST</span>
       <div class="step-title">Confirm DNS resolution is working through Pi-hole</div>
       <div class="step-body">Query a known ad server — it should return 0.0.0.0 (blocked). Legitimate domains must resolve normally to confirm no false positives in the critical path.</div>
       <pre><code class="language-bash">nslookup google.com 10.0.0.153        # should resolve
@@ -273,7 +316,6 @@ nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</code></pre>
     </div>
   </div>
 
-  <!-- RESULTS -->
   <div class="glass">
     <div class="s-title"><span class="s-num">04.</span> Results</div>
     <ul class="bullet-list" style="margin-bottom:1.25rem;">
@@ -290,7 +332,6 @@ nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</code></pre>
     </div>
   </div>
 
-  <!-- KEY TAKEAWAYS -->
   <div class="glass">
     <div class="s-title"><span class="s-num">05.</span> Key Takeaways</div>
     <ul class="bullet-list">
@@ -302,7 +343,6 @@ nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</code></pre>
     </ul>
   </div>
 
-  <!-- FUTURE -->
   <div class="glass">
     <div class="s-title"><span class="s-num">06.</span> Future Enhancements</div>
     <ul class="bullet-list">
@@ -313,7 +353,6 @@ nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</code></pre>
     </ul>
   </div>
 
-  <!-- CTA -->
   <div style="text-align:center;margin-top:2.5rem;">
     <a href="../index.html#projects" class="btn-outline">← Back to Projects</a>
   </div>
@@ -324,105 +363,161 @@ nslookup doubleclick.net 10.0.0.153   # should return 0.0.0.0</code></pre>
   <p>Abdelkrim Zouaki · <a href="https://github.com/karim871" style="color:inherit;text-decoration:none;">karim871</a> · Montreal, QC</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 <script>
-// Progress bar
+// LENIS
+const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+// PROGRESS BAR
 const progressBar = document.getElementById('progress-bar');
 window.addEventListener('scroll', () => {
-  progressBar.style.width = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100, 100) + '%';
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  progressBar.style.width = Math.min(pct, 100) + '%';
 }, { passive: true });
+
+// CURSOR
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
+(function animCursor() {
+  rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+})();
+document.querySelectorAll('a,button,.metric-card,.step-card,.glass').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    dot.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    ring.style.width = '56px'; ring.style.height = '56px';
+    ring.style.borderColor = 'rgba(0,255,136,0.9)';
+  });
+  el.addEventListener('mouseleave', () => {
+    dot.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width = '36px'; ring.style.height = '36px';
+    ring.style.borderColor = 'rgba(0,255,136,0.5)';
+  });
+});
+
+// CURSOR TRAIL
+const tc = document.getElementById('cursor-canvas');
+const tctx = tc.getContext('2d');
+let pts = [];
+function resizeTC() { tc.width = window.innerWidth; tc.height = window.innerHeight; }
+resizeTC(); window.addEventListener('resize', resizeTC);
+document.addEventListener('mousemove', (e) => {
+  pts.push({ x: e.clientX, y: e.clientY, age: 0, life: 28 + Math.random() * 18 });
+  if (pts.length > 70) pts.shift();
+});
+(function drawTrail() {
+  tctx.clearRect(0, 0, tc.width, tc.height);
+  pts = pts.filter(p => p.age < p.life);
+  for (const p of pts) {
+    const a = (1 - p.age / p.life) * 0.55;
+    const r = (1 - p.age / p.life) * 2.5;
+    tctx.beginPath(); tctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    tctx.fillStyle = `rgba(0,255,136,${a})`; tctx.fill();
+    p.age++;
+  }
+  requestAnimationFrame(drawTrail);
+})();
 
 // GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-// Hero title — word-split reveal
+// HERO TITLE SPLIT
+function splitWords(el) {
+  const html = el.innerHTML;
+  const words = html.trim().split(/\s+/);
+  el.innerHTML = words.map(w => `<span class="word-w"><span class="word-i">${w}</span></span>`).join(' ');
+}
+splitWords(document.getElementById('hl1'));
+splitWords(document.getElementById('hl2'));
+gsap.from('.word-i', { y: '115%', duration: 1.1, ease: 'power4.out', stagger: 0.065, delay: 0.1 });
+gsap.from('.hero-eyebrow', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.05 });
+gsap.from('.hero-tags',    { opacity: 0, y: 10, duration: 0.8, ease: 'power3.out', delay: 0.3 });
+gsap.from('.hero-sub',     { opacity: 0, y: 16, duration: 0.9, ease: 'power3.out', delay: 0.65 });
+gsap.from('.hero-meta',    { opacity: 0, y: 10, duration: 0.8, ease: 'power3.out', delay: 0.8 });
+gsap.from('#hero-stat',    { opacity: 0, x: 40, duration: 1.0, ease: 'power3.out', delay: 0.9 });
+
+// COUNTUP
 (function() {
-  const el = document.getElementById('hero-title');
-  if (!el) return;
-  const parts = el.innerHTML.split(/(<br\s*\/?>)/i);
-  let out = '';
-  parts.forEach(part => {
-    if (/^<br/i.test(part)) { out += part; return; }
-    part.trim().split(/\s+/).filter(Boolean).forEach(w => {
-      out += `<span style="display:inline-block;overflow:hidden;vertical-align:bottom;"><span class="wi" style="display:inline-block;">${w}</span></span> `;
-    });
-  });
-  el.innerHTML = out;
-  gsap.from('.wi', { y: '108%', duration: 1.0, ease: 'power4.out', stagger: 0.08, delay: 0.1 });
+  const el = document.getElementById('count-up-val');
+  const target = 15000;
+  let done = false;
+  setTimeout(() => {
+    if (done) return; done = true;
+    let v = 0;
+    const step = target / (1800 / 16);
+    const t = setInterval(() => {
+      v = Math.min(v + step, target);
+      el.textContent = Math.round(v).toLocaleString();
+      if (v >= target) clearInterval(t);
+    }, 16);
+  }, 1400);
 })();
 
-// Hero eyebrow + sub fade in
-gsap.from('.hero-eyebrow', { opacity: 0, y: 12, duration: 0.8, ease: 'power3.out', delay: 0.05 });
-gsap.from('.hero-sub',     { opacity: 0, y: 14, duration: 0.8, ease: 'power3.out', delay: 0.55 });
-gsap.from('.hero-tags',    { opacity: 0, y: 10, duration: 0.7, ease: 'power3.out', delay: 0.35 });
-gsap.from('.hero-meta',    { opacity: 0, y: 10, duration: 0.7, ease: 'power3.out', delay: 0.65 });
-
-// Hero parallax scrub
+// HERO SCRUB
 gsap.to('.hero-inner', {
-  y: 70,
-  ease: 'none',
-  scrollTrigger: { trigger: '.hero-section', start: 'top top', end: 'bottom top', scrub: 1.2 }
+  y: 90, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.2 }
 });
 gsap.to('.hero-inner', {
-  opacity: 0,
-  ease: 'none',
-  scrollTrigger: { trigger: '.hero-section', start: '55% top', end: 'bottom top', scrub: 1 }
+  opacity: 0, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: '45% top', end: 'bottom top', scrub: 1 }
+});
+gsap.to('#hero-stat', {
+  opacity: 0, y: -50, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: '40% top', end: 'bottom top', scrub: 1 }
 });
 
-// Metric cards
+// SECTION ANIMATIONS
 gsap.from('.metric-card', {
-  y: 28, opacity: 0, duration: 0.65, ease: 'power3.out', stagger: 0.1,
+  y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
   scrollTrigger: { trigger: '#metrics', start: 'top 88%', once: true }
 });
-
-// Glass sections
 gsap.utils.toArray('.glass').forEach(el => {
   gsap.from(el, {
-    y: 32, opacity: 0, duration: 0.75, ease: 'power3.out',
+    y: 36, opacity: 0, duration: 0.8, ease: 'power3.out',
     scrollTrigger: { trigger: el, start: 'top 90%', once: true }
   });
 });
-
-// Pull quote
 gsap.from('.pull-quote', {
-  x: -18, opacity: 0, duration: 0.8, ease: 'power3.out',
+  x: -20, opacity: 0, duration: 0.9, ease: 'power3.out',
   scrollTrigger: { trigger: '.pull-quote', start: 'top 88%', once: true }
 });
-
-// Step cards
 gsap.utils.toArray('.step-card').forEach(card => {
   gsap.from(card, {
-    y: 22, opacity: 0, duration: 0.6, ease: 'power3.out',
+    y: 24, opacity: 0, duration: 0.65, ease: 'power3.out',
     scrollTrigger: { trigger: card, start: 'top 92%', once: true }
   });
 });
-</script>
+gsap.utils.toArray('.bullet-list li').forEach((li, i) => {
+  gsap.from(li, {
+    x: -14, opacity: 0, duration: 0.5, ease: 'power3.out',
+    scrollTrigger: { trigger: li, start: 'top 93%', once: true }
+  });
+});
 
-<script>
-// Starry Night canvas
-(function() {
-  const canvas = document.getElementById('starry-night-canvas');
-  const ctx = canvas.getContext('2d');
-  const VORTICES = [{nx:.22,ny:.24,str:1.6,r:.34,cw:1},{nx:.52,ny:.14,str:1.2,r:.28,cw:-1},{nx:.76,ny:.27,str:1.0,r:.24,cw:1},{nx:.36,ny:.44,str:.8,r:.40,cw:-1}];
-  const BLUES = ['#0a1628','#0d1f3c','#122348','#1a3a6b','#1e4480','#1b5e7b','#1d6a8a','#205070','#163858','#17325a','#1c4060','#244870'];
-  function flow(x,y,t){const nx=x/canvas.width,ny=y/canvas.height;let vx=.28,vy=0;for(const v of VORTICES){const dx=nx-v.nx,dy=ny-v.ny,d2=dx*dx+dy*dy;if(d2<v.r*v.r&&d2>1e-6){const inf=(1-Math.sqrt(d2)/v.r)*v.str,ang=Math.atan2(dy,dx)+v.cw*Math.PI/2;vx+=Math.cos(ang)*inf;vy+=Math.sin(ang)*inf;}}vx+=Math.sin(ny*6.5+t*.11)*.24;vy+=Math.cos(nx*6.5+t*.09)*.20;return{vx,vy};}
-  let stars=[];
-  function buildStars(){stars=[];const n=Math.max(10,Math.floor(canvas.width*canvas.height/22000));for(let i=0;i<n;i++){const lg=Math.random()<.14;stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height*.78,r:lg?4+Math.random()*5:.9+Math.random()*2.2,phase:Math.random()*Math.PI*2,freq:.007+Math.random()*.016,halo:lg?12+Math.random()*14:4+Math.random()*8,rays:lg});}}
-  const N=350;let strokes=[];
-  function rst(s){s.x=Math.random()*canvas.width;s.y=Math.random()*canvas.height;s.age=Math.random()*160;s.maxAge=160+Math.random()*260;s.speed=.8+Math.random()*1.7;s.width=1.5+Math.random()*5.5;s.color=BLUES[Math.floor(Math.random()*BLUES.length)];s.opacity=.30+Math.random()*.62;return s;}
-  function buildStrokes(){strokes=[];for(let i=0;i<N;i++)rst(strokes[i]={});}
-  function drawSky(){const g=ctx.createLinearGradient(0,0,canvas.width*.55,canvas.height);g.addColorStop(0,'#03060d');g.addColorStop(.35,'#081428');g.addColorStop(.75,'#0d1e3c');g.addColorStop(1,'#0a1425');ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);}
-  function drawMoon(t){const mx=canvas.width*.83,my=canvas.height*.11,p=Math.sin(t*.006)*.08;const cor=ctx.createRadialGradient(mx,my,0,mx,my,130*(1+p));cor.addColorStop(0,'rgba(249,168,37,.12)');cor.addColorStop(1,'transparent');ctx.fillStyle=cor;ctx.beginPath();ctx.arc(mx,my,130*(1+p),0,Math.PI*2);ctx.fill();const hal=ctx.createRadialGradient(mx,my,0,mx,my,56*(1+p));hal.addColorStop(0,'#fffde7');hal.addColorStop(.6,'rgba(249,168,37,.55)');hal.addColorStop(1,'transparent');ctx.fillStyle=hal;ctx.beginPath();ctx.arc(mx,my,56*(1+p),0,Math.PI*2);ctx.fill();ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(mx,my,22,0,Math.PI*2);ctx.fill();}
-  function drawStar(s,t){const p=Math.sin(t*s.freq+s.phase),gw=s.r*(1+p*.32),hr=s.halo*(1+p*.22);const og=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,hr*4);og.addColorStop(0,'rgba(249,168,37,'+(0.32+p*.10)+')');og.addColorStop(1,'transparent');ctx.fillStyle=og;ctx.beginPath();ctx.arc(s.x,s.y,hr*4,0,Math.PI*2);ctx.fill();const ig=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,hr);ig.addColorStop(0,'#fffde7');ig.addColorStop(1,'transparent');ctx.fillStyle=ig;ctx.beginPath();ctx.arc(s.x,s.y,hr,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(s.x,s.y,gw,0,Math.PI*2);ctx.fill();if(s.rays){const rl=hr*3*(1+p*.12);ctx.save();ctx.translate(s.x,s.y);ctx.rotate(t*.004);for(let k=0;k<4;k++){const a=k*Math.PI/2;const gr=ctx.createLinearGradient(0,0,Math.cos(a)*rl,Math.sin(a)*rl);gr.addColorStop(0,'rgba(255,253,231,.18)');gr.addColorStop(1,'transparent');ctx.strokeStyle=gr;ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*rl,Math.sin(a)*rl);ctx.stroke();}ctx.restore();}}
-  function drawStrokes(t){ctx.save();ctx.globalCompositeOperation='screen';ctx.lineCap='round';for(let i=0;i<strokes.length;i++){const s=strokes[i];s.age++;if(s.age>s.maxAge){rst(s);continue;}const{vx,vy}=flow(s.x,s.y,t);const nx=s.x+vx*s.speed,ny=s.y+vy*s.speed;const lf=s.age/s.maxAge;const al=(lf<.08?lf/.08:lf>.88?(1-lf)/.12:1)*s.opacity*.55;if(al>.006){ctx.globalAlpha=al;ctx.strokeStyle=s.color;ctx.lineWidth=s.width;ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(nx,ny);ctx.stroke();}s.x=nx;s.y=ny;if(s.x<-20)s.x=canvas.width+20;if(s.x>canvas.width+20)s.x=-20;if(s.y<-20)s.y=canvas.height+20;if(s.y>canvas.height+20)s.y=-20;}ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';ctx.restore();}
-  let t=0;
-  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;buildStars();buildStrokes();}
-  function frame(){drawSky();drawStrokes(t);for(const s of stars)drawStar(s,t);drawMoon(t);t+=.5;requestAnimationFrame(frame);}
-  resize();window.addEventListener('resize',resize,{passive:true});requestAnimationFrame(frame);
-})();
+// MAGNETIC BUTTON
+document.querySelectorAll('.btn-outline').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.28;
+    const y = (e.clientY - r.top - r.height / 2) * 0.28;
+    gsap.to(btn, { x, y, duration: 0.35, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1,0.5)' });
+  });
+});
 </script>
 </body>
 </html>
