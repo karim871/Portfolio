@@ -61,7 +61,7 @@
     /* SCROLL PROG */
     #scroll-prog {
       position:fixed; top:0; left:0; height:2px; width:0%;
-      background:var(--accent); z-index:10001;
+      background:var(--accent); z-index:10001; pointer-events:none;
       box-shadow:0 0 8px var(--accent); transition:width 0.1s linear;
     }
 
@@ -252,9 +252,9 @@
 <body>
   <div id="grain"></div>
   <div id="scroll-prog"></div>
-  <canvas id="trail-canvas"></canvas>
-  <div id="cursor-dot"></div>
-  <div id="cursor-ring"></div>
+  <canvas id="trail-canvas" style="pointer-events:none"></canvas>
+  <div id="cursor-dot" style="pointer-events:none"></div>
+  <div id="cursor-ring" style="pointer-events:none"></div>
 
   <!-- HERO -->
   <section id="hero">
