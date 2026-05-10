@@ -481,25 +481,7 @@ tailwind.config = {
   }
   .tab-border { border-left: 1px solid var(--border); }
 
-  /* ── Cert cards ── */
-  .cert-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: all 0.4s ease;
-    cursor: default;
-  }
-  .cert-card:hover {
-    border-color: rgba(79,195,247,0.35);
-    box-shadow: 0 0 24px rgba(79,195,247,0.08);
-    transform: translateY(-3px);
-  }
-  .cert-card img { filter: grayscale(60%) brightness(0.9); transition: filter 0.4s ease; }
-  .cert-card:hover img { filter: grayscale(0%) brightness(1); }
+  /* ── Cert cards — defined further below with 3D tilt ── */
 
   /* ── Skill cards ── */
   .skill-card {
@@ -554,12 +536,7 @@ tailwind.config = {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .form-input::placeholder { color: var(--text); opacity: 0.6; }
-  .form-input:focus {
-    outline: none;
-    border-color: rgba(79,195,247,0.5);
-    box-shadow: 0 0 0 3px rgba(79,195,247,0.08);
-    background: rgba(5,15,35,0.6);
-  }
+  /* form-input:focus — green glow defined further below */
 
   /* ── Experience bullet ── */
   .exp-bullet {
@@ -885,6 +862,41 @@ tailwind.config = {
     transition: opacity 0.35s ease, transform 0.35s ease;
   }
   .skill-item.revealed { opacity: 1; transform: translateX(0); }
+
+  /* ── Cert card: 3D tilt enabled ── */
+  .cert-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: default;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 0.2s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .cert-card:hover {
+    border-color: rgba(79,195,247,0.35);
+    box-shadow: 0 0 24px rgba(79,195,247,0.08);
+  }
+  .cert-card img { filter: grayscale(60%) brightness(0.9); transition: filter 0.4s ease; }
+  .cert-card:hover img { filter: grayscale(0%) brightness(1); }
+
+  /* ── Form input: green focus glow ── */
+  .form-input:focus {
+    outline: none;
+    border-color: rgba(34,197,94,0.5);
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.07), 0 0 18px rgba(34,197,94,0.12);
+    background: rgba(5,15,35,0.6);
+  }
+
+  /* ── Page-load section reveals ── */
+  main > section {
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
 </style>
 </head>
 <body>
@@ -1477,7 +1489,7 @@ tailwind.config = {
             <label for="message" class="block text-xs font-mono mb-2 tracking-wide" style="color:var(--text-light);">Message</label>
             <textarea id="message" name="message" required rows="5" placeholder="Hi Abdelkrim, I'd like to connect about…" class="form-input resize-none"></textarea>
           </div>
-          <button type="submit" class="btn-outline w-full text-center cursor-pointer py-3">Send Message →</button>
+          <button type="submit" class="btn-outline w-full text-center cursor-pointer py-3 magnetic-btn" data-magnetic>Send Message →</button>
           <p id="form-status" class="text-center text-xs font-mono mt-4 hidden" role="status" aria-live="polite"></p>
         </form>
         <p class="text-center text-xs mt-6 font-mono" style="color:var(--text);">
@@ -1867,6 +1879,65 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
     el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
   });
 }
+
+// ── Cert cards: 3D tilt on hover ─────────────────────────────
+(function initCertTilt() {
+  document.querySelectorAll('.cert-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const rx = ((e.clientY - r.top) / r.height - 0.5) * -14;
+      const ry = ((e.clientX - r.left) / r.width - 0.5) * 14;
+      card.style.transition = 'transform 0.12s ease, border-color 0.4s ease, box-shadow 0.4s ease';
+      card.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.55s cubic-bezier(0.16,1,0.3,1), border-color 0.4s ease, box-shadow 0.4s ease';
+      card.style.transform = 'perspective(700px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+})();
+
+// ── Cert cards: stagger reveal on scroll ─────────────────────
+(function initCertReveal() {
+  const allCards = [...document.querySelectorAll('.cert-card')];
+  allCards.forEach(c => {
+    c.style.opacity = '0';
+    c.style.transform = 'translateY(18px)';
+    c.style.transition = 'opacity 0.55s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1), border-color 0.4s ease, box-shadow 0.4s ease';
+  });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const idx = allCards.indexOf(entry.target);
+      setTimeout(() => {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }, (idx % 4) * 90);
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+  allCards.forEach(c => obs.observe(c));
+})();
+
+// ── Page load: stagger main sections into view ────────────────
+(function initPageLoadReveal() {
+  const sections = [...document.querySelectorAll('main > section')];
+  sections.forEach((sec, i) => {
+    gsap.from(sec, {
+      opacity: 0,
+      y: 22,
+      duration: 0.9,
+      ease: 'power3.out',
+      delay: 0.3 + i * 0.08,
+      scrollTrigger: {
+        trigger: sec,
+        start: 'top 88%',
+        toggleActions: 'play none none none',
+      },
+      clearProps: 'opacity,transform',
+    });
+  });
+})();
 
 // ── Gallery dots ──────────────────────────────────────────────
 document.querySelectorAll('.gallery-dots').forEach(dotsEl => {
