@@ -1112,14 +1112,8 @@ tailwind.config = {
             </ul>
           </div>
           <div id="content-other" class="tab-content hidden">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">Prior Work Experience</h3>
-            <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">2022 – 2024</p>
-            <p class="text-sm leading-relaxed mb-5" style="color:var(--text-light);">Before entering IT, I worked in high-volume operations environments — roles that built reliability, attention to process, and composure under pressure. The same qualities I bring to alert triage and incident response.</p>
-            <ul class="space-y-2 text-sm" style="color:var(--text);">
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Retail Associate — Dollarama (2024)</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Warehouse Associate — IKEA (2023)</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Inventory Associate — SSENSE (2022–2023)</span></li>
-            </ul>
+            <p class="font-mono text-xs mb-4 mt-1" style="color:var(--text);">2022 – 2024</p>
+            <p class="text-sm leading-[1.8]" style="color:var(--text-light);">Before IT, I worked in high-volume operations at SSENSE, IKEA, and Dollarama, Couche-tard — environments that built the same qualities I bring to alert triage: reliability, process discipline, and composure under pressure.</p>
           </div>
         </div>
       </div>
@@ -1135,6 +1129,7 @@ tailwind.config = {
         Some Things I've Built
         <span class="section-line"></span>
       </h2>
+      <p class="text-sm text-center italic mb-8 max-w-2xl mx-auto" style="color:var(--text);opacity:0.65;"><em>These aren't isolated projects — they're one connected pipeline. Pi-hole feeds DNS logs into the Mini-SOC. The Mini-SOC produced the IR. The IR used the Threat Intel Bot. Everything runs together.</em></p>
       <div class="space-y-8">
 
         <!-- Threat Intel Bot -->
@@ -1315,6 +1310,7 @@ tailwind.config = {
             <span class="project-tag">DNS</span>
             <span class="project-tag">VirtualBox</span>
           </div>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/pfSense.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
         </div>
 
       </div>
@@ -1343,6 +1339,7 @@ tailwind.config = {
             <li class="skill-item"><span class="skill-dot"></span>Sysmon, Windows Event Logs</li>
             <li class="skill-item"><span class="skill-dot"></span>Nessus, OpenVAS</li>
             <li class="skill-item"><span class="skill-dot"></span>MITRE ATT&amp;CK, Incident Response</li>
+            <li class="skill-item"><span class="skill-dot"></span>Log Analysis &amp; Correlation</li>
             <li class="skill-item"><span class="skill-dot"></span>IOC Triage, Alert Handling &amp; Escalation</li>
             <li class="skill-item"><span class="skill-dot"></span>Threat Intel (AbuseIPDB, VirusTotal, OTX)</li>
           </ul>
@@ -1371,7 +1368,6 @@ tailwind.config = {
             <li class="skill-item"><span class="skill-dot"></span>Linux (Arch, Kali, Debian, Ubuntu, CentOS)</li>
             <li class="skill-item"><span class="skill-dot"></span>Windows Server (AD, GPO, DNS, DHCP)</li>
             <li class="skill-item"><span class="skill-dot"></span>VMware, Hyper-V, VirtualBox</li>
-            <li class="skill-item"><span class="skill-dot"></span>Nmap, Netcat</li>
           </ul>
         </div>
 
@@ -1382,7 +1378,6 @@ tailwind.config = {
           </div>
           <ul class="space-y-1.5">
             <li class="skill-item"><span class="skill-dot"></span>Bash, PowerShell, Python</li>
-            <li class="skill-item"><span class="skill-dot"></span>SQL</li>
           </ul>
           <div class="mt-6 pt-4 border-t" style="border-color:var(--border);">
             <p class="text-xs mb-3" style="color:var(--text);">Want to see more?</p>
@@ -1489,6 +1484,7 @@ tailwind.config = {
             <label for="message" class="block text-xs font-mono mb-2 tracking-wide" style="color:var(--text-light);">Message</label>
             <textarea id="message" name="message" required rows="5" placeholder="Hi Abdelkrim, I'd like to connect about…" class="form-input resize-none"></textarea>
           </div>
+          <input type="hidden" name="_subject" value="Portfolio Contact — New Message">
           <button type="submit" class="btn-outline w-full text-center cursor-pointer py-3 magnetic-btn" data-magnetic>Send Message →</button>
           <p id="form-status" class="text-center text-xs font-mono mt-4 hidden" role="status" aria-live="polite"></p>
         </form>
@@ -1835,13 +1831,15 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   try {
     const res = await fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'Accept': 'application/json' } });
     if (res.ok) {
-      status.textContent = "Message sent — I'll get back to you soon.";
-      status.className = 'text-center text-xs font-mono mt-4 accent-violet';
+      status.textContent = "Message sent! I'll respond within 24h.";
+      status.className = 'text-center text-xs font-mono mt-4';
+      status.style.color = '#00c875';
       this.reset();
     } else throw new Error();
   } catch {
-    status.textContent = 'Something went wrong. Please email me directly.';
+    status.textContent = 'Something went wrong. Email me directly.';
     status.className = 'text-center text-xs font-mono mt-4 text-red-400';
+    status.style.color = '';
   } finally {
     status.classList.remove('hidden');
     btn.textContent = 'Send Message →'; btn.disabled = false;
