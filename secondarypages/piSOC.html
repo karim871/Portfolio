@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,59 +7,181 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{fontFamily:{display:['"Space Grotesk"','sans-serif'],sans:['Inter','sans-serif'],mono:['"Fira Code"','monospace']}}}}</script>
 <style>
-:root{--base:#030508;--surface:rgba(8,18,38,0.65);--border:rgba(79,195,247,0.1);--text:#7fa8c4;--text-l:#b8d4e8;--text-b:#e8f4fd;--sky:#4FC3F7;--ice:#E0F7FA;--steel:#90CAF9;}
-*,*::before,*::after{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--base);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;}
-#starry-night-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;}
-#progress-bar{position:fixed;top:0;left:0;height:1px;width:0%;background:linear-gradient(90deg,var(--steel),var(--sky),var(--ice));z-index:9999;transition:width 0.1s linear;box-shadow:0 0 8px var(--sky);}
-::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(79,195,247,0.25);border-radius:3px;}
-.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(3,5,8,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(79,195,247,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
+:root{--bg:#121414;--surface:#1a1a1a;--border:rgba(0,255,136,0.10);--border-h:rgba(0,255,136,0.30);--text:#6b7575;--text-l:#a8b4b2;--text-h:#e3e2e2;--accent:#00ff88;--red:#ff4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:auto;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;cursor:none;}
+
+/* CURSOR */
+#cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s;mix-blend-mode:screen;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,255,136,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+#cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
+
+/* GRAIN */
+#grain{position:fixed;inset:-100%;width:400%;height:400%;z-index:9996;pointer-events:none;opacity:0.038;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.6s steps(1) infinite;}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
+
+/* PROGRESS */
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(0,255,136,0.3));z-index:10000;box-shadow:0 0 12px rgba(0,255,136,0.6);transition:width 0.1s linear;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,255,136,0.2);border-radius:2px;}
+
+/* NAV */
+.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,136,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
-.nav-back:hover{color:var(--sky);}
-.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.45;letter-spacing:0.06em;}
+.nav-back:hover{color:var(--accent);}
+.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.4;letter-spacing:0.06em;}
 .nav-ext{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--text);text-decoration:none;transition:color 0.2s;}
-.nav-ext:hover{color:var(--sky);}
-.wrap{max-width:760px;margin:0 auto;padding:80px 5% 100px;}
-.glass{background:rgba(5,15,35,0.60);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
-.glass:hover{border-color:rgba(79,195,247,0.18);}
-.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:var(--text-b);margin-bottom:1.2rem;display:flex;align-items:center;gap:10px;letter-spacing:-0.01em;}
+.nav-ext:hover{color:var(--accent);}
+
+/* HERO */
+.hero-section{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding:0 6% 7rem;overflow:hidden;}
+.hero-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-section::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 25% 20%,rgba(0,255,136,0.05) 0%,transparent 65%),linear-gradient(to bottom,transparent 40%,var(--bg) 100%);pointer-events:none;}
+.hero-orb{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,136,0.06) 0%,transparent 70%);top:-150px;right:-100px;pointer-events:none;animation:orb-drift 14s ease-in-out infinite alternate;}
+@keyframes orb-drift{0%{transform:translate(0,0);}100%{transform:translate(-50px,60px);}}
+.hero-inner{position:relative;z-index:2;max-width:820px;margin:0 auto;width:100%;}
+.hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.18em;margin-bottom:1.5rem;opacity:0.8;display:block;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:700;color:var(--text-h);line-height:0.92;letter-spacing:-0.045em;margin-bottom:1.5rem;}
+.hero-title .line{display:block;overflow:hidden;}
+.word-w{display:inline-block;overflow:hidden;vertical-align:bottom;}
+.word-i{display:inline-block;}
+@keyframes glitch-soc{0%,88%,100%{text-shadow:none;}89%{text-shadow:-3px 0 #ff0066,3px 0 var(--accent);}91%{text-shadow:3px 0 #ff0066,-3px 0 var(--accent);}93%{text-shadow:none;}}
+.hero-title{animation:glitch-soc 8s infinite;}
+.hero-sub{font-size:1.05rem;color:var(--text-l);font-weight:400;margin-bottom:2rem;line-height:1.7;max-width:600px;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.55;margin-bottom:2rem;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;}
+
+/* HERO STATS STRIP */
+.hero-stats-strip{display:flex;gap:3rem;margin-top:0.5rem;}
+.h-stat-val{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;line-height:1;letter-spacing:-0.04em;color:var(--text-h);}
+.h-stat-val.accent{color:var(--accent);}
+.h-stat-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);opacity:0.6;margin-top:4px;letter-spacing:0.08em;}
+
+/* HERO FLOATING STAT */
+.hero-stat{position:absolute;right:6%;bottom:6rem;z-index:3;text-align:right;}
+.hero-stat-val{font-family:'Space Grotesk',sans-serif;font-size:clamp(4.5rem,10vw,8rem);font-weight:700;color:var(--accent);letter-spacing:-0.06em;line-height:1;text-shadow:0 0 80px rgba(0,255,136,0.25);}
+.hero-stat-label{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--text);opacity:0.55;letter-spacing:0.1em;margin-top:6px;text-transform:uppercase;}
+
+/* TAGS */
+.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
+.tag:hover{background:rgba(0,255,136,0.12);border-color:rgba(0,255,136,0.35);}
+.tag-red{background:rgba(255,68,68,0.08);border-color:rgba(255,68,68,0.25);color:#ff8888;}
+
+/* WRAP */
+.wrap{max-width:800px;margin:0 auto;padding:4rem 5% 8rem;}
+
+/* GLASS */
+.glass{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.35s,box-shadow 0.35s;position:relative;overflow:hidden;}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,0.18),transparent);opacity:0;transition:opacity 0.35s;}
+.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(0,255,136,0.04);}
+.glass:hover::before{opacity:1;}
+
+/* RED DETECTION CARD */
+.glass-detect{background:rgba(26,10,10,0.92);border:1px solid rgba(255,68,68,0.25);border-radius:16px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;transition:border-color 0.35s,box-shadow 0.35s;}
+.glass-detect::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),rgba(255,68,68,0.2),transparent);}
+.glass-detect:hover{border-color:rgba(255,68,68,0.5);box-shadow:0 0 60px rgba(255,68,68,0.08);}
+@keyframes detect-pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,68,68,0.2);}50%{box-shadow:0 0 40px 10px rgba(255,68,68,0.06);}}
+.glass-detect{animation:detect-pulse 3s ease-in-out infinite;}
+
+/* S-TITLE */
+.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-h);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;letter-spacing:-0.02em;}
+.s-num{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--accent);opacity:0.8;flex-shrink:0;}
+.s-num-red{color:var(--red) !important;opacity:1 !important;}
 .s-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
-pre,.code-block{background:rgba(3,5,8,0.88);border:1px solid rgba(79,195,247,0.12);border-radius:10px;padding:1.1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.76rem;color:#b8d4e8;overflow-x:auto;line-height:1.8;margin:0.9rem 0;white-space:pre;}
-.tag{font-family:'Fira Code',monospace;font-size:0.67rem;padding:3px 10px;background:rgba(79,195,247,0.07);border:1px solid rgba(79,195,247,0.15);border-radius:4px;color:var(--sky);white-space:nowrap;display:inline-block;}
-.step-card{background:rgba(5,15,35,0.50);border:1px solid var(--border);border-radius:12px;padding:1.4rem;margin-bottom:1rem;}
-.step-num{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--sky);opacity:0.7;margin-bottom:5px;display:block;letter-spacing:0.06em;}
-.step-title{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text-b);margin-bottom:0.6rem;}
-.step-body{font-size:0.84rem;color:var(--text-l);line-height:1.7;}
-.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-@media(max-width:540px){.spec-grid{grid-template-columns:1fr;}}
-.spec-card{background:rgba(5,15,35,0.50);border:1px solid var(--border);border-radius:10px;padding:1.1rem;}
-.spec-label{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--sky);opacity:0.7;margin-bottom:8px;letter-spacing:0.06em;}
-.spec-item{font-size:0.82rem;color:var(--text-l);padding:3px 0;display:flex;align-items:flex-start;gap:8px;}
-.spec-item::before{content:'▹';color:var(--sky);font-size:0.72rem;flex-shrink:0;margin-top:2px;}
+
+/* THREAT BADGE */
+.threat-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Fira Code',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--red);border:1px solid rgba(255,68,68,0.3);border-radius:4px;padding:5px 14px;background:rgba(255,68,68,0.07);margin-bottom:1.25rem;}
+.threat-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:tdot 1.4s ease-in-out infinite;}
+@keyframes tdot{0%,100%{box-shadow:0 0 0 0 rgba(255,68,68,0.5);}50%{box-shadow:0 0 0 8px rgba(255,68,68,0);}}
+
+/* DETECTION STAT ROW */
+.detect-stats{display:flex;gap:2rem;margin:1.25rem 0;flex-wrap:wrap;}
+.detect-stat-val{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;color:var(--red);letter-spacing:-0.04em;line-height:1;}
+.detect-stat-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);opacity:0.65;margin-top:4px;letter-spacing:0.08em;}
+
+/* METRICS */
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
 @media(min-width:560px){.metric-grid{grid-template-columns:repeat(4,1fr);}}
-.metric-card{background:rgba(5,15,35,0.55);border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;}
-.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;color:var(--text-b);letter-spacing:-0.02em;}
-.metric-label{font-family:'Fira Code',monospace;font-size:0.62rem;color:var(--text);margin-top:4px;opacity:0.75;line-height:1.4;}
+.metric-card{background:rgba(14,16,16,0.8);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;}
+.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,255,136,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
+.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,255,136,0.06);}
+.metric-card:hover::after{opacity:1;}
+.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text-h);letter-spacing:-0.04em;line-height:1;}
+.metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:8px;line-height:1.5;opacity:0.85;}
+
+/* ARCH DIAGRAM */
+.arch-box{background:rgba(8,10,10,0.95);border:1px solid rgba(0,255,136,0.12);border-radius:10px;padding:1.25rem 1.5rem;font-family:'Fira Code',monospace;font-size:0.72rem;color:#7dd3a8;line-height:2;overflow-x:auto;white-space:pre;}
+
+/* STEP CARDS */
+.step-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.step-card:hover{border-color:var(--border-h);}
+.step-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,var(--accent),transparent);}
+.step-num{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.75;margin-bottom:6px;display:block;letter-spacing:0.1em;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:var(--text-h);margin-bottom:0.65rem;letter-spacing:-0.02em;}
+.step-body{font-size:0.87rem;color:var(--text-l);line-height:1.75;}
+
+/* SPEC GRID */
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:540px){.spec-grid{grid-template-columns:1fr;}}
+.spec-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:10px;padding:1.25rem;transition:border-color 0.3s;}
+.spec-card:hover{border-color:var(--border-h);}
+.spec-label{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.7;margin-bottom:10px;letter-spacing:0.1em;display:block;}
+.spec-item{font-size:0.83rem;color:var(--text-l);padding:3px 0;display:flex;align-items:flex-start;gap:8px;}
+.spec-item::before{content:'▹';color:var(--accent);font-size:0.72rem;flex-shrink:0;margin-top:1px;}
+
+/* PULL QUOTE */
+.pull-quote{border-left:3px solid var(--accent);margin:1.5rem 0;padding:1.25rem 1.75rem;background:rgba(0,255,136,0.04);border-radius:0 12px 12px 0;}
+.pull-quote p{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:500;color:var(--text-h);line-height:1.65;letter-spacing:-0.01em;font-style:italic;margin:0;}
+
+/* VERTICAL TIMELINE */
+.v-timeline{position:relative;padding-left:1.5rem;}
+.v-timeline::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,rgba(0,255,136,0.5),transparent);}
+.vt-item{position:relative;padding:0 0 1.75rem 1.5rem;}
+.vt-item::before{content:'';position:absolute;left:-5px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 8px rgba(0,255,136,0.4);}
+.vt-phase{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--accent);margin-bottom:4px;letter-spacing:0.1em;opacity:0.8;}
+.vt-title{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text-h);margin-bottom:0.4rem;letter-spacing:-0.02em;}
+.vt-body{font-size:0.84rem;color:var(--text-l);line-height:1.72;}
+
+/* DASHBOARD ITEMS */
+.dash-grid{display:grid;grid-template-columns:1fr;gap:0.65rem;}
+.dash-item{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1.1rem;display:flex;align-items:center;gap:14px;font-size:0.84rem;color:var(--text-l);transition:border-color 0.3s,background 0.3s;}
+.dash-item:hover{border-color:var(--border-h);background:rgba(14,16,16,0.8);}
+.dash-num{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--accent);opacity:0.7;min-width:28px;flex-shrink:0;}
+
+/* BULLETS */
 .bullet-list{list-style:none;padding:0;}
-.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.32rem 0;font-size:0.86rem;color:var(--text-l);line-height:1.6;}
-.bullet-list li::before{content:'▹';color:var(--sky);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
-.arch-box{background:rgba(3,5,8,0.75);border:1px solid rgba(79,195,247,0.12);border-radius:10px;padding:1.25rem;font-family:'Fira Code',monospace;font-size:0.75rem;color:#b8d4e8;line-height:2;overflow-x:auto;}
-.alert-info{background:rgba(79,195,247,0.07);border:1px solid rgba(79,195,247,0.2);border-radius:10px;padding:1rem 1.25rem;font-size:0.83rem;color:#7dd3fc;}
-.alert-warning{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.83rem;color:#fde68a;}
-.dash-grid{display:grid;grid-template-columns:1fr;gap:0.6rem;}
-.dash-item{background:rgba(5,15,35,0.50);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1rem;display:flex;align-items:center;gap:12px;font-size:0.83rem;color:var(--text-l);}
-.dash-num{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--sky);opacity:0.7;min-width:28px;}
+.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.35rem 0;font-size:0.87rem;color:var(--text-l);line-height:1.65;}
+.bullet-list li::before{content:'▹';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
+
+/* ALERTS */
+.alert-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.18);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#9df5c5;}
+.alert-warning{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#fde68a;}
+
+/* CODE */
+pre{background:rgba(8,10,10,0.95);border:1px solid rgba(0,255,136,0.12);border-radius:10px;padding:1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.75rem;color:#a8b4b2;overflow-x:auto;line-height:1.85;margin:0.9rem 0;white-space:pre;}
+:not(pre)>code{font-family:'Fira Code',monospace;font-size:0.82em;background:rgba(0,255,136,0.07);border:1px solid rgba(0,255,136,0.15);border-radius:4px;padding:1px 6px;color:var(--accent);}
+
+/* BUTTONS */
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(0,255,136,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
+.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(0,255,136,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.btn-outline:hover::before{transform:scaleX(1);}
+.btn-outline:hover{border-color:rgba(0,255,136,0.6);box-shadow:0 0 24px rgba(0,255,136,0.12);}
+.btn-red{border-color:rgba(255,68,68,0.35);color:var(--red);}
+.btn-red::before{background:rgba(255,68,68,0.07);}
+.btn-red:hover{border-color:rgba(255,68,68,0.6);box-shadow:0 0 24px rgba(255,68,68,0.1);}
+
+/* FOOTER */
 footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
+.mt-2{margin-top:0.5rem;}.mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-4{margin-bottom:1rem;}.mb-6{margin-bottom:1.5rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
 </style>
 </head>
 <body>
 
-<canvas id="starry-night-canvas" aria-hidden="true"></canvas>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<canvas id="cursor-canvas"></canvas>
+<div id="grain" aria-hidden="true"></div>
 <div id="progress-bar" aria-hidden="true"></div>
 
 <nav class="page-nav">
@@ -71,32 +193,57 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" class="nav-ext">GitHub ↗</a>
 </nav>
 
-<main class="wrap">
-
-  <!-- HERO -->
-  <div class="mb-10">
-    <div class="flex flex-wrap items-center gap-3 mb-5">
+<!-- HERO -->
+<section class="hero-section" id="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-inner">
+    <span class="hero-eyebrow">PROJECTS / BLUE TEAM / DETECTION ENGINEERING</span>
+    <div class="hero-tags">
       <span class="tag">Suricata IDS</span>
       <span class="tag">Splunk SIEM</span>
+      <span class="tag">Wazuh HIDS</span>
       <span class="tag">Raspberry Pi</span>
       <span class="tag">Blue Team</span>
-      <span class="tag">Detection Engineering</span>
     </div>
-    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:700;color:var(--text-b);line-height:1.1;letter-spacing:-0.03em;margin-bottom:1rem;">
-      Home Mini-SOC Lab<br>
-      <span style="font-size:0.6em;font-weight:400;color:var(--text-l);">Suricata IDS + Splunk SIEM on Raspberry Pi</span>
+    <h1 class="hero-title" id="hero-title">
+      <span class="line" id="hl1">Home Mini-SOC</span>
+      <span class="line" id="hl2">Lab</span>
     </h1>
-    <div class="flex flex-wrap gap-4 items-center" style="font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.7;">
+    <p class="hero-sub">A production-grade Security Operations Center on a Raspberry Pi Zero 2 W — Suricata IDS feeding structured EVE JSON into Splunk Enterprise. Real alerts. Real detections.</p>
+    <div class="hero-meta">
       <span>November 2025</span>
-      <span>·</span>
+      <span style="opacity:0.3">·</span>
       <span>Network: 10.0.0.0/24</span>
-      <span>·</span>
-      <span>Produced 1 documented IR</span>
+      <span style="opacity:0.3">·</span>
+      <span>1 documented IR</span>
+    </div>
+    <div class="hero-stats-strip">
+      <div>
+        <div class="h-stat-val">30k+</div>
+        <div class="h-stat-label">SURICATA RULES ACTIVE</div>
+      </div>
+      <div>
+        <div class="h-stat-val">10k+</div>
+        <div class="h-stat-label">DAILY EVENTS INDEXED</div>
+      </div>
+      <div>
+        <div class="h-stat-val accent">42 min</div>
+        <div class="h-stat-label">DETECTION TO CONTAINMENT</div>
+      </div>
     </div>
   </div>
 
+  <!-- Floating countup stat -->
+  <div class="hero-stat" id="hero-stat">
+    <div class="hero-stat-val"><span id="count-up-val">0</span>%</div>
+    <div class="hero-stat-label">Alert Reduction<br>After Tuning</div>
+  </div>
+</section>
+
+<main class="wrap">
+
   <!-- METRICS -->
-  <div class="metric-grid mb-8">
+  <div class="metric-grid mb-8" id="metrics">
     <div class="metric-card">
       <div class="metric-val">30k+</div>
       <div class="metric-label">Active Suricata<br>detection rules</div>
@@ -117,20 +264,46 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 
   <!-- OVERVIEW -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">01.</span> Project Overview</div>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">
-      A production-grade home Security Operations Center built on a Raspberry Pi Zero 2 W. Suricata IDS runs on the Pi, monitoring all network traffic and generating structured EVE JSON logs. Those logs are forwarded via rsyslog over TCP to a Splunk Enterprise instance running on a Windows PC, where custom dashboards surface alerts, DNS queries, suspicious IPs, and protocol anomalies in real time.
-    </p>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">
-      This lab produced a real documented detection — a PowerShell-based fileless attack caught and contained in 42 minutes. See the <a href="incident-response-powershell.html" style="color:var(--sky);text-decoration:none;border-bottom:1px solid rgba(79,195,247,0.3);">Incident Response writeup →</a>
-    </p>
+    <div class="s-title"><span class="s-num">01.</span> Project Overview</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">A production-grade home Security Operations Center built on a Raspberry Pi Zero 2 W. Suricata IDS runs on the Pi, monitoring all network traffic and generating structured EVE JSON logs. Those logs are forwarded via rsyslog over TCP to a Splunk Enterprise instance running on a Windows PC, where custom dashboards surface alerts, DNS queries, suspicious IPs, and protocol anomalies in real time.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">This lab produced a real documented detection — a PowerShell-based fileless attack caught and contained in 42 minutes. See the <a href="incident-response-powershell.html" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,255,136,0.3);">Incident Response writeup →</a></p>
+    <div class="pull-quote mt-4">
+      <p>"Real detections from a $15 Pi. The SOC doesn't need to be enterprise-grade to catch real threats — it needs to be tuned, monitored, and correlated."</p>
+    </div>
+  </div>
+
+  <!-- REAL DETECTION MOMENT — RED CARD -->
+  <div class="glass-detect" id="detect-card">
+    <div class="threat-badge"><span class="threat-dot"></span> REAL DETECTION — Dec 10, 2024</div>
+    <div class="s-title"><span class="s-num s-num-red">⚠</span> The Lab Caught a Live Attack</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1.25rem;">Wazuh Rule 91816 fired on WIN-LAB-01 at 14:23:17 EST. Encoded PowerShell execution detected — IEX download chain plus schtasks persistence, all obfuscated in Base64. Suricata simultaneously caught the C2 callback attempt over HTTP to 185.220.101.42 (AbuseIPDB: 100/100). The SOC saw both signals before the attacker could establish a foothold.</p>
+    <div class="detect-stats">
+      <div>
+        <div class="detect-stat-val">2m 15s</div>
+        <div class="detect-stat-label">TIME TO DETECTION</div>
+      </div>
+      <div>
+        <div class="detect-stat-val">42 min</div>
+        <div class="detect-stat-label">DETECTION TO CONTAINMENT</div>
+      </div>
+      <div>
+        <div class="detect-stat-val">3</div>
+        <div class="detect-stat-label">DATA SOURCES CORRELATED</div>
+      </div>
+    </div>
+    <div class="alert-warning mt-3" style="background:rgba(255,68,68,0.06);border-color:rgba(255,68,68,0.2);color:#fca5a5;">
+      <strong style="font-family:'Fira Code',monospace;font-size:0.7rem;letter-spacing:0.06em;">ATTACK CHAIN —</strong>
+      Suricata (network C2) + Wazuh (host HIDS) + Splunk (correlation) → complete picture. No single tool caught it alone.
+    </div>
+    <div style="margin-top:1.25rem;">
+      <a href="incident-response-powershell.html" class="btn-outline btn-red">Read Full IR Writeup →</a>
+    </div>
   </div>
 
   <!-- ARCHITECTURE -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">02.</span> Architecture</div>
-    <div class="arch-box">
-┌─────────────────────────────────────────────────────┐
+    <div class="s-title"><span class="s-num">02.</span> Architecture</div>
+    <div class="arch-box">┌─────────────────────────────────────────────────────┐
 │              Home Network  10.0.0.0/24              │
 │                                                     │
 │  [Laptop]  [Phone]  [IoT]  [Smart TV]              │
@@ -138,49 +311,51 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 │       └────────┴───────┴────────┘                   │
 │                    │                                │
 │            [Router 10.0.0.1]                        │
-│                    │ (mirror / inline)               │
+│                    │  (mirror / inline)              │
 │                    │                                │
 │     ┌──────────────▼──────────────┐                 │
 │     │   Raspberry Pi  10.0.0.153  │                 │
 │     │   Suricata IDS (EVE JSON)   │                 │
+│     │   Pi-hole DNS Sinkhole      │                 │
 │     │   rsyslog → TCP :1514       │                 │
 │     └──────────────┬──────────────┘                 │
 │                    │                                │
 │     ┌──────────────▼──────────────┐                 │
 │     │   Windows PC                │                 │
 │     │   Splunk Enterprise 9.x     │                 │
-│     │   Custom dashboards         │                 │
+│     │   Wazuh HIDS (WIN-LAB-01)  │                 │
+│     │   6 custom dashboards       │                 │
 │     └─────────────────────────────┘                 │
 └─────────────────────────────────────────────────────┘</div>
   </div>
 
   <!-- TECH SPECS -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">03.</span> Technical Specifications</div>
+    <div class="s-title"><span class="s-num">03.</span> Technical Specifications</div>
     <div class="spec-grid">
       <div class="spec-card">
-        <div class="spec-label">IDS HARDWARE</div>
+        <span class="spec-label">IDS HARDWARE</span>
         <div class="spec-item">Raspberry Pi Zero 2 W</div>
         <div class="spec-item">32 GB MicroSD (Class 10)</div>
         <div class="spec-item">5V / 2.5A power supply</div>
         <div class="spec-item">Static IP: 10.0.0.153</div>
       </div>
       <div class="spec-card">
-        <div class="spec-label">IDS SOFTWARE</div>
+        <span class="spec-label">IDS SOFTWARE</span>
         <div class="spec-item">Raspberry Pi OS Lite</div>
         <div class="spec-item">Suricata 6.x / 7.x</div>
         <div class="spec-item">ET Open Ruleset (30k+ rules)</div>
         <div class="spec-item">rsyslog (TCP port 1514)</div>
       </div>
       <div class="spec-card">
-        <div class="spec-label">SIEM PLATFORM</div>
+        <span class="spec-label">SIEM PLATFORM</span>
         <div class="spec-item">Splunk Enterprise 9.x</div>
         <div class="spec-item">Windows 10/11 host</div>
         <div class="spec-item">TCP input port 1514</div>
         <div class="spec-item">Source type: _json</div>
       </div>
       <div class="spec-card">
-        <div class="spec-label">PERFORMANCE</div>
+        <span class="spec-label">PERFORMANCE</span>
         <div class="spec-item">&lt;100ms detection latency</div>
         <div class="spec-item">&lt;0.1% packet loss</div>
         <div class="spec-item">30–50% CPU utilisation</div>
@@ -189,12 +364,57 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
     </div>
   </div>
 
-  <!-- IMPLEMENTATION -->
+  <!-- BUILD TIMELINE -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">04.</span> Implementation</div>
+    <div class="s-title"><span class="s-num">04.</span> How the SOC Was Built</div>
+    <p style="font-size:0.84rem;color:var(--text-l);line-height:1.7;margin-bottom:1.5rem;">Six phases from bare hardware to a production-ready detection pipeline.</p>
+    <div class="v-timeline">
+
+      <div class="vt-item">
+        <div class="vt-phase">PHASE 01 — HARDWARE</div>
+        <div class="vt-title">Raspberry Pi OS, static IP, essentials</div>
+        <div class="vt-body">Flash Raspberry Pi OS Lite, configure static IP via nmtui, install network and monitoring tools. Disable unnecessary services — the Pi runs headless, IDS-only.</div>
+      </div>
+
+      <div class="vt-item">
+        <div class="vt-phase">PHASE 02 — IDS ENGINE</div>
+        <div class="vt-title">Suricata installed from official PPA</div>
+        <div class="vt-body">Install Suricata from the OISF PPA to get a current build. Pull the Emerging Threats Open ruleset via <code>suricata-update</code> — 30,000+ rules covering malware C2, exploits, and protocol anomalies.</div>
+      </div>
+
+      <div class="vt-item">
+        <div class="vt-phase">PHASE 03 — LOG FORMAT</div>
+        <div class="vt-title">EVE JSON — structured output for every event type</div>
+        <div class="vt-body">Configure <code>suricata.yaml</code> for EVE JSON logging on eth0. Enable all event types: alert, HTTP, DNS, TLS, SSH, flow. Structured JSON makes Splunk ingestion seamless — no parsing required.</div>
+      </div>
+
+      <div class="vt-item">
+        <div class="vt-phase">PHASE 04 — LOG SHIPPING</div>
+        <div class="vt-title">rsyslog tails EVE JSON and ships to Splunk TCP 1514</div>
+        <div class="vt-body">Configure rsyslog's <code>imfile</code> module to tail <code>/var/log/suricata/eve.json</code> and forward each line over TCP to the Windows PC. inotify mode ensures sub-second forwarding latency.</div>
+      </div>
+
+      <div class="vt-item">
+        <div class="vt-phase">PHASE 05 — SIEM</div>
+        <div class="vt-title">Splunk TCP input, custom index, 6 dashboards built</div>
+        <div class="vt-body">Create a dedicated <code>suricata</code> index in Splunk, configure TCP input on port 1514 with source type <code>_json</code>. Build 6 dashboards surfacing alert distribution, top signatures, DNS analysis, HTTP traffic, suspicious IPs, and protocol breakdown.</div>
+      </div>
+
+      <div class="vt-item" style="padding-bottom:0;">
+        <div class="vt-phase">PHASE 06 — TUNING</div>
+        <div class="vt-title">~40% alert reduction over 3-week observation period</div>
+        <div class="vt-body">The ET Open ruleset fires on many benign home-network patterns. Suppress noisy scanner signatures and known-safe traffic via <code>threshold.conf</code>. Over 3 weeks, daily alert volume dropped from ~120 to ~72 — leaving only actionable signals.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- IMPLEMENTATION DETAILS -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">05.</span> Implementation</div>
 
     <div class="step-card">
-      <span class="step-num">STEP 01 — Raspberry Pi Setup</span>
+      <span class="step-num">STEP 01 — RASPBERRY PI SETUP</span>
       <div class="step-title">Base OS, static IP, essential tools</div>
       <div class="step-body">Flash Raspberry Pi OS Lite, configure static IP via nmtui, install essentials.</div>
       <pre>sudo apt update && sudo apt full-upgrade -y
@@ -204,7 +424,7 @@ ip -4 addr show eth0</pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 02 — Install Suricata</span>
+      <span class="step-num">STEP 02 — INSTALL SURICATA</span>
       <div class="step-title">IDS engine from official PPA</div>
       <div class="step-body">Install via PPA to get a current build, then verify and pull the ET Open ruleset.</div>
       <pre>sudo add-apt-repository ppa:oisf/suricata-stable
@@ -214,9 +434,9 @@ sudo suricata-update   # pull ET Open rules</pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 03 — Configure EVE JSON Logging</span>
+      <span class="step-num">STEP 03 — CONFIGURE EVE JSON LOGGING</span>
       <div class="step-title">Structured JSON output for every event type</div>
-      <div class="step-body">Edit <code style="font-family:'Fira Code',monospace;font-size:0.85em;">/etc/suricata/suricata.yaml</code> to enable EVE JSON and set the monitored interface.</div>
+      <div class="step-body">Edit <code>/etc/suricata/suricata.yaml</code> to enable EVE JSON and set the monitored interface.</div>
       <pre># In suricata.yaml:
 af-packet:
   - interface: eth0
@@ -241,9 +461,9 @@ sudo tail -f /var/log/suricata/eve.json</pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 04 — rsyslog Forwarding to Splunk</span>
+      <span class="step-num">STEP 04 — RSYSLOG FORWARDING TO SPLUNK</span>
       <div class="step-title">Ship EVE JSON from Pi to Splunk over TCP 1514</div>
-      <div class="step-body">Create <code style="font-family:'Fira Code',monospace;font-size:0.85em;">/etc/rsyslog.d/30-suricata.conf</code>:</div>
+      <div class="step-body">Create <code>/etc/rsyslog.d/30-suricata.conf</code>:</div>
       <pre>module(load="imfile" Mode="inotify")
 
 input(type="imfile"
@@ -260,20 +480,20 @@ echo "test" | nc -w1 10.0.0.XXX 1514</pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 05 — Splunk Data Input</span>
+      <span class="step-num">STEP 05 — SPLUNK DATA INPUT</span>
       <div class="step-title">Receive and index EVE JSON in Splunk</div>
       <div class="step-body">In Splunk Web: Settings → Data Inputs → TCP → New. Configure the input to receive on port 1514 and parse as JSON.</div>
       <ul class="bullet-list mt-2">
         <li>Port: 1514</li>
-        <li>Source type: <code style="font-family:'Fira Code',monospace;font-size:0.85em;">_json</code></li>
-        <li>Index: <code style="font-family:'Fira Code',monospace;font-size:0.85em;">suricata</code> (create new)</li>
+        <li>Source type: <code>_json</code></li>
+        <li>Index: <code>suricata</code> (create new)</li>
       </ul>
       <pre># Verify data is arriving:
 index=suricata | head 5 | table _time, event_type, alert.signature</pre>
     </div>
 
     <div class="step-card">
-      <span class="step-num">STEP 06 — Alert Tuning</span>
+      <span class="step-num">STEP 06 — ALERT TUNING</span>
       <div class="step-title">Reduce alert volume from ~120 to ~72 daily</div>
       <div class="step-body">The Emerging Threats Open ruleset fires on many benign home-network patterns. Suppressing noisy scanner signatures and known-safe traffic reduces daily alert volume by ~40%, leaving only actionable signals. Tuning was done over a 3-week observation period.</div>
       <pre># Example: suppress noisy rule for known scanner
@@ -282,9 +502,9 @@ suppress gen_id 1, sig_id 2013028, track by_src, ip 10.0.0.0/24</pre>
     </div>
   </div>
 
-  <!-- DASHBOARDS -->
+  <!-- SPLUNK DASHBOARDS -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">05.</span> Splunk Dashboards</div>
+    <div class="s-title"><span class="s-num">06.</span> Splunk Dashboards</div>
     <p style="font-size:0.84rem;color:var(--text-l);margin-bottom:1rem;line-height:1.7;">Six custom dashboards built to surface different layers of the network picture:</p>
     <div class="dash-grid">
       <div class="dash-item"><span class="dash-num">01</span>Event type distribution — alert vs. DNS vs. HTTP vs. flow by count</div>
@@ -298,19 +518,19 @@ suppress gen_id 1, sig_id 2013028, track by_src, ip 10.0.0.0/24</pre>
 
   <!-- DETECTION CAPABILITIES -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">06.</span> Detection Capabilities</div>
+    <div class="s-title"><span class="s-num">07.</span> Detection Capabilities</div>
     <div class="spec-grid">
       <div class="spec-card">
-        <div class="spec-label">PROTOCOL ANALYSIS</div>
+        <span class="spec-label">PROTOCOL ANALYSIS</span>
         <div class="spec-item">DNS tunneling &amp; DGA detection</div>
         <div class="spec-item">HTTP suspicious user-agents</div>
-        <div class="spec-item">TLS cert anomalies</div>
+        <div class="spec-item">TLS certificate anomalies</div>
         <div class="spec-item">SSH brute-force patterns</div>
       </div>
       <div class="spec-card">
-        <div class="spec-label">THREAT CATEGORIES</div>
+        <span class="spec-label">THREAT CATEGORIES</span>
         <div class="spec-item">Malware C2 callbacks</div>
-        <div class="spec-item">Exploit &amp; vuln scan attempts</div>
+        <div class="spec-item">Exploit &amp; vulnerability scan attempts</div>
         <div class="spec-item">Data exfiltration patterns</div>
         <div class="spec-item">Lateral movement indicators</div>
       </div>
@@ -319,20 +539,14 @@ suppress gen_id 1, sig_id 2013028, track by_src, ip 10.0.0.0/24</pre>
 
   <!-- PRIVACY -->
   <div class="glass">
-    <div class="s-title"><span style="font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--sky);opacity:0.7;">07.</span> Privacy &amp; Data Handling</div>
-    <div class="alert-info">
-      All screenshots and log samples shared publicly have been sanitised: internal IP addresses masked, domain names of non-malicious hosts redacted, and no personally identifiable information included. Suricata EVE JSON logs remain local to the home network and are not uploaded anywhere.
-    </div>
+    <div class="s-title"><span class="s-num">08.</span> Privacy &amp; Data Handling</div>
+    <div class="alert-info">All screenshots and log samples shared publicly have been sanitised: internal IP addresses masked, domain names of non-malicious hosts redacted, and no personally identifiable information included. Suricata EVE JSON logs remain local to the home network and are not uploaded anywhere.</div>
   </div>
 
   <!-- CTA -->
-  <div class="flex flex-wrap justify-center gap-4 mt-10">
-    <a href="incident-response-powershell.html" style="font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:10px 24px;border:1px solid rgba(79,195,247,0.35);color:var(--sky);border-radius:8px;transition:all 0.3s ease;display:inline-block;text-decoration:none;" onmouseover="this.style.background='rgba(79,195,247,0.07)'" onmouseout="this.style.background='transparent'">
-      Read IR Writeup →
-    </a>
-    <a href="../index.html#projects" style="font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:10px 24px;border:1px solid rgba(79,195,247,0.35);color:var(--sky);border-radius:8px;transition:all 0.3s ease;display:inline-block;text-decoration:none;" onmouseover="this.style.background='rgba(79,195,247,0.07)'" onmouseout="this.style.background='transparent'">
-      ← Back to Projects
-    </a>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2.5rem;">
+    <a href="incident-response-powershell.html" class="btn-outline btn-red">Read IR Writeup →</a>
+    <a href="../index.html#projects" class="btn-outline">← Back to Projects</a>
   </div>
 
 </main>
@@ -341,26 +555,190 @@ suppress gen_id 1, sig_id 2013028, track by_src, ip 10.0.0.0/24</pre>
   <p>Abdelkrim Zouaki · <a href="https://github.com/karim871" style="color:inherit;text-decoration:none;">karim871</a> · Montreal, QC</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
+// LENIS
+const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+// PROGRESS BAR
 const progressBar = document.getElementById('progress-bar');
-window.addEventListener('scroll', () => { progressBar.style.width = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100, 100) + '%'; }, { passive: true });
-(function() {
-  const canvas = document.getElementById('starry-night-canvas');
-  const ctx = canvas.getContext('2d');
-  const VORTICES = [{nx:.22,ny:.24,str:1.6,r:.34,cw:1},{nx:.52,ny:.14,str:1.2,r:.28,cw:-1},{nx:.76,ny:.27,str:1.0,r:.24,cw:1},{nx:.36,ny:.44,str:.8,r:.40,cw:-1}];
-  const BLUES = ['#0a1628','#0d1f3c','#122348','#1a3a6b','#1e4480','#1b5e7b','#1d6a8a','#205070','#163858','#17325a','#1c4060','#244870'];
-  function flow(x,y,t){const nx=x/canvas.width,ny=y/canvas.height;let vx=.28,vy=0;for(const v of VORTICES){const dx=nx-v.nx,dy=ny-v.ny,d2=dx*dx+dy*dy;if(d2<v.r*v.r&&d2>1e-6){const inf=(1-Math.sqrt(d2)/v.r)*v.str,ang=Math.atan2(dy,dx)+v.cw*Math.PI/2;vx+=Math.cos(ang)*inf;vy+=Math.sin(ang)*inf;}}vx+=Math.sin(ny*6.5+t*.11)*.24;vy+=Math.cos(nx*6.5+t*.09)*.20;return{vx,vy};}
-  let stars=[];function buildStars(){stars=[];const n=Math.max(10,Math.floor(canvas.width*canvas.height/22000));for(let i=0;i<n;i++){const lg=Math.random()<.14;stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height*.78,r:lg?4+Math.random()*5:.9+Math.random()*2.2,phase:Math.random()*Math.PI*2,freq:.007+Math.random()*.016,halo:lg?12+Math.random()*14:4+Math.random()*8,rays:lg});}}
-  const N=350;let strokes=[];function rst(s){s.x=Math.random()*canvas.width;s.y=Math.random()*canvas.height;s.age=Math.random()*160;s.maxAge=160+Math.random()*260;s.speed=.8+Math.random()*1.7;s.width=1.5+Math.random()*5.5;s.color=BLUES[Math.floor(Math.random()*BLUES.length)];s.opacity=.30+Math.random()*.62;return s;}
-  function buildStrokes(){strokes=[];for(let i=0;i<N;i++)rst(strokes[i]={});}
-  function drawSky(){const g=ctx.createLinearGradient(0,0,canvas.width*.55,canvas.height);g.addColorStop(0,'#03060d');g.addColorStop(.35,'#081428');g.addColorStop(.75,'#0d1e3c');g.addColorStop(1,'#0a1425');ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);}
-  function drawMoon(t){const mx=canvas.width*.83,my=canvas.height*.11,p=Math.sin(t*.006)*.08;const cor=ctx.createRadialGradient(mx,my,0,mx,my,130*(1+p));cor.addColorStop(0,'rgba(249,168,37,.12)');cor.addColorStop(1,'transparent');ctx.fillStyle=cor;ctx.beginPath();ctx.arc(mx,my,130*(1+p),0,Math.PI*2);ctx.fill();const hal=ctx.createRadialGradient(mx,my,0,mx,my,56*(1+p));hal.addColorStop(0,'#fffde7');hal.addColorStop(.6,'rgba(249,168,37,.55)');hal.addColorStop(1,'transparent');ctx.fillStyle=hal;ctx.beginPath();ctx.arc(mx,my,56*(1+p),0,Math.PI*2);ctx.fill();ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(mx,my,22,0,Math.PI*2);ctx.fill();}
-  function drawStar(s,t){const p=Math.sin(t*s.freq+s.phase),gw=s.r*(1+p*.32),hr=s.halo*(1+p*.22);const og=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,hr*4);og.addColorStop(0,'rgba(249,168,37,'+(0.32+p*.10)+')');og.addColorStop(1,'transparent');ctx.fillStyle=og;ctx.beginPath();ctx.arc(s.x,s.y,hr*4,0,Math.PI*2);ctx.fill();const ig=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,hr);ig.addColorStop(0,'#fffde7');ig.addColorStop(1,'transparent');ctx.fillStyle=ig;ctx.beginPath();ctx.arc(s.x,s.y,hr,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(s.x,s.y,gw,0,Math.PI*2);ctx.fill();if(s.rays){const rl=hr*3*(1+p*.12);ctx.save();ctx.translate(s.x,s.y);ctx.rotate(t*.004);for(let k=0;k<4;k++){const a=k*Math.PI/2;const gr=ctx.createLinearGradient(0,0,Math.cos(a)*rl,Math.sin(a)*rl);gr.addColorStop(0,'rgba(255,253,231,.18)');gr.addColorStop(1,'transparent');ctx.strokeStyle=gr;ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*rl,Math.sin(a)*rl);ctx.stroke();}ctx.restore();}}
-  function drawStrokes(t){ctx.save();ctx.globalCompositeOperation='screen';ctx.lineCap='round';for(let i=0;i<strokes.length;i++){const s=strokes[i];s.age++;if(s.age>s.maxAge){rst(s);continue;}const{vx,vy}=flow(s.x,s.y,t);const nx=s.x+vx*s.speed,ny=s.y+vy*s.speed;const lf=s.age/s.maxAge;const al=(lf<.08?lf/.08:lf>.88?(1-lf)/.12:1)*s.opacity*.55;if(al>.006){ctx.globalAlpha=al;ctx.strokeStyle=s.color;ctx.lineWidth=s.width;ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(nx,ny);ctx.stroke();}s.x=nx;s.y=ny;if(s.x<-20)s.x=canvas.width+20;if(s.x>canvas.width+20)s.x=-20;if(s.y<-20)s.y=canvas.height+20;if(s.y>canvas.height+20)s.y=-20;}ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';ctx.restore();}
-  let t=0;function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;buildStars();buildStrokes();}
-  function frame(){drawSky();drawStrokes(t);for(const s of stars)drawStar(s,t);drawMoon(t);t+=.5;requestAnimationFrame(frame);}
-  resize();window.addEventListener('resize',resize,{passive:true});requestAnimationFrame(frame);
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  progressBar.style.width = Math.min(pct, 100) + '%';
+}, { passive: true });
+
+// CURSOR
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
+(function animCursor() {
+  rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
 })();
+document.querySelectorAll('a,button,.metric-card,.spec-card,.step-card,.dash-item,.vt-item').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    dot.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    ring.style.width = '56px'; ring.style.height = '56px';
+    ring.style.borderColor = 'rgba(0,255,136,0.9)';
+  });
+  el.addEventListener('mouseleave', () => {
+    dot.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width = '36px'; ring.style.height = '36px';
+    ring.style.borderColor = 'rgba(0,255,136,0.5)';
+  });
+});
+
+// CURSOR TRAIL
+const tc = document.getElementById('cursor-canvas');
+const tctx = tc.getContext('2d');
+let pts = [];
+function resizeTC() { tc.width = window.innerWidth; tc.height = window.innerHeight; }
+resizeTC(); window.addEventListener('resize', resizeTC);
+document.addEventListener('mousemove', (e) => {
+  pts.push({ x: e.clientX, y: e.clientY, age: 0, life: 28 + Math.random() * 18 });
+  if (pts.length > 70) pts.shift();
+});
+(function drawTrail() {
+  tctx.clearRect(0, 0, tc.width, tc.height);
+  pts = pts.filter(p => p.age < p.life);
+  for (const p of pts) {
+    const a = (1 - p.age / p.life) * 0.55;
+    const r = (1 - p.age / p.life) * 2.5;
+    tctx.beginPath(); tctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    tctx.fillStyle = `rgba(0,255,136,${a})`; tctx.fill();
+    p.age++;
+  }
+  requestAnimationFrame(drawTrail);
+})();
+
+// GSAP
+gsap.registerPlugin(ScrollTrigger);
+
+// HERO TITLE SPLIT
+function splitWords(el) {
+  const words = el.textContent.trim().split(/\s+/);
+  el.innerHTML = words.map(w => `<span class="word-w"><span class="word-i">${w}</span></span>`).join(' ');
+}
+['hl1', 'hl2'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) splitWords(el);
+});
+gsap.from('.word-i', { y: '115%', duration: 1.1, ease: 'power4.out', stagger: 0.07, delay: 0.1 });
+gsap.from('.hero-eyebrow', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.05 });
+gsap.from('.hero-tags',    { opacity: 0, y: 10, duration: 0.8, ease: 'power3.out', delay: 0.3 });
+gsap.from('.hero-sub',     { opacity: 0, y: 16, duration: 0.9, ease: 'power3.out', delay: 0.65 });
+gsap.from('.hero-meta',    { opacity: 0, y: 10, duration: 0.8, ease: 'power3.out', delay: 0.8 });
+gsap.from('.hero-stats-strip > div', { opacity: 0, y: 20, duration: 0.7, ease: 'power3.out', stagger: 0.12, delay: 1.0 });
+gsap.from('#hero-stat',    { opacity: 0, x: 40, duration: 1.0, ease: 'power3.out', delay: 0.95 });
+
+// COUNTUP — 40% alert reduction
+(function() {
+  const el = document.getElementById('count-up-val');
+  const target = 40;
+  let done = false;
+  setTimeout(() => {
+    if (done) return; done = true;
+    let v = 0;
+    const step = target / (1600 / 16);
+    const t = setInterval(() => {
+      v = Math.min(v + step, target);
+      el.textContent = Math.round(v);
+      if (v >= target) clearInterval(t);
+    }, 16);
+  }, 1500);
+})();
+
+// HERO SCRUB
+gsap.to('.hero-inner', {
+  y: 90, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.2 }
+});
+gsap.to('.hero-inner', {
+  opacity: 0, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: '45% top', end: 'bottom top', scrub: 1 }
+});
+gsap.to('#hero-stat', {
+  opacity: 0, y: -50, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: '40% top', end: 'bottom top', scrub: 1 }
+});
+
+// SECTION ANIMATIONS
+gsap.from('.metric-card', {
+  y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
+  scrollTrigger: { trigger: '#metrics', start: 'top 88%', once: true }
+});
+gsap.utils.toArray('.glass, .glass-detect').forEach(el => {
+  gsap.from(el, {
+    y: 36, opacity: 0, duration: 0.8, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 90%', once: true }
+  });
+});
+gsap.utils.toArray('.step-card').forEach(card => {
+  gsap.from(card, {
+    y: 24, opacity: 0, duration: 0.65, ease: 'power3.out',
+    scrollTrigger: { trigger: card, start: 'top 92%', once: true }
+  });
+});
+gsap.utils.toArray('.vt-item').forEach((item, i) => {
+  gsap.from(item, {
+    x: -18, opacity: 0, duration: 0.6, ease: 'power3.out',
+    scrollTrigger: { trigger: item, start: 'top 91%', once: true }
+  });
+});
+gsap.utils.toArray('.dash-item').forEach((item, i) => {
+  gsap.from(item, {
+    x: -14, opacity: 0, duration: 0.5, ease: 'power3.out',
+    scrollTrigger: { trigger: item, start: 'top 93%', once: true }
+  });
+});
+gsap.utils.toArray('.spec-card').forEach(card => {
+  gsap.from(card, {
+    y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+    scrollTrigger: { trigger: card, start: 'top 92%', once: true }
+  });
+});
+// Pull quote
+gsap.from('.pull-quote', {
+  x: -20, opacity: 0, duration: 0.9, ease: 'power3.out',
+  scrollTrigger: { trigger: '.pull-quote', start: 'top 88%', once: true }
+});
+// Detection stats countup on scroll
+(function() {
+  const stats = [
+    { el: document.querySelector('.detect-stat-val:nth-child(1)'), target: 135, suffix: 's', prefix: '' },
+  ];
+  // Animate detect card entrance with a red flash
+  ScrollTrigger.create({
+    trigger: '#detect-card',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      gsap.fromTo('#detect-card',
+        { borderColor: 'rgba(255,68,68,0.6)', boxShadow: '0 0 80px rgba(255,68,68,0.2)' },
+        { borderColor: 'rgba(255,68,68,0.25)', boxShadow: 'none', duration: 1.2, ease: 'power2.out', delay: 0.3 }
+      );
+    }
+  });
+})();
+
+// MAGNETIC BUTTONS
+document.querySelectorAll('.btn-outline').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const r = btn.getBoundingClientRect();
+    gsap.to(btn, { x: (e.clientX - r.left - r.width/2)*0.28, y: (e.clientY - r.top - r.height/2)*0.28, duration: 0.35, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1,0.5)' });
+  });
+});
 </script>
 </body>
 </html>
