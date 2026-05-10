@@ -720,6 +720,46 @@ tailwind.config = {
 
   /* ── accent-violet fallback ── */
   .accent-violet { color: var(--steel); }
+
+  /* ── Nav: hidden on load, revealed by hero sequence ── */
+  #hero-nav .nav-link {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease,
+                color 0.3s ease, padding-left 0.3s ease;
+  }
+  #hero-nav .nav-link.nav-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ── Metric highlight (about + project key numbers) ── */
+  .metric-highlight {
+    color: var(--ice);
+    font-weight: 600;
+    padding: 1px 5px;
+    background: rgba(79,195,247,0.08);
+    border-radius: 4px;
+    border: 1px solid rgba(79,195,247,0.14);
+    box-shadow: 0 0 10px rgba(79,195,247,0.06);
+    white-space: nowrap;
+  }
+
+  /* ── About paragraph fade-up ── */
+  .about-p {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.16,1,0.3,1);
+  }
+  .about-p.revealed { opacity: 1; transform: translateY(0); }
+
+  /* ── Experience bullet stagger ── */
+  .exp-li {
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .exp-li.revealed { opacity: 1; transform: translateX(0); }
 </style>
 </head>
 <body>
@@ -859,17 +899,17 @@ tailwind.config = {
   <main class="lg:w-[60%] lg:ml-[40%] px-6 py-16 lg:px-14 lg:py-28 lg:pr-[8%]">
 
     <!-- 01 ABOUT -->
-    <section id="about" class="mb-28 relative reveal">
+    <section id="about" class="mb-28 relative">
       <span class="ghost-num" aria-hidden="true">01</span>
-      <h2 class="section-heading">
+      <h2 class="section-heading reveal">
         <span class="section-num">01.</span>
         About Me
         <span class="section-line"></span>
       </h2>
       <div class="space-y-5 text-[0.95rem] leading-[1.85] text-slate-400">
-        <p>I'm Abdelkrim — I built a working SOC on a Raspberry Pi before I had my first IT job. That <span class="accent-sky font-medium">Mini-SOC (Suricata + Splunk + Wazuh)</span> isn't a classroom exercise: it runs against real traffic and has produced real detections, including a <span class="accent-sky font-medium">documented PowerShell fileless attack</span> caught, investigated, and contained in 42 minutes.</p>
-        <p>I'm a <span class="accent-sky font-medium">Computer Security &amp; Networking graduate</span> based in Montreal, specializing in threat detection, network security, and automation pipelines that turn raw IOCs into actionable intelligence. My focus is on reducing noise — getting alerts that mean something — and acting on them fast. I operate fully in both <span class="accent-sky font-medium">English and French</span>, which matters in Montreal's bilingual IT support landscape.</p>
-        <p>I'm currently available and actively looking for SOC Analyst and IT Support roles in Montreal. If you're building a detection capability or need someone who can work a queue and escalate intelligently, let's talk.</p>
+        <p class="about-p">I'm Abdelkrim — I built a working SOC on a Raspberry Pi before I had my first IT job. That <span class="accent-sky font-medium">Mini-SOC (Suricata + Splunk + Wazuh)</span> isn't a classroom exercise: it runs against real traffic and has produced real detections, including a <span class="accent-sky font-medium">documented PowerShell fileless attack</span> caught, investigated, and contained in <span class="metric-highlight">42 minutes</span>.</p>
+        <p class="about-p">I'm a <span class="accent-sky font-medium">Computer Security &amp; Networking graduate</span> based in Montreal, specializing in threat detection, network security, and automation pipelines that turn raw IOCs into actionable intelligence. My focus is on reducing noise — getting alerts that mean something — and acting on them fast. I operate fully in both <span class="accent-sky font-medium">English and French</span>, which matters in Montreal's bilingual IT support landscape.</p>
+        <p class="about-p">I'm currently available and actively looking for SOC Analyst and IT Support roles in Montreal. If you're building a detection capability or need someone who can work a queue and escalate intelligently, let's talk.</p>
       </div>
     </section>
 
@@ -920,18 +960,18 @@ tailwind.config = {
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Technician <span class="accent-sky">@ Alorica</span></h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">July 2025 – December 2025 · Montreal, QC</p>
             <ul class="space-y-3 text-sm" style="color:var(--text-light);">
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Provided Tier 1/2 IT support for Alorica's internal workforce — diagnosing Windows 10/11, Office 365, VPN, and network peripheral issues across a bilingual (FR/EN) environment at a pace of 25–35 tickets per day.</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Documented every incident with structured CRM notes to ensure clean handoff and audit trail for L2/L3 escalations.</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Maintained SLA compliance under high ticket volume — same bilingual communication skills used daily here as in the lab environment.</span></li>
+              <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Provided Tier 1/2 IT support for Alorica's internal workforce — diagnosing Windows 10/11, Office 365, VPN, and network peripheral issues across a bilingual (FR/EN) environment at a pace of 25–35 tickets per day.</span></li>
+              <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Documented every incident with structured CRM notes to ensure clean handoff and audit trail for L2/L3 escalations.</span></li>
+              <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Maintained SLA compliance under high ticket volume — same bilingual communication skills used daily here as in the lab environment.</span></li>
             </ul>
           </div>
           <div id="content-cosior" class="tab-content hidden">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Intern <span class="accent-sky">@ Groupe Cosior TI</span></h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">January – May 2025 · Montreal, QC</p>
             <ul class="space-y-3 text-sm" style="color:var(--text-light);">
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Supported the cybersecurity team with network traffic monitoring and vulnerability tracking.</span></li>
-              <li class="flex items-start"><span class="exp-bullet">▹</span><span>Documented configurations and incidents to maintain accurate infrastructure records.</span></li>
+              <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</span></li>
+              <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Supported the cybersecurity team with network traffic monitoring and vulnerability tracking.</span></li>
+              <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Documented configurations and incidents to maintain accurate infrastructure records.</span></li>
             </ul>
           </div>
           <div id="content-other" class="tab-content hidden">
@@ -1427,7 +1467,7 @@ if (prefersReduced) {
     const el = document.getElementById(id);
     if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
   });
-  document.querySelectorAll('#hero-nav .nav-link').forEach(l => { l.style.opacity='1'; l.style.transform='none'; });
+  document.querySelectorAll('#hero-nav .nav-link').forEach(l => l.classList.add('nav-visible'));
   countUp('stat-0', 42, 1); countUp('stat-1', 40, 1); countUp('stat-2', 15000, 1);
   typeWriter();
 } else {
@@ -1460,14 +1500,9 @@ if (prefersReduced) {
     fadeInEl(document.getElementById('hero-badge'));
     await wait(160);
 
-    // 6 — stagger nav links
+    // 6 — stagger nav links (CSS handles initial hidden state)
     const navLinks = [...document.querySelectorAll('#hero-nav .nav-link')];
-    navLinks.forEach((l, i) => {
-      l.style.opacity = '0';
-      l.style.transform = 'translateX(-10px)';
-      l.style.transition = 'opacity 0.4s ease, transform 0.4s ease, color 0.3s ease, padding-left 0.3s ease';
-      setTimeout(() => { l.style.opacity = '1'; l.style.transform = 'none'; }, i * 75);
-    });
+    navLinks.forEach((l, i) => setTimeout(() => l.classList.add('nav-visible'), i * 75));
     await wait(navLinks.length * 75 + 100);
 
     // 7 — CTA buttons
@@ -1555,6 +1590,52 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
     }
     requestAnimationFrame(drawTrail);
   })();
+})();
+
+// ── About paragraphs fade-up ──────────────────────────────────
+(function initAboutReveal() {
+  const paragraphs = document.querySelectorAll('.about-p');
+  if (!paragraphs.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = [...paragraphs].indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('revealed'), idx * 120);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  paragraphs.forEach(p => obs.observe(p));
+})();
+
+// ── Experience bullet stagger ─────────────────────────────────
+(function initExpStagger() {
+  const section = document.getElementById('experience');
+  if (!section) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.exp-li').forEach((li, i) => {
+          if (!li.classList.contains('revealed')) {
+            setTimeout(() => li.classList.add('revealed'), i * 90);
+          }
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+  obs.observe(section);
+  // Re-trigger stagger when tabs switch
+  const origSwitch = window.switchTab;
+  window.switchTab = function(name) {
+    origSwitch(name);
+    const pane = document.getElementById('content-' + name);
+    if (pane) {
+      pane.querySelectorAll('.exp-li').forEach((li, i) => {
+        li.classList.remove('revealed');
+        setTimeout(() => li.classList.add('revealed'), i * 90);
+      });
+    }
+  };
 })();
 
 // ── Tabs ──────────────────────────────────────────────────────
