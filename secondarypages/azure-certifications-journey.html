@@ -567,7 +567,18 @@
         <a href="Blog.html" class="back-button" style="margin-top: 40px;">← Back to Blog</a>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script>
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smooth: true,
+        });
+        (function raf(time) { lenis.raf(time); requestAnimationFrame(raf); })(0);
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', e => { e.preventDefault(); lenis.scrollTo(a.getAttribute('href')); });
+        });
+
         window.addEventListener('scroll', function() {
             const header = document.querySelector('.header');
             if (window.scrollY > 100) {

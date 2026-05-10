@@ -572,7 +572,18 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script>
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smooth: true,
+        });
+        (function raf(time) { lenis.raf(time); requestAnimationFrame(raf); })(0);
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', e => { e.preventDefault(); lenis.scrollTo(a.getAttribute('href')); });
+        });
+
         // Parallax effect for orbs
         document.addEventListener('mousemove', (e) => {
             const orbs = document.querySelectorAll('.orb');
