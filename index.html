@@ -760,6 +760,131 @@ tailwind.config = {
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
   }
   .exp-li.revealed { opacity: 1; transform: translateX(0); }
+
+  /* ── Featured badge with pulse dot ── */
+  .featured-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sky);
+    margin-bottom: 4px;
+    opacity: 0.85;
+  }
+  .featured-badge-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--sky);
+    flex-shrink: 0;
+    animation: badge-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes badge-pulse {
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79,195,247,0.4); }
+    50%      { transform: scale(1.5); box-shadow: 0 0 0 5px rgba(79,195,247,0); }
+  }
+
+  /* ── Snap gallery (replaces screenshot-gallery) ── */
+  .snap-gallery {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(79,195,247,0.25) transparent;
+  }
+  .snap-gallery img {
+    scroll-snap-align: start;
+    height: 130px;
+    width: auto;
+    min-width: 190px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(79,195,247,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: saturate(0.6) brightness(0.8);
+    flex-shrink: 0;
+  }
+  .snap-gallery img:hover {
+    filter: saturate(1) brightness(1);
+    border-color: rgba(79,195,247,0.45);
+    box-shadow: 0 0 20px rgba(79,195,247,0.12);
+    transform: scale(1.02);
+  }
+
+  /* ── Gallery dot indicators ── */
+  .gallery-dots { display: flex; gap: 5px; padding: 6px 0 8px; align-items: center; }
+  .gallery-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(79,195,247,0.25);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+  .gallery-dot.active { background: var(--sky); width: 14px; border-radius: 3px; }
+
+  /* ── "View Case Study" button ── */
+  .btn-case-study {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.67rem;
+    letter-spacing: 0.04em;
+    padding: 6px 14px;
+    border: 1px solid rgba(79,195,247,0.2);
+    color: var(--text);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: transparent;
+  }
+  .btn-case-study:hover {
+    color: var(--sky);
+    border-color: rgba(79,195,247,0.5);
+    background: rgba(79,195,247,0.06);
+  }
+  .btn-case-study .cs-prefix { color: var(--sky); opacity: 0.7; }
+
+  /* ── Skill card alternating slide ── */
+  .skill-card {
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1),
+                border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .skill-card.slide-left  { transform: translateX(-40px); }
+  .skill-card.slide-right { transform: translateX(40px); }
+  .skill-card.revealed    { opacity: 1; transform: translateX(0); }
+  .skill-card.revealed:hover {
+    border-color: rgba(56,189,248,0.25);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 0 24px rgba(56,189,248,0.05);
+  }
+
+  /* ── Skill item stagger ── */
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    padding: 4px 0;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .skill-item.revealed { opacity: 1; transform: translateX(0); }
 </style>
 </head>
 <body>
@@ -1004,7 +1129,7 @@ tailwind.config = {
         <div class="glass project-card p-6">
           <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="featured-label">Featured Project</p>
+              <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
               <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Threat Intelligence Automation Bot</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
@@ -1017,7 +1142,7 @@ tailwind.config = {
             </div>
           </div>
           <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Python framework querying <span class="accent-sky font-medium">AbuseIPDB, VirusTotal, and AlienVault OTX</span> to automate IOC enrichment and risk scoring. Generates structured JSON threat reports for SOC workflows — cutting manual lookup time from minutes per IOC to seconds, with automated severity classification across all three feeds.</p>
-          <div class="screenshot-gallery mb-4">
+          <div class="snap-gallery mb-1" id="snap-g1">
             <img src="https://karim871.github.io/Portfolio/images/01-help-command.png"          alt="CLI help command"         onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/clean-ip-result.webp"         alt="Clean IP scan result"     onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/malicious-ip-result.webp"     alt="Malicious IP detection"   onclick="openLightbox(this.src)" title="Click to enlarge">
@@ -1028,21 +1153,22 @@ tailwind.config = {
             <img src="https://karim871.github.io/Portfolio/images/protocol.webp"               alt="Protocol analysis"        onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/14-complete-workflow.webp"   alt="Complete workflow"         onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
-          <div class="flex flex-wrap gap-2">
+          <div class="gallery-dots" data-gallery="snap-g1"></div>
+          <div class="flex flex-wrap gap-2 mb-3">
             <span class="project-tag">Python</span>
             <span class="project-tag">REST APIs</span>
             <span class="project-tag">JSON Parsing</span>
             <span class="project-tag">Linux</span>
             <span class="project-tag">Automation</span>
           </div>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/cybersecurity-audit-tool-blog.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
         </div>
 
         <!-- Mini-SOC -->
         <div class="glass project-card p-6">
           <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="featured-label">Featured Project</p>
+              <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
               <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Home Mini-SOC Lab</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
@@ -1054,27 +1180,28 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Full Security Operations Center on a <span class="accent-sky font-medium">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Rule tuning — suppressing noisy scanner signatures and home-network baseline traffic — dropped alert volume from ~120 to ~72 daily alerts over a 3-week cycle (<span class="accent-ice font-semibold">~40% reduction</span>). This lab produced a real documented detection: a PowerShell-based fileless attack caught and contained in 42 minutes — see the IR writeup below.</p>
-          <div class="screenshot-gallery mb-4">
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Full Security Operations Center on a <span class="accent-sky font-medium">Raspberry Pi</span>. Suricata IDS with the Emerging Threats ruleset feeds into Splunk SIEM for real-time detection, alert correlation, and custom dashboard visualization. Rule tuning — suppressing noisy scanner signatures and home-network baseline traffic — dropped alert volume from ~120 to ~72 daily alerts over a 3-week cycle (<span class="metric-highlight">~40% reduction</span>). This lab produced a real documented detection: a PowerShell-based fileless attack caught and contained in <span class="metric-highlight">42 minutes</span> — see the IR writeup below.</p>
+          <div class="snap-gallery mb-1" id="snap-g2">
             <img src="https://karim871.github.io/Portfolio/images/raspberrypi.jpg"     alt="Raspberry Pi hardware" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/Screenshot2025.webp" alt="Alert detail"          onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/Screenshot2026.webp" alt="Alert detail"          onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
-          <div class="flex flex-wrap gap-2">
+          <div class="gallery-dots" data-gallery="snap-g2"></div>
+          <div class="flex flex-wrap gap-2 mb-3">
             <span class="project-tag">Suricata</span>
             <span class="project-tag">Splunk</span>
             <span class="project-tag">Raspberry Pi</span>
             <span class="project-tag">rsyslog</span>
             <span class="project-tag">Linux</span>
           </div>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/piSOC.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
         </div>
 
         <!-- PowerShell IR -->
         <div class="glass project-card p-6">
           <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="featured-label" style="color:#4ade80;border-color:rgba(74,222,128,0.25);background:rgba(74,222,128,0.06);">Real Detection</p>
+              <p class="featured-badge" style="color:#4ade80;"><span class="featured-badge-dot" style="background:#4ade80;"></span>Real Detection</p>
               <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Incident Response: PowerShell Threat Detection</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
@@ -1083,7 +1210,7 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-4" style="color:var(--text-light);">A live detection from my Mini-SOC: <span class="accent-sky font-medium">Wazuh flagged a Base64-encoded PowerShell command</span> (severity 12) on WIN-LAB-01 attempting a remote stage-2 payload download and scheduled-task persistence. I cross-correlated Wazuh HIDS alerts, Suricata network events, and Sysmon endpoint logs in Splunk, then enriched the C2 IP <code style="font-family:'Fira Code',monospace;font-size:0.82em;color:var(--sky);">185.220.101.42</code> via my Threat Intel Bot — 100/100 AbuseIPDB, 8/92 VirusTotal flags. Detection to containment: <span class="accent-ice font-semibold">42 minutes</span>. Host isolated, process terminated, malicious scheduled task removed, forensic artifacts preserved.</p>
+          <p class="text-sm leading-[1.8] mb-4" style="color:var(--text-light);">A live detection from my Mini-SOC: <span class="accent-sky font-medium">Wazuh flagged a Base64-encoded PowerShell command</span> (severity 12) on WIN-LAB-01 attempting a remote stage-2 payload download and scheduled-task persistence. I cross-correlated Wazuh HIDS alerts, Suricata network events, and Sysmon endpoint logs in Splunk, then enriched the C2 IP <code style="font-family:'Fira Code',monospace;font-size:0.82em;color:var(--sky);">185.220.101.42</code> via my Threat Intel Bot — 100/100 AbuseIPDB, 8/92 VirusTotal flags. Detection to containment: <span class="metric-highlight">42 minutes</span>. Host isolated, process terminated, malicious scheduled task removed, forensic artifacts preserved.</p>
           <div class="flex flex-wrap gap-2 mb-4">
             <span style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--sky);opacity:0.8;">MITRE:</span>
             <span class="project-tag">T1059.001 · PowerShell</span>
@@ -1091,7 +1218,7 @@ tailwind.config = {
             <span class="project-tag">T1053.005 · Sched. Task</span>
             <span class="project-tag">T1105 · C2 Download</span>
           </div>
-          <div class="flex flex-wrap gap-2">
+          <div class="flex flex-wrap gap-2 mb-3">
             <span class="project-tag">Wazuh</span>
             <span class="project-tag">Suricata</span>
             <span class="project-tag">Splunk</span>
@@ -1099,13 +1226,14 @@ tailwind.config = {
             <span class="project-tag">Threat Intel Bot</span>
             <span class="project-tag">Incident Response</span>
           </div>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/incident-response-powershell.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
         </div>
 
         <!-- Pi-hole -->
         <div class="glass project-card p-6">
           <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="featured-label">Featured Project</p>
+              <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
               <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">Network-Wide DNS Security Layer</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
@@ -1117,8 +1245,8 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="accent-ice font-semibold">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
-          <div class="screenshot-gallery mb-4">
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="metric-highlight">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
+          <div class="snap-gallery mb-1" id="snap-g3">
             <img src="./images/Screenshot1.webp"  alt="Pi-hole installation process"          loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="./images/Screenshot2.webp"  alt="Pi-hole upstream DNS selection"        loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="./images/Screenshot3.webp"  alt="Pi-hole blocklist configuration"       loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
@@ -1135,20 +1263,21 @@ tailwind.config = {
             <img src="./images/Screenshot15.webp" alt="Mobile device ad-free browsing"        loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="./images/phone.webp"         alt="Mobile device DNS config"              loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
-          <div class="flex flex-wrap gap-2">
+          <div class="gallery-dots" data-gallery="snap-g3"></div>
+          <div class="flex flex-wrap gap-2 mb-3">
             <span class="project-tag">Pi-hole</span>
             <span class="project-tag">DNS Security</span>
             <span class="project-tag">Network Filtering</span>
             <span class="project-tag">Linux</span>
           </div>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/pihole.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
         </div>
 
         <!-- pfSense -->
         <div class="glass project-card p-6">
           <div class="flex items-start justify-between mb-4">
             <div>
-              <p class="featured-label">Featured Project</p>
+              <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
               <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:500;color:var(--text-bright);">pfSense Firewall — Secure Network Architecture</h3>
             </div>
             <div class="flex gap-3 ml-4 mt-1 shrink-0">
@@ -1157,13 +1286,13 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">LAN/WAN segmented lab across <span class="accent-ice font-semibold">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
-          <div class="screenshot-gallery mb-4">
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">LAN/WAN segmented lab across <span class="metric-highlight">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
+          <div class="snap-gallery mb-1" id="snap-g4">
             <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"             onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP config"     onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="https://karim871.github.io/Portfolio/images/screen3.png" alt="Windows client receiving DHCP from pfSense"  onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
-          <p class="font-mono text-xs mb-4" style="color:var(--text);opacity:0.6;">↔ scroll to see more</p>
+          <div class="gallery-dots" data-gallery="snap-g4"></div>
           <div class="flex flex-wrap gap-2">
             <span class="project-tag">pfSense</span>
             <span class="project-tag">OPNsense</span>
@@ -1738,6 +1867,85 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
     el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
   });
 }
+
+// ── Gallery dots ──────────────────────────────────────────────
+document.querySelectorAll('.gallery-dots').forEach(dotsEl => {
+  const gallery = document.getElementById(dotsEl.dataset.gallery);
+  if (!gallery) return;
+  const imgs = [...gallery.querySelectorAll('img')];
+  const dots = imgs.map((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+    btn.setAttribute('aria-label', `Image ${i + 1}`);
+    btn.addEventListener('click', () => gallery.scrollTo({ left: imgs[i].offsetLeft, behavior: 'smooth' }));
+    dotsEl.appendChild(btn);
+    return btn;
+  });
+  gallery.addEventListener('scroll', () => {
+    const mid = gallery.scrollLeft + gallery.clientWidth / 2;
+    let active = 0;
+    imgs.forEach((img, i) => { if (img.offsetLeft <= mid) active = i; });
+    dots.forEach((d, i) => d.classList.toggle('active', i === active));
+  }, { passive: true });
+});
+
+// ── Tech tag stagger ──────────────────────────────────────────
+(function initTagStagger() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.project-tag').forEach((tag, i) => {
+          tag.style.opacity = '0';
+          tag.style.transform = 'translateY(6px)';
+          tag.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          setTimeout(() => { tag.style.opacity = '1'; tag.style.transform = 'translateY(0)'; }, i * 50);
+        });
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.project-card').forEach(c => obs.observe(c));
+})();
+
+// ── Case study: terminal type-out on hover ────────────────────
+document.querySelectorAll('.btn-case-study').forEach(btn => {
+  const label = btn.querySelector('.cs-label');
+  if (!label) return;
+  const original = label.textContent;
+  let timer = null;
+  btn.addEventListener('mouseenter', () => {
+    clearTimeout(timer);
+    label.textContent = '';
+    let i = 0;
+    function tick() {
+      label.textContent = original.slice(0, i++);
+      if (i <= original.length) timer = setTimeout(tick, 45);
+    }
+    tick();
+  });
+  btn.addEventListener('mouseleave', () => { clearTimeout(timer); label.textContent = original; });
+});
+
+// ── Skill cards: alternating horizontal slide ─────────────────
+(function initSkillSlide() {
+  const cards = [...document.querySelectorAll('.skill-card')];
+  cards.forEach((c, i) => c.classList.add(i % 2 === 0 ? 'slide-left' : 'slide-right'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const card = entry.target;
+      const idx = cards.indexOf(card);
+      setTimeout(() => {
+        card.classList.add('revealed');
+        card.querySelectorAll('.skill-item').forEach((item, j) => {
+          setTimeout(() => item.classList.add('revealed'), j * 60 + 180);
+        });
+      }, idx * 80);
+      obs.unobserve(card);
+    });
+  }, { threshold: 0.12 });
+  cards.forEach(c => obs.observe(c));
+})();
 
 // ── Particle canvas ───────────────────────────────────────────
 (function initParticles() {
