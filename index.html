@@ -19,6 +19,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script>
 tailwind.config = {
   theme: {
@@ -642,9 +645,93 @@ tailwind.config = {
 
   /* ── Z-index management ── */
   /* 0: canvas/orbs, 10: content, 20: sidebar, 30: progress/cursor, 50+: overlays */
+
+  /* ── Grain overlay ── */
+  .grain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9996;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+
+  /* ── Trail canvas ── */
+  #trail-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ── Binary canvas ── */
+  #binary-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── Stat strip ── */
+  .stat-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    padding: 14px 16px;
+    margin: 8px 0 20px;
+    background: rgba(79,195,247,0.04);
+    border: 1px solid rgba(79,195,247,0.1);
+    border-radius: 10px;
+  }
+  .stat-item { display: flex; flex-direction: column; }
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ice);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .stat-unit { font-size: 1rem; color: var(--sky); font-family: 'Space Grotesk', sans-serif; }
+  .stat-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.57rem;
+    color: var(--text);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+    opacity: 0.65;
+  }
+
+  /* ── Name split-text chars ── */
+  .name-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1),
+                transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  }
+  .name-char.revealed { opacity: 1; transform: translateY(0); }
+  .name-space { display: inline-block; width: 0.28em; }
+
+  /* ── Magnetic button ── */
+  .magnetic-btn { transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+
+  /* ── accent-violet fallback ── */
+  .accent-violet { color: var(--steel); }
 </style>
 </head>
 <body>
+
+<!-- Grain texture overlay -->
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- Cursor trail canvas -->
+<canvas id="trail-canvas" aria-hidden="true"></canvas>
+
+<!-- Binary/hex particle background -->
+<canvas id="binary-canvas" aria-hidden="true"></canvas>
 
 <!-- Ambient orbs -->
 <div class="orb orb-1" aria-hidden="true"></div>
@@ -676,19 +763,35 @@ tailwind.config = {
   <header id="sidebar" class="lg:w-[40%] lg:fixed lg:h-screen flex flex-col justify-between px-6 py-12 lg:px-12 lg:py-0 lg:pl-[8%] z-20">
     <div class="flex flex-col justify-center h-full">
 
-      <p class="hero-sub mb-5 reveal">Hi, my name is</p>
+      <!-- Greeting: typed character by character -->
+      <p class="hero-sub mb-4" id="hero-greeting" aria-label="Hi, my name is"></p>
 
-      <h1 class="hero-name mb-3 reveal reveal-delay-1">
-        Abdelkrim Zouaki
-      </h1>
+      <!-- Name: split-text reveal after typing finishes -->
+      <h1 class="hero-name mb-2" id="hero-name" aria-label="Abdelkrim Zouaki"></h1>
 
-      <div class="hero-title mb-4 reveal reveal-delay-2">
+      <!-- Live stat strip: count-up on load -->
+      <div class="stat-strip" id="stat-strip" style="opacity:0;transform:translateY(10px)">
+        <div class="stat-item">
+          <div><span class="stat-num" id="stat-0">0</span><span class="stat-unit"> min</span></div>
+          <span class="stat-label">detection to containment</span>
+        </div>
+        <div class="stat-item">
+          <div><span class="stat-num" id="stat-1">0</span><span class="stat-unit">%</span></div>
+          <span class="stat-label">alert volume reduction</span>
+        </div>
+        <div class="stat-item">
+          <div><span class="stat-num" id="stat-2">0</span></div>
+          <span class="stat-label">domains blocked daily</span>
+        </div>
+      </div>
+
+      <div class="hero-title mb-4" id="hero-title" style="opacity:0;transform:translateY(10px)">
         <span id="typewriter"></span><span class="tw-cursor"></span>
       </div>
 
-      <p class="hero-sub mb-5 reveal reveal-delay-3">Fluent: English &amp; French · Native: Moroccan Arabic</p>
+      <p class="hero-sub mb-5" id="hero-lang" style="opacity:0;transform:translateY(10px)">Fluent: English &amp; French · Native: Moroccan Arabic</p>
 
-      <div class="mb-8 reveal reveal-delay-3">
+      <div class="mb-8" id="hero-badge" style="opacity:0;transform:translateY(10px)">
         <span class="inline-flex items-center gap-2 font-mono text-xs px-3 py-1.5 rounded-full" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.22);color:#4ade80;">
           <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse-glow 2s ease-in-out infinite;flex-shrink:0;"></span>
           Available for hire · Montreal, QC
@@ -696,7 +799,7 @@ tailwind.config = {
       </div>
 
       <!-- Desktop nav -->
-      <nav class="hidden lg:flex flex-col gap-2 mb-10 reveal" aria-label="Main navigation">
+      <nav class="hidden lg:flex flex-col gap-2 mb-10" id="hero-nav" aria-label="Main navigation">
         <a href="#about"          class="nav-link">About</a>
         <a href="#education"      class="nav-link">Education</a>
         <a href="#experience"     class="nav-link">Experience</a>
@@ -715,9 +818,10 @@ tailwind.config = {
         <a href="#certifications" class="mobile-nav-pill">Certs</a>
       </nav>
 
-      <div class="flex flex-wrap gap-3 reveal">
-        <a href="#contact" class="btn-outline">Get In Touch</a>
-        <a href="https://karim871.github.io/Portfolio/Abdelkrim_Zouaki_CV.pdf" download class="btn-primary">
+      <!-- CTA buttons — magnetic on hover -->
+      <div class="flex flex-wrap gap-3" id="hero-btns" style="opacity:0;transform:translateY(10px)">
+        <a href="#contact" class="btn-outline magnetic-btn" data-magnetic>Get In Touch</a>
+        <a href="https://karim871.github.io/Portfolio/Abdelkrim_Zouaki_CV.pdf" download class="btn-primary magnetic-btn" data-magnetic>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>
           Download CV
         </a>
@@ -1230,13 +1334,75 @@ tailwind.config = {
 </div>
 
 <script>
+// ── GSAP + Lenis ───────────────────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
+const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((t) => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+
 // ── Progress bar ──────────────────────────────────────────────
 const progressBar = document.getElementById('progress-bar');
 window.addEventListener('scroll', () => {
   progressBar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%';
 }, { passive: true });
 
-// ── Typewriter ────────────────────────────────────────────────
+// ── Hero sequence helpers ─────────────────────────────────────
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function typeText(el, text, msPer) {
+  for (let i = 0; i <= text.length; i++) {
+    el.textContent = text.slice(0, i);
+    await wait(msPer);
+  }
+}
+
+function buildSplitName(name) {
+  const h1 = document.getElementById('hero-name');
+  h1.innerHTML = '';
+  for (const ch of name) {
+    if (ch === ' ') {
+      const s = document.createElement('span');
+      s.className = 'name-space';
+      h1.appendChild(s);
+    } else {
+      const s = document.createElement('span');
+      s.className = 'name-char';
+      s.textContent = ch;
+      h1.appendChild(s);
+    }
+  }
+}
+
+async function revealSplitName() {
+  const chars = document.querySelectorAll('#hero-name .name-char');
+  chars.forEach((c, i) => setTimeout(() => c.classList.add('revealed'), i * 35));
+  await wait(chars.length * 35 + 150);
+}
+
+function fadeInEl(el, dur = 600) {
+  el.style.transition = `opacity ${dur}ms ease, transform ${dur}ms cubic-bezier(0.16,1,0.3,1)`;
+  el.style.opacity = '1';
+  el.style.transform = 'translateY(0)';
+}
+
+function countUp(id, target, duration) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = performance.now();
+  const fmt = n => target >= 1000 ? n.toLocaleString() : String(n);
+  const tick = now => {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = fmt(Math.round(ease * target));
+    if (t < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+// ── Typewriter (job titles) ───────────────────────────────────
 const titles = ['SOC Analyst', 'Cybersecurity Specialist', 'Threat Hunter'];
 let ti = 0, ci = 0, deleting = false;
 const tw = document.getElementById('typewriter');
@@ -1244,12 +1410,152 @@ function typeWriter() {
   const t = titles[ti];
   tw.textContent = deleting ? t.substring(0, ci - 1) : t.substring(0, ci + 1);
   deleting ? ci-- : ci++;
-  let delay = deleting ? 70 : 160;
-  if (!deleting && ci === t.length) { delay = 3800; deleting = true; }
-  else if (deleting && ci === 0) { deleting = false; ti = (ti + 1) % titles.length; delay = 400; }
-  setTimeout(typeWriter, delay);
+  let d = deleting ? 70 : 160;
+  if (!deleting && ci === t.length) { d = 3800; deleting = true; }
+  else if (deleting && ci === 0) { deleting = false; ti = (ti + 1) % titles.length; d = 400; }
+  setTimeout(typeWriter, d);
 }
-document.addEventListener('DOMContentLoaded', typeWriter);
+
+// ── Hero sequence ─────────────────────────────────────────────
+buildSplitName('Abdelkrim Zouaki');
+
+if (prefersReduced) {
+  // Skip animations — show everything immediately
+  document.getElementById('hero-greeting').textContent = 'Hi, my name is';
+  document.querySelectorAll('#hero-name .name-char').forEach(c => c.classList.add('revealed'));
+  ['stat-strip','hero-title','hero-lang','hero-badge','hero-btns'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+  });
+  document.querySelectorAll('#hero-nav .nav-link').forEach(l => { l.style.opacity='1'; l.style.transform='none'; });
+  countUp('stat-0', 42, 1); countUp('stat-1', 40, 1); countUp('stat-2', 15000, 1);
+  typeWriter();
+} else {
+  (async function heroSequence() {
+    await wait(350);
+
+    // 1 — type the greeting
+    await typeText(document.getElementById('hero-greeting'), 'Hi, my name is', 80);
+    await wait(180);
+
+    // 2 — reveal name chars one by one
+    await revealSplitName();
+
+    // 3 — fade in stat strip + count up
+    const strip = document.getElementById('stat-strip');
+    fadeInEl(strip);
+    countUp('stat-0', 42, 1200);
+    countUp('stat-1', 40, 1200);
+    countUp('stat-2', 15000, 1500);
+    await wait(280);
+
+    // 4 — typewriter area
+    fadeInEl(document.getElementById('hero-title'));
+    typeWriter();
+    await wait(180);
+
+    // 5 — language line, badge
+    fadeInEl(document.getElementById('hero-lang'));
+    await wait(130);
+    fadeInEl(document.getElementById('hero-badge'));
+    await wait(160);
+
+    // 6 — stagger nav links
+    const navLinks = [...document.querySelectorAll('#hero-nav .nav-link')];
+    navLinks.forEach((l, i) => {
+      l.style.opacity = '0';
+      l.style.transform = 'translateX(-10px)';
+      l.style.transition = 'opacity 0.4s ease, transform 0.4s ease, color 0.3s ease, padding-left 0.3s ease';
+      setTimeout(() => { l.style.opacity = '1'; l.style.transform = 'none'; }, i * 75);
+    });
+    await wait(navLinks.length * 75 + 100);
+
+    // 7 — CTA buttons
+    fadeInEl(document.getElementById('hero-btns'));
+  })();
+}
+
+// ── Magnetic buttons ──────────────────────────────────────────
+document.querySelectorAll('[data-magnetic]').forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    btn.style.transition = 'transform 0.15s ease';
+  });
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.32;
+    const y = (e.clientY - r.top - r.height / 2) * 0.32;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+    btn.style.transform = 'translate(0,0)';
+  });
+});
+
+// ── Binary / hex particle canvas ─────────────────────────────
+(function initBinaryCanvas() {
+  const canvas = document.getElementById('binary-canvas');
+  const ctx = canvas.getContext('2d');
+  const chars = '01010011 01001111 43 2E 4F 52 47 FF A0 B3'.split(' ')
+    .concat('0123456789ABCDEF'.split(''));
+  const COUNT = 38;
+  const particles = [];
+
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize();
+  addEventListener('resize', resize, { passive: true });
+
+  for (let i = 0; i < COUNT; i++) {
+    particles.push({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight,
+      vy: 0.12 + Math.random() * 0.25,
+      ch: chars[Math.floor(Math.random() * chars.length)],
+      alpha: 0.018 + Math.random() * 0.018,
+      size: 9 + Math.floor(Math.random() * 5),
+      tick: 0,
+      interval: 40 + Math.floor(Math.random() * 80),
+    });
+  }
+
+  (function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of particles) {
+      p.y += p.vy;
+      if (p.y > canvas.height + 20) { p.y = -20; p.x = Math.random() * canvas.width; }
+      if (++p.tick >= p.interval) { p.ch = chars[Math.floor(Math.random() * chars.length)]; p.tick = 0; }
+      ctx.font = `${p.size}px 'Fira Code',monospace`;
+      ctx.fillStyle = `rgba(227,226,226,${p.alpha})`;
+      ctx.fillText(p.ch, p.x, p.y);
+    }
+    requestAnimationFrame(draw);
+  })();
+})();
+
+// ── Cursor trail canvas ───────────────────────────────────────
+(function initTrailCanvas() {
+  if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+  const canvas = document.getElementById('trail-canvas');
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
+  addEventListener('resize', () => { W = canvas.width = innerWidth; H = canvas.height = innerHeight; });
+  const pts = [];
+  let mx = 0, my = 0;
+  addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; pts.push({ x: mx, y: my, life: 1 }); }, { passive: true });
+  (function drawTrail() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = pts.length - 1; i >= 0; i--) {
+      const p = pts[i];
+      p.life -= 0.048;
+      if (p.life <= 0) { pts.splice(i, 1); continue; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2.5 * p.life, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(79,195,247,${p.life * 0.35})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(drawTrail);
+  })();
+})();
 
 // ── Tabs ──────────────────────────────────────────────────────
 function switchTab(name) {
@@ -1274,12 +1580,12 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 document.querySelectorAll('section[id]').forEach(el => revealObserver.observe(el));
 
-// ── Smooth scroll ─────────────────────────────────────────────
+// ── Smooth scroll (Lenis) ─────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', function(e) {
     e.preventDefault();
-    const t = document.querySelector(this.getAttribute('href'));
-    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) lenis.scrollTo(target, { offset: -60 });
   });
 });
 
@@ -1429,7 +1735,7 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
 })();
 
 // ── prefers-reduced-motion: disable animations ────────────────
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (prefersReduced) {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
 }
 </script>
