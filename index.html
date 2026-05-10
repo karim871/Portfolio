@@ -45,23 +45,23 @@ tailwind.config = {
 <style>
   /* ── Base ── */
   :root {
-    --base: #030508;
-    --surface: rgba(8,18,38,0.65);
-    --border: rgba(79,195,247,0.1);
-    --border-hover: rgba(79,195,247,0.4);
-    --text: #7fa8c4;
-    --text-light: #b8d4e8;
-    --text-bright: #e8f4fd;
-    --sky: #4FC3F7;
-    --ice: #E0F7FA;
-    --steel: #90CAF9;
-    --glow-sky: rgba(79,195,247,0.18);
-    --glow-ice: rgba(224,247,250,0.1);
+    --base: #050e20;
+    --surface: rgba(8,22,52,0.62);
+    --border: rgba(100,200,255,0.12);
+    --border-hover: rgba(100,200,255,0.4);
+    --text: #7db8d8;
+    --text-light: #bddaf0;
+    --text-bright: #edf8ff;
+    --sky: #5bc8ff;
+    --ice: #e4f9ff;
+    --steel: #96d0ff;
+    --glow-sky: rgba(91,200,255,0.18);
+    --glow-ice: rgba(228,249,255,0.1);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: auto; }
 
   body {
     background: var(--base);
@@ -85,18 +85,11 @@ tailwind.config = {
     z-index: 0;
     pointer-events: none;
     background:
-      /* Milky Way arc — faint diagonal band */
-      radial-gradient(ellipse 200% 30% at 60% 45%, rgba(20,50,90,0.18) 0%, transparent 60%),
-      /* Nebula cluster top-left — deep teal */
-      radial-gradient(ellipse 60% 50% at -10% 10%, rgba(0,60,100,0.35) 0%, transparent 55%),
-      /* Nebula cluster bottom-right — steel blue */
-      radial-gradient(ellipse 55% 45% at 110% 90%, rgba(10,40,80,0.4) 0%, transparent 55%),
-      /* Mid nebula — dark navy bloom */
-      radial-gradient(ellipse 70% 40% at 50% 60%, rgba(5,20,50,0.5) 0%, transparent 65%),
-      /* Faint cold blue center haze */
-      radial-gradient(ellipse 40% 30% at 75% 25%, rgba(79,195,247,0.04) 0%, transparent 60%),
-      /* Deep space base */
-      #030508;
+      radial-gradient(ellipse 70% 50% at 0% 0%, rgba(15,55,110,0.28) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 45% at 100% 90%, rgba(10,45,95,0.32) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 35% at 55% 40%, rgba(20,60,120,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 30% at 75% 15%, rgba(91,200,255,0.05) 0%, transparent 55%),
+      #050e20;
   }
 
   /* ── Ambient nebula orbs (slow drift) ── */
@@ -159,9 +152,9 @@ tailwind.config = {
   /* ── Custom cursor ── */
   .cursor-glow {
     position: fixed;
-    width: 300px; height: 300px;
+    width: 80px; height: 80px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(79,195,247,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(91,200,255,0.18) 0%, transparent 70%);
     pointer-events: none;
     z-index: 99997;
     transform: translate(-50%, -50%);
@@ -274,13 +267,13 @@ tailwind.config = {
   /* ── Reveal animations ── */
   .reveal {
     opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    transform: translateY(18px);
+    transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
   }
   .reveal.active { opacity: 1; transform: translateY(0); }
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
 
   /* ── Accent text ── */
   .accent-sky   { color: var(--sky); }
@@ -382,10 +375,11 @@ tailwind.config = {
 
   /* ── Project cards ── */
   .project-card {
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.4s ease;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease, border-color 0.4s ease;
   }
   .project-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(91,200,255,0.07);
   }
   .project-tag {
     font-family: 'Fira Code', monospace;
@@ -651,35 +645,6 @@ tailwind.config = {
     pointer-events: none;
   }
 
-  /* ── Stat strip ── */
-  .stat-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 20px;
-    padding: 14px 16px;
-    margin: 8px 0 20px;
-    background: rgba(79,195,247,0.04);
-    border: 1px solid rgba(79,195,247,0.1);
-    border-radius: 10px;
-  }
-  .stat-item { display: flex; flex-direction: column; }
-  .stat-num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--ice);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
-  .stat-unit { font-size: 1rem; color: var(--sky); font-family: 'Space Grotesk', sans-serif; }
-  .stat-label {
-    font-family: 'Fira Code', monospace;
-    font-size: 0.57rem;
-    color: var(--text);
-    letter-spacing: 0.04em;
-    margin-top: 2px;
-    opacity: 0.65;
-  }
 
   /* ── Name split-text chars ── */
   .name-char {
@@ -946,22 +911,6 @@ tailwind.config = {
       <!-- Name: split-text reveal after typing finishes -->
       <h1 class="hero-name mb-2" id="hero-name" aria-label="Abdelkrim Zouaki"></h1>
 
-      <!-- Live stat strip: count-up on load -->
-      <div class="stat-strip" id="stat-strip" style="opacity:0;transform:translateY(10px)">
-        <div class="stat-item">
-          <div><span class="stat-num" id="stat-0">0</span><span class="stat-unit"> min</span></div>
-          <span class="stat-label">detection to containment</span>
-        </div>
-        <div class="stat-item">
-          <div><span class="stat-num" id="stat-1">0</span><span class="stat-unit">%</span></div>
-          <span class="stat-label">alert volume reduction</span>
-        </div>
-        <div class="stat-item">
-          <div><span class="stat-num" id="stat-2">0</span></div>
-          <span class="stat-label">domains blocked daily</span>
-        </div>
-      </div>
-
       <div class="hero-title mb-4" id="hero-title" style="opacity:0;transform:translateY(10px)">
         <span id="typewriter"></span><span class="tw-cursor"></span>
       </div>
@@ -998,7 +947,7 @@ tailwind.config = {
       <!-- CTA buttons — magnetic on hover -->
       <div class="flex flex-wrap gap-3" id="hero-btns" style="opacity:0;transform:translateY(10px)">
         <a href="#contact" class="btn-outline magnetic-btn" data-magnetic>Get In Touch</a>
-        <a href="https://karim871.github.io/Portfolio/Abdelkrim_Zouaki_CV.pdf" download class="btn-primary magnetic-btn" data-magnetic>
+        <a href="https://karim871.github.io/Portfolio/cv.html" target="_blank" rel="noopener" class="btn-primary magnetic-btn" data-magnetic>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>
           Download CV
         </a>
@@ -1044,9 +993,8 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
       <div class="space-y-5 text-[0.95rem] leading-[1.85] text-slate-400">
-        <p class="about-p">I'm Abdelkrim — I built a working SOC on a Raspberry Pi before I had my first IT job. That <span class="accent-sky font-medium">Mini-SOC (Suricata + Splunk + Wazuh)</span> isn't a classroom exercise: it runs against real traffic and has produced real detections, including a <span class="accent-sky font-medium">documented PowerShell fileless attack</span> caught, investigated, and contained in <span class="metric-highlight">42 minutes</span>.</p>
-        <p class="about-p">I'm a <span class="accent-sky font-medium">Computer Security &amp; Networking graduate</span> based in Montreal, specializing in threat detection, network security, and automation pipelines that turn raw IOCs into actionable intelligence. My focus is on reducing noise — getting alerts that mean something — and acting on them fast. I operate fully in both <span class="accent-sky font-medium">English and French</span>, which matters in Montreal's bilingual IT support landscape.</p>
-        <p class="about-p">I'm currently available and actively looking for SOC Analyst and IT Support roles in Montreal. If you're building a detection capability or need someone who can work a queue and escalate intelligently, let's talk.</p>
+        <p class="about-p">SOC Analyst based in Montreal. Before my first IT role, I built a working detection stack — <span class="accent-sky font-medium">Suricata, Splunk, and Wazuh</span> running on a Raspberry Pi against live network traffic. It produced real incidents and real documentation. Not a portfolio lab — a working system.</p>
+        <p class="about-p"><span class="accent-sky font-medium">DEC graduate in Computer Security &amp; Networking</span> (Bois-de-Boulogne, 2025). Bilingual in French and English. I specialize in alert triage, log correlation, and automation pipelines that surface what matters. Open to <span class="accent-sky font-medium">SOC Analyst and IT Support roles</span> in Montreal.</p>
       </div>
     </section>
 
@@ -1517,6 +1465,7 @@ const lenis = new Lenis({
   duration: 1.2,
   easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   smooth: true,
+  smoothWheel: false,
 });
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((t) => lenis.raf(t * 1000));
@@ -1569,19 +1518,6 @@ function fadeInEl(el, dur = 600) {
   el.style.transform = 'translateY(0)';
 }
 
-function countUp(id, target, duration) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const start = performance.now();
-  const fmt = n => target >= 1000 ? n.toLocaleString() : String(n);
-  const tick = now => {
-    const t = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - t, 3);
-    el.textContent = fmt(Math.round(ease * target));
-    if (t < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
 
 // ── Typewriter (job titles) ───────────────────────────────────
 const titles = ['SOC Analyst', 'Cybersecurity Specialist', 'Threat Hunter'];
@@ -1604,12 +1540,11 @@ if (prefersReduced) {
   // Skip animations — show everything immediately
   document.getElementById('hero-greeting').textContent = 'Hi, my name is';
   document.querySelectorAll('#hero-name .name-char').forEach(c => c.classList.add('revealed'));
-  ['stat-strip','hero-title','hero-lang','hero-badge','hero-btns'].forEach(id => {
+  ['hero-title','hero-lang','hero-badge','hero-btns'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
   });
   document.querySelectorAll('#hero-nav .nav-link').forEach(l => l.classList.add('nav-visible'));
-  countUp('stat-0', 42, 1); countUp('stat-1', 40, 1); countUp('stat-2', 15000, 1);
   typeWriter();
 } else {
   (async function heroSequence() {
@@ -1622,15 +1557,7 @@ if (prefersReduced) {
     // 2 — reveal name chars one by one
     await revealSplitName();
 
-    // 3 — fade in stat strip + count up
-    const strip = document.getElementById('stat-strip');
-    fadeInEl(strip);
-    countUp('stat-0', 42, 1200);
-    countUp('stat-1', 40, 1200);
-    countUp('stat-2', 15000, 1500);
-    await wait(280);
-
-    // 4 — typewriter area
+    // 3 — typewriter area
     fadeInEl(document.getElementById('hero-title'));
     typeWriter();
     await wait(180);

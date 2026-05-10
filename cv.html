@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdelkrim Zouaki — CV</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #0e1117;
+  --muted:  #4a5568;
+  --light:  #718096;
+  --border: #e2e8f0;
+  --accent: #1a56db;
+  --bg:     #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Print ── */
+@media print {
+  body { font-size: 12px; }
+  .no-print { display: none !important; }
+  .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Layout ── */
+.page {
+  max-width: 860px;
+  margin: 40px auto;
+  background: var(--bg);
+  box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* ── Print bar ── */
+.print-bar {
+  background: #f7fafc;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem;
+  color: var(--light);
+}
+.print-btn {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem;
+  padding: 6px 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+.print-btn:hover { background: #1646c0; }
+
+/* ── Header ── */
+.cv-header {
+  padding: 40px 48px 32px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.cv-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.cv-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+  margin-bottom: 18px;
+}
+
+.cv-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.cv-contact a { color: var(--muted); text-decoration: none; }
+.cv-contact a:hover { color: var(--accent); }
+.cv-contact span::before { content: '·'; margin-right: 6px; opacity: 0.4; }
+.cv-contact span:first-child::before { display: none; }
+
+/* ── Body ── */
+.cv-body {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 0;
+}
+
+.cv-main  { padding: 32px 48px; border-right: 1px solid var(--border); }
+.cv-aside { padding: 32px 30px; background: #f9fafb; }
+
+/* ── Section ── */
+.section { margin-bottom: 30px; }
+.section:last-child { margin-bottom: 0; }
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin-bottom: 16px;
+}
+
+/* ── Experience entry ── */
+.entry { margin-bottom: 22px; }
+.entry:last-child { margin-bottom: 0; }
+
+.entry-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px; }
+.entry-role { font-weight: 600; font-size: 0.92rem; color: var(--ink); }
+.entry-company { font-size: 0.85rem; color: var(--accent); font-weight: 500; margin-bottom: 2px; }
+.entry-date {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.7rem;
+  color: var(--light);
+  white-space: nowrap;
+}
+.entry-location { font-size: 0.75rem; color: var(--light); margin-bottom: 8px; }
+
+.bullets { list-style: none; padding: 0; }
+.bullets li {
+  display: flex;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+  line-height: 1.55;
+}
+.bullets li::before { content: '▹'; color: var(--accent); flex-shrink: 0; font-size: 0.72rem; margin-top: 1px; }
+
+/* ── Aside items ── */
+.aside-section { margin-bottom: 24px; }
+.aside-section:last-child { margin-bottom: 0; }
+
+.aside-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 5px;
+  margin-bottom: 12px;
+}
+
+.skill-group { margin-bottom: 12px; }
+.skill-group-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.skill-tag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  background: #edf2f7;
+  border-radius: 3px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.cert-item {
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.cert-item:last-child { border-bottom: none; }
+.cert-name { color: var(--ink); font-weight: 500; font-size: 0.78rem; }
+.cert-year { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: var(--light); white-space: nowrap; }
+
+.project-item { margin-bottom: 12px; }
+.project-name { font-weight: 600; font-size: 0.82rem; color: var(--ink); margin-bottom: 2px; }
+.project-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+
+.lang-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+.lang-item:last-child { border-bottom: none; }
+.lang-name { color: var(--ink); font-weight: 500; }
+
+.edu-degree { font-weight: 600; font-size: 0.88rem; color: var(--ink); }
+.edu-school { font-size: 0.82rem; color: var(--accent); margin-bottom: 2px; }
+.edu-detail { font-size: 0.76rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Print toolbar -->
+  <div class="print-bar no-print">
+    <span>Abdelkrim_Zouaki_CV.pdf — <a href="index.html" style="color:var(--accent);">← Portfolio</a></span>
+    <button class="print-btn" onclick="window.print()">Save as PDF ↓</button>
+  </div>
+
+  <!-- Header -->
+  <header class="cv-header">
+    <div class="cv-name">Abdelkrim Zouaki</div>
+    <div class="cv-title">SOC Analyst · Computer Security &amp; Networking</div>
+    <div class="cv-contact">
+      <span>Montreal, QC</span>
+      <span><a href="mailto:abdelkrim.zouaki.ti@gmail.com">abdelkrim.zouaki.ti@gmail.com</a></span>
+      <span><a href="https://github.com/karim871" target="_blank">github.com/karim871</a></span>
+      <span><a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank">linkedin.com/in/abdelkrim-z</a></span>
+    </div>
+  </header>
+
+  <div class="cv-body">
+
+    <!-- LEFT COLUMN -->
+    <main class="cv-main">
+
+      <!-- Profile -->
+      <section class="section">
+        <div class="section-title">Profile</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.7;">SOC Analyst based in Montreal. Built a working detection stack — Suricata, Splunk, and Wazuh on a Raspberry Pi — before my first IT role. It runs against live traffic and produces real incidents. Specializing in alert triage, log correlation, and automation pipelines that surface what matters. Bilingual (French/English).</p>
+      </section>
+
+      <!-- Experience -->
+      <section class="section">
+        <div class="section-title">Experience</div>
+
+        <div class="entry">
+          <div class="entry-header">
+            <div class="entry-role">IT Support Technician</div>
+            <div class="entry-date">Jul 2025 – Dec 2025</div>
+          </div>
+          <div class="entry-company">Alorica</div>
+          <div class="entry-location">Montreal, QC</div>
+          <ul class="bullets">
+            <li>Tier 1/2 support for internal workforce — Windows 10/11, Office 365, VPN, network peripherals. 25–35 tickets/day in a bilingual (FR/EN) environment.</li>
+            <li>Documented every incident with structured CRM notes for clean L2/L3 handoff and audit trail.</li>
+            <li>Maintained SLA compliance under sustained high ticket volume.</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-header">
+            <div class="entry-role">IT Support Intern</div>
+            <div class="entry-date">Jan 2025 – May 2025</div>
+          </div>
+          <div class="entry-company">Groupe Cosior TI</div>
+          <div class="entry-location">Montreal, QC</div>
+          <ul class="bullets">
+            <li>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</li>
+            <li>Supported cybersecurity team with network traffic monitoring and vulnerability tracking.</li>
+            <li>Documented configurations and incidents to maintain accurate infrastructure records.</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-header">
+            <div class="entry-role">Operations (Retail &amp; Warehouse)</div>
+            <div class="entry-date">2022 – 2024</div>
+          </div>
+          <div class="entry-company">SSENSE · IKEA · Dollarama · Couche-Tard</div>
+          <ul class="bullets">
+            <li>High-volume operations roles that built the reliability, process discipline, and composure under pressure that transfers directly to alert triage.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section class="section">
+        <div class="section-title">Education</div>
+        <div class="entry">
+          <div class="edu-degree">DEC — Computer Security &amp; Networking</div>
+          <div class="edu-school">Collège de Bois-de-Boulogne · Montreal, QC</div>
+          <div class="edu-detail">Graduated 2025 · Core focus: network security, ethical hacking, incident response, system administration · Lab environments: Suricata, Splunk, pfSense, ELK Stack</div>
+        </div>
+      </section>
+
+      <!-- Selected Projects -->
+      <section class="section">
+        <div class="section-title">Selected Projects</div>
+
+        <div class="project-item">
+          <div class="project-name">Home Mini-SOC Lab</div>
+          <div class="project-desc">Suricata IDS + Splunk SIEM + Wazuh HIDS on a Raspberry Pi, running against live network traffic. Produced real detections including a documented PowerShell fileless attack. Alert tuning reduced daily volume ~40% over 3 weeks.</div>
+        </div>
+
+        <div class="project-item">
+          <div class="project-name">Threat Intelligence Automation Bot</div>
+          <div class="project-desc">Python bot querying AbuseIPDB, VirusTotal, and OTX in parallel. Enriches IOCs, assigns risk scores, and generates structured reports. Integrated into IR workflow.</div>
+        </div>
+
+        <div class="project-item">
+          <div class="project-name">pfSense Firewall Lab</div>
+          <div class="project-desc">3-VLAN segmented lab (LAN/OPT1/OPT2) with site-to-site VPN, OpenVPN client access, per-segment DHCP/DNS, and Suricata in inline IDS mode.</div>
+        </div>
+
+        <div class="project-item">
+          <div class="project-name">Pi-hole DNS Security Layer</div>
+          <div class="project-desc">Network-wide DNS sinkhole on Raspberry Pi Zero 2 WH. Query logs piped into Splunk alongside Suricata alerts for cross-correlation.</div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- RIGHT COLUMN -->
+    <aside class="cv-aside">
+
+      <!-- Certifications -->
+      <div class="aside-section">
+        <div class="aside-title">Certifications</div>
+        <div class="cert-item">
+          <span class="cert-name">CompTIA CySA+</span>
+          <span class="cert-year">2025–2028</span>
+        </div>
+        <div class="cert-item">
+          <span class="cert-name">CompTIA Security+</span>
+          <span class="cert-year">2025–2028</span>
+        </div>
+        <div class="cert-item">
+          <span class="cert-name">Cisco CCNA ITN</span>
+          <span class="cert-year">2024</span>
+        </div>
+        <div class="cert-item">
+          <span class="cert-name">TEF Canada (French)</span>
+          <span class="cert-year">Fluent</span>
+        </div>
+        <div class="cert-item">
+          <span class="cert-name">IELTS (English)</span>
+          <span class="cert-year">Fluent</span>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="aside-section">
+        <div class="aside-title">Technical Skills</div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Detection &amp; SIEM</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Splunk</span>
+            <span class="skill-tag">Wazuh</span>
+            <span class="skill-tag">ELK Stack</span>
+            <span class="skill-tag">Suricata</span>
+            <span class="skill-tag">Snort</span>
+            <span class="skill-tag">Wireshark</span>
+            <span class="skill-tag">Sysmon</span>
+            <span class="skill-tag">MITRE ATT&CK</span>
+            <span class="skill-tag">Log Correlation</span>
+            <span class="skill-tag">Alert Triage</span>
+            <span class="skill-tag">IOC Enrichment</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Network Security</div>
+          <div class="skill-tags">
+            <span class="skill-tag">TCP/IP</span>
+            <span class="skill-tag">VLANs</span>
+            <span class="skill-tag">OpenVPN</span>
+            <span class="skill-tag">pfSense</span>
+            <span class="skill-tag">Cisco IOS</span>
+            <span class="skill-tag">DNS / DHCP / NAT</span>
+            <span class="skill-tag">Firewall Rules</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Systems</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Linux (Kali/Debian)</span>
+            <span class="skill-tag">Windows Server</span>
+            <span class="skill-tag">Active Directory</span>
+            <span class="skill-tag">VMware / VirtualBox</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Scripting &amp; Automation</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Bash</span>
+            <span class="skill-tag">PowerShell</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="aside-section">
+        <div class="aside-title">Languages</div>
+        <div class="lang-item"><span class="lang-name">French</span><span>Fluent</span></div>
+        <div class="lang-item"><span class="lang-name">English</span><span>Fluent</span></div>
+        <div class="lang-item"><span class="lang-name">Arabic</span><span>Native</span></div>
+      </div>
+
+      <!-- Availability -->
+      <div class="aside-section">
+        <div class="aside-title">Status</div>
+        <p style="font-size:0.78rem;color:var(--muted);line-height:1.6;">Available immediately · Montreal, QC · Open to SOC Analyst and IT Support roles · Bilingual environment preferred</p>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+</body>
+</html>

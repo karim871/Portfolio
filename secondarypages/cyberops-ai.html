@@ -827,6 +827,7 @@ chmod +x threat_analyzer.py run_analysis.sh
           duration: 1.2,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smooth: true,
+          smoothWheel: false,
         });
         (function raf(time) { lenis.raf(time); requestAnimationFrame(raf); })(0);
         document.querySelectorAll('a[href^="#"]').forEach(a => {
