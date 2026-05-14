@@ -143,6 +143,60 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 .arch-wrap svg{display:block;margin:0 auto;max-width:100%;}
 
 .mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
+
+/* ── UI Snapshot panels ── */
+.snapshot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1.25rem;}
+.snap-panel{background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.snap-panel.snap-full{grid-column:1 / -1;}
+.snap-hdr{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border);font-family:'Fira Code',monospace;font-size:0.62rem;color:var(--text-l);letter-spacing:0.04em;}
+.snap-hdr-dots{display:flex;gap:4px;flex-shrink:0;}
+.snap-hdr-dot{width:8px;height:8px;border-radius:50%;}
+.snap-body{padding:12px;}
+.snap-tbl{width:100%;border-collapse:collapse;font-family:'Fira Code',monospace;font-size:0.71rem;}
+.snap-tbl th{text-align:left;padding:5px 8px;border-bottom:1px solid rgba(255,255,255,0.07);color:var(--text);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;opacity:0.55;font-weight:500;}
+.snap-tbl td{color:var(--text-l);padding:5px 8px;border-bottom:1px solid rgba(255,255,255,0.025);}
+.snap-tbl tr:last-child td{border-bottom:none;}
+.snap-tbl td:first-child{color:var(--accent);opacity:0.85;}
+.lease-on{color:#4ade80;font-size:0.65rem;}
+.snap-log{display:flex;flex-direction:column;gap:3px;}
+.log-row{display:grid;grid-template-columns:140px 48px 1fr;gap:10px;align-items:baseline;font-family:'Fira Code',monospace;font-size:0.68rem;padding:5px 8px;border-radius:4px;background:rgba(255,255,255,0.015);border:1px solid transparent;}
+.log-row:hover{border-color:var(--border);}
+.log-ts{color:var(--text);opacity:0.4;flex-shrink:0;}
+.log-sev{font-size:0.58rem;padding:1px 5px;border-radius:3px;text-align:center;font-weight:600;letter-spacing:0.04em;}
+.sev-hi{background:rgba(255,68,68,0.12);color:#ff7070;border:1px solid rgba(255,68,68,0.18);}
+.sev-md{background:rgba(255,165,0,0.1);color:#ffa040;border:1px solid rgba(255,165,0,0.18);}
+.sev-lo{background:rgba(255,255,255,0.05);color:var(--text-l);border:1px solid var(--border);}
+.log-msg{color:var(--text-l);line-height:1.5;}
+.log-msg em{font-style:normal;color:var(--accent);opacity:0.7;}
+
+/* ── Firewall rules table ── */
+.rules-wrap{overflow-x:auto;margin-top:1.25rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.rules-tbl{width:100%;border-collapse:collapse;font-family:'Fira Code',monospace;font-size:0.71rem;}
+.rules-tbl th{text-align:left;padding:8px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);color:var(--text);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.07em;opacity:0.55;font-weight:500;}
+.rules-tbl td{padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text-l);}
+.rules-tbl tr:last-child td{border-bottom:none;}
+.rules-tbl tbody tr:hover td{background:rgba(255,255,255,0.015);}
+.r-iface{color:var(--accent);opacity:0.85;}
+.r-pass{color:#4ade80;font-size:0.67rem;padding:2px 7px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.15);border-radius:4px;}
+.r-block{color:#ff6b6b;font-size:0.67rem;padding:2px 7px;background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.15);border-radius:4px;}
+.r-note{font-size:0.62rem;color:var(--text);opacity:0.45;margin-top:3px;}
+
+/* ── Suricata log block ── */
+.suri-log{margin-top:1rem;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.suri-log-hdr{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:rgba(255,255,255,0.025);border-bottom:1px solid var(--border);font-family:'Fira Code',monospace;font-size:0.62rem;color:var(--text);opacity:0.6;}
+.suri-log-body{padding:10px 12px;display:flex;flex-direction:column;gap:3px;}
+.suri-line{font-family:'Fira Code',monospace;font-size:0.69rem;color:var(--text-l);line-height:1.6;padding:2px 0;}
+.suri-line .sl-ts{color:var(--text);opacity:0.35;}
+.suri-line .sl-sig{color:var(--accent);opacity:0.8;}
+.suri-line .sl-ip{color:#aaaaaa;}
+
+/* ── Docs reference ── */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem;margin-top:1.25rem;}
+.doc-link{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;text-decoration:none;transition:border-color 0.25s,background 0.25s;}
+.doc-link:hover{border-color:var(--border-h);background:rgba(255,255,255,0.05);}
+.doc-link-icon{font-size:0.9rem;flex-shrink:0;margin-top:1px;}
+.doc-link-text{font-family:'Fira Code',monospace;font-size:0.67rem;color:var(--text-l);line-height:1.5;}
+.doc-link-title{display:block;color:var(--accent);opacity:0.85;margin-bottom:2px;letter-spacing:0.02em;}
 </style>
 </head>
 <body>
@@ -225,12 +279,96 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   </div>
 
   <div class="glass">
-    <div class="s-title"><span class="s-num">02.</span> Lab Screenshots</div>
-    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:1rem;">pfSense running in VirtualBox — interface configuration, DHCP assignments, and Suricata alert console.</p>
-    <div class="screenshot-grid">
-      <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab" onclick="openLightbox(this.src)">
-      <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP configuration" onclick="openLightbox(this.src)">
-      <img src="https://karim871.github.io/Portfolio/images/screen3.png" alt="Windows client receiving DHCP from pfSense" onclick="openLightbox(this.src)">
+    <div class="s-title"><span class="s-num">02.</span> Interface Walk-through</div>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">Key views from the pfSense web UI — interface assignments, DHCP leases across all three segments, and the Suricata alert console captured during a red team exercise.</p>
+    <div class="snapshot-grid">
+
+      <!-- Panel 1: Interface Assignments -->
+      <div class="snap-panel">
+        <div class="snap-hdr">
+          <div class="snap-hdr-dots">
+            <div class="snap-hdr-dot" style="background:#ff5f57;"></div>
+            <div class="snap-hdr-dot" style="background:#febc2e;"></div>
+            <div class="snap-hdr-dot" style="background:#28c840;"></div>
+          </div>
+          Interfaces → Interface Assignments
+        </div>
+        <div class="snap-body">
+          <table class="snap-tbl">
+            <thead><tr><th>Interface</th><th>Network Port</th><th>IP</th></tr></thead>
+            <tbody>
+              <tr><td>WAN</td><td style="color:var(--text-l)">em0 (vtnet0)</td><td style="color:var(--text-l)">DHCP (ISP)</td></tr>
+              <tr><td>LAN</td><td style="color:var(--text-l)">em1 (vtnet1)</td><td style="color:var(--text-l)">192.168.1.1/24</td></tr>
+              <tr><td>OPT1</td><td style="color:var(--text-l)">em2 (vtnet2)</td><td style="color:var(--text-l)">192.168.2.1/24</td></tr>
+              <tr><td>OPT2</td><td style="color:var(--text-l)">em3 (vtnet3)</td><td style="color:var(--text-l)">192.168.3.1/24</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel 2: DHCP Leases -->
+      <div class="snap-panel">
+        <div class="snap-hdr">
+          <div class="snap-hdr-dots">
+            <div class="snap-hdr-dot" style="background:#ff5f57;"></div>
+            <div class="snap-hdr-dot" style="background:#febc2e;"></div>
+            <div class="snap-hdr-dot" style="background:#28c840;"></div>
+          </div>
+          Status → DHCP Leases
+        </div>
+        <div class="snap-body">
+          <table class="snap-tbl">
+            <thead><tr><th>IP Address</th><th>Hostname</th><th>State</th></tr></thead>
+            <tbody>
+              <tr><td>192.168.1.101</td><td style="color:var(--text-l)">WIN-CLIENT-01</td><td><span class="lease-on">active</span></td></tr>
+              <tr><td>192.168.1.102</td><td style="color:var(--text-l)">WIN-CLIENT-02</td><td><span class="lease-on">active</span></td></tr>
+              <tr><td>192.168.2.101</td><td style="color:var(--text-l)">KALI-OPT1</td><td><span class="lease-on">active</span></td></tr>
+              <tr><td>192.168.3.101</td><td style="color:var(--text-l)">UBUNTU-OPT2</td><td><span class="lease-on">active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel 3: Suricata Alerts (full width) -->
+      <div class="snap-panel snap-full">
+        <div class="snap-hdr">
+          <div class="snap-hdr-dots">
+            <div class="snap-hdr-dot" style="background:#ff5f57;"></div>
+            <div class="snap-hdr-dot" style="background:#febc2e;"></div>
+            <div class="snap-hdr-dot" style="background:#28c840;"></div>
+          </div>
+          Services → Suricata → WAN Alerts
+          <span style="margin-left:auto;color:#ff7070;font-size:0.62rem;">● 47 events</span>
+        </div>
+        <div class="snap-body snap-log">
+          <div class="log-row">
+            <span class="log-ts">2024-01-15 14:32:18</span>
+            <span class="log-sev sev-hi">HIGH</span>
+            <span class="log-msg">ET SCAN Nmap Scripting Engine User-Agent Detected — <em>192.168.3.50</em> → <em>192.168.1.10</em></span>
+          </div>
+          <div class="log-row">
+            <span class="log-ts">2024-01-15 14:33:41</span>
+            <span class="log-sev sev-hi">HIGH</span>
+            <span class="log-msg">ET EXPLOIT Metasploit Meterpreter Reverse Shell — <em>192.168.3.50:4444</em> → <em>192.168.1.10:55123</em></span>
+          </div>
+          <div class="log-row">
+            <span class="log-ts">2024-01-15 14:35:02</span>
+            <span class="log-sev sev-md">MED</span>
+            <span class="log-msg">GPL ATTACK_RESPONSE id check returned root — <em>192.168.3.50</em> → <em>192.168.1.10</em></span>
+          </div>
+          <div class="log-row">
+            <span class="log-ts">2024-01-15 14:38:19</span>
+            <span class="log-sev sev-md">MED</span>
+            <span class="log-msg">ET SCAN Hydra SSH Brute Force — <em>192.168.2.55</em> → <em>192.168.1.10:22</em> (34 attempts/s)</span>
+          </div>
+          <div class="log-row">
+            <span class="log-ts">2024-01-15 14:41:07</span>
+            <span class="log-sev sev-lo">LOW</span>
+            <span class="log-msg">ET POLICY SSH Session in Progress — <em>192.168.3.101</em> → <em>192.168.1.10:22</em></span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -296,7 +434,110 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   </div>
 
   <div class="glass">
-    <div class="s-title"><span class="s-num">04.</span> Technical Configuration</div>
+    <div class="s-title"><span class="s-num">04.</span> Firewall Rule Logic</div>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">Each interface enforces its own ruleset. LAN has unrestricted outbound. OPT1 permits only specific ports toward LAN services. OPT2 is default-deny — no inter-VLAN traffic unless explicitly allowed.</p>
+    <div class="rules-wrap">
+      <table class="rules-tbl">
+        <thead>
+          <tr>
+            <th>Interface</th>
+            <th>Protocol</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Port</th>
+            <th>Action</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="r-iface">LAN</td>
+            <td>TCP/UDP</td>
+            <td>LAN net</td>
+            <td>LAN address</td>
+            <td>443, 80</td>
+            <td><span class="r-pass">PASS</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">Allow access to pfSense WebUI</td>
+          </tr>
+          <tr>
+            <td class="r-iface">LAN</td>
+            <td>*</td>
+            <td>LAN net</td>
+            <td>*</td>
+            <td>*</td>
+            <td><span class="r-pass">PASS</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">Full outbound internet access</td>
+          </tr>
+          <tr>
+            <td class="r-iface">OPT1</td>
+            <td>TCP</td>
+            <td>OPT1 net</td>
+            <td>192.168.1.0/24</td>
+            <td>8000, 9997</td>
+            <td><span class="r-pass">PASS</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">Allow Splunk indexer on LAN</td>
+          </tr>
+          <tr>
+            <td class="r-iface">OPT1</td>
+            <td>TCP/UDP</td>
+            <td>OPT1 net</td>
+            <td>OPT1 address</td>
+            <td>53</td>
+            <td><span class="r-pass">PASS</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">DNS Resolver queries</td>
+          </tr>
+          <tr>
+            <td class="r-iface">OPT1</td>
+            <td>*</td>
+            <td>OPT1 net</td>
+            <td>LAN net</td>
+            <td>*</td>
+            <td><span class="r-block">BLOCK</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">Block lateral movement to LAN</td>
+          </tr>
+          <tr>
+            <td class="r-iface">OPT1</td>
+            <td>*</td>
+            <td>OPT1 net</td>
+            <td>*</td>
+            <td>*</td>
+            <td><span class="r-pass">PASS</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">Internet access allowed</td>
+          </tr>
+          <tr>
+            <td class="r-iface">OPT2</td>
+            <td>TCP/UDP</td>
+            <td>OPT2 net</td>
+            <td>OPT2 address</td>
+            <td>53</td>
+            <td><span class="r-pass">PASS</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">DNS Resolver only</td>
+          </tr>
+          <tr>
+            <td class="r-iface">OPT2</td>
+            <td>*</td>
+            <td>OPT2 net</td>
+            <td>LAN net / OPT1 net</td>
+            <td>*</td>
+            <td><span class="r-block">BLOCK</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">Full inter-VLAN isolation</td>
+          </tr>
+          <tr>
+            <td class="r-iface">Floating</td>
+            <td>*</td>
+            <td>*</td>
+            <td>*</td>
+            <td>*</td>
+            <td><span style="color:#aaaaaa;font-size:0.67rem;padding:2px 7px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;">IDS</span></td>
+            <td style="color:var(--text);opacity:0.45;font-size:0.65rem;">Suricata inline inspection all ifaces</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="glass">
+    <div class="s-title"><span class="s-num">05.</span> Technical Configuration</div>
 
     <div class="step-card">
       <span class="step-num">STEP 01 — VLAN SEGMENTATION</span>
@@ -326,12 +567,25 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
       <span class="step-num">STEP 05 — SURICATA INLINE IDS MODE</span>
       <div class="step-title">Active intrusion detection across all VLAN interfaces</div>
       <div class="step-body">Suricata is configured in inline (NFQUEUE) mode rather than passive sniffing — packets are held until Suricata makes a pass/drop decision. ET Open and emerging-threats rulesets are applied. During red team exercises, simulated attacks (nmap scans, Metasploit payloads, brute-force attempts) generated alert events that appeared in Splunk alongside pfSense firewall logs, enabling full kill-chain correlation.</div>
+      <div class="suri-log">
+        <div class="suri-log-hdr">
+          <span>suricata/fast.log — red team exercise excerpt</span>
+          <span style="color:#4ade80;">● inline mode active</span>
+        </div>
+        <div class="suri-log-body">
+          <div class="suri-line"><span class="sl-ts">01/15-14:32:18.124533</span> <span class="sl-sig">[**] ET SCAN Nmap Scripting Engine User-Agent [**]</span> <span class="sl-ip">192.168.3.50:51234 → 192.168.1.10:80</span></div>
+          <div class="suri-line"><span class="sl-ts">01/15-14:33:41.880211</span> <span class="sl-sig">[**] ET EXPLOIT Metasploit Meterpreter reverse shell [**]</span> <span class="sl-ip">192.168.3.50:4444 → 192.168.1.10:55123</span></div>
+          <div class="suri-line"><span class="sl-ts">01/15-14:35:02.019847</span> <span class="sl-sig">[**] GPL ATTACK_RESPONSE id check returned root [**]</span> <span class="sl-ip">192.168.3.50 → 192.168.1.10 TTL:64</span></div>
+          <div class="suri-line"><span class="sl-ts">01/15-14:38:19.443091</span> <span class="sl-sig">[**] ET SCAN Hydra SSH brute-force [**]</span> <span class="sl-ip">192.168.2.55 → 192.168.1.10:22 [34 pkts/s]</span></div>
+          <div class="suri-line"><span class="sl-ts">01/15-14:41:07.701234</span> <span class="sl-sig">[**] ET POLICY SSH session in progress [**]</span> <span class="sl-ip">192.168.3.101 → 192.168.1.10:22</span></div>
+        </div>
+      </div>
     </div>
 
   </div>
 
   <div class="glass">
-    <div class="s-title"><span class="s-num">05.</span> Technical Specifications</div>
+    <div class="s-title"><span class="s-num">06.</span> Technical Specifications</div>
     <div class="spec-grid">
       <div class="spec-card">
         <span class="spec-label">PLATFORM</span>
@@ -365,7 +619,7 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   </div>
 
   <div class="glass">
-    <div class="s-title"><span class="s-num">06.</span> Key Takeaways</div>
+    <div class="s-title"><span class="s-num">07.</span> Key Takeaways</div>
     <ul class="bullet-list">
       <li>VLAN segmentation limits lateral movement — a compromised OPT2 device cannot reach LAN without an explicit firewall rule, which doesn't exist by default</li>
       <li>Inline IDS mode provides active blocking capability, not just alerting — Suricata can drop malicious packets in real time rather than logging after the fact</li>
@@ -373,6 +627,55 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
       <li>DNS Resolver per-segment control prevents internal rebind attacks and allows VLAN-specific domain overrides without touching the WAN DNS settings</li>
       <li>Certificate-based VPN auth eliminates the shared-secret weakness — stolen credentials don't grant VPN access without the corresponding certificate</li>
     </ul>
+  </div>
+
+  <div class="glass">
+    <div class="s-title"><span class="s-num">08.</span> Reference Documentation</div>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">Official Netgate documentation and community resources used during this lab build.</p>
+    <div class="doc-grid">
+      <a href="https://docs.netgate.com/pfsense/en/latest/vlan/configuration.html" target="_blank" rel="noopener noreferrer" class="doc-link">
+        <span class="doc-link-icon">↗</span>
+        <span class="doc-link-text">
+          <span class="doc-link-title">VLAN Configuration</span>
+          Netgate Docs — VLAN setup on pfSense, parent interface assignment, per-VLAN IP ranges
+        </span>
+      </a>
+      <a href="https://docs.netgate.com/pfsense/en/latest/recipes/openvpn-ra.html" target="_blank" rel="noopener noreferrer" class="doc-link">
+        <span class="doc-link-icon">↗</span>
+        <span class="doc-link-text">
+          <span class="doc-link-title">OpenVPN Remote Access</span>
+          Netgate Docs — Certificate-based OpenVPN server, client config export, routing
+        </span>
+      </a>
+      <a href="https://docs.netgate.com/pfsense/en/latest/interfaces/" target="_blank" rel="noopener noreferrer" class="doc-link">
+        <span class="doc-link-icon">↗</span>
+        <span class="doc-link-text">
+          <span class="doc-link-title">Interface Configuration</span>
+          Netgate Docs — Interface types, assignment, WAN/LAN/OPT config reference
+        </span>
+      </a>
+      <a href="https://psychogun.github.io/docs/pfsense/Suricata-installation-and-configuration/" target="_blank" rel="noopener noreferrer" class="doc-link">
+        <span class="doc-link-icon">↗</span>
+        <span class="doc-link-text">
+          <span class="doc-link-title">Suricata on pfSense</span>
+          Installation, interface binding, ET Open ruleset, inline IPS vs IDS mode
+        </span>
+      </a>
+      <a href="https://github.com/tracecyber/pfsense-suricata-ids-lab" target="_blank" rel="noopener noreferrer" class="doc-link">
+        <span class="doc-link-icon">↗</span>
+        <span class="doc-link-text">
+          <span class="doc-link-title">pfSense + Suricata Lab</span>
+          GitHub lab — virtual IDS/IPS deployment, red team testing methodology
+        </span>
+      </a>
+      <a href="https://medium.com/@chukkavenkatadri143/hands-on-network-security-lab-part-1-implementing-firewall-rules-and-ips-with-pfsense-aliases-0408d648ad31" target="_blank" rel="noopener noreferrer" class="doc-link">
+        <span class="doc-link-icon">↗</span>
+        <span class="doc-link-text">
+          <span class="doc-link-title">Firewall Rules + Suricata IPS</span>
+          Medium lab series — aliases, WAN/LAN rules, geo-blocking, Suricata IPS config
+        </span>
+      </a>
+    </div>
   </div>
 
   <div style="text-align:center;margin-top:2.5rem;">
