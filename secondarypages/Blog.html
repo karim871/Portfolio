@@ -9,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #121414; --text: #e3e2e2; --muted: #888;
-      --accent: #00ff88; --card: #1a1a1a; --border: rgba(255,255,255,0.07);
+      --bg: #07040f; --text: #f0eaff; --muted: #9b8ab8;
+      --accent: #8b5cf6; --card: #110820; --border: rgba(139,92,246,0.12);
       --red: #ef4444;
     }
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -152,6 +152,45 @@
     .section-label { font-family:'Fira Code',monospace; font-size:0.75rem; color:var(--accent); letter-spacing:0.2em; text-transform:uppercase; white-space:nowrap; }
     .section-line { flex:1; height:1px; background:var(--border); }
 
+    /* NEW FEATURED – AI GUIDE */
+    .featured-guide {
+      display:block; text-decoration:none;
+      background:linear-gradient(135deg, rgba(168,85,247,0.07) 0%, rgba(56,189,248,0.04) 50%, var(--card) 100%);
+      border:1px solid rgba(168,85,247,0.28); border-left:4px solid #a855f7;
+      border-radius:14px; padding:2.5rem; margin-bottom:1.5rem;
+      transition:transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s, border-color 0.35s;
+      position:relative; overflow:hidden; cursor:none;
+    }
+    .featured-guide::before {
+      content:'NEW'; position:absolute; top:1.5rem; right:1.75rem;
+      font-family:'Fira Code',monospace; font-size:0.65rem;
+      letter-spacing:0.18em; color:rgba(168,85,247,0.7);
+    }
+    .featured-guide:hover {
+      transform:translateY(-4px);
+      box-shadow:0 30px 70px -20px rgba(168,85,247,0.22);
+      border-color:rgba(168,85,247,0.5);
+    }
+    .guide-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:'Fira Code',monospace; font-size:0.7rem;
+      background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3);
+      color:#a855f7; padding:4px 12px; border-radius:3px; margin-bottom:1.5rem;
+    }
+    .guide-badge .gbdot { width:6px; height:6px; border-radius:50%; background:#a855f7; animation:sdot 1.5s ease-in-out infinite; }
+    .guide-tool-pills { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:1.5rem; }
+    .gtag {
+      font-family:'Fira Code',monospace; font-size:0.62rem; letter-spacing:0.1em;
+      padding:3px 10px; border-radius:100px; border:1px solid;
+    }
+    .gtag-purple { border-color:rgba(168,85,247,0.4); color:#a855f7; background:rgba(168,85,247,0.07); }
+    .gtag-amber  { border-color:rgba(245,158,11,0.4); color:#f59e0b; background:rgba(245,158,11,0.07); }
+    .gtag-sky    { border-color:rgba(56,189,248,0.4); color:#38bdf8; background:rgba(56,189,248,0.07); }
+    .gtag-lime   { border-color:rgba(132,204,22,0.4); color:#84cc16; background:rgba(132,204,22,0.07); }
+    .gtag-rose   { border-color:rgba(244,63,94,0.4); color:#f43f5e; background:rgba(244,63,94,0.07); }
+    .guide-cta { display:inline-flex; align-items:center; gap:8px; font-family:'Fira Code',monospace; font-size:0.78rem; color:#a855f7; transition:gap 0.2s; }
+    .featured-guide:hover .guide-cta { gap:14px; }
+
     /* FEATURED CARD */
     .featured-card {
       display:block; text-decoration:none;
@@ -268,7 +307,7 @@
       </p>
       <div class="hero-stats">
         <div class="h-stat">
-          <span class="h-stat-val">9</span>
+          <span class="h-stat-val">10</span>
           <span class="h-stat-label">Articles</span>
         </div>
         <div class="stat-div"></div>
@@ -289,11 +328,39 @@
   <!-- STICKY FILTER -->
   <nav id="filter-sticky">
     <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="guides">Guides</button>
     <button class="filter-tab" data-filter="projects">Projects</button>
     <button class="filter-tab" data-filter="incident-reports">Incident Reports</button>
     <button class="filter-tab" data-filter="certifications">Certifications</button>
     <button class="filter-tab" data-filter="lab-notes">Lab Notes</button>
   </nav>
+
+  <!-- NEW: AI GUIDE FEATURED -->
+  <section class="section" style="padding-bottom:2rem">
+    <div class="section-head">
+      <span class="section-label">[ New Guide ]</span>
+      <div class="section-line"></div>
+    </div>
+
+    <a href="ai-slop-guide.html" class="featured-guide" id="guide-card" data-category="guides">
+      <div class="guide-badge"><span class="gbdot"></span>AI TOOLING &mdash; MAY 2026</div>
+      <div class="feat-meta">
+        <span class="feat-cat" style="background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.3)">Guide</span>
+        <span class="feat-date">May 2026</span>
+        <span class="feat-read">8 min read</span>
+      </div>
+      <h2 class="feat-title">Stop Letting Claude Build AI Slop &mdash; The 5-Tool Stack for Studio-Grade Landing Pages</h2>
+      <p class="feat-preview">The purple-gradient hero. The floating glass cards. The same 4 stock-photo testimonials. Claude builds these by default &mdash; not because it's bad, but because nobody told it what good looks like. Here's the exact stack and the 7-step framework that changes that.</p>
+      <div class="guide-tool-pills">
+        <span class="gtag gtag-purple">Claude Code</span>
+        <span class="gtag gtag-amber">Nano Banana</span>
+        <span class="gtag gtag-sky">Motion</span>
+        <span class="gtag gtag-lime">GSAP</span>
+        <span class="gtag gtag-rose">21st Dev MCP</span>
+      </div>
+      <span class="guide-cta">Read the Guide &rarr;</span>
+    </a>
+  </section>
 
   <!-- FEATURED SECTION -->
   <section class="section">
@@ -677,6 +744,12 @@
     gsap.to('.hero-inner', { y: 90, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.2 } });
     gsap.to('.hero-inner', { opacity: 0, ease: 'none', scrollTrigger: { trigger: '#hero', start: '42% top', end: 'bottom top', scrub: 1 } });
 
+    // GUIDE CARD REVEAL
+    gsap.from('#guide-card', {
+      opacity: 0, y: 50, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: '#guide-card', start: 'top 82%' }
+    });
+
     // FEATURED CARD REVEAL
     gsap.from('#featured-card', {
       opacity: 0, y: 50, duration: 0.9, ease: 'power3.out',
@@ -713,14 +786,20 @@
 
     // FILTER TABS
     const allCards = document.querySelectorAll('.article-card');
-    const featCard = document.getElementById('featured-card');
+    const featCard  = document.getElementById('featured-card');
+    const guideCard = document.getElementById('guide-card');
     document.querySelectorAll('.filter-tab').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const f = btn.dataset.filter;
 
-        // featured card
+        // guide card
+        const guideMatch = f === 'all' || f === 'guides';
+        gsap.to(guideCard, { opacity: guideMatch ? 1 : 0.1, scale: guideMatch ? 1 : 0.97, duration: 0.4, ease: 'power2.out' });
+        guideCard.style.pointerEvents = guideMatch ? 'auto' : 'none';
+
+        // incident featured card
         const featMatch = f === 'all' || f === 'incident-reports';
         gsap.to(featCard, { opacity: featMatch ? 1 : 0.1, scale: featMatch ? 1 : 0.97, duration: 0.4, ease: 'power2.out' });
         featCard.style.pointerEvents = featMatch ? 'auto' : 'none';

@@ -27,11 +27,11 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        base:    '#0c1e3a',
-        surface: 'rgba(14,34,68,0.65)',
-        sky:     '#4FC3F7',
-        ice:     '#E0F7FA',
-        steel:   '#90CAF9',
+        base:    '#07040f',
+        surface: 'rgba(18,10,42,0.72)',
+        sky:     '#8b5cf6',
+        ice:     '#ede9fe',
+        steel:   '#a78bfa',
       },
       fontFamily: {
         display: ['"Space Grotesk"', 'sans-serif'],
@@ -45,18 +45,18 @@ tailwind.config = {
 <style>
   /* ── Base ── */
   :root {
-    --base: #0c1e3a;
-    --surface: rgba(14,34,68,0.65);
-    --border: rgba(100,200,255,0.14);
-    --border-hover: rgba(100,200,255,0.45);
-    --text: #8fc8e8;
-    --text-light: #c8e6f8;
-    --text-bright: #edf8ff;
-    --sky: #5bc8ff;
-    --ice: #e4f9ff;
-    --steel: #96d0ff;
-    --glow-sky: rgba(91,200,255,0.22);
-    --glow-ice: rgba(228,249,255,0.12);
+    --base: #07040f;
+    --surface: rgba(18,10,42,0.72);
+    --border: rgba(139,92,246,0.14);
+    --border-hover: rgba(139,92,246,0.50);
+    --text: #9b8ab8;
+    --text-light: #c4b5e8;
+    --text-bright: #f0eaff;
+    --sky: #8b5cf6;
+    --ice: #ede9fe;
+    --steel: #a78bfa;
+    --glow-sky: rgba(139,92,246,0.22);
+    --glow-ice: rgba(139,92,246,0.10);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -74,8 +74,8 @@ tailwind.config = {
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(79,195,247,0.25); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(79,195,247,0.5); }
+  ::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.25); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.5); }
 
   /* ── NASA nebula background ── */
   body::before {
@@ -85,11 +85,11 @@ tailwind.config = {
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(ellipse 70% 50% at 0% 0%, rgba(30,90,180,0.38) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 45% at 100% 90%, rgba(20,70,150,0.42) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 35% at 55% 40%, rgba(40,100,200,0.22) 0%, transparent 65%),
-      radial-gradient(ellipse 40% 30% at 75% 15%, rgba(91,200,255,0.1) 0%, transparent 55%),
-      #0c1e3a;
+      radial-gradient(ellipse 70% 50% at 0% 0%, rgba(100,30,200,0.32) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 45% at 100% 90%, rgba(80,20,170,0.36) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 35% at 55% 40%, rgba(110,40,200,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 30% at 75% 15%, rgba(139,92,246,0.1) 0%, transparent 55%),
+      #07040f;
   }
 
   /* ── Ambient nebula orbs (slow drift) ── */
@@ -103,20 +103,20 @@ tailwind.config = {
   }
   .orb-1 {
     width: 700px; height: 450px;
-    background: radial-gradient(ellipse, rgba(30,100,220,0.28) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(110,40,220,0.28) 0%, transparent 70%);
     top: -80px; left: -200px;
     animation-duration: 38s;
   }
   .orb-2 {
     width: 550px; height: 400px;
-    background: radial-gradient(ellipse, rgba(79,195,247,0.16) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(139,92,246,0.16) 0%, transparent 70%);
     bottom: 10%; right: -150px;
     animation-duration: 45s;
     animation-direction: reverse;
   }
   .orb-3 {
     width: 400px; height: 400px;
-    background: radial-gradient(ellipse, rgba(20,70,160,0.28) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(80,20,160,0.28) 0%, transparent 70%);
     top: 40%; left: 35%;
     animation-duration: 55s;
   }
@@ -154,7 +154,7 @@ tailwind.config = {
     position: fixed;
     width: 80px; height: 80px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(91,200,255,0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%);
     pointer-events: none;
     z-index: 99997;
     transform: translate(-50%, -50%);
@@ -168,13 +168,13 @@ tailwind.config = {
     pointer-events: none;
     z-index: 99999;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--sky), 0 0 20px rgba(79,195,247,0.6);
+    box-shadow: 0 0 10px var(--sky), 0 0 20px rgba(139,92,246,0.6);
     transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
   }
   .cursor-ring {
     position: fixed;
     width: 36px; height: 36px;
-    border: 1px solid rgba(79,195,247,0.4);
+    border: 1px solid rgba(139,92,246,0.4);
     border-radius: 50%;
     pointer-events: none;
     z-index: 99998;
@@ -183,8 +183,8 @@ tailwind.config = {
   }
   .cursor-ring.hovering {
     width: 56px; height: 56px;
-    border-color: rgba(79,195,247,0.9);
-    box-shadow: 0 0 16px rgba(79,195,247,0.3);
+    border-color: rgba(139,92,246,0.9);
+    box-shadow: 0 0 16px rgba(139,92,246,0.3);
   }
   @media (hover: none) and (pointer: coarse) {
     body { cursor: auto; }
@@ -193,24 +193,24 @@ tailwind.config = {
 
   /* ── Glass surface ── */
   .glass {
-    background: rgba(12,30,60,0.6);
+    background: rgba(15,8,35,0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(79,195,247,0.12);
+    border: 1px solid rgba(139,92,246,0.12);
     border-radius: 16px;
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
   }
   .glass:hover {
-    border-color: rgba(79,195,247,0.3);
-    box-shadow: 0 0 30px rgba(79,195,247,0.05), inset 0 0 30px rgba(79,195,247,0.02);
+    border-color: rgba(139,92,246,0.3);
+    box-shadow: 0 0 30px rgba(139,92,246,0.05), inset 0 0 30px rgba(139,92,246,0.02);
   }
 
   /* ── Sidebar ── */
   #sidebar {
-    background: rgba(10,22,48,0.8);
+    background: rgba(10,5,25,0.8);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-right: 1px solid rgba(79,195,247,0.1);
+    border-right: 1px solid rgba(139,92,246,0.1);
   }
 
   /* ── Nav links ── */
@@ -311,7 +311,7 @@ tailwind.config = {
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     padding: 10px 24px;
-    border: 1px solid rgba(79,195,247,0.35);
+    border: 1px solid rgba(139,92,246,0.35);
     color: var(--sky);
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -319,17 +319,17 @@ tailwind.config = {
     cursor: pointer;
   }
   .btn-outline:hover {
-    background: rgba(79,195,247,0.07);
+    background: rgba(139,92,246,0.07);
     border-color: var(--sky);
-    box-shadow: 0 0 20px rgba(79,195,247,0.15);
+    box-shadow: 0 0 20px rgba(139,92,246,0.15);
   }
   .btn-primary {
     font-family: 'Fira Code', monospace;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     padding: 10px 24px;
-    background: linear-gradient(135deg, rgba(79,195,247,0.18), rgba(144,202,249,0.12));
-    border: 1px solid rgba(79,195,247,0.3);
+    background: linear-gradient(135deg, rgba(139,92,246,0.18), rgba(167,139,250,0.12));
+    border: 1px solid rgba(139,92,246,0.3);
     color: var(--text-bright);
     border-radius: 8px;
     display: inline-flex;
@@ -340,12 +340,12 @@ tailwind.config = {
     cursor: pointer;
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, rgba(79,195,247,0.28), rgba(144,202,249,0.2));
-    box-shadow: 0 0 24px rgba(79,195,247,0.2);
+    background: linear-gradient(135deg, rgba(139,92,246,0.28), rgba(167,139,250,0.2));
+    box-shadow: 0 0 24px rgba(139,92,246,0.2);
   }
   @keyframes pulse-glow {
-    0%,100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.2); }
-    50%      { box-shadow: 0 0 0 6px rgba(79,195,247,0); }
+    0%,100% { box-shadow: 0 0 0 0 rgba(139,92,246,0.2); }
+    50%      { box-shadow: 0 0 0 6px rgba(139,92,246,0); }
   }
 
   /* ── Social icons ── */
@@ -379,15 +379,15 @@ tailwind.config = {
   }
   .project-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(91,200,255,0.07);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(139,92,246,0.07);
   }
   .project-tag {
     font-family: 'Fira Code', monospace;
     font-size: 0.65rem;
     letter-spacing: 0.06em;
     padding: 4px 10px;
-    background: rgba(79,195,247,0.07);
-    border: 1px solid rgba(79,195,247,0.2);
+    background: rgba(139,92,246,0.07);
+    border: 1px solid rgba(139,92,246,0.2);
     color: var(--sky);
     border-radius: 100px;
   }
@@ -398,7 +398,7 @@ tailwind.config = {
     gap: 8px;
     overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(79,195,247,0.25) transparent;
+    scrollbar-color: rgba(139,92,246,0.25) transparent;
     padding-bottom: 6px;
   }
   .screenshot-gallery img {
@@ -407,15 +407,15 @@ tailwind.config = {
     min-width: 190px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid rgba(79,195,247,0.1);
+    border: 1px solid rgba(139,92,246,0.1);
     cursor: pointer;
     transition: all 0.3s ease;
     filter: saturate(0.6) brightness(0.8);
   }
   .screenshot-gallery img:hover {
     filter: saturate(1) brightness(1);
-    border-color: rgba(79,195,247,0.45);
-    box-shadow: 0 0 20px rgba(79,195,247,0.12);
+    border-color: rgba(139,92,246,0.45);
+    box-shadow: 0 0 20px rgba(139,92,246,0.12);
     transform: scale(1.02);
   }
 
@@ -435,8 +435,8 @@ tailwind.config = {
     max-width: 90vw;
     max-height: 90vh;
     border-radius: 12px;
-    border: 1px solid rgba(79,195,247,0.15);
-    box-shadow: 0 0 60px rgba(79,195,247,0.08);
+    border: 1px solid rgba(139,92,246,0.15);
+    box-shadow: 0 0 60px rgba(139,92,246,0.08);
   }
   #lightbox-close {
     position: absolute;
@@ -444,8 +444,8 @@ tailwind.config = {
     color: var(--text-light);
     font-size: 1.5rem;
     cursor: pointer;
-    background: rgba(5,15,35,0.8);
-    border: 1px solid rgba(79,195,247,0.15);
+    background: rgba(8,4,20,0.8);
+    border: 1px solid rgba(139,92,246,0.15);
     width: 40px; height: 40px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -471,7 +471,7 @@ tailwind.config = {
   .tab-btn.active {
     color: var(--sky);
     border-left-color: var(--sky);
-    background: rgba(79,195,247,0.06);
+    background: rgba(139,92,246,0.06);
   }
   .tab-border { border-left: 1px solid var(--border); }
 
@@ -486,9 +486,9 @@ tailwind.config = {
     transition: all 0.4s ease;
   }
   .skill-card:hover {
-    border-color: rgba(56,189,248,0.25);
+    border-color: rgba(139,92,246,0.25);
     transform: translateY(-2px);
-    box-shadow: 0 0 24px rgba(56,189,248,0.05);
+    box-shadow: 0 0 24px rgba(139,92,246,0.05);
   }
   .skill-icon { color: var(--sky); }
   .skill-heading {
@@ -560,7 +560,7 @@ tailwind.config = {
     position: absolute;
     top: -1.5rem;
     left: -1rem;
-    color: rgba(79,195,247,0.035);
+    color: rgba(139,92,246,0.035);
     line-height: 1;
     pointer-events: none;
     user-select: none;
@@ -599,9 +599,9 @@ tailwind.config = {
     transition: all 0.3s ease;
   }
   .mobile-nav-pill:hover {
-    border-color: rgba(79,195,247,0.4);
+    border-color: rgba(139,92,246,0.4);
     color: var(--sky);
-    background: rgba(79,195,247,0.06);
+    background: rgba(139,92,246,0.06);
   }
 
   /* ── Education card ── */
@@ -612,7 +612,7 @@ tailwind.config = {
     padding: 24px;
     transition: border-color 0.4s ease;
   }
-  .edu-card:hover { border-color: rgba(56,189,248,0.25); }
+  .edu-card:hover { border-color: rgba(139,92,246,0.25); }
 
   /* ── Z-index management ── */
   /* 0: canvas/orbs, 10: content, 20: sidebar, 30: progress/cursor, 50+: overlays */
@@ -680,10 +680,10 @@ tailwind.config = {
     color: var(--ice);
     font-weight: 600;
     padding: 1px 5px;
-    background: rgba(79,195,247,0.08);
+    background: rgba(139,92,246,0.08);
     border-radius: 4px;
-    border: 1px solid rgba(79,195,247,0.14);
-    box-shadow: 0 0 10px rgba(79,195,247,0.06);
+    border: 1px solid rgba(139,92,246,0.14);
+    box-shadow: 0 0 10px rgba(139,92,246,0.06);
     white-space: nowrap;
   }
 
@@ -724,8 +724,8 @@ tailwind.config = {
     animation: badge-pulse 2.2s ease-in-out infinite;
   }
   @keyframes badge-pulse {
-    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(79,195,247,0.4); }
-    50%      { transform: scale(1.5); box-shadow: 0 0 0 5px rgba(79,195,247,0); }
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139,92,246,0.4); }
+    50%      { transform: scale(1.5); box-shadow: 0 0 0 5px rgba(139,92,246,0); }
   }
 
   /* ── Snap gallery (replaces screenshot-gallery) ── */
@@ -736,7 +736,7 @@ tailwind.config = {
     gap: 8px;
     padding-bottom: 6px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(79,195,247,0.25) transparent;
+    scrollbar-color: rgba(139,92,246,0.25) transparent;
   }
   .snap-gallery img {
     scroll-snap-align: start;
@@ -745,7 +745,7 @@ tailwind.config = {
     min-width: 190px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid rgba(79,195,247,0.1);
+    border: 1px solid rgba(139,92,246,0.1);
     cursor: pointer;
     transition: all 0.3s ease;
     filter: saturate(0.6) brightness(0.8);
@@ -753,8 +753,8 @@ tailwind.config = {
   }
   .snap-gallery img:hover {
     filter: saturate(1) brightness(1);
-    border-color: rgba(79,195,247,0.45);
-    box-shadow: 0 0 20px rgba(79,195,247,0.12);
+    border-color: rgba(139,92,246,0.45);
+    box-shadow: 0 0 20px rgba(139,92,246,0.12);
     transform: scale(1.02);
   }
 
@@ -763,7 +763,7 @@ tailwind.config = {
   .gallery-dot {
     width: 5px; height: 5px;
     border-radius: 50%;
-    background: rgba(79,195,247,0.25);
+    background: rgba(139,92,246,0.25);
     border: none;
     padding: 0;
     cursor: pointer;
@@ -781,7 +781,7 @@ tailwind.config = {
     font-size: 0.67rem;
     letter-spacing: 0.04em;
     padding: 6px 14px;
-    border: 1px solid rgba(79,195,247,0.2);
+    border: 1px solid rgba(139,92,246,0.2);
     color: var(--text);
     border-radius: 6px;
     text-decoration: none;
@@ -790,8 +790,8 @@ tailwind.config = {
   }
   .btn-case-study:hover {
     color: var(--sky);
-    border-color: rgba(79,195,247,0.5);
-    background: rgba(79,195,247,0.06);
+    border-color: rgba(139,92,246,0.5);
+    background: rgba(139,92,246,0.06);
   }
   .btn-case-study .cs-prefix { color: var(--sky); opacity: 0.7; }
 
@@ -809,9 +809,9 @@ tailwind.config = {
   .skill-card.slide-right { transform: translateX(40px); }
   .skill-card.revealed    { opacity: 1; transform: translateX(0); }
   .skill-card.revealed:hover {
-    border-color: rgba(56,189,248,0.25);
+    border-color: rgba(139,92,246,0.25);
     transform: translateY(-2px) !important;
-    box-shadow: 0 0 24px rgba(56,189,248,0.05);
+    box-shadow: 0 0 24px rgba(139,92,246,0.05);
   }
 
   /* ── Skill item stagger ── */
@@ -843,8 +843,8 @@ tailwind.config = {
     transition: transform 0.2s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   }
   .cert-card:hover {
-    border-color: rgba(79,195,247,0.35);
-    box-shadow: 0 0 24px rgba(79,195,247,0.08);
+    border-color: rgba(139,92,246,0.35);
+    box-shadow: 0 0 24px rgba(139,92,246,0.08);
   }
   .cert-card img { filter: grayscale(60%) brightness(0.9); transition: filter 0.4s ease; }
   .cert-card:hover img { filter: grayscale(0%) brightness(1); }
@@ -854,7 +854,7 @@ tailwind.config = {
     outline: none;
     border-color: rgba(34,197,94,0.5);
     box-shadow: 0 0 0 3px rgba(34,197,94,0.07), 0 0 18px rgba(34,197,94,0.12);
-    background: rgba(5,15,35,0.6);
+    background: rgba(8,4,20,0.6);
   }
 
   /* ── Page-load section reveals ── */
@@ -862,9 +862,345 @@ tailwind.config = {
     transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1),
                 transform 0.45s cubic-bezier(0.16,1,0.3,1);
   }
+
+  /* ── Hero name: bigger, more dominant ── */
+  .hero-name {
+    font-size: clamp(2.8rem, 6.5vw, 5rem) !important;
+    line-height: 1.0 !important;
+  }
+
+  /* ── Glitch effect ── */
+  #hero-name { position: relative; }
+  #hero-name.glitching::before,
+  #hero-name.glitching::after {
+    content: attr(data-name);
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: inherit;
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  #hero-name.glitching::before {
+    color: rgba(255, 60, 80, 0.75);
+    animation: glitch-r 0.38s steps(3) forwards;
+  }
+  #hero-name.glitching::after {
+    color: rgba(80, 210, 255, 0.75);
+    animation: glitch-b 0.38s steps(3) forwards;
+  }
+  @keyframes glitch-r {
+    0%   { clip-path: inset(12% 0 72% 0); transform: translateX(-5px); }
+    33%  { clip-path: inset(58% 0 8% 0);  transform: translateX(4px); }
+    66%  { clip-path: inset(30% 0 45% 0); transform: translateX(-3px); }
+    100% { clip-path: inset(100% 0 0 0);  transform: translateX(0); }
+  }
+  @keyframes glitch-b {
+    0%   { clip-path: inset(68% 0 10% 0); transform: translateX(5px); }
+    33%  { clip-path: inset(8% 0 62% 0);  transform: translateX(-4px); }
+    66%  { clip-path: inset(42% 0 28% 0); transform: translateX(3px); }
+    100% { clip-path: inset(0 0 100% 0);  transform: translateX(0); }
+  }
+
+  /* ── Terminal window bar ── */
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: rgba(5, 3, 15, 0.9);
+    border-bottom: 1px solid rgba(139,92,246,0.1);
+    border-radius: 16px 16px 0 0;
+    margin: -24px -24px 20px -24px;
+    flex-shrink: 0;
+  }
+  .terminal-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .terminal-dot.r { background: #ff5f57; box-shadow: 0 0 6px rgba(255,95,87,0.6); }
+  .terminal-dot.y { background: #febc2e; box-shadow: 0 0 6px rgba(254,188,46,0.5); }
+  .terminal-dot.g { background: #28c840; box-shadow: 0 0 6px rgba(40,200,64,0.5); }
+  .terminal-title {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.63rem;
+    color: var(--text);
+    opacity: 0.45;
+    margin-left: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Scanline HUD overlay ── */
+  .scanline {
+    position: fixed;
+    inset: 0;
+    z-index: 9994;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.018) 3px,
+      rgba(0, 0, 0, 0.018) 4px
+    );
+  }
+
+  /* ── Metric counter: flash on count-up ── */
+  .metric-highlight.counting {
+    color: var(--ice);
+    border-color: rgba(139,92,246,0.4);
+    box-shadow: 0 0 18px rgba(139,92,246,0.18);
+    transition: color 0.1s, box-shadow 0.1s;
+  }
+
+  /* ── HoverCard ── */
+  #hovercard {
+    position: fixed;
+    z-index: 99985;
+    width: 300px;
+    max-width: calc(100vw - 32px);
+    background: rgba(10, 5, 24, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(139,92,246,0.22);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.65), 0 0 0 1px rgba(139,92,246,0.06);
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.94) translateY(6px);
+    transition: opacity 0.18s ease, transform 0.24s cubic-bezier(0.34,1.56,0.64,1);
+    will-change: opacity, transform;
+  }
+  #hovercard.hc-measuring {
+    opacity: 0 !important;
+    transform: none !important;
+    visibility: visible;
+    pointer-events: none;
+  }
+  #hovercard.hc-visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
+  #hovercard::after {
+    content: '';
+    position: absolute;
+    width: 10px; height: 10px;
+    background: rgba(10, 5, 24, 0.96);
+    border: 1px solid rgba(139,92,246,0.22);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+  #hovercard.hc-arrow-bottom::after {
+    bottom: -6px;
+    left: var(--hc-arrow-x, 50%);
+    margin-left: -5px;
+    border-top: none;
+    border-left: none;
+  }
+  #hovercard.hc-arrow-top::after {
+    top: -6px;
+    left: var(--hc-arrow-x, 50%);
+    margin-left: -5px;
+    border-bottom: none;
+    border-right: none;
+  }
+  .hc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.59rem;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.22);
+    border-radius: 100px;
+    color: var(--steel);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .hc-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ice);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+  .hc-subtitle {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.67rem;
+    color: var(--sky);
+    letter-spacing: 0.03em;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .hc-meta {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.64rem;
+    color: var(--text);
+    margin-bottom: 8px;
+    opacity: 0.75;
+  }
+  .hc-courses {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0;
+  }
+  .hc-courses li {
+    font-size: 0.74rem;
+    color: var(--text-light);
+    padding: 2.5px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.45;
+  }
+  .hc-courses li::before {
+    content: '▸';
+    color: var(--sky);
+    font-size: 0.58rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .hc-divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(139,92,246,0.25) 0%, transparent 100%);
+    margin: 10px 0;
+  }
+  .hc-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.76rem;
+    color: var(--text-light);
+    line-height: 1.55;
+  }
+  .hc-usage {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.76rem;
+    color: var(--text-light);
+    line-height: 1.55;
+  }
+  .hc-usage-label {
+    color: var(--electric, var(--steel));
+    font-weight: 600;
+    font-size: 0.72rem;
+  }
+  .hc-links {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .hc-link {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.68rem;
+    color: var(--steel);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    pointer-events: all;
+    transition: color 0.2s ease;
+  }
+  .hc-link:hover { color: var(--ice); }
+
+  /* ── HoverCard triggers ── */
+  .hc-text-trigger {
+    cursor: help;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: rgba(139,92,246,0.45);
+    text-underline-offset: 3px;
+  }
+  .cert-card[data-hc] { cursor: help; }
+
+  /* ── Skills filter tabs ── */
+  .skills-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 20px;
+  }
+  .skills-filter {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.67rem;
+    letter-spacing: 0.07em;
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 100px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .skills-filter:hover {
+    border-color: rgba(139,92,246,0.42);
+    color: var(--sky);
+    background: rgba(139,92,246,0.05);
+  }
+  .skills-filter.active {
+    background: rgba(139,92,246,0.1);
+    border-color: rgba(139,92,246,0.42);
+    color: var(--sky);
+  }
+
+  /* ── Skill chips grid ── */
+  .skills-chips-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: help;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease;
+    user-select: none;
+  }
+  .skill-chip:hover {
+    border-color: rgba(139,92,246,0.45);
+    background: rgba(139,92,246,0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139,92,246,0.12);
+  }
+  .skill-chip.hc-no-data { cursor: default; }
+  .skill-chip-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-light);
+    transition: color 0.25s ease;
+  }
+  .skill-chip:hover .skill-chip-name { color: var(--ice); }
+  .skill-chip-prof {
+    display: flex;
+    gap: 2.5px;
+    align-items: center;
+  }
+  .sc-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(139,92,246,0.2);
+    transition: background 0.25s ease;
+  }
+  .sc-dot.filled { background: var(--sky); }
+  .skill-chip:hover .sc-dot.filled { background: var(--electric, var(--steel)); }
+  .skill-chip.hidden-chip { display: none; }
 </style>
 </head>
 <body>
+
+<!-- Scanline HUD overlay -->
+<div class="scanline" aria-hidden="true"></div>
 
 <!-- Grain texture overlay -->
 <div class="grain-overlay" aria-hidden="true"></div>
@@ -890,6 +1226,9 @@ tailwind.config = {
 
 <!-- Progress bar -->
 <div id="progress-bar" aria-hidden="true"></div>
+
+<!-- HoverCard -->
+<div id="hovercard" role="tooltip" aria-hidden="true"></div>
 
 <!-- Lightbox -->
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
@@ -956,13 +1295,13 @@ tailwind.config = {
 
     <!-- Desktop social -->
     <div class="social-column hidden lg:flex" aria-label="Social links">
-      <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon">
+      <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon" data-hc="github-contact">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
       </a>
-      <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
+      <a href="https://www.linkedin.com/in/abdelkrim-z-9a3782229/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon" data-hc="linkedin-contact">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
       </a>
-      <a href="mailto:abdelkrim.zouaki.ti@gmail.com" aria-label="Email" class="social-icon">
+      <a href="mailto:abdelkrim.zouaki.ti@gmail.com" aria-label="Email" class="social-icon" data-hc="email-contact">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </a>
     </div>
@@ -1012,7 +1351,7 @@ tailwind.config = {
         <div class="flex items-start justify-between flex-wrap gap-3 mb-5">
           <div>
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">DEC — Computer Security &amp; Networking</h3>
-            <p class="accent-violet font-mono text-xs mt-1 tracking-wide">Collège de Bois-de-Boulogne · Montreal, QC</p>
+            <p class="accent-violet font-mono text-xs mt-1 tracking-wide"><span class="hc-text-trigger" data-hc="bdeb">Collège de Bois-de-Boulogne</span> · Montreal, QC</p>
           </div>
           <p class="font-mono text-xs" style="color:var(--text);">Graduated 2025</p>
         </div>
@@ -1042,7 +1381,7 @@ tailwind.config = {
         </div>
         <div class="flex-grow py-2 md:px-6">
           <div id="content-alorica" class="tab-content">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Technician <span class="accent-sky">@ Alorica</span></h3>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Technician <span class="accent-sky hc-text-trigger" data-hc="alorica">@ Alorica</span></h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">July 2025 – December 2025 · Montreal, QC</p>
             <ul class="space-y-3 text-sm" style="color:var(--text-light);">
               <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Provided Tier 1/2 IT support for Alorica's internal workforce — diagnosing Windows 10/11, Office 365, VPN, and network peripheral issues across a bilingual (FR/EN) environment at a pace of 25–35 tickets per day.</span></li>
@@ -1051,7 +1390,7 @@ tailwind.config = {
             </ul>
           </div>
           <div id="content-cosior" class="tab-content hidden">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Intern <span class="accent-sky">@ Groupe Cosior TI</span></h3>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:500;color:var(--text-bright);">IT Support Intern <span class="accent-sky hc-text-trigger" data-hc="cosior">@ Groupe Cosior TI</span></h3>
             <p class="font-mono text-xs mb-5 mt-1" style="color:var(--text);">January – May 2025 · Montreal, QC</p>
             <ul class="space-y-3 text-sm" style="color:var(--text-light);">
               <li class="flex items-start exp-li"><span class="exp-bullet">▹</span><span>Assisted with installation, configuration, and maintenance of servers and network equipment in enterprise environments.</span></li>
@@ -1082,6 +1421,12 @@ tailwind.config = {
 
         <!-- Threat Intel Bot -->
         <div class="glass project-card p-6">
+          <div class="terminal-bar">
+            <span class="terminal-dot r"></span>
+            <span class="terminal-dot y"></span>
+            <span class="terminal-dot g"></span>
+            <span class="terminal-title">threat_intel_bot.py</span>
+          </div>
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
@@ -1121,6 +1466,12 @@ tailwind.config = {
 
         <!-- Mini-SOC -->
         <div class="glass project-card p-6">
+          <div class="terminal-bar">
+            <span class="terminal-dot r"></span>
+            <span class="terminal-dot y"></span>
+            <span class="terminal-dot g"></span>
+            <span class="terminal-title">mini_soc_lab.sh  —  suricata + splunk + wazuh</span>
+          </div>
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
@@ -1154,6 +1505,12 @@ tailwind.config = {
 
         <!-- PowerShell IR -->
         <div class="glass project-card p-6">
+          <div class="terminal-bar">
+            <span class="terminal-dot r"></span>
+            <span class="terminal-dot y"></span>
+            <span class="terminal-dot g"></span>
+            <span class="terminal-title">incident_response.log  —  SEVERITY: CRITICAL</span>
+          </div>
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-badge" style="color:#4ade80;"><span class="featured-badge-dot" style="background:#4ade80;"></span>Real Detection</p>
@@ -1186,6 +1543,12 @@ tailwind.config = {
 
         <!-- Pi-hole -->
         <div class="glass project-card p-6">
+          <div class="terminal-bar">
+            <span class="terminal-dot r"></span>
+            <span class="terminal-dot y"></span>
+            <span class="terminal-dot g"></span>
+            <span class="terminal-title">pihole_dns.conf  —  ~15,000 domains blocked/day</span>
+          </div>
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
@@ -1230,6 +1593,12 @@ tailwind.config = {
 
         <!-- pfSense -->
         <div class="glass project-card p-6">
+          <div class="terminal-bar">
+            <span class="terminal-dot r"></span>
+            <span class="terminal-dot y"></span>
+            <span class="terminal-dot g"></span>
+            <span class="terminal-title">pfsense_rules.xml  —  3 VLANs · OpenVPN · Suricata IDS</span>
+          </div>
           <div class="flex items-start justify-between mb-4">
             <div>
               <p class="featured-badge"><span class="featured-badge-dot"></span>Featured Project</p>
@@ -1274,68 +1643,143 @@ tailwind.config = {
         Technical Skills
         <span class="section-line"></span>
       </h2>
-      <div class="grid md:grid-cols-2 gap-4">
 
-        <div class="skill-card">
-          <div class="skill-heading">
-            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            Detection &amp; SIEM
-          </div>
-          <ul class="space-y-1.5">
-            <li class="skill-item"><span class="skill-dot"></span>Splunk Enterprise, Wazuh, ELK Stack</li>
-            <li class="skill-item"><span class="skill-dot"></span>Suricata IDS/IPS, Snort, Wireshark, tcpdump</li>
-            <li class="skill-item"><span class="skill-dot"></span>Sysmon, Windows Event Logs</li>
-            <li class="skill-item"><span class="skill-dot"></span>Nessus, OpenVAS</li>
-            <li class="skill-item"><span class="skill-dot"></span>MITRE ATT&amp;CK, Incident Response</li>
-            <li class="skill-item"><span class="skill-dot"></span>Log Analysis &amp; Correlation</li>
-            <li class="skill-item"><span class="skill-dot"></span>IOC Triage, Alert Handling &amp; Escalation</li>
-            <li class="skill-item"><span class="skill-dot"></span>Threat Intel (AbuseIPDB, VirusTotal, OTX)</li>
-          </ul>
+      <!-- Filter tabs -->
+      <div class="skills-filter-row" role="tablist" aria-label="Skill categories">
+        <button class="skills-filter active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="skills-filter" data-filter="detection" role="tab" aria-selected="false">Detection</button>
+        <button class="skills-filter" data-filter="network" role="tab" aria-selected="false">Network</button>
+        <button class="skills-filter" data-filter="scripting" role="tab" aria-selected="false">Scripting</button>
+        <button class="skills-filter" data-filter="cloud" role="tab" aria-selected="false">Cloud</button>
+        <button class="skills-filter" data-filter="systems" role="tab" aria-selected="false">Systems</button>
+      </div>
+
+      <!-- Skill chips -->
+      <div class="skills-chips-grid" id="skills-chips-grid">
+
+        <!-- Detection & SIEM -->
+        <span class="skill-chip" data-category="detection" data-hc="suricata">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
+          <span class="skill-chip-name">Suricata</span>
+        </span>
+        <span class="skill-chip" data-category="detection" data-hc="splunk">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Splunk</span>
+        </span>
+        <span class="skill-chip" data-category="detection" data-hc="wazuh">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Wazuh</span>
+        </span>
+        <span class="skill-chip" data-category="detection" data-hc="elk">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">ELK Stack</span>
+        </span>
+        <span class="skill-chip" data-category="detection" data-hc="sysmon">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Sysmon</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="detection">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Wireshark</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="detection">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Nessus</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="detection">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
+          <span class="skill-chip-name">MITRE ATT&amp;CK</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="detection">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Incident Response</span>
+        </span>
+
+        <!-- Network -->
+        <span class="skill-chip" data-category="network" data-hc="pfsense">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
+          <span class="skill-chip-name">pfSense / OPNsense</span>
+        </span>
+        <span class="skill-chip" data-category="network" data-hc="pihole">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
+          <span class="skill-chip-name">Pi-hole</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="network">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
+          <span class="skill-chip-name">TCP/IP</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="network">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">VLANs</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="network">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">OpenVPN</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="network">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Cisco IOS</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="network">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">DNS / DHCP / NAT</span>
+        </span>
+
+        <!-- Scripting -->
+        <span class="skill-chip" data-category="scripting" data-hc="python">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Python</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="scripting">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Bash</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="scripting">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">PowerShell</span>
+        </span>
+
+        <!-- Cloud -->
+        <span class="skill-chip" data-category="cloud" data-hc="azure">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Microsoft Azure</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="cloud">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Microsoft 365</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="cloud">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Entra ID (AAD)</span>
+        </span>
+
+        <!-- Systems -->
+        <span class="skill-chip hc-no-data" data-category="systems">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
+          <span class="skill-chip-name">Linux</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="systems">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Windows Server</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="systems">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">Active Directory</span>
+        </span>
+        <span class="skill-chip hc-no-data" data-category="systems">
+          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
+          <span class="skill-chip-name">VMware / VirtualBox</span>
+        </span>
+
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="mt-8 pt-5 border-t" style="border-color:var(--border);">
+        <p class="text-xs mb-3 font-mono" style="color:var(--text);">Want to see more?</p>
+        <div class="flex gap-3">
+          <a href="https://karim871.github.io/Portfolio/secondarypages/CTF.html" class="btn-outline text-xs py-2 px-4 cursor-pointer">CTF Writeups</a>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/Blog.html" class="btn-outline text-xs py-2 px-4 cursor-pointer">Blog</a>
         </div>
-
-        <div class="skill-card">
-          <div class="skill-heading">
-            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Network Security
-          </div>
-          <ul class="space-y-1.5">
-            <li class="skill-item"><span class="skill-dot"></span>TCP/IP, VLAN, Trunking</li>
-            <li class="skill-item"><span class="skill-dot"></span>VPN (OpenVPN, Site-to-Site)</li>
-            <li class="skill-item"><span class="skill-dot"></span>DHCP, DNS, NAT</li>
-            <li class="skill-item"><span class="skill-dot"></span>Cisco IOS (ACL, Routing, Switching)</li>
-            <li class="skill-item"><span class="skill-dot"></span>pfSense / OPNsense Firewall</li>
-          </ul>
-        </div>
-
-        <div class="skill-card">
-          <div class="skill-heading">
-            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
-            Systems
-          </div>
-          <ul class="space-y-1.5">
-            <li class="skill-item"><span class="skill-dot"></span>Linux (Arch, Kali, Debian, Ubuntu, CentOS)</li>
-            <li class="skill-item"><span class="skill-dot"></span>Windows Server (AD, GPO, DNS, DHCP)</li>
-            <li class="skill-item"><span class="skill-dot"></span>VMware, Hyper-V, VirtualBox</li>
-          </ul>
-        </div>
-
-        <div class="skill-card">
-          <div class="skill-heading">
-            <svg class="w-4 h-4 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-            Scripting
-          </div>
-          <ul class="space-y-1.5">
-            <li class="skill-item"><span class="skill-dot"></span>Bash, PowerShell, Python</li>
-          </ul>
-          <div class="mt-6 pt-4 border-t" style="border-color:var(--border);">
-            <p class="text-xs mb-3" style="color:var(--text);">Want to see more?</p>
-            <div class="flex gap-3">
-              <a href="https://karim871.github.io/Portfolio/secondarypages/CTF.html" class="btn-outline text-xs py-2 px-4 cursor-pointer">CTF Writeups</a>
-              <a href="https://karim871.github.io/Portfolio/secondarypages/Blog.html" class="btn-outline text-xs py-2 px-4 cursor-pointer">Blog</a>
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
 
@@ -1350,37 +1794,37 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-        <div class="cert-card">
+        <div class="cert-card" data-hc="cysa-plus">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CySA+-png.webp" alt="CompTIA CySA+" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA CySA+</h4>
           <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
-        <div class="cert-card">
+        <div class="cert-card" data-hc="security-plus">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/Security+-png.webp" alt="CompTIA Security+" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA Security+</h4>
           <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
-        <div class="cert-card">
+        <div class="cert-card" data-hc="ccna-itn">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ITN.png" alt="Cisco CCNA ITN" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ITN</h4>
         </div>
-        <div class="cert-card">
+        <div class="cert-card" data-hc="ccna-srwe">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_SRWE.png" alt="Cisco CCNA SRWE" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA SRWE</h4>
         </div>
-        <div class="cert-card">
+        <div class="cert-card" data-hc="ccna-ensa">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ENSA.png" alt="Cisco CCNA ENSA" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ENSA</h4>
         </div>
-        <div class="cert-card">
+        <div class="cert-card" data-hc="network-defense">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/NetworkDefense.png" alt="Cisco Network Defense" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco Network Defense</h4>
         </div>
-        <div class="cert-card">
+        <div class="cert-card" data-hc="az-900">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/AZ-900.png" alt="Microsoft AZ-900" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft AZ-900</h4>
         </div>
-        <div class="cert-card">
+        <div class="cert-card" data-hc="sc-900">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/SC-900.png" alt="Microsoft SC-900" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft SC-900</h4>
         </div>
@@ -1437,7 +1881,7 @@ tailwind.config = {
           <p id="form-status" class="text-center text-xs font-mono mt-4 hidden" role="status" aria-live="polite"></p>
         </form>
         <p class="text-center text-xs mt-6 font-mono" style="color:var(--text);">
-          Or directly: <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="accent-violet hover:underline">abdelkrim.zouaki.ti@gmail.com</a>
+          Or directly: <a href="mailto:abdelkrim.zouaki.ti@gmail.com" class="accent-violet hover:underline hc-text-trigger" data-hc="email-contact">abdelkrim.zouaki.ti@gmail.com</a>
         </p>
       </div>
 
@@ -1492,6 +1936,7 @@ async function typeText(el, text, msPer) {
 function buildSplitName(name) {
   const h1 = document.getElementById('hero-name');
   h1.innerHTML = '';
+  h1.setAttribute('data-name', name);
   for (const ch of name) {
     if (ch === ' ') {
       const s = document.createElement('span');
@@ -1612,10 +2057,10 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
     particles.push({
       x: Math.random() * innerWidth,
       y: Math.random() * innerHeight,
-      vy: 0.12 + Math.random() * 0.25,
+      vy: 0.12 + Math.random() * 0.28,
       ch: chars[Math.floor(Math.random() * chars.length)],
-      alpha: 0.018 + Math.random() * 0.018,
-      size: 9 + Math.floor(Math.random() * 5),
+      alpha: 0.038 + Math.random() * 0.032,
+      size: 10 + Math.floor(Math.random() * 6),
       tick: 0,
       interval: 40 + Math.floor(Math.random() * 80),
     });
@@ -1653,7 +2098,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       if (p.life <= 0) { pts.splice(i, 1); continue; }
       ctx.beginPath();
       ctx.arc(p.x, p.y, 2.5 * p.life, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(79,195,247,${p.life * 0.35})`;
+      ctx.fillStyle = `rgba(139,92,246,${p.life * 0.35})`;
       ctx.fill();
     }
     requestAnimationFrame(drawTrail);
@@ -1802,7 +2247,7 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
     requestAnimationFrame(animate);
   })();
 
-  const hoverTargets = 'a, button, .project-card, .nav-link, .tab-btn, .cert-card, .skill-card, .screenshot-gallery img';
+  const hoverTargets = 'a, button, .project-card, .nav-link, .tab-btn, .cert-card, .skill-chip, .screenshot-gallery img';
   document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
     el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
@@ -1926,25 +2371,45 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
   btn.addEventListener('mouseleave', () => { clearTimeout(timer); label.textContent = original; });
 });
 
-// ── Skill cards: alternating horizontal slide ─────────────────
-(function initSkillSlide() {
-  const cards = [...document.querySelectorAll('.skill-card')];
-  cards.forEach((c, i) => c.classList.add(i % 2 === 0 ? 'slide-left' : 'slide-right'));
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const card = entry.target;
-      const idx = cards.indexOf(card);
-      setTimeout(() => {
-        card.classList.add('revealed');
-        card.querySelectorAll('.skill-item').forEach((item, j) => {
-          setTimeout(() => item.classList.add('revealed'), j * 35 + 80);
-        });
-      }, idx * 40);
-      obs.unobserve(card);
+// ── Skills filter tabs ────────────────────────────────────────
+(function initSkillsFilter() {
+  const tabs = document.querySelectorAll('.skills-filter');
+  const chips = document.querySelectorAll('.skill-chip');
+  if (!tabs.length || !chips.length) return;
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      const filter = tab.dataset.filter;
+      chips.forEach(chip => {
+        if (filter === 'all' || chip.dataset.category === filter) {
+          chip.classList.remove('hidden-chip');
+        } else {
+          chip.classList.add('hidden-chip');
+        }
+      });
     });
-  }, { threshold: 0.12 });
-  cards.forEach(c => obs.observe(c));
+  });
+
+  // Stagger chip entrance on scroll
+  const grid = document.getElementById('skills-chips-grid');
+  if (grid) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        [...chips].forEach((c, i) => {
+          c.style.opacity = '0';
+          c.style.transform = 'translateY(12px)';
+          c.style.transition = 'opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1)';
+          setTimeout(() => { c.style.opacity = '1'; c.style.transform = 'translateY(0)'; }, i * 28);
+        });
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.1 });
+    obs.observe(grid);
+  }
 })();
 
 // ── Particle canvas ───────────────────────────────────────────
@@ -1954,6 +2419,10 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
   let particles = [];
   const COUNT = 55;
   const MAX_DIST = 140;
+  const REPEL = 110;
+  const MAX_SPEED = 1.4;
+  let pmx = -9999, pmy = -9999;
+  window.addEventListener('mousemove', e => { pmx = e.clientX; pmy = e.clientY; }, { passive: true });
 
   function resize() {
     canvas.width  = window.innerWidth;
@@ -1962,22 +2431,23 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
   resize();
   window.addEventListener('resize', resize, { passive: true });
 
-  /* Star-like particles: mostly white/ice, some cold blue, rare bright sky */
+  /* Star-like particles: mostly crystal, some electric, rare violet */
   const colorPool = [
-    'rgba(224,247,250,',  /* ice white — most common */
-    'rgba(224,247,250,',
-    'rgba(224,247,250,',
-    'rgba(144,202,249,',  /* steel blue */
-    'rgba(144,202,249,',
-    'rgba(79,195,247,',   /* sky blue — rare */
+    'rgba(237,233,254,',
+    'rgba(237,233,254,',
+    'rgba(237,233,254,',
+    'rgba(196,181,253,',
+    'rgba(196,181,253,',
+    'rgba(139,92,246,',
   ];
 
   for (let i = 0; i < COUNT; i++) {
+    const bvx = (Math.random() - 0.5) * 0.18;
+    const bvy = (Math.random() - 0.5) * 0.18;
     particles.push({
       x:  Math.random() * window.innerWidth,
       y:  Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.18,
+      vx: bvx, vy: bvy, bvx, bvy,
       r:  Math.random() * 1.2 + 0.3,
       c:  colorPool[Math.floor(Math.random() * colorPool.length)],
       twinkle: Math.random() * Math.PI * 2,
@@ -1989,6 +2459,20 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
+
+      // Mouse repulsion — particles flee cursor and drift back
+      const mdx = p.x - pmx, mdy = p.y - pmy;
+      const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+      if (mdist < REPEL && mdist > 0) {
+        const force = (REPEL - mdist) / REPEL;
+        p.vx += (mdx / mdist) * force * 0.45;
+        p.vy += (mdy / mdist) * force * 0.45;
+      }
+      p.vx += (p.bvx - p.vx) * 0.009;
+      p.vy += (p.bvy - p.vy) * 0.009;
+      const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      if (spd > MAX_SPEED) { p.vx = (p.vx / spd) * MAX_SPEED; p.vy = (p.vy / spd) * MAX_SPEED; }
+
       p.x += p.vx; p.y += p.vy;
       if (p.x < 0) p.x = canvas.width;
       if (p.x > canvas.width) p.x = 0;
@@ -2003,17 +2487,19 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
       ctx.fillStyle = p.c + brightness + ')';
       ctx.fill();
 
+      // Connections glow brighter when cursor is nearby
+      const proximity = Math.max(0, 1 - mdist / 180);
       for (let j = i + 1; j < particles.length; j++) {
         const q = particles[j];
         const dx = p.x - q.x, dy = p.y - q.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < MAX_DIST) {
-          const alpha = (1 - dist / MAX_DIST) * 0.07;
+          const alpha = (1 - dist / MAX_DIST) * (0.07 + proximity * 0.1);
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = 'rgba(144,202,249,' + alpha + ')';
-          ctx.lineWidth = 0.4;
+          ctx.strokeStyle = 'rgba(167,139,250,' + alpha + ')';
+          ctx.lineWidth = 0.4 + proximity * 0.3;
           ctx.stroke();
         }
       }
@@ -2023,10 +2509,368 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
   draw();
 })();
 
+// ── Glitch effect on hero name ───────────────────────────────
+(function initGlitch() {
+  if (prefersReduced) return;
+  const h1 = document.getElementById('hero-name');
+  function triggerGlitch() {
+    h1.classList.add('glitching');
+    setTimeout(() => h1.classList.remove('glitching'), 420);
+  }
+  // First glitch after hero sequence settles, then random intervals
+  setTimeout(() => {
+    triggerGlitch();
+    setInterval(() => {
+      if (Math.random() > 0.25) triggerGlitch();
+    }, 8000 + Math.random() * 6000);
+  }, 5000);
+})();
+
+// ── Animated metric counters ──────────────────────────────────
+(function initCounters() {
+  document.querySelectorAll('.metric-highlight').forEach(el => {
+    const match = el.textContent.match(/([\d,]+)/);
+    if (!match) return;
+    const raw = match[1].replace(/,/g, '');
+    const target = parseInt(raw);
+    if (isNaN(target) || target < 3) return;
+    const full = el.textContent;
+    const pre  = full.slice(0, match.index);
+    const suf  = full.slice(match.index + match[1].length);
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        el.classList.add('counting');
+        const start = performance.now();
+        const dur   = Math.min(1400, 600 + target * 0.4);
+        (function tick(now) {
+          const t = Math.min((now - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - t, 3);
+          el.textContent = pre + Math.round(ease * target).toLocaleString() + suf;
+          if (t < 1) requestAnimationFrame(tick);
+          else { el.classList.remove('counting'); el.textContent = pre + target.toLocaleString() + suf; }
+        })(performance.now());
+        obs.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    obs.observe(el);
+  });
+})();
+
+// ── Section heading character reveal ─────────────────────────
+(function initHeadingCharReveal() {
+  if (prefersReduced) return;
+  document.querySelectorAll('.section-heading').forEach(h2 => {
+    const textNode = [...h2.childNodes].find(n =>
+      n.nodeType === 3 && n.textContent.trim().length > 1
+    );
+    if (!textNode) return;
+    const text = textNode.textContent;
+    const frag = document.createDocumentFragment();
+    const charSpans = [];
+    for (const ch of text) {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      s.style.display = 'inline-block';
+      frag.appendChild(s);
+      charSpans.push(s);
+    }
+    h2.replaceChild(frag, textNode);
+    gsap.set(charSpans, { opacity: 0, y: 12 });
+    ScrollTrigger.create({
+      trigger: h2,
+      start: 'top 85%',
+      onEnter: () => gsap.to(charSpans, {
+        opacity: 1, y: 0,
+        duration: 0.4,
+        ease: 'power3.out',
+        stagger: 0.028,
+        delay: 0.12,
+      }),
+      once: true,
+    });
+  });
+})();
+
 // ── prefers-reduced-motion: disable animations ────────────────
 if (prefersReduced) {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
 }
+
+// ── HoverCard System ──────────────────────────────────────────
+(function initHoverCards() {
+  const HC = document.getElementById('hovercard');
+  if (!HC) return;
+
+  const DATA = {
+    'bdeb': {
+      badge: 'EDUCATION',
+      title: 'Collège de Bois-de-Boulogne',
+      subtitle: 'DEC — Computer Security & Networking',
+      meta: '3 years · Graduated 2025 · Montreal, QC',
+      courses: [
+        'Network Security & Firewall Configuration',
+        'Ethical Hacking & Penetration Testing',
+        'Incident Response & Digital Forensics',
+        'SIEM Implementation & Log Analysis',
+        'Cryptography & PKI',
+      ],
+      links: [
+        { label: 'View Program →', href: 'https://bdeb.qc.ca', target: '_blank' },
+        { label: 'My Projects from this program →', href: '#projects', target: '_self' },
+      ],
+    },
+    'alorica': {
+      badge: 'EXPERIENCE',
+      title: 'Alorica',
+      subtitle: 'IT Support Technician',
+      meta: 'July – December 2025 · Montreal, QC',
+      body: 'Tier 1/2 support for internal workforce. Windows 10/11, Office 365, VPN, network peripherals. 25–35 tickets/day in a bilingual environment.',
+    },
+    'cosior': {
+      badge: 'EXPERIENCE',
+      title: 'Groupe Cosior TI',
+      subtitle: 'IT Support Intern',
+      meta: 'January – May 2025 · Montreal, QC',
+      body: 'Server/network equipment installation and maintenance. Supported cybersecurity team with traffic monitoring and vulnerability tracking.',
+      links: [
+        { label: 'Visit company →', href: 'https://cosior.ca', target: '_blank' },
+      ],
+    },
+    'cysa-plus': {
+      badge: 'COMPTIA',
+      title: 'CompTIA CySA+',
+      subtitle: 'Cybersecurity Analyst+',
+      meta: 'Valid 2025 – 2028',
+      body: 'Threat detection, SIEM analysis, vulnerability management, and incident response. The detection skills this cert covers are the same ones behind my 42-minute IR.',
+      links: [{ label: 'Verify credential →', href: 'https://www.comptia.org/certifications/cybersecurity-analyst', target: '_blank' }],
+    },
+    'security-plus': {
+      badge: 'COMPTIA',
+      title: 'CompTIA Security+',
+      subtitle: 'Foundation Security Certification',
+      meta: 'Valid 2025 – 2028',
+      body: 'Threats, attacks, vulnerabilities, cryptography, network security, and identity & access management. Industry baseline for security roles.',
+      links: [{ label: 'Learn more →', href: 'https://www.comptia.org/certifications/security', target: '_blank' }],
+    },
+    'ccna-itn': {
+      badge: 'CISCO',
+      title: 'Cisco CCNA ITN',
+      subtitle: 'Introduction to Networks',
+      body: 'Networking fundamentals: TCP/IP stack, Ethernet, IP addressing, routing basics, and network infrastructure components.',
+      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+    },
+    'ccna-srwe': {
+      badge: 'CISCO',
+      title: 'Cisco CCNA SRWE',
+      subtitle: 'Switching, Routing & Wireless Essentials',
+      body: 'VLANs, inter-VLAN routing, STP, EtherChannel, WLAN configuration, and layer-2 security concepts.',
+      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+    },
+    'ccna-ensa': {
+      badge: 'CISCO',
+      title: 'Cisco CCNA ENSA',
+      subtitle: 'Enterprise Networking, Security & Automation',
+      body: 'OSPF, QoS, ACLs, site-to-site and remote-access VPN, and network automation basics.',
+      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+    },
+    'network-defense': {
+      badge: 'CISCO',
+      title: 'Cisco Network Defense',
+      subtitle: 'Cybersecurity Operations Track',
+      body: 'Network security monitoring, firewall operation, IDS/IPS deployment, and Security Operations Center workflows.',
+    },
+    'az-900': {
+      badge: 'MICROSOFT',
+      title: 'Microsoft AZ-900',
+      subtitle: 'Azure Fundamentals',
+      body: 'Cloud concepts, Azure services, security, compliance, identity, and governance.',
+      links: [{ label: 'Microsoft Learn →', href: 'https://learn.microsoft.com/en-us/certifications/azure-fundamentals/', target: '_blank' }],
+    },
+    'sc-900': {
+      badge: 'MICROSOFT',
+      title: 'Microsoft SC-900',
+      subtitle: 'Security, Compliance & Identity',
+      body: 'Microsoft Entra ID, Defender, Sentinel, and regulatory compliance frameworks.',
+      links: [{ label: 'Microsoft Learn →', href: 'https://learn.microsoft.com/en-us/certifications/security-compliance-and-identity-fundamentals/', target: '_blank' }],
+    },
+    'suricata': {
+      badge: 'DETECTION',
+      title: 'Suricata',
+      subtitle: 'Open-source IDS/IPS & NSM Engine',
+      body: 'Stateful packet inspection with the Emerging Threats ruleset. Deployed in inline IDS mode on pfSense to monitor all three VLANs.',
+      usage: 'Detected C2 PowerShell reverse shell (185.220.101.42) during a red team exercise. Detection-to-containment: 42 minutes.',
+      links: [{ label: 'Official docs →', href: 'https://suricata.io', target: '_blank' }],
+    },
+    'splunk': {
+      badge: 'SIEM',
+      title: 'Splunk Enterprise',
+      subtitle: 'Security Information & Event Management',
+      body: 'Centralized log aggregation from Suricata, Wazuh, and rsyslog. Built custom searches, correlation rules, and dashboards.',
+      usage: 'Custom alert tuning cut false positives from ~120 to ~72 daily alerts (40% reduction) over 3 weeks.',
+      links: [{ label: 'Official docs →', href: 'https://splunk.com', target: '_blank' }],
+    },
+    'wazuh': {
+      badge: 'HIDS',
+      title: 'Wazuh',
+      subtitle: 'Host Intrusion Detection System',
+      body: 'File integrity monitoring, log analysis, and security alerting for Windows and Linux endpoints.',
+      usage: 'Detected Base64-encoded PowerShell (severity 12) on WIN-LAB-01 attempting stage-2 payload download.',
+      links: [{ label: 'Official docs →', href: 'https://wazuh.com', target: '_blank' }],
+    },
+    'pfsense': {
+      badge: 'NETWORK',
+      title: 'pfSense / OPNsense',
+      subtitle: 'Open-source Firewall & Router',
+      body: '3-VLAN segmented lab: LAN/WAN firewall rules, NAT, DNS Resolver, DHCP per segment, and OpenVPN site-to-site.',
+      usage: 'Ran Suricata in inline IDS mode across all 3 VLANs during red team exercises.',
+      links: [{ label: 'pfSense docs →', href: 'https://docs.netgate.com/pfsense/en/latest/', target: '_blank' }],
+    },
+    'pihole': {
+      badge: 'DNS',
+      title: 'Pi-hole',
+      subtitle: 'Network-wide DNS Sinkhole',
+      body: 'DNS-level ad and malicious domain blocking for the entire home network. Custom regex blocklists, whitelist management.',
+      usage: 'Blocks ~15,000 domains/day. Query logs feed into Splunk pipeline for DNS threat correlation.',
+      links: [{ label: 'Official site →', href: 'https://pi-hole.net', target: '_blank' }],
+    },
+    'python': {
+      badge: 'SCRIPTING',
+      title: 'Python',
+      subtitle: 'Automation & Security Tooling',
+      body: 'REST API integration, JSON parsing, CLI tool design, and automated security workflows.',
+      usage: 'Threat Intel Bot queries AbuseIPDB, VirusTotal & OTX — cuts IOC enrichment from minutes to seconds with automated severity scoring.',
+    },
+    'elk': {
+      badge: 'SIEM',
+      title: 'ELK Stack',
+      subtitle: 'Elasticsearch · Logstash · Kibana',
+      body: 'Full-stack log ingestion, storage, and visualization. Used for network traffic analysis and event correlation in lab environments.',
+    },
+    'sysmon': {
+      badge: 'ENDPOINT',
+      title: 'Sysmon',
+      subtitle: 'Windows System Monitor (Sysinternals)',
+      body: 'Deep Windows telemetry: process creation, network connections, registry changes, file hash tracking.',
+      usage: 'Cross-correlated Sysmon endpoint logs with Wazuh alerts in Splunk to build the full PowerShell kill chain.',
+    },
+    'azure': {
+      badge: 'CLOUD',
+      title: 'Microsoft Azure',
+      subtitle: 'AZ-900 & SC-900 Certified',
+      body: 'Azure cloud services, Entra ID (AAD), Defender for Cloud, and Microsoft Sentinel.',
+      links: [{ label: 'Microsoft Learn →', href: 'https://learn.microsoft.com/', target: '_blank' }],
+    },
+    'email-contact': {
+      badge: 'CONTACT',
+      title: 'Email',
+      subtitle: 'abdelkrim.zouaki.ti@gmail.com',
+      body: 'Best for job opportunities, technical discussions, or collaboration.',
+      meta: 'Response time: usually within 24 hours',
+      links: [{ label: 'Open email client →', href: 'mailto:abdelkrim.zouaki.ti@gmail.com', target: '_self' }],
+    },
+    'linkedin-contact': {
+      badge: 'LINKEDIN',
+      title: 'LinkedIn',
+      subtitle: 'Abdelkrim Zouaki',
+      body: 'SOC Analyst & cybersecurity practitioner based in Montreal. Open to roles in security operations, threat detection, and IT support.',
+      links: [{ label: 'View profile →', href: 'https://www.linkedin.com/in/abdelkrim-z-9a3782229/', target: '_blank' }],
+    },
+    'github-contact': {
+      badge: 'GITHUB',
+      title: 'GitHub',
+      subtitle: 'karim871',
+      body: 'Home to the Threat Intel Bot, CTF writeup repos, and lab documentation. Most active security work is here.',
+      links: [{ label: 'View profile →', href: 'https://github.com/karim871', target: '_blank' }],
+    },
+  };
+
+  function buildHTML(d) {
+    let h = '';
+    if (d.badge) h += `<span class="hc-badge">${d.badge}</span>`;
+    h += `<div class="hc-title">${d.title}</div>`;
+    h += `<div class="hc-subtitle">${d.subtitle}</div>`;
+    if (d.meta) h += `<div class="hc-meta">${d.meta}</div>`;
+    if (d.courses && d.courses.length) {
+      h += '<ul class="hc-courses">' + d.courses.map(c => `<li>${c}</li>`).join('') + '</ul>';
+    }
+    if (d.body) {
+      h += '<div class="hc-divider"></div><div class="hc-body">' + d.body + '</div>';
+    }
+    if (d.usage) {
+      h += '<div class="hc-divider"></div><div class="hc-usage"><span class="hc-usage-label">How I used it: </span>' + d.usage + '</div>';
+    }
+    if (d.links && d.links.length) {
+      h += '<div class="hc-divider"></div><div class="hc-links">';
+      d.links.forEach(l => {
+        h += `<a href="${l.href}" target="${l.target}" rel="noopener noreferrer" class="hc-link">${l.label}</a>`;
+      });
+      h += '</div>';
+    }
+    return h;
+  }
+
+  let hideTimer = null;
+
+  function showCard(trigger, key) {
+    const d = DATA[key];
+    if (!d) return;
+    clearTimeout(hideTimer);
+
+    HC.innerHTML = buildHTML(d);
+    HC.className = 'hc-measuring';
+
+    requestAnimationFrame(() => {
+      const tr = trigger.getBoundingClientRect();
+      const hcW = Math.min(300, window.innerWidth - 32);
+      const hcH = HC.offsetHeight;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // Horizontal: center on trigger, clamp to viewport
+      let left = tr.left + tr.width / 2 - hcW / 2;
+      left = Math.max(12, Math.min(left, vw - hcW - 12));
+
+      // Arrow X relative to card
+      const arrowX = Math.max(16, Math.min((tr.left + tr.width / 2) - left, hcW - 16));
+
+      // Vertical: prefer above, fall back below
+      let top, arrowClass;
+      if (tr.top - hcH - 16 > 8) {
+        top = tr.top - hcH - 16;
+        arrowClass = 'hc-arrow-bottom';
+      } else {
+        top = tr.bottom + 16;
+        arrowClass = 'hc-arrow-top';
+      }
+      top = Math.max(8, Math.min(top, vh - hcH - 8));
+
+      HC.style.left = left + 'px';
+      HC.style.top = top + 'px';
+      HC.style.width = hcW + 'px';
+      HC.style.setProperty('--hc-arrow-x', arrowX + 'px');
+      HC.className = arrowClass + ' hc-visible';
+    });
+  }
+
+  function hideCard() {
+    hideTimer = setTimeout(() => {
+      HC.classList.remove('hc-visible');
+      HC.className = HC.className.replace(/hc-arrow-\w+/g, '').trim();
+    }, 100);
+  }
+
+  document.querySelectorAll('[data-hc]').forEach(el => {
+    el.addEventListener('mouseenter', () => showCard(el, el.dataset.hc));
+    el.addEventListener('mouseleave', hideCard);
+    el.addEventListener('focus', () => showCard(el, el.dataset.hc));
+    el.addEventListener('blur', hideCard);
+  });
+
+  // Links inside card are pointer-events:all, keep card open on hover
+  HC.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  HC.addEventListener('mouseleave', hideCard);
+})();
 </script>
 </body>
 </html>

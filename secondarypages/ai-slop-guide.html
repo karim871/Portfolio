@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stop Letting Claude Build AI Slop | Abdelkrim Zouaki</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ─────────────────────────────────── */
+    :root {
+      --bg:       #07040f;
+      --bg2:      #0c0518;
+      --bg3:      #130822;
+      --text:     #f0eaff;
+      --muted:    #9b8ab8;
+      --border:   rgba(139,92,246,0.10);
+      --border2:  rgba(139,92,246,0.18);
+
+      /* Tool palette */
+      --green:    #00ff88;
+      --purple:   #a855f7;
+      --amber:    #f59e0b;
+      --sky:      #38bdf8;
+      --lime:     #84cc16;
+      --rose:     #f43f5e;
+
+      /* Glows */
+      --glow-green:  rgba(0,255,136,0.18);
+      --glow-purple: rgba(168,85,247,0.18);
+      --glow-amber:  rgba(245,158,11,0.18);
+      --glow-sky:    rgba(56,189,248,0.18);
+      --glow-lime:   rgba(132,204,22,0.18);
+      --glow-rose:   rgba(244,63,94,0.18);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+    a, button, label, [onclick] { cursor: none; }
+    ::selection { background: rgba(0,255,136,0.2); color: var(--green); }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--green); }
+
+    /* ── GRAIN ───────────────────────────────────── */
+    #grain {
+      position: fixed; inset: -100%; width: 400%; height: 400%;
+      z-index: 9996; pointer-events: none; opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 0.6s steps(1) infinite;
+    }
+    @keyframes grain {
+      0%{transform:translate(0,0)} 10%{transform:translate(-2%,-3%)} 20%{transform:translate(3%,1%)}
+      30%{transform:translate(-1%,4%)} 40%{transform:translate(4%,-2%)} 50%{transform:translate(-3%,3%)}
+      60%{transform:translate(2%,-4%)} 70%{transform:translate(-4%,1%)} 80%{transform:translate(1%,3%)}
+      90%{transform:translate(-2%,-1%)} 100%{transform:translate(3%,2%)}
+    }
+
+    /* ── CURSOR ──────────────────────────────────── */
+    #cursor-dot {
+      position: fixed; width: 8px; height: 8px; background: var(--green);
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%); mix-blend-mode: screen;
+      transition: background 0.3s;
+    }
+    #cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid rgba(0,255,136,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9998; transform: translate(-50%,-50%);
+      transition: width 0.2s, height 0.2s, border-color 0.2s;
+    }
+    #cursor-ring.big { width: 54px; height: 54px; border-color: var(--green); }
+    #trail-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 9997; }
+    @media (hover:none) and (pointer:coarse) {
+      body, a, button { cursor: auto; }
+      #cursor-dot, #cursor-ring, #trail-canvas { display: none; }
+    }
+
+    /* ── SCROLL PROGRESS ─────────────────────────── */
+    #scroll-prog {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--purple), var(--sky), var(--green));
+      z-index: 10001; pointer-events: none; transition: width 0.1s linear;
+      box-shadow: 0 0 10px var(--glow-green);
+    }
+
+    /* ── BACK BUTTON ─────────────────────────────── */
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Fira Code', monospace; font-size: 0.78rem;
+      color: var(--muted); text-decoration: none; letter-spacing: 0.1em;
+      transition: color 0.2s; margin-bottom: 3rem;
+      width: fit-content; will-change: transform;
+    }
+    .btn-back:hover { color: var(--green); }
+    .btn-back:hover svg { transform: translateX(-4px); }
+    .btn-back svg { transition: transform 0.2s; }
+
+    /* ── HERO ────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 8vw 5rem;
+      position: relative; overflow: hidden;
+    }
+
+    /* Cinematic hero background — layered depth */
+    #hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 65% 40%, rgba(168,85,247,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 20% 70%, rgba(56,189,248,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,255,136,0.06) 0%, transparent 45%),
+        linear-gradient(160deg, #0d0f0f 0%, #121414 40%, #0e1112 100%);
+    }
+
+    /* Grid overlay */
+    #hero-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* Floating orbs */
+    #hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle 3px at 18% 30%, rgba(168,85,247,0.7) 0%, transparent 3px),
+        radial-gradient(circle 2px at 72% 25%, rgba(56,189,248,0.6) 0%, transparent 2px),
+        radial-gradient(circle 4px at 55% 65%, rgba(0,255,136,0.5) 0%, transparent 4px),
+        radial-gradient(circle 2px at 35% 80%, rgba(245,158,11,0.5) 0%, transparent 2px),
+        radial-gradient(circle 3px at 85% 55%, rgba(244,63,94,0.5) 0%, transparent 3px);
+      animation: orb-pulse 6s ease-in-out infinite alternate;
+    }
+    @keyframes orb-pulse {
+      0%  { opacity: 0.6; }
+      100%{ opacity: 1.0; }
+    }
+
+    /* Browser mockup (hero visual right side) */
+    #hero-mockup {
+      position: absolute; right: 5vw; top: 50%; transform: translateY(-55%);
+      width: clamp(320px, 40vw, 560px);
+      z-index: 1; pointer-events: none;
+    }
+    .mock-chrome {
+      background: #1e2022; border-radius: 12px 12px 0 0;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mock-dot:nth-child(1){ background: #ff5f57; }
+    .mock-dot:nth-child(2){ background: #febc2e; }
+    .mock-dot:nth-child(3){ background: #28c840; }
+    .mock-url {
+      flex: 1; background: rgba(255,255,255,0.06); border-radius: 4px;
+      padding: 4px 10px; font-family: 'Fira Code', monospace;
+      font-size: 0.68rem; color: var(--muted); margin-left: 8px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .mock-body {
+      background: #0f1011;
+      border: 1px solid rgba(255,255,255,0.08); border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 24px; min-height: 280px;
+      position: relative; overflow: hidden;
+    }
+    .mock-hero-stripe { height: 90px; border-radius: 6px; margin-bottom: 16px;
+      background: linear-gradient(135deg, rgba(168,85,247,0.3) 0%, rgba(56,189,248,0.15) 100%);
+      border: 1px solid rgba(168,85,247,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fira Code', monospace; font-size: 0.7rem; color: rgba(168,85,247,0.8);
+      letter-spacing: 0.15em;
+    }
+    .mock-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .mock-col { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 4px; height: 52px; }
+    .mock-col:nth-child(1){ border-color: rgba(0,255,136,0.2); }
+    .mock-col:nth-child(2){ border-color: rgba(245,158,11,0.2); }
+    .mock-col:nth-child(3){ border-color: rgba(244,63,94,0.2); }
+    .mock-lines { display: flex; flex-direction: column; gap: 6px; }
+    .mock-line { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; }
+    .mock-line:nth-child(1){ width: 85%; }
+    .mock-line:nth-child(2){ width: 65%; }
+    .mock-line:nth-child(3){ width: 75%; }
+    .mock-glow {
+      position: absolute; inset: -60px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .mock-badge {
+      position: absolute; bottom: 16px; right: 16px;
+      background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);
+      border-radius: 4px; padding: 4px 10px;
+      font-family: 'Fira Code', monospace; font-size: 0.62rem; color: var(--green);
+      letter-spacing: 0.1em;
+    }
+
+    .hero-inner { position: relative; z-index: 2; max-width: 660px; }
+
+    .hero-eyebrow {
+      font-family: 'Fira Code', monospace; font-size: 0.75rem;
+      color: var(--green); letter-spacing: 0.2em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow::after {
+      content: ''; width: 80px; height: 1px;
+      background: linear-gradient(to right, var(--green), transparent);
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.035em;
+      color: var(--text);
+    }
+    .hero-title .accent-word { display: block; }
+    .hero-title .accent-word.slop {
+      background: linear-gradient(135deg, #ef4444, #f59e0b);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-deck {
+      font-size: clamp(1rem, 1.4vw, 1.15rem);
+      color: var(--muted); line-height: 1.75;
+      margin-top: 1.5rem; max-width: 520px;
+    }
+
+    .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2rem; }
+    .pill {
+      font-family: 'Fira Code', monospace; font-size: 0.68rem;
+      letter-spacing: 0.1em; padding: 5px 14px; border-radius: 100px;
+      border: 1px solid; display: flex; align-items: center; gap: 6px;
+    }
+    .pill-dot { width: 5px; height: 5px; border-radius: 50%; }
+    .pill-claude { border-color: rgba(168,85,247,0.4); color: var(--purple); background: rgba(168,85,247,0.06); }
+    .pill-claude .pill-dot { background: var(--purple); }
+    .pill-banana { border-color: rgba(245,158,11,0.4); color: var(--amber); background: rgba(245,158,11,0.06); }
+    .pill-banana .pill-dot { background: var(--amber); }
+    .pill-motion { border-color: rgba(56,189,248,0.4); color: var(--sky); background: rgba(56,189,248,0.06); }
+    .pill-motion .pill-dot { background: var(--sky); }
+    .pill-gsap { border-color: rgba(132,204,22,0.4); color: var(--lime); background: rgba(132,204,22,0.06); }
+    .pill-gsap .pill-dot { background: var(--lime); }
+    .pill-21st { border-color: rgba(244,63,94,0.4); color: var(--rose); background: rgba(244,63,94,0.06); }
+    .pill-21st .pill-dot { background: var(--rose); }
+
+    .hero-meta {
+      margin-top: 3rem; display: flex; align-items: center; gap: 2rem;
+      font-family: 'Fira Code', monospace; font-size: 0.72rem; color: var(--muted);
+      flex-wrap: wrap;
+    }
+    .hero-meta-item { display: flex; align-items: center; gap: 6px; }
+    .hero-meta-divider { width: 1px; height: 20px; background: var(--border); }
+
+    /* ── ARTICLE LAYOUT ──────────────────────────── */
+    .article-wrap {
+      max-width: 780px; margin: 0 auto;
+      padding: 6rem 8vw;
+    }
+
+    /* ── DROP CAP / LEAD ─────────────────────────── */
+    .lead-para {
+      font-size: 1.2rem; line-height: 1.85;
+      color: rgba(227,226,226,0.85);
+      border-left: 3px solid var(--green);
+      padding-left: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .lead-para .drop-word {
+      font-size: 1.4em; font-weight: 800; color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    /* ── SECTION ANATOMY ─────────────────────────── */
+    .art-section { margin-bottom: 5rem; }
+
+    .art-section-label {
+      font-family: 'Fira Code', monospace; font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .art-section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .art-h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 800; letter-spacing: -0.025em;
+      color: var(--text); line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .art-p {
+      color: rgba(227,226,226,0.75);
+      margin-bottom: 1.25rem;
+      font-size: 1.025rem;
+    }
+    .art-p strong { color: var(--text); font-weight: 600; }
+    .art-p em { color: var(--muted); font-style: italic; }
+    .art-p code {
+      font-family: 'Fira Code', monospace; font-size: 0.88em;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      padding: 1px 7px; border-radius: 3px; color: var(--green);
+    }
+
+    /* ── BEFORE/AFTER ────────────────────────────── */
+    .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 3rem 0; background: var(--border); border-radius: 12px; overflow: hidden; }
+    .ba-pane { padding: 2rem; }
+    .ba-before { background: #171717; }
+    .ba-after  { background: #131815; }
+    .ba-label {
+      font-family: 'Fira Code', monospace; font-size: 0.65rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;
+    }
+    .ba-before .ba-label { color: #ef4444; }
+    .ba-after  .ba-label { color: var(--green); }
+    .ba-dot-b { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: blink 1.5s infinite; }
+    .ba-dot-a { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 1.5s 0.75s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+    /* Mini mockup inside before/after */
+    .ba-mock { border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+    .ba-chrome { background: #1e2020; padding: 8px 12px; display: flex; gap: 5px; align-items: center; }
+    .ba-cdot { width: 7px; height: 7px; border-radius: 50%; }
+    .ba-before .ba-cdot:nth-child(1){ background: rgba(255,95,87,0.5); }
+    .ba-before .ba-cdot:nth-child(2){ background: rgba(254,188,46,0.5); }
+    .ba-before .ba-cdot:nth-child(3){ background: rgba(40,200,64,0.5); }
+    .ba-after  .ba-cdot:nth-child(1){ background: #ff5f57; }
+    .ba-after  .ba-cdot:nth-child(2){ background: #febc2e; }
+    .ba-after  .ba-cdot:nth-child(3){ background: #28c840; }
+    .ba-screen { min-height: 140px; padding: 16px; }
+    .ba-before .ba-screen {
+      background: linear-gradient(135deg, #1a0533, #120824);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .ba-template-stripe { height: 36px; border-radius: 4px; }
+    .ba-template-stripe:nth-child(1){ background: linear-gradient(90deg, #7c3aed, #4f46e5); width: 100%; }
+    .ba-template-stripe:nth-child(2){ background: rgba(255,255,255,0.06); width: 80%; }
+    .ba-template-stripe:nth-child(3){ background: rgba(255,255,255,0.04); width: 55%; height: 22px; }
+    .ba-float-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 8px 12px; backdrop-filter: blur(8px); font-family: 'Fira Code', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.4); }
+
+    .ba-after .ba-screen {
+      background: #0f1011;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .ba-studio-hero { height: 50px; border-radius: 4px; background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(56,189,248,0.08)); border: 1px solid rgba(0,255,136,0.2); display: flex; align-items: center; justify-content: center; }
+    .ba-studio-hero span { font-family: 'Fira Code', monospace; font-size: 0.55rem; color: rgba(0,255,136,0.7); letter-spacing: 0.15em; }
+    .ba-studio-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+    .ba-studio-col { height: 36px; border-radius: 3px; border: 1px solid; }
+    .ba-studio-col:nth-child(1){ background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.25); }
+    .ba-studio-col:nth-child(2){ background: rgba(56,189,248,0.08); border-color: rgba(56,189,248,0.25); }
+    .ba-studio-col:nth-child(3){ background: rgba(0,255,136,0.08); border-color: rgba(0,255,136,0.25); }
+    .ba-studio-line { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.08); }
+    .ba-studio-line:nth-child(1){ width: 90%; }
+    .ba-studio-line:nth-child(2){ width: 60%; }
+    @media(max-width:600px){ .ba-grid { grid-template-columns: 1fr; } }
+
+    /* ── TOOL CARDS ──────────────────────────────── */
+    .tools-stack { display: flex; flex-direction: column; gap: 1.5rem; margin: 3rem 0; }
+
+    .tool-card {
+      border-radius: 14px; border: 1px solid;
+      overflow: hidden; position: relative;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s;
+    }
+    .tool-card:hover { transform: translateY(-3px); }
+
+    .tool-card-inner { display: grid; grid-template-columns: auto 1fr; gap: 0; }
+    .tool-accent-bar { width: 4px; flex-shrink: 0; }
+    .tool-body { padding: 2rem 2rem 2rem 1.75rem; }
+
+    .tool-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .tool-num { font-family: 'Fira Code', monospace; font-size: 0.65rem; letter-spacing: 0.2em; opacity: 0.5; }
+    .tool-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; }
+    .tool-desc { font-size: 0.95rem; color: rgba(227,226,226,0.68); line-height: 1.75; margin-bottom: 1.25rem; }
+    .tool-setup {
+      font-family: 'Fira Code', monospace; font-size: 0.78rem;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.85rem 1rem;
+      color: var(--muted); line-height: 1.8;
+    }
+    .tool-setup .cmd { color: var(--text); }
+    .tool-setup .kw  { color: inherit; opacity: 0.7; }
+
+    /* Claude Code – purple */
+    .tool-claude { border-color: rgba(168,85,247,0.25); background: linear-gradient(135deg, rgba(168,85,247,0.05) 0%, var(--bg2) 60%); }
+    .tool-claude:hover { box-shadow: 0 24px 60px -18px rgba(168,85,247,0.25); }
+    .tool-claude .tool-accent-bar { background: linear-gradient(180deg, var(--purple), rgba(168,85,247,0.3)); }
+    .tool-claude .tool-name { color: var(--purple); }
+    .tool-claude .tool-setup { border-color: rgba(168,85,247,0.2); }
+
+    /* Nano Banana – amber */
+    .tool-banana { border-color: rgba(245,158,11,0.25); background: linear-gradient(135deg, rgba(245,158,11,0.05) 0%, var(--bg2) 60%); }
+    .tool-banana:hover { box-shadow: 0 24px 60px -18px rgba(245,158,11,0.25); }
+    .tool-banana .tool-accent-bar { background: linear-gradient(180deg, var(--amber), rgba(245,158,11,0.3)); }
+    .tool-banana .tool-name { color: var(--amber); }
+    .tool-banana .tool-setup { border-color: rgba(245,158,11,0.2); }
+
+    /* Motion – sky */
+    .tool-motion { border-color: rgba(56,189,248,0.25); background: linear-gradient(135deg, rgba(56,189,248,0.05) 0%, var(--bg2) 60%); }
+    .tool-motion:hover { box-shadow: 0 24px 60px -18px rgba(56,189,248,0.25); }
+    .tool-motion .tool-accent-bar { background: linear-gradient(180deg, var(--sky), rgba(56,189,248,0.3)); }
+    .tool-motion .tool-name { color: var(--sky); }
+    .tool-motion .tool-setup { border-color: rgba(56,189,248,0.2); }
+
+    /* GSAP – lime */
+    .tool-gsap { border-color: rgba(132,204,22,0.25); background: linear-gradient(135deg, rgba(132,204,22,0.05) 0%, var(--bg2) 60%); }
+    .tool-gsap:hover { box-shadow: 0 24px 60px -18px rgba(132,204,22,0.25); }
+    .tool-gsap .tool-accent-bar { background: linear-gradient(180deg, var(--lime), rgba(132,204,22,0.3)); }
+    .tool-gsap .tool-name { color: var(--lime); }
+    .tool-gsap .tool-setup { border-color: rgba(132,204,22,0.2); }
+
+    /* 21st Dev – rose */
+    .tool-21st { border-color: rgba(244,63,94,0.25); background: linear-gradient(135deg, rgba(244,63,94,0.05) 0%, var(--bg2) 60%); }
+    .tool-21st:hover { box-shadow: 0 24px 60px -18px rgba(244,63,94,0.25); }
+    .tool-21st .tool-accent-bar { background: linear-gradient(180deg, var(--rose), rgba(244,63,94,0.3)); }
+    .tool-21st .tool-name { color: var(--rose); }
+    .tool-21st .tool-setup { border-color: rgba(244,63,94,0.2); }
+
+    /* ── 7-STEP FRAMEWORK ────────────────────────── */
+    .steps { display: flex; flex-direction: column; gap: 0; margin: 3rem 0; }
+    .step {
+      display: grid; grid-template-columns: 56px 1fr;
+      gap: 0; position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: ''; position: absolute;
+      left: 27px; top: 56px; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+    }
+    .step-num-col { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+    .step-circle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid; display: flex; align-items: center; justify-content: center;
+      font-family: 'Fira Code', monospace; font-size: 0.75rem; font-weight: 700;
+      flex-shrink: 0;
+      transition: box-shadow 0.3s;
+    }
+    .step-body { padding: 0 0 2.5rem 1.5rem; }
+    .step-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+    .step-text { font-size: 0.925rem; color: rgba(227,226,226,0.65); line-height: 1.75; }
+
+    .step:nth-child(1) .step-circle { border-color: var(--purple); color: var(--purple); }
+    .step:nth-child(2) .step-circle { border-color: var(--amber);  color: var(--amber);  }
+    .step:nth-child(3) .step-circle { border-color: var(--sky);    color: var(--sky);    }
+    .step:nth-child(4) .step-circle { border-color: var(--lime);   color: var(--lime);   }
+    .step:nth-child(5) .step-circle { border-color: var(--rose);   color: var(--rose);   }
+    .step:nth-child(6) .step-circle { border-color: var(--amber);  color: var(--amber);  }
+    .step:nth-child(7) .step-circle { border-color: var(--green);  color: var(--green);  }
+
+    /* ── KEYWORDS TABLE ──────────────────────────── */
+    .kw-grid { display: flex; flex-direction: column; gap: 1px; margin: 2.5rem 0; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .kw-row {
+      display: grid; grid-template-columns: 230px 1fr;
+      background: var(--bg2);
+      transition: background 0.2s;
+    }
+    .kw-row:hover { background: var(--bg3); }
+    .kw-keyword {
+      font-family: 'Fira Code', monospace; font-size: 0.82rem;
+      padding: 1rem 1.25rem; color: var(--sky);
+      border-right: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .kw-explain {
+      padding: 1rem 1.25rem; font-size: 0.88rem;
+      color: rgba(227,226,226,0.65); line-height: 1.65;
+    }
+    @media(max-width:580px){ .kw-row{ grid-template-columns: 1fr; } .kw-keyword { border-right: none; border-bottom: 1px solid var(--border); } }
+
+    /* ── PROMPT BLOCK ────────────────────────────── */
+    .prompt-block {
+      background: #0e100f; border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 12px; overflow: hidden; margin: 2.5rem 0;
+      position: relative;
+    }
+    .prompt-header {
+      padding: 12px 20px; background: rgba(0,255,136,0.06);
+      border-bottom: 1px solid rgba(0,255,136,0.15);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .prompt-header-label {
+      font-family: 'Fira Code', monospace; font-size: 0.7rem;
+      color: var(--green); letter-spacing: 0.15em; text-transform: uppercase;
+    }
+    .copy-btn {
+      font-family: 'Fira Code', monospace; font-size: 0.65rem;
+      color: var(--muted); background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 4px 12px; cursor: none; transition: all 0.2s;
+    }
+    .copy-btn:hover { color: var(--green); border-color: rgba(0,255,136,0.3); }
+    .prompt-code {
+      padding: 1.5rem 1.75rem;
+      font-family: 'Fira Code', monospace; font-size: 0.82rem;
+      line-height: 1.9; color: rgba(227,226,226,0.75);
+      overflow-x: auto; tab-size: 2;
+    }
+    .prompt-code .c-comment { color: #4b5563; }
+    .prompt-code .c-key    { color: var(--sky); }
+    .prompt-code .c-val    { color: var(--green); }
+    .prompt-code .c-str    { color: var(--amber); }
+
+    /* ── PRO TIP ─────────────────────────────────── */
+    .pro-tip {
+      border-radius: 14px; overflow: hidden;
+      margin: 3rem 0; border: 1px solid rgba(255,255,255,0.08);
+    }
+    .tip-header {
+      padding: 1rem 1.75rem;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--border);
+      font-family: 'Fira Code', monospace; font-size: 0.72rem;
+      letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tip-header::before { content: '⚡'; font-size: 0.9rem; }
+    .tip-body { padding: 1.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .color-demo { border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+    .color-swatch { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .swatch-black { background: #000000; }
+    .swatch-warm  { background: #121414; }
+    .color-info { padding: 1rem; background: var(--bg3); }
+    .color-hex {
+      font-family: 'Fira Code', monospace; font-size: 0.9rem;
+      font-weight: 700; margin-bottom: 4px;
+    }
+    .swatch-black + .color-info .color-hex { color: #ef4444; }
+    .swatch-warm  + .color-info .color-hex { color: var(--green); }
+    .color-note { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+    .tip-verdict { padding: 0 1.75rem 1.75rem; font-size: 0.925rem; color: rgba(227,226,226,0.65); line-height: 1.75; }
+    @media(max-width:540px){ .tip-body{ grid-template-columns: 1fr; } }
+
+    /* ── CLOSING CTA ─────────────────────────────── */
+    .closing-cta {
+      text-align: center; padding: 5rem 0;
+      border-top: 1px solid var(--border);
+      margin-top: 5rem;
+    }
+    .cta-eyebrow {
+      font-family: 'Fira Code', monospace; font-size: 0.72rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 1.5rem;
+    }
+    .cta-h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .cta-sub { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'Fira Code', monospace; font-size: 0.85rem;
+      letter-spacing: 0.1em; padding: 14px 32px;
+      background: rgba(0,255,136,0.09); border: 1px solid rgba(0,255,136,0.35);
+      color: var(--green); border-radius: 6px; text-decoration: none;
+      transition: all 0.3s; will-change: transform;
+    }
+    .cta-btn:hover { background: rgba(0,255,136,0.14); box-shadow: 0 0 30px rgba(0,255,136,0.15); }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      padding: 2.5rem 8vw; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      font-family: 'Fira Code', monospace; font-size: 0.72rem; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--green); }
+
+    /* ── UTIL ────────────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 4rem 0; }
+
+    /* Reveal (GSAP handles) */
+    .reveal { opacity: 0; }
+
+  </style>
+</head>
+<body>
+  <div id="grain"></div>
+  <div id="scroll-prog"></div>
+  <canvas id="trail-canvas"></canvas>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ══ HERO ══════════════════════════════════════ -->
+  <section id="hero">
+    <div id="hero-bg"></div>
+
+    <!-- Cinematic browser mockup -->
+    <div id="hero-mockup" aria-hidden="true">
+      <div class="mock-chrome">
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+        <div class="mock-url">your-product.com &nbsp;/&nbsp; studio-grade</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-glow"></div>
+        <div class="mock-hero-stripe">HERO — PINNED SCRUB</div>
+        <div class="mock-cols">
+          <div class="mock-col"></div>
+          <div class="mock-col"></div>
+          <div class="mock-col"></div>
+        </div>
+        <div class="mock-lines">
+          <div class="mock-line"></div>
+          <div class="mock-line"></div>
+          <div class="mock-line"></div>
+        </div>
+        <div class="mock-badge">AWWWARDS READY</div>
+      </div>
+    </div>
+
+    <div class="hero-inner">
+      <a href="../secondarypages/Blog.html" class="btn-back" id="btn-back">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to Blog
+      </a>
+
+      <div class="hero-eyebrow">[GUIDE · AI TOOLING]</div>
+
+      <h1 class="hero-title" id="hero-h1">
+        <span class="accent-word">Stop Letting</span>
+        <span class="accent-word">Claude Build</span>
+        <span class="accent-word slop">AI Slop.</span>
+      </h1>
+
+      <p class="hero-deck">The 5-tool stack that separates AI templates from studio-grade landing pages. Set it up once. Never look back.</p>
+
+      <div class="hero-pills">
+        <span class="pill pill-claude"><span class="pill-dot"></span>Claude Code</span>
+        <span class="pill pill-banana"><span class="pill-dot"></span>Nano Banana</span>
+        <span class="pill pill-motion"><span class="pill-dot"></span>Motion</span>
+        <span class="pill pill-gsap"><span class="pill-dot"></span>GSAP</span>
+        <span class="pill pill-21st"><span class="pill-dot"></span>21st Dev</span>
+      </div>
+
+      <div class="hero-meta">
+        <span class="hero-meta-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          8 min read
+        </span>
+        <div class="hero-meta-divider"></div>
+        <span class="hero-meta-item">May 2026</span>
+        <div class="hero-meta-divider"></div>
+        <span class="hero-meta-item" style="color:var(--green)">Guide · AI Tooling</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ARTICLE BODY ═══════════════════════════════ -->
+  <main class="article-wrap">
+
+    <!-- LEAD -->
+    <p class="lead-para reveal">
+      <span class="drop-word">The purple-gradient hero.</span> The floating glass cards. The same 4 stock-photo testimonials. You know the look — and you've seen it on every AI-generated site this year. Claude builds these by default. Not because it's bad. Because nobody told it what good looks like.
+    </p>
+
+    <!-- THE PROBLEM ───────────────────────── -->
+    <section class="art-section reveal">
+      <p class="art-section-label">The Problem</p>
+      <h2 class="art-h2">AI template vs. studio grade. Here's the gap.</h2>
+      <p class="art-p">Ask Claude to <em>"build me a landing page"</em> and you get the same template every time. Gradient mesh background, glassmorphism cards, generic copy. It's technically correct and aesthetically exhausted.</p>
+      <p class="art-p">The gap isn't Claude's capability. It's context. Claude optimizes for average — because the average prompt gives it nothing to aim higher at. Give it the right tools and vocabulary, and it builds like a senior design engineer.</p>
+
+      <div class="ba-grid">
+        <div class="ba-pane ba-before">
+          <p class="ba-label"><span class="ba-dot-b"></span>Default prompt</p>
+          <div class="ba-mock">
+            <div class="ba-chrome">
+              <div class="ba-cdot"></div><div class="ba-cdot"></div><div class="ba-cdot"></div>
+            </div>
+            <div class="ba-screen">
+              <div class="ba-template-stripe"></div>
+              <div class="ba-template-stripe"></div>
+              <div class="ba-template-stripe"></div>
+              <div class="ba-float-card">✨ glass card testimonial</div>
+            </div>
+          </div>
+          <p style="font-size:0.8rem;color:#6b7280;margin-top:1rem;font-family:'Fira Code',monospace">Purple template. Every time.</p>
+        </div>
+        <div class="ba-pane ba-after">
+          <p class="ba-label"><span class="ba-dot-a"></span>With the 5-tool stack</p>
+          <div class="ba-mock">
+            <div class="ba-chrome">
+              <div class="ba-cdot"></div><div class="ba-cdot"></div><div class="ba-cdot"></div>
+            </div>
+            <div class="ba-screen">
+              <div class="ba-studio-hero"><span>PINNED-SCRUB HERO</span></div>
+              <div class="ba-studio-cols">
+                <div class="ba-studio-col"></div>
+                <div class="ba-studio-col"></div>
+                <div class="ba-studio-col"></div>
+              </div>
+              <div class="ba-studio-line"></div>
+              <div class="ba-studio-line"></div>
+            </div>
+          </div>
+          <p style="font-size:0.8rem;color:var(--green);margin-top:1rem;font-family:'Fira Code',monospace">Awwwards-caliber. Every time.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE 5 TOOLS ───────────────────────── -->
+    <section class="art-section reveal">
+      <p class="art-section-label">The Stack</p>
+      <h2 class="art-h2">5 tools. Nothing else.</h2>
+      <p class="art-p">The gap between AI template and studio-grade is exactly these five working together. Not a framework. Not a boilerplate. Five sharp tools with a shared vocabulary.</p>
+
+      <div class="tools-stack">
+
+        <!-- Claude Code -->
+        <div class="tool-card tool-claude reveal">
+          <div class="tool-card-inner">
+            <div class="tool-accent-bar"></div>
+            <div class="tool-body">
+              <div class="tool-header">
+                <div>
+                  <p class="tool-num">TOOL 01 / 05</p>
+                  <h3 class="tool-name">Claude Code</h3>
+                </div>
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="rgba(168,85,247,0.5)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9l3 3-3 3M13 15h3"/></svg>
+              </div>
+              <p class="tool-desc">The brain of the stack. Orchestrates everything else and writes the site. Runs from your terminal via the Anthropic CLI. Pair it with CLAUDE.md system context and it develops with consistent design intent across every section.</p>
+              <div class="tool-setup">
+                <span class="c-comment"># Install</span><br>
+                <span class="cmd">npm install -g @anthropic-ai/claude-code</span><br>
+                <span class="c-comment"># Authenticate once</span><br>
+                <span class="cmd">claude auth login</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nano Banana -->
+        <div class="tool-card tool-banana reveal">
+          <div class="tool-card-inner">
+            <div class="tool-accent-bar"></div>
+            <div class="tool-body">
+              <div class="tool-header">
+                <div>
+                  <p class="tool-num">TOOL 02 / 05</p>
+                  <h3 class="tool-name">Nano Banana</h3>
+                </div>
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="rgba(245,158,11,0.5)" stroke-width="1.5"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
+              <p class="tool-desc">Google's image model, accessible from your terminal. Generates real product photography — <strong>not AI art, not stock photos</strong>. Hero imagery generated by Nano Banana beats every alternative. Get an API key from Google AI Studio. The free tier covers your first dozen images.</p>
+              <div class="tool-setup">
+                <span class="c-comment"># Install CLI</span><br>
+                <span class="cmd">pip install nanobanana</span><br>
+                <span class="c-comment"># Set API key (from Google AI Studio)</span><br>
+                <span class="cmd">export GOOGLE_API_KEY=<span class="kw">your_key_here</span></span><br>
+                <span class="c-comment"># Generate hero image</span><br>
+                <span class="cmd">nanobanana generate <span class="kw">"cinematic product hero, dark studio, 8K"</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Motion -->
+        <div class="tool-card tool-motion reveal">
+          <div class="tool-card-inner">
+            <div class="tool-accent-bar"></div>
+            <div class="tool-body">
+              <div class="tool-header">
+                <div>
+                  <p class="tool-num">TOOL 03 / 05</p>
+                  <h3 class="tool-name">Motion</h3>
+                </div>
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="rgba(56,189,248,0.5)" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <p class="tool-desc">Formerly Framer Motion. The animation runtime for React. Makes the page feel alive with spring physics and gesture recognition. Claude knows its API well — just name the pattern and it wires it up correctly every time.</p>
+              <div class="tool-setup">
+                <span class="cmd">npm install motion</span><br>
+                <span class="c-comment"># In your component</span><br>
+                <span class="cmd">import &#123; motion, AnimatePresence &#125; from <span class="kw">'motion/react'</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GSAP -->
+        <div class="tool-card tool-gsap reveal">
+          <div class="tool-card-inner">
+            <div class="tool-accent-bar"></div>
+            <div class="tool-body">
+              <div class="tool-header">
+                <div>
+                  <p class="tool-num">TOOL 04 / 05</p>
+                  <h3 class="tool-name">GSAP + GreenSock Skills</h3>
+                </div>
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="rgba(132,204,22,0.5)" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              </div>
+              <p class="tool-desc">The scroll vocabulary. That pinned section on Apple's Vision Pro page? GSAP. The GreenSock skills repo at <code>github.com/greensock/gsap-skills</code> gives Claude every scroll pattern by name — so it pulls from real training data instead of improvising geometry.</p>
+              <div class="tool-setup">
+                <span class="cmd">npm install gsap</span><br>
+                <span class="c-comment"># With ScrollTrigger</span><br>
+                <span class="cmd">import &#123; gsap &#125; from <span class="kw">'gsap'</span></span><br>
+                <span class="cmd">import ScrollTrigger from <span class="kw">'gsap/ScrollTrigger'</span></span><br>
+                <span class="cmd">gsap.registerPlugin(ScrollTrigger)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 21st Dev -->
+        <div class="tool-card tool-21st reveal">
+          <div class="tool-card-inner">
+            <div class="tool-accent-bar"></div>
+            <div class="tool-body">
+              <div class="tool-header">
+                <div>
+                  <p class="tool-num">TOOL 05 / 05</p>
+                  <h3 class="tool-name">21st Dev MCP</h3>
+                </div>
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="rgba(244,63,94,0.5)" stroke-width="1.5"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              </div>
+              <p class="tool-desc">A catalog of premium pre-built React components. Connect it once as an MCP server and Claude pulls from real, production-tested components instead of writing each one from scratch. Pricing tables, testimonial carousels, feature grids — all studio-grade out of the box.</p>
+              <div class="tool-setup">
+                <span class="c-comment"># Add to Claude's MCP config</span><br>
+                <span class="cmd">&#123;</span><br>
+                <span class="cmd">&nbsp;&nbsp;<span class="kw">"mcpServers"</span>: &#123;</span><br>
+                <span class="cmd">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">"21st-dev"</span>: &#123; <span class="kw">"command"</span>: <span class="c-val">"npx @21st-dev/mcp"</span> &#125;</span><br>
+                <span class="cmd">&nbsp;&nbsp;&#125;</span><br>
+                <span class="cmd">&#125;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- THE 7-STEP FRAMEWORK ──────────────── -->
+    <section class="art-section reveal">
+      <p class="art-section-label">The Framework</p>
+      <h2 class="art-h2">7 steps. Walk Claude through them in order.</h2>
+      <p class="art-p">Don't ask Claude to <em>"build me a landing page."</em> That's the prompt that gets you the purple template. Walk it through these seven steps — in this exact order — and it builds like it has a design director looking over its shoulder.</p>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num-col"><div class="step-circle">01</div></div>
+          <div class="step-body">
+            <h4 class="step-title" style="color:var(--purple)">Show it what good looks like</h4>
+            <p class="step-text">Send 3–5 reference URLs of sites you love. Linear, Stripe, Apple's Vision Pro page, Igloo Inc, anything off awwwards.com. Tell Claude to study them before it writes a single line of code. It'll extract palette, type hierarchy, spacing rhythm, and motion vocabulary.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num-col"><div class="step-circle">02</div></div>
+          <div class="step-body">
+            <h4 class="step-title" style="color:var(--amber)">Lock the look before any code</h4>
+            <p class="step-text">Colors, fonts, vibe — define them once, write them down as design tokens. Every section has to obey this contract. No drift halfway through. This is the step most developers skip, and it's why AI pages look inconsistent.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num-col"><div class="step-circle">03</div></div>
+          <div class="step-body">
+            <h4 class="step-title" style="color:var(--sky)">Plan sections like a magazine</h4>
+            <p class="step-text">Hero, problem, feature deep-dive, comparison, pricing, closing CTA. Decide the order first. Give each section a different visual treatment — varying density, dominant color, layout grid — so the page doesn't feel monotonous. A magazine art director designs every spread differently.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num-col"><div class="step-circle">04</div></div>
+          <div class="step-body">
+            <h4 class="step-title" style="color:var(--lime)">Pick how things move</h4>
+            <p class="step-text">Use the named GSAP patterns Claude already knows: <strong>pinned-scrub, sticky-stack, image-sequence-scrub, horizontal-on-vertical, splittext-reveal</strong>. Naming them triggers Claude to pull from training data instead of guessing scroll geometry. Each section should have a named pattern.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num-col"><div class="step-circle">05</div></div>
+          <div class="step-body">
+            <h4 class="step-title" style="color:var(--rose)">Pull in real parts</h4>
+            <p class="step-text">Tell Claude to use 21st Dev components and GreenSock patterns. Explicitly say: <em>"don't write custom components unless no 21st Dev equivalent exists."</em> This forces it toward battle-tested UI instead of reinventing the wheel with worse results.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num-col"><div class="step-circle">06</div></div>
+          <div class="step-body">
+            <h4 class="step-title" style="color:var(--amber)">Generate the imagery</h4>
+            <p class="step-text">Use Nano Banana for the hero. Real product photography beats AI illustrations every time — it has depth, texture, and a physical quality that AI art doesn't. Run it from your terminal, iterate on the prompt until it's cinematic, then hand the path to Claude.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num-col"><div class="step-circle">07</div></div>
+          <div class="step-body">
+            <h4 class="step-title" style="color:var(--green)">Test, fix, repeat</h4>
+            <p class="step-text">Screenshot after every section at 1440px. Compare to your references. Tell Claude what's off with specific language — <em>"the feature section feels too light, needs more visual weight"</em> rather than <em>"make it better."</em> Keep iterating until your screenshot belongs on Awwwards.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- KEYWORDS ──────────────────────────── -->
+    <section class="art-section reveal">
+      <p class="art-section-label">The Vocabulary</p>
+      <h2 class="art-h2">Keywords that unlock Claude.</h2>
+      <p class="art-p">Drop these into your prompts. Each one corresponds to a real pattern Claude already knows from GSAP, Linear, Stripe, and Apple's sites. Naming them makes Claude pull from training data instead of improvising.</p>
+
+      <div class="kw-grid">
+        <div class="kw-row">
+          <span class="kw-keyword">pinned-scrub</span>
+          <span class="kw-explain">Page locks while content animates. Apple Vision Pro hero. The text changes as you scroll but the visual stays pinned in the viewport.</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-keyword">sticky-stack</span>
+          <span class="kw-explain">Cards hold while the next one slides over. Stripe pricing section. Each feature card sticks until the next one arrives from below.</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-keyword">image-sequence-scrub</span>
+          <span class="kw-explain">Frame-by-frame product orbit driven by scroll position. Apple AirPods Pro. Scroll speed controls which frame renders — pure cinematic product display.</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-keyword">horizontal-on-vertical</span>
+          <span class="kw-explain">You scroll down, content moves sideways. Linear features section. Vertical scroll drives horizontal camera pan through content panels.</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-keyword">splittext-reveal</span>
+          <span class="kw-explain">Letters or words animate in individually, staggered by scroll position. Most Stripe heroes and high-end editorial sites use this for headlines.</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- THE PROMPT ────────────────────────── -->
+    <section class="art-section reveal">
+      <p class="art-section-label">The Prompt</p>
+      <h2 class="art-h2">Your first prompt. Copy it. Adapt it.</h2>
+      <p class="art-p">This is the exact prompt structure that gets you studio-grade output. Replace the bracketed sections for your product. The order matters — each step sets up the next.</p>
+
+      <div class="prompt-block">
+        <div class="prompt-header">
+          <span class="prompt-header-label">prompt.txt</span>
+          <button class="copy-btn" id="copy-btn" onclick="copyPrompt()">Copy</button>
+        </div>
+        <pre class="prompt-code" id="prompt-text"><span class="c-comment"># Studio-Grade Landing Page Prompt</span>
+
+I want to build a studio-grade landing page for <span class="c-str">[PRODUCT NAME]</span>.
+
+<span class="c-key">Reference sites:</span> <span class="c-str">[URL 1], [URL 2], [URL 3]</span>
+<span class="c-key">Tone:</span>          <span class="c-str">[premium / playful / industrial / editorial]</span>
+<span class="c-key">Audience:</span>      <span class="c-str">[who buys this]</span>
+
+<span class="c-key">Use:</span>
+  - Motion + GSAP + Lenis for smooth scroll and animations
+  - 21st Dev MCP for components
+  - Nano Banana for the hero image
+
+<span class="c-key">Follow this order:</span>
+
+<span class="c-comment"># 1 — Scrape references first</span>
+Scrape the reference sites. Extract palette, type scale, spacing system,
+and motion vocabulary. Show me what you found before touching any code.
+
+<span class="c-comment"># 2 — Lock design tokens</span>
+Propose CSS custom properties for color, type, spacing. Wait for approval
+before writing any component.
+
+<span class="c-comment"># 3 — Plan sections</span>
+Plan 5–8 sections with distinct visual treatments. Specify the layout,
+dominant color, and visual density for each. Different every time.
+
+<span class="c-comment"># 4 — Name the scroll patterns</span>
+For each section, pick a named scroll pattern:
+pinned-scrub, sticky-stack, image-sequence-scrub,
+horizontal-on-vertical, or splittext-reveal.
+
+<span class="c-comment"># 5 — Pull from 21st Dev</span>
+Use 21st Dev components wherever possible. Only write custom ones
+when no equivalent exists. Tell me which you pulled vs. wrote.
+
+<span class="c-comment"># 6 — Generate hero image via Nano Banana</span>
+Run: nanobanana generate "<span class="c-str">cinematic [product] hero, dark studio, 8K sharp</span>"
+Iterate the prompt until it's photo-quality. Then use that image.
+
+<span class="c-comment"># 7 — Screenshot and iterate</span>
+Take screenshots at 1440px after every section.
+Compare to the references. Tell me what's off.
+Don't ship until the screenshots feel like the reference sites.</pre>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PRO TIP ───────────────────────────── -->
+    <section class="art-section reveal">
+      <p class="art-section-label">Pro Tip</p>
+      <h2 class="art-h2">One color swap. Big difference.</h2>
+      <p class="art-p">Don't use pure black for the background. <strong>Don't use pure white for the text.</strong> These two swaps separate premium dark mode from default dark mode — and they cost you nothing.</p>
+
+      <div class="pro-tip">
+        <div class="tip-header">Background color</div>
+        <div class="tip-body">
+          <div class="color-demo">
+            <div class="color-swatch swatch-black">
+              <span style="font-family:'Fira Code',monospace;font-size:0.7rem;color:rgba(255,255,255,0.25)">#ffffff text on #000</span>
+            </div>
+            <div class="color-info">
+              <p class="color-hex">#000000 ✗</p>
+              <p class="color-note">OLED dead-zone. Shadows, gradients, and tonal layers have nowhere to live. The whole site reads flat.</p>
+            </div>
+          </div>
+          <div class="color-demo">
+            <div class="color-swatch swatch-warm" style="background:#121414">
+              <span style="font-family:'Fira Code',monospace;font-size:0.7rem;color:rgba(227,226,226,0.5)">#e3e2e2 text on #121414</span>
+            </div>
+            <div class="color-info">
+              <p class="color-hex">#121414 ✓</p>
+              <p class="color-note">The slight warm bias gives your shadows, gradients, and glass layers room to breathe. Premium instantly.</p>
+            </div>
+          </div>
+        </div>
+        <p class="tip-verdict">Same logic for text: <strong style="color:var(--text);font-family:'Fira Code',monospace">#e3e2e2</strong>, not <strong style="color:#6b7280;font-family:'Fira Code',monospace">#ffffff</strong>. Pure white blows out contrast on dark backgrounds and reads harsh at any screen brightness. The warm-gray bias creates visual hierarchy between headings and body text without touching font weight.</p>
+      </div>
+    </section>
+
+    <!-- CLOSING ───────────────────────────── -->
+    <div class="closing-cta reveal">
+      <p class="cta-eyebrow">[ Ship it ]</p>
+      <h2 class="cta-h2">Five tools.<br>Seven steps.<br>One prompt.</h2>
+      <p class="cta-sub">Go build something that belongs on Awwwards.</p>
+      <a href="../secondarypages/Blog.html" class="cta-btn" id="cta-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to Blog
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ══ FOOTER ════════════════════════════════════ -->
+  <footer>
+    <span>Abdelkrim Zouaki &middot; AI Tooling Guide</span>
+    <a href="../index.html">Portfolio &rarr;</a>
+  </footer>
+
+  <!-- ══ SCRIPTS ═══════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── LENIS ─────────────────────────────── */
+    const lenis = new Lenis({
+      duration: 1.3,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true, smoothWheel: false
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    /* ── SCROLL PROGRESS ───────────────────── */
+    window.addEventListener('scroll', () => {
+      const st = document.documentElement.scrollTop;
+      const sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      document.getElementById('scroll-prog').style.width = (st / sh * 100) + '%';
+    });
+
+    /* ── CURSOR ────────────────────────────── */
+    const canvas = document.getElementById('trail-canvas');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = window.innerWidth, H = canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => { W = canvas.width = innerWidth; H = canvas.height = innerHeight; });
+    const pts = [];
+    let mx = 0, my = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; pts.push({x:mx,y:my,life:1}); });
+    (function draw() {
+      ctx.clearRect(0,0,W,H);
+      for (let i = pts.length-1; i >= 0; i--) {
+        const p = pts[i]; p.life -= 0.045;
+        if (p.life <= 0){ pts.splice(i,1); continue; }
+        ctx.beginPath(); ctx.arc(p.x,p.y,3*p.life,0,Math.PI*2);
+        ctx.fillStyle = `rgba(0,255,136,${p.life*0.5})`; ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    })();
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let rx=0,ry=0;
+    (function animC() {
+      rx += (mx-rx)*0.13; ry += (my-ry)*0.13;
+      dot.style.left = mx+'px'; dot.style.top = my+'px';
+      ring.style.left = rx+'px'; ring.style.top = ry+'px';
+      requestAnimationFrame(animC);
+    })();
+    document.querySelectorAll('a,button,.tool-card,.kw-row').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('big'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+    });
+
+    /* ── HERO ANIMATIONS ───────────────────── */
+    // SplitText-style title reveal
+    const h1 = document.getElementById('hero-h1');
+    const words = [...h1.querySelectorAll('.accent-word')];
+    words.forEach(word => {
+      const text = word.innerHTML;
+      word.innerHTML = `<span style="display:block;overflow:hidden"><span style="display:block">${text}</span></span>`;
+    });
+    gsap.from(words.map(w => w.querySelector('span > span')), {
+      y: '110%', duration: 1.1, ease: 'power4.out', stagger: 0.09, delay: 0.2
+    });
+    gsap.from('.hero-eyebrow', { opacity:0, y:20, duration:0.8, ease:'power3.out', delay:0.1 });
+    gsap.from('.hero-deck',    { opacity:0, y:20, duration:0.8, ease:'power3.out', delay:0.7 });
+    gsap.from('.hero-pills',   { opacity:0, y:20, duration:0.8, ease:'power3.out', delay:0.9 });
+    gsap.from('.hero-meta',    { opacity:0, y:20, duration:0.8, ease:'power3.out', delay:1.05 });
+    gsap.from('#hero-mockup',  { opacity:0, x:50, duration:1.1, ease:'power3.out', delay:0.4 });
+    gsap.from('.btn-back',     { opacity:0, x:-20, duration:0.6, ease:'power3.out', delay:0.05 });
+
+    // Hero parallax scrub
+    gsap.to('.hero-inner', {
+      y: 100, ease: 'none',
+      scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:1.2 }
+    });
+    gsap.to('.hero-inner', {
+      opacity: 0, ease: 'none',
+      scrollTrigger: { trigger:'#hero', start:'38% top', end:'bottom top', scrub:0.9 }
+    });
+    gsap.to('#hero-mockup', {
+      y: -60, ease: 'none',
+      scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:0.8 }
+    });
+
+    /* ── REVEAL ON SCROLL ──────────────────── */
+    gsap.utils.toArray('.reveal').forEach((el, i) => {
+      gsap.from(el, {
+        opacity: 0, y: 44, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 86%' }
+      });
+    });
+
+    /* ── TOOL CARD HOVER TILT ──────────────── */
+    document.querySelectorAll('.tool-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const cx = (e.clientX - r.left - r.width/2) / r.width;
+        const cy = (e.clientY - r.top - r.height/2) / r.height;
+        gsap.to(card, { rotationY:cx*4, rotationX:-cy*2.5, duration:0.45, ease:'power2.out', transformPerspective:900 });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { rotationY:0, rotationX:0, duration:0.65, ease:'elastic.out(1,0.7)', transformPerspective:900 });
+      });
+    });
+
+    /* ── KEYWORD ROW HIGHLIGHT ─────────────── */
+    document.querySelectorAll('.kw-row').forEach(row => {
+      row.addEventListener('mouseenter', () => {
+        gsap.to(row.querySelector('.kw-keyword'), { color:'#38bdf8', duration:0.25 });
+      });
+      row.addEventListener('mouseleave', () => {
+        gsap.to(row.querySelector('.kw-keyword'), { color:'#38bdf8', duration:0.25 });
+      });
+    });
+
+    /* ── MAGNETIC BACK BUTTON ──────────────── */
+    const backBtn = document.getElementById('btn-back');
+    const ctaBtn  = document.getElementById('cta-btn');
+    [backBtn, ctaBtn].forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        gsap.to(btn, { x:(e.clientX-r.left-r.width/2)*0.3, y:(e.clientY-r.top-r.height/2)*0.3, duration:0.35, ease:'power2.out' });
+      });
+      btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { x:0, y:0, duration:0.65, ease:'elastic.out(1,0.5)' });
+      });
+    });
+
+    /* ── COPY PROMPT ───────────────────────── */
+    function copyPrompt() {
+      const raw = document.getElementById('prompt-text').innerText;
+      navigator.clipboard.writeText(raw).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+    window.copyPrompt = copyPrompt;
+  </script>
+</body>
+</html>

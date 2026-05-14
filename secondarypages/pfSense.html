@@ -8,14 +8,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#121414;--surface:#1a1a1a;--border:rgba(0,255,136,0.10);--border-h:rgba(0,255,136,0.30);--text:#6b7575;--text-l:#a8b4b2;--text-h:#e3e2e2;--accent:#00ff88;--red:#ff4444;}
+:root{--bg:#07040f;--surface:#110820;--border:rgba(139,92,246,0.12);--border-h:rgba(139,92,246,0.38);--text:#9b8ab8;--text-l:#c4b5e8;--text-h:#f0eaff;--accent:#8b5cf6;--red:#ff4444;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:auto;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;cursor:none;}
 
 /* CURSOR */
 #cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s,opacity 0.2s;mix-blend-mode:screen;}
-#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,255,136,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(139,92,246,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
 #cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
 
 /* GRAIN */
@@ -23,13 +23,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 @keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
 
 /* PROGRESS */
-#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(0,255,136,0.3));z-index:10000;box-shadow:0 0 12px rgba(0,255,136,0.6);transition:width 0.1s linear;}
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(139,92,246,0.3));z-index:10000;box-shadow:0 0 12px rgba(139,92,246,0.6);transition:width 0.1s linear;}
 
 /* SCROLLBAR */
-::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,255,136,0.2);border-radius:2px;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.2);border-radius:2px;}
 
 /* NAV */
-.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,255,136,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
+.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(139,92,246,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
 .nav-back:hover{color:var(--accent);}
 .nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.4;letter-spacing:0.06em;}
@@ -38,9 +38,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 /* HERO */
 .hero-section{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding:0 6% 7rem;overflow:hidden;}
-.hero-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
-.hero-section::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 30% 20%,rgba(0,255,136,0.05) 0%,transparent 65%),linear-gradient(to bottom,transparent 40%,var(--bg) 100%);pointer-events:none;}
-.hero-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,136,0.07) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none;animation:orb-drift 12s ease-in-out infinite alternate;}
+.hero-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(139,92,246,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,0.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-section::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 30% 20%,rgba(139,92,246,0.05) 0%,transparent 65%),linear-gradient(to bottom,transparent 40%,var(--bg) 100%);pointer-events:none;}
+.hero-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,0.07) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none;animation:orb-drift 12s ease-in-out infinite alternate;}
 @keyframes orb-drift{0%{transform:translate(0,0);}100%{transform:translate(60px,40px);}}
 .hero-inner{position:relative;z-index:2;max-width:820px;margin:0 auto;width:100%;}
 .hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.18em;margin-bottom:1.5rem;opacity:0.8;display:block;}
@@ -54,7 +54,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 /* HERO STAT */
 .hero-stat{position:absolute;right:6%;bottom:6rem;z-index:3;text-align:right;}
-.hero-stat-val{font-family:'Space Grotesk',sans-serif;font-size:clamp(4.5rem,10vw,8rem);font-weight:700;color:var(--accent);letter-spacing:-0.06em;line-height:1;text-shadow:0 0 80px rgba(0,255,136,0.25);}
+.hero-stat-val{font-family:'Space Grotesk',sans-serif;font-size:clamp(4.5rem,10vw,8rem);font-weight:700;color:var(--accent);letter-spacing:-0.06em;line-height:1;text-shadow:0 0 80px rgba(139,92,246,0.25);}
 .hero-stat-label{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--text);opacity:0.55;letter-spacing:0.1em;margin-top:6px;text-transform:uppercase;}
 
 /* GLITCH */
@@ -62,16 +62,16 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .hero-title{animation:glitch-skew 7s infinite;}
 
 /* TAGS */
-.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
-.tag:hover{background:rgba(0,255,136,0.12);border-color:rgba(0,255,136,0.35);}
+.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
+.tag:hover{background:rgba(139,92,246,0.12);border-color:rgba(139,92,246,0.35);}
 
 /* WRAP */
 .wrap{max-width:800px;margin:0 auto;padding:4rem 5% 8rem;}
 
 /* GLASS */
 .glass{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.35s,box-shadow 0.35s;position:relative;overflow:hidden;}
-.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,0.18),transparent);opacity:0;transition:opacity 0.35s;}
-.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(0,255,136,0.04);}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.18),transparent);opacity:0;transition:opacity 0.35s;}
+.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(139,92,246,0.04);}
 .glass:hover::before{opacity:1;}
 
 /* S-TITLE */
@@ -83,14 +83,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
 @media(min-width:560px){.metric-grid{grid-template-columns:repeat(3,1fr);}}
 .metric-card{background:rgba(14,16,16,0.8);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;}
-.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,255,136,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
-.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,255,136,0.06);}
+.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(139,92,246,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
+.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(139,92,246,0.06);}
 .metric-card:hover::after{opacity:1;}
 .metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text-h);letter-spacing:-0.04em;line-height:1;}
 .metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:8px;line-height:1.5;opacity:0.85;}
 
 /* PULL QUOTE */
-.pull-quote{border-left:3px solid var(--accent);margin:2rem 0;padding:1.25rem 1.75rem;background:rgba(0,255,136,0.04);border-radius:0 12px 12px 0;}
+.pull-quote{border-left:3px solid var(--accent);margin:2rem 0;padding:1.25rem 1.75rem;background:rgba(139,92,246,0.04);border-radius:0 12px 12px 0;}
 .pull-quote p{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:500;color:var(--text-h);line-height:1.65;letter-spacing:-0.01em;font-style:italic;margin:0;}
 
 /* STEP CARDS */
@@ -115,13 +115,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .bullet-list li::before{content:'▹';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
 
 /* ALERTS */
-.alert-info{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.18);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#9df5c5;}
+.alert-info{background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.18);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#9df5c5;}
 
 /* BTN */
-.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(0,255,136,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
-.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(0,255,136,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(139,92,246,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
+.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(139,92,246,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
 .btn-outline:hover::before{transform:scaleX(1);}
-.btn-outline:hover{border-color:rgba(0,255,136,0.6);box-shadow:0 0 24px rgba(0,255,136,0.12);}
+.btn-outline:hover{border-color:rgba(139,92,246,0.6);box-shadow:0 0 24px rgba(139,92,246,0.12);}
 
 /* FOOTER */
 footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
@@ -129,7 +129,7 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 /* IMAGES */
 .screenshot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1.5rem;}
 .screenshot-grid img{width:100%;border-radius:10px;border:1px solid var(--border);transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;filter:saturate(0.7) brightness(0.85);cursor:zoom-in;}
-.screenshot-grid img:hover{border-color:var(--border-h);transform:scale(1.02);box-shadow:0 0 30px rgba(0,255,136,0.08);filter:saturate(1) brightness(1);}
+.screenshot-grid img:hover{border-color:var(--border-h);transform:scale(1.02);box-shadow:0 0 30px rgba(139,92,246,0.08);filter:saturate(1) brightness(1);}
 
 /* LIGHTBOX */
 #lightbox{display:none;position:fixed;inset:0;background:rgba(10,12,12,0.97);backdrop-filter:blur(14px);z-index:20000;align-items:center;justify-content:center;}
@@ -240,57 +240,57 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
     <div class="arch-wrap">
       <svg width="680" height="340" viewBox="0 0 680 340" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="pfSense VLAN architecture diagram">
         <!-- Internet/WAN -->
-        <rect x="270" y="10" width="140" height="44" rx="8" fill="rgba(0,255,136,0.06)" stroke="rgba(0,255,136,0.35)" stroke-width="1.2"/>
-        <text x="340" y="28" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#00ff88" opacity="0.75">WAN</text>
+        <rect x="270" y="10" width="140" height="44" rx="8" fill="rgba(139,92,246,0.06)" stroke="rgba(139,92,246,0.35)" stroke-width="1.2"/>
+        <text x="340" y="28" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#8b5cf6" opacity="0.75">WAN</text>
         <text x="340" y="44" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#a8b4b2">Internet / ISP</text>
 
         <!-- Arrow WAN → pfSense -->
-        <line x1="340" y1="54" x2="340" y2="88" stroke="rgba(0,255,136,0.4)" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <polygon points="336,88 344,88 340,96" fill="rgba(0,255,136,0.5)"/>
+        <line x1="340" y1="54" x2="340" y2="88" stroke="rgba(139,92,246,0.4)" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <polygon points="336,88 344,88 340,96" fill="rgba(139,92,246,0.5)"/>
 
         <!-- pfSense core -->
-        <rect x="220" y="96" width="240" height="54" rx="10" fill="rgba(0,255,136,0.1)" stroke="#00ff88" stroke-width="1.5"/>
+        <rect x="220" y="96" width="240" height="54" rx="10" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.5"/>
         <text x="340" y="118" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" font-weight="700" fill="#e3e2e2">pfSense Firewall</text>
-        <text x="340" y="136" text-anchor="middle" font-family="Fira Code,monospace" font-size="9" fill="#00ff88" opacity="0.7">Suricata IDS · NAT · DNS Resolver · OpenVPN</text>
+        <text x="340" y="136" text-anchor="middle" font-family="Fira Code,monospace" font-size="9" fill="#8b5cf6" opacity="0.7">Suricata IDS · NAT · DNS Resolver · OpenVPN</text>
 
         <!-- Three lines down to VLANs -->
         <!-- LAN -->
-        <line x1="155" y1="150" x2="155" y2="186" stroke="rgba(0,255,136,0.35)" stroke-width="1.5"/>
-        <line x1="220" y1="150" x2="155" y2="150" stroke="rgba(0,255,136,0.25)" stroke-width="1.2" stroke-dasharray="3,2"/>
-        <polygon points="151,186 159,186 155,194" fill="rgba(0,255,136,0.45)"/>
+        <line x1="155" y1="150" x2="155" y2="186" stroke="rgba(139,92,246,0.35)" stroke-width="1.5"/>
+        <line x1="220" y1="150" x2="155" y2="150" stroke="rgba(139,92,246,0.25)" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <polygon points="151,186 159,186 155,194" fill="rgba(139,92,246,0.45)"/>
         <!-- OPT1 -->
-        <line x1="340" y1="150" x2="340" y2="186" stroke="rgba(0,255,136,0.35)" stroke-width="1.5"/>
-        <polygon points="336,186 344,186 340,194" fill="rgba(0,255,136,0.45)"/>
+        <line x1="340" y1="150" x2="340" y2="186" stroke="rgba(139,92,246,0.35)" stroke-width="1.5"/>
+        <polygon points="336,186 344,186 340,194" fill="rgba(139,92,246,0.45)"/>
         <!-- OPT2 -->
-        <line x1="525" y1="150" x2="525" y2="186" stroke="rgba(0,255,136,0.35)" stroke-width="1.5"/>
-        <line x1="460" y1="150" x2="525" y2="150" stroke="rgba(0,255,136,0.25)" stroke-width="1.2" stroke-dasharray="3,2"/>
-        <polygon points="521,186 529,186 525,194" fill="rgba(0,255,136,0.45)"/>
+        <line x1="525" y1="150" x2="525" y2="186" stroke="rgba(139,92,246,0.35)" stroke-width="1.5"/>
+        <line x1="460" y1="150" x2="525" y2="150" stroke="rgba(139,92,246,0.25)" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <polygon points="521,186 529,186 525,194" fill="rgba(139,92,246,0.45)"/>
 
         <!-- LAN VLAN box -->
-        <rect x="70" y="194" width="170" height="86" rx="9" fill="rgba(0,255,136,0.05)" stroke="rgba(0,255,136,0.22)" stroke-width="1.1"/>
-        <text x="155" y="213" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#00ff88" opacity="0.8">LAN (em1)</text>
+        <rect x="70" y="194" width="170" height="86" rx="9" fill="rgba(139,92,246,0.05)" stroke="rgba(139,92,246,0.22)" stroke-width="1.1"/>
+        <text x="155" y="213" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#8b5cf6" opacity="0.8">LAN (em1)</text>
         <text x="155" y="230" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" fill="#a8b4b2">192.168.1.0/24</text>
         <text x="155" y="246" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#6b7575">Trusted clients</text>
         <text x="155" y="262" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#6b7575">DHCP · DNS · VPN exit</text>
 
         <!-- OPT1 VLAN box -->
-        <rect x="255" y="194" width="170" height="86" rx="9" fill="rgba(0,255,136,0.05)" stroke="rgba(0,255,136,0.22)" stroke-width="1.1"/>
-        <text x="340" y="213" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#00ff88" opacity="0.8">OPT1 (em2)</text>
+        <rect x="255" y="194" width="170" height="86" rx="9" fill="rgba(139,92,246,0.05)" stroke="rgba(139,92,246,0.22)" stroke-width="1.1"/>
+        <text x="340" y="213" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#8b5cf6" opacity="0.8">OPT1 (em2)</text>
         <text x="340" y="230" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" fill="#a8b4b2">192.168.2.0/24</text>
         <text x="340" y="246" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#6b7575">Server / DMZ</text>
         <text x="340" y="262" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#6b7575">Selective allow to LAN</text>
 
         <!-- OPT2 VLAN box -->
-        <rect x="440" y="194" width="170" height="86" rx="9" fill="rgba(0,255,136,0.05)" stroke="rgba(0,255,136,0.22)" stroke-width="1.1"/>
-        <text x="525" y="213" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#00ff88" opacity="0.8">OPT2 (em3)</text>
+        <rect x="440" y="194" width="170" height="86" rx="9" fill="rgba(139,92,246,0.05)" stroke="rgba(139,92,246,0.22)" stroke-width="1.1"/>
+        <text x="525" y="213" text-anchor="middle" font-family="Fira Code,monospace" font-size="10" fill="#8b5cf6" opacity="0.8">OPT2 (em3)</text>
         <text x="525" y="230" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" fill="#a8b4b2">192.168.3.0/24</text>
         <text x="525" y="246" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#6b7575">Isolated / Lab</text>
         <text x="525" y="262" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#6b7575">Default deny inter-VLAN</text>
 
         <!-- OpenVPN label -->
-        <rect x="70" y="300" width="170" height="30" rx="6" fill="rgba(0,255,136,0.04)" stroke="rgba(0,255,136,0.15)" stroke-width="1"/>
+        <rect x="70" y="300" width="170" height="30" rx="6" fill="rgba(139,92,246,0.04)" stroke="rgba(139,92,246,0.15)" stroke-width="1"/>
         <text x="155" y="319" text-anchor="middle" font-family="Fira Code,monospace" font-size="9" fill="#6b7575">OpenVPN · Site-to-Site VPN</text>
-        <line x1="155" y1="280" x2="155" y2="300" stroke="rgba(0,255,136,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="155" y1="280" x2="155" y2="300" stroke="rgba(139,92,246,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
       </svg>
     </div>
   </div>
@@ -429,12 +429,12 @@ document.querySelectorAll('a,button,.metric-card,.step-card,.glass').forEach(el 
   el.addEventListener('mouseenter', () => {
     dot.style.transform = 'translate(-50%,-50%) scale(2.5)';
     ring.style.width = '56px'; ring.style.height = '56px';
-    ring.style.borderColor = 'rgba(0,255,136,0.9)';
+    ring.style.borderColor = 'rgba(139,92,246,0.9)';
   });
   el.addEventListener('mouseleave', () => {
     dot.style.transform = 'translate(-50%,-50%) scale(1)';
     ring.style.width = '36px'; ring.style.height = '36px';
-    ring.style.borderColor = 'rgba(0,255,136,0.5)';
+    ring.style.borderColor = 'rgba(139,92,246,0.5)';
   });
 });
 
@@ -455,7 +455,7 @@ document.addEventListener('mousemove', (e) => {
     const a = (1 - p.age / p.life) * 0.55;
     const r = (1 - p.age / p.life) * 2.5;
     tctx.beginPath(); tctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-    tctx.fillStyle = `rgba(0,255,136,${a})`; tctx.fill();
+    tctx.fillStyle = `rgba(139,92,246,${a})`; tctx.fill();
     p.age++;
   }
   requestAnimationFrame(drawTrail);
