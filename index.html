@@ -29,9 +29,9 @@ tailwind.config = {
       colors: {
         base:    '#0a0a0a',
         surface: 'rgba(255,255,255,0.034)',
-        sky:     '#eeeeee',
-        ice:     '#ffffff',
-        steel:   '#999999',
+        sky:     '#b8d8ec',
+        ice:     '#e8f6ff',
+        steel:   '#6888a8',
       },
       fontFamily: {
         display: ['"Space Grotesk"', 'sans-serif'],
@@ -49,14 +49,16 @@ tailwind.config = {
     --surface: rgba(255,255,255,0.034);
     --border: rgba(255,255,255,0.08);
     --border-hover: rgba(255,255,255,0.24);
-    --text: #555555;
-    --text-light: #aaaaaa;
-    --text-bright: #f0f0f0;
-    --sky: #eeeeee;
-    --ice: #ffffff;
-    --steel: #999999;
-    --glow-sky: rgba(255,255,255,0.06);
-    --glow-ice: rgba(255,255,255,0.03);
+    --text: #566878;
+    --text-light: #8ca4b8;
+    --text-bright: #e4f2fa;
+    --sky: #b8d8ec;
+    --ice: #e8f6ff;
+    --steel: #6888a8;
+    --dim: #38485a;
+    --mist: #9ab8cc;
+    --glow-sky: rgba(184,216,236,0.08);
+    --glow-ice: rgba(232,246,255,0.03);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -975,20 +977,27 @@ tailwind.config = {
     box-shadow: 0 25px 50px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06);
     pointer-events: none;
     opacity: 0;
-    transform: scale(0.94) translateY(6px);
-    transition: opacity 0.18s ease, transform 0.24s cubic-bezier(0.34,1.56,0.64,1);
-    will-change: opacity, transform;
+    transform: translateY(18px);
+    filter: blur(6px);
+    transition: opacity 0.22s ease, transform 0.36s cubic-bezier(0.16,1,0.3,1), filter 0.24s ease;
+    will-change: opacity, transform, filter;
   }
   #hovercard.hc-measuring {
     opacity: 0 !important;
     transform: none !important;
+    filter: none !important;
     visibility: visible;
     pointer-events: none;
   }
   #hovercard.hc-visible {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
+    filter: blur(0px);
     pointer-events: auto;
+  }
+  #hovercard.hc-locked {
+    outline: 1px dashed rgba(255,255,255,0.12);
+    outline-offset: 4px;
   }
   #hovercard::after {
     content: '';
@@ -1024,7 +1033,7 @@ tailwind.config = {
     background: rgba(255,255,255,0.1);
     border: 1px solid rgba(255,255,255,0.22);
     border-radius: 100px;
-    color: var(--steel);
+    color: var(--hc-accent, var(--steel));
     margin-bottom: 8px;
     text-transform: uppercase;
   }
@@ -1039,7 +1048,7 @@ tailwind.config = {
   .hc-subtitle {
     font-family: 'Fira Code', monospace;
     font-size: 0.67rem;
-    color: var(--sky);
+    color: var(--hc-accent, var(--sky));
     letter-spacing: 0.03em;
     margin-bottom: 8px;
     line-height: 1.4;
@@ -1067,7 +1076,7 @@ tailwind.config = {
   }
   .hc-courses li::before {
     content: '▸';
-    color: var(--sky);
+    color: var(--hc-accent, var(--sky));
     font-size: 0.58rem;
     margin-top: 3px;
     flex-shrink: 0;
@@ -1102,13 +1111,18 @@ tailwind.config = {
   .hc-link {
     font-family: 'Fira Code', monospace;
     font-size: 0.68rem;
-    color: var(--steel);
+    color: var(--hc-accent, var(--steel));
     text-decoration: none;
     letter-spacing: 0.02em;
     pointer-events: all;
     transition: color 0.2s ease;
   }
   .hc-link:hover { color: var(--ice); }
+
+  @keyframes hc-conn-shimmer {
+    0%   { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -18; }
+  }
 
   /* ── HoverCard triggers ── */
   .hc-text-trigger {
@@ -1183,6 +1197,20 @@ tailwind.config = {
 
 <!-- HoverCard -->
 <div id="hovercard" role="tooltip" aria-hidden="true"></div>
+
+<!-- HoverCard connector line -->
+<svg id="hc-connector-svg" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99984;overflow:visible;" aria-hidden="true">
+  <defs>
+    <filter id="hc-conn-filter" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <line id="hc-conn-line" x1="0" y1="0" x2="0" y2="0"
+    stroke="#ffffff" stroke-width="1" stroke-dasharray="5 4"
+    filter="url(#hc-conn-filter)"
+    style="opacity:0;transition:opacity 0.2s ease;"/>
+</svg>
 
 <!-- Lightbox -->
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
@@ -1286,8 +1314,8 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
       <div class="space-y-5 text-[0.95rem] leading-[1.85] text-slate-400">
-        <p class="about-p">SOC Analyst based in Montreal. Before my first IT role, I built a working detection stack — <span class="accent-sky font-medium">Suricata, Splunk, and Wazuh</span> running on a Raspberry Pi against live network traffic. It produced real incidents and real documentation. Not a portfolio lab — a working system.</p>
-        <p class="about-p"><span class="accent-sky font-medium">DEC graduate in Computer Security &amp; Networking</span> (Bois-de-Boulogne, 2025). Bilingual in French and English. I specialize in alert triage, log correlation, and automation pipelines that surface what matters. Open to <span class="accent-sky font-medium">SOC Analyst and IT Support roles</span> in Montreal.</p>
+        <p class="about-p">I'm passionate about IT and genuinely curious about how things work — not just technically, but in general. You'll find the same impulse behind hiking a trail, working through a philosophy text, or tracing why a network rule isn't behaving the way it should. Securing networks is what I do professionally, but it starts with that basic urge to figure things out.</p>
+        <p class="about-p"><span class="accent-sky font-medium">DEC graduate in Computer Security &amp; Networking</span> from Collège de Bois-de-Boulogne (2025). Grew up in Montreal, so French and English are equally natural — I move between both without thinking about it. My education was centered on lab work rather than theory, which is why my projects are systems that actually run. Open to <span class="accent-sky font-medium">SOC Analyst and IT support roles</span> in Montreal.</p>
       </div>
     </section>
 
@@ -1898,9 +1926,11 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
 (function initBinaryCanvas() {
   const canvas = document.getElementById('binary-canvas');
   const ctx = canvas.getContext('2d');
+  const mathSyms = ['∑','π','∞','√','∂','∫','∇','×','÷','±','≤','≥','≠','≈','α','β','γ','δ','θ','λ','μ','σ','φ'];
   const chars = '01010011 01001111 43 2E 4F 52 47 FF A0 B3'.split(' ')
-    .concat('0123456789ABCDEF'.split(''));
-  const COUNT = 38;
+    .concat('0123456789ABCDEF'.split(''))
+    .concat(mathSyms);
+  const COUNT = 50;
   const particles = [];
 
   function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
@@ -1911,9 +1941,9 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
     particles.push({
       x: Math.random() * innerWidth,
       y: Math.random() * innerHeight,
-      vy: 0.12 + Math.random() * 0.28,
+      vy: 0.04 + Math.random() * 0.1,
       ch: chars[Math.floor(Math.random() * chars.length)],
-      alpha: 0.038 + Math.random() * 0.032,
+      alpha: 0.07 + Math.random() * 0.06,
       size: 10 + Math.floor(Math.random() * 6),
       tick: 0,
       interval: 40 + Math.floor(Math.random() * 80),
@@ -2335,9 +2365,9 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
   setTimeout(() => {
     triggerGlitch();
     setInterval(() => {
-      if (Math.random() > 0.25) triggerGlitch();
-    }, 8000 + Math.random() * 6000);
-  }, 5000);
+      if (Math.random() > 0.1) triggerGlitch();
+    }, 2200 + Math.random() * 1800);
+  }, 2500);
 })();
 
 // ── Animated metric counters ──────────────────────────────────
@@ -2416,6 +2446,25 @@ if (prefersReduced) {
   const HC = document.getElementById('hovercard');
   if (!HC) return;
 
+  const BADGE_COLORS = {
+    'EDUCATION':  '#7dd3fc',
+    'EXPERIENCE': '#86efac',
+    'COMPTIA':    '#fbbf24',
+    'CISCO':      '#60a5fa',
+    'MICROSOFT':  '#c084fc',
+    'DETECTION':  '#5eead4',
+    'SIEM':       '#5eead4',
+    'HIDS':       '#f87171',
+    'NETWORK':    '#34d399',
+    'DNS':        '#34d399',
+    'SCRIPTING':  '#a78bfa',
+    'ENDPOINT':   '#fb923c',
+    'CLOUD':      '#38bdf8',
+    'LINKEDIN':   '#60a5fa',
+    'GITHUB':     '#d1d5db',
+    'CONTACT':    '#86efac',
+  };
+
   const DATA = {
     'bdeb': {
       badge: 'EDUCATION',
@@ -2431,7 +2480,6 @@ if (prefersReduced) {
       ],
       links: [
         { label: 'View Program →', href: 'https://bdeb.qc.ca', target: '_blank' },
-        { label: 'My Projects from this program →', href: '#projects', target: '_self' },
       ],
     },
     'alorica': {
@@ -2625,6 +2673,8 @@ if (prefersReduced) {
   }
 
   let hideTimer = null;
+  let hcLocked = false;
+  let hcLockedTrigger = null;
 
   function showCard(trigger, key) {
     const d = DATA[key];
@@ -2632,8 +2682,13 @@ if (prefersReduced) {
     clearTimeout(hideTimer);
 
     HC.innerHTML = buildHTML(d);
+    const accentColor = BADGE_COLORS[d.badge] || '#b8d8ec';
+    HC.style.setProperty('--hc-accent', accentColor);
+    HC.style.borderColor = accentColor + '28';
+    HC.style.boxShadow = `0 30px 60px rgba(0,0,0,0.7), 0 0 30px ${accentColor}10, 0 0 0 1px ${accentColor}18`;
     HC.className = 'hc-measuring';
 
+    const GAP = 36;
     requestAnimationFrame(() => {
       const tr = trigger.getBoundingClientRect();
       const hcW = Math.min(300, window.innerWidth - 32);
@@ -2641,20 +2696,17 @@ if (prefersReduced) {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
-      // Horizontal: center on trigger, clamp to viewport
       let left = tr.left + tr.width / 2 - hcW / 2;
       left = Math.max(12, Math.min(left, vw - hcW - 12));
 
-      // Arrow X relative to card
       const arrowX = Math.max(16, Math.min((tr.left + tr.width / 2) - left, hcW - 16));
 
-      // Vertical: prefer above, fall back below
       let top, arrowClass;
-      if (tr.top - hcH - 16 > 8) {
-        top = tr.top - hcH - 16;
+      if (tr.top - hcH - GAP > 8) {
+        top = tr.top - hcH - GAP;
         arrowClass = 'hc-arrow-bottom';
       } else {
-        top = tr.bottom + 16;
+        top = tr.bottom + GAP;
         arrowClass = 'hc-arrow-top';
       }
       top = Math.max(8, Math.min(top, vh - hcH - 8));
@@ -2663,27 +2715,77 @@ if (prefersReduced) {
       HC.style.top = top + 'px';
       HC.style.width = hcW + 'px';
       HC.style.setProperty('--hc-arrow-x', arrowX + 'px');
-      HC.className = arrowClass + ' hc-visible';
+
+      // Connector line
+      const connLine = document.getElementById('hc-conn-line');
+      if (connLine) {
+        const trigCx = tr.left + tr.width / 2;
+        const trigCy = arrowClass === 'hc-arrow-bottom' ? tr.top : tr.bottom;
+        const cardCy = arrowClass === 'hc-arrow-bottom' ? top + hcH : top;
+        const cardArrowX = left + arrowX;
+        connLine.setAttribute('x1', trigCx);
+        connLine.setAttribute('y1', trigCy);
+        connLine.setAttribute('x2', cardArrowX);
+        connLine.setAttribute('y2', cardCy);
+        connLine.setAttribute('stroke', accentColor);
+        connLine.style.opacity = '1';
+        connLine.style.animation = 'hc-conn-shimmer 1.6s ease-in-out infinite';
+      }
+
+      HC.className = arrowClass + ' hc-visible' + (hcLocked && hcLockedTrigger === trigger ? ' hc-locked' : '');
     });
   }
 
   function hideCard() {
     hideTimer = setTimeout(() => {
-      HC.classList.remove('hc-visible');
+      HC.classList.remove('hc-visible', 'hc-locked');
       HC.className = HC.className.replace(/hc-arrow-\w+/g, '').trim();
+      const connLine = document.getElementById('hc-conn-line');
+      if (connLine) { connLine.style.opacity = '0'; connLine.style.animation = 'none'; }
     }, 100);
   }
 
   document.querySelectorAll('[data-hc]').forEach(el => {
-    el.addEventListener('mouseenter', () => showCard(el, el.dataset.hc));
-    el.addEventListener('mouseleave', hideCard);
-    el.addEventListener('focus', () => showCard(el, el.dataset.hc));
-    el.addEventListener('blur', hideCard);
+    el.addEventListener('mouseenter', () => {
+      if (!hcLocked) showCard(el, el.dataset.hc);
+    });
+    el.addEventListener('mouseleave', () => {
+      if (!hcLocked) hideCard();
+    });
+    el.addEventListener('focus', () => {
+      if (!hcLocked) showCard(el, el.dataset.hc);
+    });
+    el.addEventListener('blur', () => {
+      if (!hcLocked) hideCard();
+    });
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (hcLocked && hcLockedTrigger === el) {
+        hcLocked = false;
+        hcLockedTrigger = null;
+        HC.classList.remove('hc-locked');
+        hideCard();
+      } else {
+        hcLocked = true;
+        hcLockedTrigger = el;
+        showCard(el, el.dataset.hc);
+      }
+    });
   });
 
-  // Links inside card are pointer-events:all, keep card open on hover
+  // Keep card open while hovering it (only when not locked)
   HC.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-  HC.addEventListener('mouseleave', hideCard);
+  HC.addEventListener('mouseleave', () => { if (!hcLocked) hideCard(); });
+
+  // Click outside to unlock
+  document.addEventListener('click', () => {
+    if (hcLocked) {
+      hcLocked = false;
+      hcLockedTrigger = null;
+      HC.classList.remove('hc-locked');
+      hideCard();
+    }
+  });
 })();
 </script>
 </body>
