@@ -27,11 +27,11 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        base:    '#07040f',
-        surface: 'rgba(18,10,42,0.72)',
-        sky:     '#8b5cf6',
-        ice:     '#ede9fe',
-        steel:   '#a78bfa',
+        base:    '#0a0a0a',
+        surface: 'rgba(255,255,255,0.034)',
+        sky:     '#eeeeee',
+        ice:     '#ffffff',
+        steel:   '#999999',
       },
       fontFamily: {
         display: ['"Space Grotesk"', 'sans-serif'],
@@ -45,18 +45,18 @@ tailwind.config = {
 <style>
   /* ── Base ── */
   :root {
-    --base: #07040f;
-    --surface: rgba(18,10,42,0.72);
-    --border: rgba(139,92,246,0.14);
-    --border-hover: rgba(139,92,246,0.50);
-    --text: #9b8ab8;
-    --text-light: #c4b5e8;
-    --text-bright: #f0eaff;
-    --sky: #8b5cf6;
-    --ice: #ede9fe;
-    --steel: #a78bfa;
-    --glow-sky: rgba(139,92,246,0.22);
-    --glow-ice: rgba(139,92,246,0.10);
+    --base: #0a0a0a;
+    --surface: rgba(255,255,255,0.034);
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.24);
+    --text: #555555;
+    --text-light: #aaaaaa;
+    --text-bright: #f0f0f0;
+    --sky: #eeeeee;
+    --ice: #ffffff;
+    --steel: #999999;
+    --glow-sky: rgba(255,255,255,0.06);
+    --glow-ice: rgba(255,255,255,0.03);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -74,8 +74,8 @@ tailwind.config = {
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.25); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.5); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
 
   /* ── NASA nebula background ── */
   body::before {
@@ -85,11 +85,9 @@ tailwind.config = {
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(ellipse 70% 50% at 0% 0%, rgba(100,30,200,0.32) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 45% at 100% 90%, rgba(80,20,170,0.36) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 35% at 55% 40%, rgba(110,40,200,0.18) 0%, transparent 65%),
-      radial-gradient(ellipse 40% 30% at 75% 15%, rgba(139,92,246,0.1) 0%, transparent 55%),
-      #07040f;
+      radial-gradient(ellipse 80% 55% at 0% 0%, rgba(255,255,255,0.012) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(255,255,255,0.008) 0%, transparent 60%),
+      #0a0a0a;
   }
 
   /* ── Ambient nebula orbs (slow drift) ── */
@@ -103,20 +101,20 @@ tailwind.config = {
   }
   .orb-1 {
     width: 700px; height: 450px;
-    background: radial-gradient(ellipse, rgba(110,40,220,0.28) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(255,255,255,0.03) 0%, transparent 70%);
     top: -80px; left: -200px;
     animation-duration: 38s;
   }
   .orb-2 {
     width: 550px; height: 400px;
-    background: radial-gradient(ellipse, rgba(139,92,246,0.16) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(255,255,255,0.02) 0%, transparent 70%);
     bottom: 10%; right: -150px;
     animation-duration: 45s;
     animation-direction: reverse;
   }
   .orb-3 {
     width: 400px; height: 400px;
-    background: radial-gradient(ellipse, rgba(80,20,160,0.28) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(255,255,255,0.025) 0%, transparent 70%);
     top: 40%; left: 35%;
     animation-duration: 55s;
   }
@@ -154,7 +152,7 @@ tailwind.config = {
     position: fixed;
     width: 80px; height: 80px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
     pointer-events: none;
     z-index: 99997;
     transform: translate(-50%, -50%);
@@ -168,13 +166,13 @@ tailwind.config = {
     pointer-events: none;
     z-index: 99999;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--sky), 0 0 20px rgba(139,92,246,0.6);
+    box-shadow: 0 0 10px var(--sky), 0 0 20px rgba(255,255,255,0.6);
     transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
   }
   .cursor-ring {
     position: fixed;
     width: 36px; height: 36px;
-    border: 1px solid rgba(139,92,246,0.4);
+    border: 1px solid rgba(255,255,255,0.4);
     border-radius: 50%;
     pointer-events: none;
     z-index: 99998;
@@ -183,8 +181,8 @@ tailwind.config = {
   }
   .cursor-ring.hovering {
     width: 56px; height: 56px;
-    border-color: rgba(139,92,246,0.9);
-    box-shadow: 0 0 16px rgba(139,92,246,0.3);
+    border-color: rgba(255,255,255,0.9);
+    box-shadow: 0 0 16px rgba(255,255,255,0.3);
   }
   @media (hover: none) and (pointer: coarse) {
     body { cursor: auto; }
@@ -193,24 +191,24 @@ tailwind.config = {
 
   /* ── Glass surface ── */
   .glass {
-    background: rgba(15,8,35,0.6);
+    background: rgba(255,255,255,0.04);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(139,92,246,0.12);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px;
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
   }
   .glass:hover {
-    border-color: rgba(139,92,246,0.3);
-    box-shadow: 0 0 30px rgba(139,92,246,0.05), inset 0 0 30px rgba(139,92,246,0.02);
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 0 30px rgba(255,255,255,0.05), inset 0 0 30px rgba(255,255,255,0.02);
   }
 
   /* ── Sidebar ── */
   #sidebar {
-    background: rgba(10,5,25,0.8);
+    background: rgba(0,0,0,0.75);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-right: 1px solid rgba(139,92,246,0.1);
+    border-right: 1px solid rgba(255,255,255,0.06);
   }
 
   /* ── Nav links ── */
@@ -249,7 +247,7 @@ tailwind.config = {
     letter-spacing: -0.02em;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
     margin-bottom: 2.5rem;
   }
   .section-num {
@@ -292,10 +290,10 @@ tailwind.config = {
   .hero-title {
     font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-    font-weight: 300;
+    font-weight: 400;
     color: var(--text-light);
     min-height: 2.2rem;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.04em;
   }
   .hero-sub {
     font-family: 'Fira Code', monospace;
@@ -311,7 +309,7 @@ tailwind.config = {
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     padding: 10px 24px;
-    border: 1px solid rgba(139,92,246,0.35);
+    border: 1px solid rgba(255,255,255,0.35);
     color: var(--sky);
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -319,17 +317,17 @@ tailwind.config = {
     cursor: pointer;
   }
   .btn-outline:hover {
-    background: rgba(139,92,246,0.07);
+    background: rgba(255,255,255,0.07);
     border-color: var(--sky);
-    box-shadow: 0 0 20px rgba(139,92,246,0.15);
+    box-shadow: 0 0 20px rgba(255,255,255,0.15);
   }
   .btn-primary {
     font-family: 'Fira Code', monospace;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     padding: 10px 24px;
-    background: linear-gradient(135deg, rgba(139,92,246,0.18), rgba(167,139,250,0.12));
-    border: 1px solid rgba(139,92,246,0.3);
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(200,200,200,0.12));
+    border: 1px solid rgba(255,255,255,0.3);
     color: var(--text-bright);
     border-radius: 8px;
     display: inline-flex;
@@ -340,12 +338,12 @@ tailwind.config = {
     cursor: pointer;
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, rgba(139,92,246,0.28), rgba(167,139,250,0.2));
-    box-shadow: 0 0 24px rgba(139,92,246,0.2);
+    background: linear-gradient(135deg, rgba(255,255,255,0.28), rgba(200,200,200,0.2));
+    box-shadow: 0 0 24px rgba(255,255,255,0.2);
   }
   @keyframes pulse-glow {
-    0%,100% { box-shadow: 0 0 0 0 rgba(139,92,246,0.2); }
-    50%      { box-shadow: 0 0 0 6px rgba(139,92,246,0); }
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
+    50%      { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
   }
 
   /* ── Social icons ── */
@@ -379,15 +377,15 @@ tailwind.config = {
   }
   .project-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(139,92,246,0.07);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(255,255,255,0.07);
   }
   .project-tag {
     font-family: 'Fira Code', monospace;
     font-size: 0.65rem;
     letter-spacing: 0.06em;
     padding: 4px 10px;
-    background: rgba(139,92,246,0.07);
-    border: 1px solid rgba(139,92,246,0.2);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.2);
     color: var(--sky);
     border-radius: 100px;
   }
@@ -398,7 +396,7 @@ tailwind.config = {
     gap: 8px;
     overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(139,92,246,0.25) transparent;
+    scrollbar-color: rgba(255,255,255,0.25) transparent;
     padding-bottom: 6px;
   }
   .screenshot-gallery img {
@@ -407,15 +405,15 @@ tailwind.config = {
     min-width: 190px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid rgba(139,92,246,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
     cursor: pointer;
     transition: all 0.3s ease;
     filter: saturate(0.6) brightness(0.8);
   }
   .screenshot-gallery img:hover {
     filter: saturate(1) brightness(1);
-    border-color: rgba(139,92,246,0.45);
-    box-shadow: 0 0 20px rgba(139,92,246,0.12);
+    border-color: rgba(255,255,255,0.45);
+    box-shadow: 0 0 20px rgba(255,255,255,0.12);
     transform: scale(1.02);
   }
 
@@ -435,8 +433,8 @@ tailwind.config = {
     max-width: 90vw;
     max-height: 90vh;
     border-radius: 12px;
-    border: 1px solid rgba(139,92,246,0.15);
-    box-shadow: 0 0 60px rgba(139,92,246,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 0 60px rgba(255,255,255,0.08);
   }
   #lightbox-close {
     position: absolute;
@@ -444,8 +442,8 @@ tailwind.config = {
     color: var(--text-light);
     font-size: 1.5rem;
     cursor: pointer;
-    background: rgba(8,4,20,0.8);
-    border: 1px solid rgba(139,92,246,0.15);
+    background: rgba(20,20,20,0.8);
+    border: 1px solid rgba(255,255,255,0.1);
     width: 40px; height: 40px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -471,7 +469,7 @@ tailwind.config = {
   .tab-btn.active {
     color: var(--sky);
     border-left-color: var(--sky);
-    background: rgba(139,92,246,0.06);
+    background: rgba(255,255,255,0.06);
   }
   .tab-border { border-left: 1px solid var(--border); }
 
@@ -486,9 +484,9 @@ tailwind.config = {
     transition: all 0.4s ease;
   }
   .skill-card:hover {
-    border-color: rgba(139,92,246,0.25);
+    border-color: rgba(255,255,255,0.25);
     transform: translateY(-2px);
-    box-shadow: 0 0 24px rgba(139,92,246,0.05);
+    box-shadow: 0 0 24px rgba(255,255,255,0.05);
   }
   .skill-icon { color: var(--sky); }
   .skill-heading {
@@ -560,7 +558,7 @@ tailwind.config = {
     position: absolute;
     top: -1.5rem;
     left: -1rem;
-    color: rgba(139,92,246,0.035);
+    color: rgba(255,255,255,0.035);
     line-height: 1;
     pointer-events: none;
     user-select: none;
@@ -599,9 +597,9 @@ tailwind.config = {
     transition: all 0.3s ease;
   }
   .mobile-nav-pill:hover {
-    border-color: rgba(139,92,246,0.4);
+    border-color: rgba(255,255,255,0.4);
     color: var(--sky);
-    background: rgba(139,92,246,0.06);
+    background: rgba(255,255,255,0.06);
   }
 
   /* ── Education card ── */
@@ -612,7 +610,7 @@ tailwind.config = {
     padding: 24px;
     transition: border-color 0.4s ease;
   }
-  .edu-card:hover { border-color: rgba(139,92,246,0.25); }
+  .edu-card:hover { border-color: rgba(255,255,255,0.25); }
 
   /* ── Z-index management ── */
   /* 0: canvas/orbs, 10: content, 20: sidebar, 30: progress/cursor, 50+: overlays */
@@ -680,10 +678,10 @@ tailwind.config = {
     color: var(--ice);
     font-weight: 600;
     padding: 1px 5px;
-    background: rgba(139,92,246,0.08);
+    background: rgba(255,255,255,0.08);
     border-radius: 4px;
-    border: 1px solid rgba(139,92,246,0.14);
-    box-shadow: 0 0 10px rgba(139,92,246,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 0 10px rgba(255,255,255,0.06);
     white-space: nowrap;
   }
 
@@ -724,8 +722,8 @@ tailwind.config = {
     animation: badge-pulse 2.2s ease-in-out infinite;
   }
   @keyframes badge-pulse {
-    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139,92,246,0.4); }
-    50%      { transform: scale(1.5); box-shadow: 0 0 0 5px rgba(139,92,246,0); }
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+    50%      { transform: scale(1.5); box-shadow: 0 0 0 5px rgba(255,255,255,0); }
   }
 
   /* ── Snap gallery (replaces screenshot-gallery) ── */
@@ -736,7 +734,7 @@ tailwind.config = {
     gap: 8px;
     padding-bottom: 6px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(139,92,246,0.25) transparent;
+    scrollbar-color: rgba(255,255,255,0.25) transparent;
   }
   .snap-gallery img {
     scroll-snap-align: start;
@@ -745,7 +743,7 @@ tailwind.config = {
     min-width: 190px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid rgba(139,92,246,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
     cursor: pointer;
     transition: all 0.3s ease;
     filter: saturate(0.6) brightness(0.8);
@@ -753,8 +751,8 @@ tailwind.config = {
   }
   .snap-gallery img:hover {
     filter: saturate(1) brightness(1);
-    border-color: rgba(139,92,246,0.45);
-    box-shadow: 0 0 20px rgba(139,92,246,0.12);
+    border-color: rgba(255,255,255,0.45);
+    box-shadow: 0 0 20px rgba(255,255,255,0.12);
     transform: scale(1.02);
   }
 
@@ -763,7 +761,7 @@ tailwind.config = {
   .gallery-dot {
     width: 5px; height: 5px;
     border-radius: 50%;
-    background: rgba(139,92,246,0.25);
+    background: rgba(255,255,255,0.25);
     border: none;
     padding: 0;
     cursor: pointer;
@@ -781,7 +779,7 @@ tailwind.config = {
     font-size: 0.67rem;
     letter-spacing: 0.04em;
     padding: 6px 14px;
-    border: 1px solid rgba(139,92,246,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
     color: var(--text);
     border-radius: 6px;
     text-decoration: none;
@@ -790,8 +788,8 @@ tailwind.config = {
   }
   .btn-case-study:hover {
     color: var(--sky);
-    border-color: rgba(139,92,246,0.5);
-    background: rgba(139,92,246,0.06);
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.06);
   }
   .btn-case-study .cs-prefix { color: var(--sky); opacity: 0.7; }
 
@@ -809,9 +807,9 @@ tailwind.config = {
   .skill-card.slide-right { transform: translateX(40px); }
   .skill-card.revealed    { opacity: 1; transform: translateX(0); }
   .skill-card.revealed:hover {
-    border-color: rgba(139,92,246,0.25);
+    border-color: rgba(255,255,255,0.25);
     transform: translateY(-2px) !important;
-    box-shadow: 0 0 24px rgba(139,92,246,0.05);
+    box-shadow: 0 0 24px rgba(255,255,255,0.05);
   }
 
   /* ── Skill item stagger ── */
@@ -843,8 +841,8 @@ tailwind.config = {
     transition: transform 0.2s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   }
   .cert-card:hover {
-    border-color: rgba(139,92,246,0.35);
-    box-shadow: 0 0 24px rgba(139,92,246,0.08);
+    border-color: rgba(255,255,255,0.35);
+    box-shadow: 0 0 24px rgba(255,255,255,0.08);
   }
   .cert-card img { filter: grayscale(60%) brightness(0.9); transition: filter 0.4s ease; }
   .cert-card:hover img { filter: grayscale(0%) brightness(1); }
@@ -854,7 +852,7 @@ tailwind.config = {
     outline: none;
     border-color: rgba(34,197,94,0.5);
     box-shadow: 0 0 0 3px rgba(34,197,94,0.07), 0 0 18px rgba(34,197,94,0.12);
-    background: rgba(8,4,20,0.6);
+    background: rgba(20,20,20,0.6);
   }
 
   /* ── Page-load section reveals ── */
@@ -863,10 +861,14 @@ tailwind.config = {
                 transform 0.45s cubic-bezier(0.16,1,0.3,1);
   }
 
-  /* ── Hero name: bigger, more dominant ── */
+  /* ── Hero name: bigger, no mid-word wrapping ── */
   .hero-name {
-    font-size: clamp(2.8rem, 6.5vw, 5rem) !important;
+    font-size: clamp(3.2rem, 8vw, 5.8rem) !important;
     line-height: 1.0 !important;
+  }
+  .name-word {
+    display: inline-block;
+    white-space: nowrap;
   }
 
   /* ── Glitch effect ── */
@@ -912,8 +914,8 @@ tailwind.config = {
     align-items: center;
     gap: 6px;
     padding: 10px 16px;
-    background: rgba(5, 3, 15, 0.9);
-    border-bottom: 1px solid rgba(139,92,246,0.1);
+    background: rgba(0, 0, 0, 0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
     border-radius: 16px 16px 0 0;
     margin: -24px -24px 20px -24px;
     flex-shrink: 0;
@@ -953,8 +955,8 @@ tailwind.config = {
   /* ── Metric counter: flash on count-up ── */
   .metric-highlight.counting {
     color: var(--ice);
-    border-color: rgba(139,92,246,0.4);
-    box-shadow: 0 0 18px rgba(139,92,246,0.18);
+    border-color: rgba(255,255,255,0.4);
+    box-shadow: 0 0 18px rgba(255,255,255,0.18);
     transition: color 0.1s, box-shadow 0.1s;
   }
 
@@ -964,13 +966,13 @@ tailwind.config = {
     z-index: 99985;
     width: 300px;
     max-width: calc(100vw - 32px);
-    background: rgba(10, 5, 24, 0.96);
+    background: rgba(16, 16, 16, 0.97);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(139,92,246,0.22);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 14px;
     padding: 16px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.65), 0 0 0 1px rgba(139,92,246,0.06);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06);
     pointer-events: none;
     opacity: 0;
     transform: scale(0.94) translateY(6px);
@@ -992,8 +994,8 @@ tailwind.config = {
     content: '';
     position: absolute;
     width: 10px; height: 10px;
-    background: rgba(10, 5, 24, 0.96);
-    border: 1px solid rgba(139,92,246,0.22);
+    background: rgba(16, 16, 16, 0.97);
+    border: 1px solid rgba(255,255,255,0.1);
     transform: rotate(45deg);
     pointer-events: none;
   }
@@ -1019,8 +1021,8 @@ tailwind.config = {
     font-size: 0.59rem;
     letter-spacing: 0.1em;
     padding: 2px 8px;
-    background: rgba(139,92,246,0.1);
-    border: 1px solid rgba(139,92,246,0.22);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.22);
     border-radius: 100px;
     color: var(--steel);
     margin-bottom: 8px;
@@ -1072,7 +1074,7 @@ tailwind.config = {
   }
   .hc-divider {
     height: 1px;
-    background: linear-gradient(90deg, rgba(139,92,246,0.25) 0%, transparent 100%);
+    background: linear-gradient(90deg, rgba(255,255,255,0.25) 0%, transparent 100%);
     margin: 10px 0;
   }
   .hc-body {
@@ -1113,88 +1115,40 @@ tailwind.config = {
     cursor: help;
     text-decoration: underline;
     text-decoration-style: dotted;
-    text-decoration-color: rgba(139,92,246,0.45);
+    text-decoration-color: rgba(255,255,255,0.45);
     text-underline-offset: 3px;
   }
   .cert-card[data-hc] { cursor: help; }
 
-  /* ── Skills filter tabs ── */
-  .skills-filter-row {
+  /* ── Skills table (minimal) ── */
+  .skills-table {
     display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-bottom: 20px;
+    flex-direction: column;
   }
-  .skills-filter {
+  .skills-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0 28px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+  .skills-row:first-child { border-top: 1px solid var(--border); }
+  .skills-cat {
     font-family: 'Fira Code', monospace;
-    font-size: 0.67rem;
-    letter-spacing: 0.07em;
-    padding: 5px 14px;
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 100px;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.25s ease;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    white-space: nowrap;
+    padding-top: 2px;
   }
-  .skills-filter:hover {
-    border-color: rgba(139,92,246,0.42);
-    color: var(--sky);
-    background: rgba(139,92,246,0.05);
-  }
-  .skills-filter.active {
-    background: rgba(139,92,246,0.1);
-    border-color: rgba(139,92,246,0.42);
-    color: var(--sky);
-  }
-
-  /* ── Skill chips grid ── */
-  .skills-chips-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .skill-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 7px 14px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    cursor: help;
-    transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease;
-    user-select: none;
-  }
-  .skill-chip:hover {
-    border-color: rgba(139,92,246,0.45);
-    background: rgba(139,92,246,0.08);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(139,92,246,0.12);
-  }
-  .skill-chip.hc-no-data { cursor: default; }
-  .skill-chip-name {
+  .skills-list {
     font-family: 'Inter', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
+    font-size: 0.875rem;
     color: var(--text-light);
-    transition: color 0.25s ease;
+    line-height: 1.6;
   }
-  .skill-chip:hover .skill-chip-name { color: var(--ice); }
-  .skill-chip-prof {
-    display: flex;
-    gap: 2.5px;
-    align-items: center;
-  }
-  .sc-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: rgba(139,92,246,0.2);
-    transition: background 0.25s ease;
-  }
-  .sc-dot.filled { background: var(--sky); }
-  .skill-chip:hover .sc-dot.filled { background: var(--electric, var(--steel)); }
-  .skill-chip.hidden-chip { display: none; }
 </style>
 </head>
 <body>
@@ -1644,133 +1598,28 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
 
-      <!-- Filter tabs -->
-      <div class="skills-filter-row" role="tablist" aria-label="Skill categories">
-        <button class="skills-filter active" data-filter="all" role="tab" aria-selected="true">All</button>
-        <button class="skills-filter" data-filter="detection" role="tab" aria-selected="false">Detection</button>
-        <button class="skills-filter" data-filter="network" role="tab" aria-selected="false">Network</button>
-        <button class="skills-filter" data-filter="scripting" role="tab" aria-selected="false">Scripting</button>
-        <button class="skills-filter" data-filter="cloud" role="tab" aria-selected="false">Cloud</button>
-        <button class="skills-filter" data-filter="systems" role="tab" aria-selected="false">Systems</button>
-      </div>
-
-      <!-- Skill chips -->
-      <div class="skills-chips-grid" id="skills-chips-grid">
-
-        <!-- Detection & SIEM -->
-        <span class="skill-chip" data-category="detection" data-hc="suricata">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
-          <span class="skill-chip-name">Suricata</span>
-        </span>
-        <span class="skill-chip" data-category="detection" data-hc="splunk">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Splunk</span>
-        </span>
-        <span class="skill-chip" data-category="detection" data-hc="wazuh">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Wazuh</span>
-        </span>
-        <span class="skill-chip" data-category="detection" data-hc="elk">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">ELK Stack</span>
-        </span>
-        <span class="skill-chip" data-category="detection" data-hc="sysmon">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Sysmon</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="detection">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Wireshark</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="detection">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Nessus</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="detection">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
-          <span class="skill-chip-name">MITRE ATT&amp;CK</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="detection">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Incident Response</span>
-        </span>
-
-        <!-- Network -->
-        <span class="skill-chip" data-category="network" data-hc="pfsense">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
-          <span class="skill-chip-name">pfSense / OPNsense</span>
-        </span>
-        <span class="skill-chip" data-category="network" data-hc="pihole">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
-          <span class="skill-chip-name">Pi-hole</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="network">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
-          <span class="skill-chip-name">TCP/IP</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="network">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">VLANs</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="network">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">OpenVPN</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="network">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Cisco IOS</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="network">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">DNS / DHCP / NAT</span>
-        </span>
-
-        <!-- Scripting -->
-        <span class="skill-chip" data-category="scripting" data-hc="python">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Python</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="scripting">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Bash</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="scripting">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">PowerShell</span>
-        </span>
-
-        <!-- Cloud -->
-        <span class="skill-chip" data-category="cloud" data-hc="azure">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Microsoft Azure</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="cloud">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Microsoft 365</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="cloud">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Entra ID (AAD)</span>
-        </span>
-
-        <!-- Systems -->
-        <span class="skill-chip hc-no-data" data-category="systems">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span></span>
-          <span class="skill-chip-name">Linux</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="systems">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Windows Server</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="systems">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">Active Directory</span>
-        </span>
-        <span class="skill-chip hc-no-data" data-category="systems">
-          <span class="skill-chip-prof"><span class="sc-dot filled"></span><span class="sc-dot filled"></span><span class="sc-dot"></span><span class="sc-dot"></span></span>
-          <span class="skill-chip-name">VMware / VirtualBox</span>
-        </span>
-
+      <!-- Skills minimal table -->
+      <div class="skills-table">
+        <div class="skills-row">
+          <span class="skills-cat">Detection</span>
+          <span class="skills-list">Suricata · Splunk · Wazuh · ELK Stack · Sysmon · Wireshark · Nessus · MITRE ATT&amp;CK · Incident Response</span>
+        </div>
+        <div class="skills-row">
+          <span class="skills-cat">Network</span>
+          <span class="skills-list">pfSense / OPNsense · Pi-hole · TCP/IP · VLANs · OpenVPN · Cisco IOS · DNS / DHCP / NAT</span>
+        </div>
+        <div class="skills-row">
+          <span class="skills-cat">Scripting</span>
+          <span class="skills-list">Python · Bash · PowerShell</span>
+        </div>
+        <div class="skills-row">
+          <span class="skills-cat">Cloud</span>
+          <span class="skills-list">Microsoft Azure · Microsoft 365 · Entra ID (AAD)</span>
+        </div>
+        <div class="skills-row">
+          <span class="skills-cat">Systems</span>
+          <span class="skills-list">Linux · Windows Server · Active Directory · VMware / VirtualBox</span>
+        </div>
       </div>
 
       <!-- Footer CTA -->
@@ -1937,18 +1786,23 @@ function buildSplitName(name) {
   const h1 = document.getElementById('hero-name');
   h1.innerHTML = '';
   h1.setAttribute('data-name', name);
-  for (const ch of name) {
-    if (ch === ' ') {
-      const s = document.createElement('span');
-      s.className = 'name-space';
-      h1.appendChild(s);
-    } else {
+  const words = name.split(' ');
+  words.forEach((word, wi) => {
+    const wordSpan = document.createElement('span');
+    wordSpan.className = 'name-word';
+    for (const ch of word) {
       const s = document.createElement('span');
       s.className = 'name-char';
       s.textContent = ch;
-      h1.appendChild(s);
+      wordSpan.appendChild(s);
     }
-  }
+    h1.appendChild(wordSpan);
+    if (wi < words.length - 1) {
+      const sp = document.createElement('span');
+      sp.className = 'name-space';
+      h1.appendChild(sp);
+    }
+  });
 }
 
 async function revealSplitName() {
@@ -2098,7 +1952,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       if (p.life <= 0) { pts.splice(i, 1); continue; }
       ctx.beginPath();
       ctx.arc(p.x, p.y, 2.5 * p.life, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(139,92,246,${p.life * 0.35})`;
+      ctx.fillStyle = `rgba(255,255,255,${p.life * 0.35})`;
       ctx.fill();
     }
     requestAnimationFrame(drawTrail);
@@ -2247,7 +2101,7 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
     requestAnimationFrame(animate);
   })();
 
-  const hoverTargets = 'a, button, .project-card, .nav-link, .tab-btn, .cert-card, .skill-chip, .screenshot-gallery img';
+  const hoverTargets = 'a, button, .project-card, .nav-link, .tab-btn, .cert-card, .screenshot-gallery img';
   document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
     el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
@@ -2371,46 +2225,6 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
   btn.addEventListener('mouseleave', () => { clearTimeout(timer); label.textContent = original; });
 });
 
-// ── Skills filter tabs ────────────────────────────────────────
-(function initSkillsFilter() {
-  const tabs = document.querySelectorAll('.skills-filter');
-  const chips = document.querySelectorAll('.skill-chip');
-  if (!tabs.length || !chips.length) return;
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-      const filter = tab.dataset.filter;
-      chips.forEach(chip => {
-        if (filter === 'all' || chip.dataset.category === filter) {
-          chip.classList.remove('hidden-chip');
-        } else {
-          chip.classList.add('hidden-chip');
-        }
-      });
-    });
-  });
-
-  // Stagger chip entrance on scroll
-  const grid = document.getElementById('skills-chips-grid');
-  if (grid) {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        [...chips].forEach((c, i) => {
-          c.style.opacity = '0';
-          c.style.transform = 'translateY(12px)';
-          c.style.transition = 'opacity 0.35s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1)';
-          setTimeout(() => { c.style.opacity = '1'; c.style.transform = 'translateY(0)'; }, i * 28);
-        });
-        obs.unobserve(entry.target);
-      });
-    }, { threshold: 0.1 });
-    obs.observe(grid);
-  }
-})();
 
 // ── Particle canvas ───────────────────────────────────────────
 (function initParticles() {
@@ -2431,14 +2245,14 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
   resize();
   window.addEventListener('resize', resize, { passive: true });
 
-  /* Star-like particles: mostly crystal, some electric, rare violet */
+  /* Star-like particles: white/gray shades */
   const colorPool = [
-    'rgba(237,233,254,',
-    'rgba(237,233,254,',
-    'rgba(237,233,254,',
-    'rgba(196,181,253,',
-    'rgba(196,181,253,',
-    'rgba(139,92,246,',
+    'rgba(240,240,240,',
+    'rgba(240,240,240,',
+    'rgba(220,220,220,',
+    'rgba(200,200,200,',
+    'rgba(200,200,200,',
+    'rgba(160,160,160,',
   ];
 
   for (let i = 0; i < COUNT; i++) {
@@ -2498,7 +2312,7 @@ document.querySelectorAll('.btn-case-study').forEach(btn => {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = 'rgba(167,139,250,' + alpha + ')';
+          ctx.strokeStyle = 'rgba(200,200,200,' + alpha + ')';
           ctx.lineWidth = 0.4 + proximity * 0.3;
           ctx.stroke();
         }

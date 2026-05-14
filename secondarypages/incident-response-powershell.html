@@ -8,18 +8,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07040f;--surface:#110820;--border:rgba(139,92,246,0.12);--border-h:rgba(139,92,246,0.38);--text:#9b8ab8;--text-l:#c4b5e8;--text-h:#f0eaff;--accent:#8b5cf6;--red:#ff4444;--red-d:rgba(255,68,68,0.1);}
+:root{--bg:#0a0a0a;--surface:#111111;--border:rgba(255,255,255,0.08);--border-h:rgba(255,255,255,0.22);--text:#555555;--text-l:#aaaaaa;--text-h:#f0f0f0;--accent:#eeeeee;--red:#ff4444;--red-d:rgba(255,68,68,0.1);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:auto;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;cursor:none;}
 
 #cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s;mix-blend-mode:screen;}
-#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(139,92,246,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(255,255,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
 #cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
 #grain{position:fixed;inset:-100%;width:400%;height:400%;z-index:9996;pointer-events:none;opacity:0.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.6s steps(1) infinite;}
 @keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
 #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--red),rgba(255,68,68,0.3));z-index:10000;box-shadow:0 0 12px rgba(255,68,68,0.5);transition:width 0.1s linear;}
-::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.2);border-radius:2px;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:2px;}
 
 .page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,68,68,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
 .nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
@@ -50,8 +50,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 @keyframes threat-pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(255,68,68,0.5);}50%{box-shadow:0 0 0 8px rgba(255,68,68,0);}}
 
 /* TAGS */
-.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
-.tag:hover{background:rgba(139,92,246,0.12);border-color:rgba(139,92,246,0.35);}
+.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
+.tag:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.35);}
 .tag-red{background:rgba(255,68,68,0.08);border-color:rgba(255,68,68,0.25);color:#ff8888;}
 
 /* HERO STAT STRIP */
@@ -65,8 +65,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 /* GLASS */
 .glass{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.35s,box-shadow 0.35s;position:relative;overflow:hidden;}
-.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.18),transparent);opacity:0;transition:opacity 0.35s;}
-.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(139,92,246,0.04);}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);opacity:0;transition:opacity 0.35s;}
+.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(255,255,255,0.04);}
 .glass:hover::before{opacity:1;}
 .glass-red{border-color:rgba(255,68,68,0.15);}
 .glass-red:hover{border-color:rgba(255,68,68,0.35);box-shadow:0 0 40px rgba(255,68,68,0.05);}
@@ -103,9 +103,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .tl-event-body{font-size:0.82rem;color:var(--text-l);line-height:1.72;}
 .tl-badge{display:inline-block;font-family:'Fira Code',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:3px 10px;border-radius:4px;margin-bottom:0.75rem;}
 .tl-badge-threat{background:rgba(255,68,68,0.12);color:#ff8888;border:1px solid rgba(255,68,68,0.3);}
-.tl-badge-ok{background:rgba(139,92,246,0.07);color:var(--accent);border:1px solid rgba(139,92,246,0.2);}
+.tl-badge-ok{background:rgba(255,255,255,0.07);color:var(--accent);border:1px solid rgba(255,255,255,0.2);}
 .tl-badge-intel{background:rgba(251,191,36,0.07);color:#fde68a;border:1px solid rgba(251,191,36,0.25);}
-.tl-code{background:rgba(8,10,10,0.9);border:1px solid rgba(139,92,246,0.1);border-radius:8px;padding:0.75rem 1rem;font-family:'Fira Code',monospace;font-size:0.7rem;color:#a8b4b2;margin-top:0.75rem;line-height:1.8;overflow-x:auto;}
+.tl-code{background:rgba(8,10,10,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.75rem 1rem;font-family:'Fira Code',monospace;font-size:0.7rem;color:#a8b4b2;margin-top:0.75rem;line-height:1.8;overflow-x:auto;}
 .tl-card-threat .tl-code{border-color:rgba(255,68,68,0.15);}
 
 /* RED PULSE RING (threat card) */
@@ -120,8 +120,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
 @media(min-width:560px){.metric-grid{grid-template-columns:repeat(4,1fr);}}
 .metric-card{background:rgba(14,16,16,0.8);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;}
-.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(139,92,246,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
-.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(139,92,246,0.06);}
+.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
+.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(255,255,255,0.06);}
 .metric-card:hover::after{opacity:1;}
 .metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text-h);letter-spacing:-0.04em;line-height:1;}
 .metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:8px;line-height:1.5;opacity:0.85;}
@@ -134,13 +134,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .alert-val{color:var(--text-l);}
 .alert-val.critical{color:#f87171;font-weight:600;}
 
-pre,.code-block{background:rgba(8,10,10,0.95);border:1px solid rgba(139,92,246,0.12);border-radius:10px;padding:1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.75rem;color:#a8b4b2;overflow-x:auto;line-height:1.85;margin:0.9rem 0;white-space:pre;}
+pre,.code-block{background:rgba(8,10,10,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.75rem;color:#a8b4b2;overflow-x:auto;line-height:1.85;margin:0.9rem 0;white-space:pre;}
 
 /* TIMELINE (vertical, inside wrap) */
 .timeline{position:relative;padding-left:1.5rem;}
-.timeline::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,rgba(139,92,246,0.4),transparent);}
+.timeline::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent);}
 .tl-item{position:relative;padding:0 0 1.6rem 1.25rem;}
-.tl-item::before{content:'';position:absolute;left:-4.5px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 8px rgba(139,92,246,0.4);}
+.tl-item::before{content:'';position:absolute;left:-4.5px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 8px rgba(255,255,255,0.4);}
 .tl-item-threat::before{border-color:var(--red);box-shadow:0 0 10px rgba(255,68,68,0.5);}
 .tl-time-v{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);margin-bottom:4px;}
 .tl-item-threat .tl-time-v{color:var(--red);}
@@ -160,7 +160,7 @@ pre,.code-block{background:rgba(8,10,10,0.95);border:1px solid rgba(139,92,246,0
 /* IOC TABLE */
 .ioc-table{width:100%;border-collapse:collapse;font-size:0.8rem;font-family:'Fira Code',monospace;}
 .ioc-table th{text-align:left;padding:8px 12px;color:var(--accent);font-size:0.68rem;letter-spacing:0.08em;border-bottom:1px solid var(--border);font-weight:400;}
-.ioc-table td{padding:8px 12px;color:var(--text-l);border-bottom:1px solid rgba(139,92,246,0.05);vertical-align:top;line-height:1.5;}
+.ioc-table td{padding:8px 12px;color:var(--text-l);border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;line-height:1.5;}
 .ioc-table tr:last-child td{border-bottom:none;}
 
 /* BULLETS */
@@ -172,12 +172,12 @@ pre,.code-block{background:rgba(8,10,10,0.95);border:1px solid rgba(139,92,246,0
 .alert-danger{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.22);color:#fca5a5;}
 .alert-warning{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.22);color:#fde68a;}
 .alert-success{background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.22);color:#86efac;}
-.alert-info{background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.18);color:#9df5c5;}
+.alert-info{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.18);color:#9df5c5;}
 
-.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(139,92,246,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
-.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(139,92,246,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(255,255,255,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
+.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
 .btn-outline:hover::before{transform:scaleX(1);}
-.btn-outline:hover{border-color:rgba(139,92,246,0.6);box-shadow:0 0 24px rgba(139,92,246,0.12);}
+.btn-outline:hover{border-color:rgba(255,255,255,0.6);box-shadow:0 0 24px rgba(255,255,255,0.12);}
 
 footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
 .mt-2{margin-top:0.5rem;}.mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-4{margin-bottom:1rem;}.mb-6{margin-bottom:1.5rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
@@ -263,7 +263,7 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
       <!-- CARD 2: T+0:05 -->
       <div class="tl-card">
         <span class="tl-badge tl-badge-ok">LOG CORRELATION</span>
-        <div class="tl-time"><span class="tl-dot" style="background:rgba(139,92,246,0.6);"></span>T+0:05</div>
+        <div class="tl-time"><span class="tl-dot" style="background:rgba(255,255,255,0.6);"></span>T+0:05</div>
         <div class="tl-event-title">Multi-Source Log Correlation</div>
         <div class="tl-event-body">Splunk query across Wazuh, Suricata, and Windows event indexes. Found 3 additional PowerShell executions within 2-minute window. Suricata detected HTTP outbound to 185.220.101.42. Event ID 4698 confirmed scheduled task creation.</div>
         <div class="tl-code">index=suricata OR index=wazuh host="WIN-LAB-01"
@@ -282,13 +282,13 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
       <!-- CARD 4: T+0:25 -->
       <div class="tl-card">
         <span class="tl-badge tl-badge-ok">HOST FORENSICS</span>
-        <div class="tl-time"><span class="tl-dot" style="background:rgba(139,92,246,0.6);"></span>T+0:25</div>
+        <div class="tl-time"><span class="tl-dot" style="background:rgba(255,255,255,0.6);"></span>T+0:25</div>
         <div class="tl-event-title">Host Forensics &amp; Evidence Collection</div>
         <div class="tl-event-body">Windows Event Log and Sysmon analysis. Event ID 4688: powershell.exe (parent: cmd.exe). Sysmon Event ID 1: full command line captured. Event ID 4698: "SystemUpdate" task created. File write: C:\Users\Public\update.ps1 confirmed.</div>
       </div>
 
       <!-- CARD 5: T+0:42 -->
-      <div class="tl-card" style="border-color:rgba(139,92,246,0.2);">
+      <div class="tl-card" style="border-color:rgba(255,255,255,0.2);">
         <span class="tl-badge tl-badge-ok">CONTAINED</span>
         <div class="tl-time"><span class="tl-dot"></span>T+0:42</div>
         <div class="tl-event-title">Containment &amp; Remediation</div>
@@ -564,12 +564,12 @@ document.querySelectorAll('a,button,.metric-card,.mitre-card,.tl-card').forEach(
   el.addEventListener('mouseenter', () => {
     dot.style.transform = 'translate(-50%,-50%) scale(2.5)';
     ring.style.width = '56px'; ring.style.height = '56px';
-    ring.style.borderColor = 'rgba(139,92,246,0.9)';
+    ring.style.borderColor = 'rgba(255,255,255,0.9)';
   });
   el.addEventListener('mouseleave', () => {
     dot.style.transform = 'translate(-50%,-50%) scale(1)';
     ring.style.width = '36px'; ring.style.height = '36px';
-    ring.style.borderColor = 'rgba(139,92,246,0.5)';
+    ring.style.borderColor = 'rgba(255,255,255,0.5)';
   });
 });
 
@@ -590,7 +590,7 @@ document.addEventListener('mousemove', (e) => {
     const a = (1 - p.age / p.life) * 0.5;
     const r = (1 - p.age / p.life) * 2.2;
     tctx.beginPath(); tctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-    tctx.fillStyle = `rgba(139,92,246,${a})`; tctx.fill();
+    tctx.fillStyle = `rgba(255,255,255,${a})`; tctx.fill();
     p.age++;
   }
   requestAnimationFrame(drawTrail);
