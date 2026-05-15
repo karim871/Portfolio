@@ -776,24 +776,24 @@ tailwind.config = {
   .btn-case-study {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-family: 'Fira Code', monospace;
-    font-size: 0.67rem;
-    letter-spacing: 0.04em;
-    padding: 6px 14px;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: var(--text);
-    border-radius: 6px;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(200,200,200,0.12));
+    border: 1px solid rgba(255,255,255,0.3);
+    color: var(--text-bright);
+    border-radius: 8px;
     text-decoration: none;
     transition: all 0.3s ease;
-    background: transparent;
+    animation: pulse-glow 3s ease-in-out infinite;
+    margin-top: 1rem;
   }
   .btn-case-study:hover {
-    color: var(--sky);
-    border-color: rgba(255,255,255,0.5);
-    background: rgba(255,255,255,0.06);
+    background: linear-gradient(135deg, rgba(255,255,255,0.28), rgba(200,200,200,0.2));
+    box-shadow: 0 0 24px rgba(255,255,255,0.2);
   }
-  .btn-case-study .cs-prefix { color: var(--sky); opacity: 0.7; }
 
   /* ── Skill card alternating slide ── */
   .skill-card {
@@ -1392,6 +1392,23 @@ tailwind.config = {
           <li class="flex items-start"><span class="exp-bullet">▹</span><span>Coursework in cryptography, vulnerability assessment, Windows/Linux hardening, and CCNA-level networking.</span></li>
         </ul>
       </div>
+
+      <div class="edu-card mt-5">
+        <div class="flex items-start justify-between flex-wrap gap-3 mb-5">
+          <div>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">Cycle Préparatoire Intégré — Sciences de l'Ingénieur</h3>
+            <p class="accent-violet font-mono text-xs mt-1 tracking-wide">
+              <a href="https://www-ensab.uh1.ac.ma/cycle-preparatoire" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">ENSA Berrechid</a> · Université Hassan 1<sup>er</sup> · Morocco
+            </p>
+          </div>
+          <p class="font-mono text-xs" style="color:var(--text);">2019 – 2021</p>
+        </div>
+        <ul class="space-y-2.5 text-sm" style="color:var(--text-light);">
+          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Selective 2-year integrated preparatory cycle — prerequisite to ENSA's 5-year engineering programme. Transferred to Montreal to continue in applied cybersecurity.</span></li>
+          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Core curriculum: advanced mathematics (algebra, analysis, probability), physics, electronics, mechanics, and thermodynamics across 4 semesters.</span></li>
+          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Computer science track: algorithmics, C programming, computer architecture, and applied IT tools.</span></li>
+        </ul>
+      </div>
     </section>
 
     <div class="section-fade"></div>
@@ -1492,7 +1509,7 @@ tailwind.config = {
             <span class="project-tag">Linux</span>
             <span class="project-tag">Automation</span>
           </div>
-          <a href="https://karim871.github.io/Portfolio/secondarypages/cybersecurity-audit-tool-blog.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/cybersecurity-audit-tool-blog.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg><span class="cs-label">view case study</span></a>
         </div>
 
         <!-- Mini-SOC -->
@@ -1531,7 +1548,7 @@ tailwind.config = {
             <span class="project-tag">rsyslog</span>
             <span class="project-tag">Linux</span>
           </div>
-          <a href="https://karim871.github.io/Portfolio/secondarypages/piSOC.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/piSOC.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg><span class="cs-label">view case study</span></a>
         </div>
 
         <!-- PowerShell IR -->
@@ -1569,7 +1586,7 @@ tailwind.config = {
             <span class="project-tag">Threat Intel Bot</span>
             <span class="project-tag">Incident Response</span>
           </div>
-          <a href="https://karim871.github.io/Portfolio/secondarypages/incident-response-powershell.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/incident-response-powershell.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg><span class="cs-label">view case study</span></a>
         </div>
 
         <!-- Pi-hole -->
@@ -1619,7 +1636,7 @@ tailwind.config = {
             <span class="project-tag">Network Filtering</span>
             <span class="project-tag">Linux</span>
           </div>
-          <a href="https://karim871.github.io/Portfolio/secondarypages/pihole.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/pihole.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg><span class="cs-label">view case study</span></a>
         </div>
 
         <!-- pfSense -->
@@ -1658,7 +1675,7 @@ tailwind.config = {
             <span class="project-tag">DNS</span>
             <span class="project-tag">VirtualBox</span>
           </div>
-          <a href="https://karim871.github.io/Portfolio/secondarypages/pfSense.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><span class="cs-prefix">$</span> <span class="cs-label">view case study</span></a>
+          <a href="https://karim871.github.io/Portfolio/secondarypages/pfSense.html" target="_blank" rel="noopener noreferrer" class="btn-case-study"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg><span class="cs-label">view case study</span></a>
         </div>
 
       </div>
@@ -2267,24 +2284,6 @@ document.querySelectorAll('.gallery-dots').forEach(dotsEl => {
   document.querySelectorAll('.project-card').forEach(c => obs.observe(c));
 })();
 
-// ── Case study: terminal type-out on hover ────────────────────
-document.querySelectorAll('.btn-case-study').forEach(btn => {
-  const label = btn.querySelector('.cs-label');
-  if (!label) return;
-  const original = label.textContent;
-  let timer = null;
-  btn.addEventListener('mouseenter', () => {
-    clearTimeout(timer);
-    label.textContent = '';
-    let i = 0;
-    function tick() {
-      label.textContent = original.slice(0, i++);
-      if (i <= original.length) timer = setTimeout(tick, 45);
-    }
-    tick();
-  });
-  btn.addEventListener('mouseleave', () => { clearTimeout(timer); label.textContent = original; });
-});
 
 
 // ── Particle canvas ───────────────────────────────────────────
@@ -2734,6 +2733,7 @@ if (prefersReduced) {
       title: 'Cisco Network Defense',
       subtitle: 'Cybersecurity Operations Track',
       body: 'Network security monitoring, firewall operation, IDS/IPS deployment, and Security Operations Center workflows.',
+      links: [{ label: 'Official course →', href: 'https://www.netacad.com/courses/network-defense?courseLang=en-US', target: '_blank' }],
     },
     'az-900': {
       badge: 'MICROSOFT',
@@ -2843,7 +2843,7 @@ if (prefersReduced) {
       title: 'TCF Canada',
       subtitle: 'Test de Connaissance du Français',
       body: 'C1 proficiency in oral and written comprehension. B2 in oral and written expression.',
-      links: [{ label: 'Official TCF Canada →', href: 'https://www.france-education-international.fr/test/test-connaissance-francais-canada', target: '_blank' }],
+      links: [{ label: 'Official TCF Canada →', href: 'https://www.france-education-international.fr/test/tcf-canada', target: '_blank' }],
     },
     'celpip': {
       badge: 'LANGUAGE',
