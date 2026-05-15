@@ -271,16 +271,17 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 
   <div class="glass">
     <div class="s-title"><span class="s-num">01.</span> Project Overview</div>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">A fully segmented network lab built on pfSense running in VirtualBox, divided across three VLANs — LAN (trusted clients), OPT1 (server/DMZ segment), and OPT2 (isolated IoT/lab segment). Each segment has its own DHCP scope, DNS Resolver policy, and independent firewall ruleset enforcing strict inter-VLAN access control.</p>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">A site-to-site VPN tunnel simulates a branch-to-HQ scenario, while OpenVPN client access provides secure remote entry to the LAN segment. Suricata runs in inline IDS mode on all interfaces — signatures fire on real traffic during active red team exercises, producing logs that feed into the Mini-SOC Splunk instance.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">This started as a school project and turned into something I kept building long after the course ended. I wanted to understand what a real perimeter actually looks like — not just read about it. So I built one in VirtualBox: pfSense as the firewall, three isolated VLANs, a working VPN, and Suricata running in a mode where it can actually drop packets, not just complain about them.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">The three-segment design (LAN for trusted clients, OPT1 as a DMZ-style server network, OPT2 as the isolated attacker network) wasn't chosen randomly — it mirrors what you'd see in an actual enterprise: a trusted zone, a service zone that needs limited access to production, and a segment you assume might be compromised. Everything between them is default-deny unless I explicitly wrote a rule for it.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">Once the segmentation was solid, I layered in VPN (OpenVPN with certificate auth, not shared keys — more setup, but stolen credentials alone can't get you in) and then ran attack traffic from OPT2 to see what Suricata would catch. The alerts forwarded into my Splunk instance. That's when it clicked: a firewall log and an IDS alert on the same event tell a much more complete story than either one alone.</p>
     <div class="pull-quote">
-      <p>"A single pfSense box becomes a full enterprise-grade perimeter: segmented VLANs, dual VPN modes, real-time intrusion detection — all running in a home lab."</p>
+      <p>"I kept expecting the firewall to be the interesting part. Turns out it was alert tuning — figuring out what was actually malicious versus what was just my lab being noisy."</p>
     </div>
   </div>
 
   <div class="glass">
     <div class="s-title"><span class="s-num">02.</span> Interface Walk-through</div>
-    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">Key views from the pfSense web UI — interface assignments, DHCP leases across all three segments, and the Suricata alert console captured during a red team exercise.</p>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">The interface assignments table below reflects the actual VirtualBox setup: four virtual NICs, each bound to a separate internal network adapter. Getting pfSense to recognize all four adapters on first boot took more troubleshooting than expected — the adapter ordering in VirtualBox doesn't always match what pfSense presents during interface assignment. The Suricata alerts at the bottom are from a live exercise, not synthetic data.</p>
     <div class="snapshot-grid">
 
       <!-- Panel 1: Interface Assignments -->
@@ -374,7 +375,7 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 
   <div class="glass">
     <div class="s-title"><span class="s-num">03.</span> Network Architecture</div>
-    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.5rem;">VLAN segmentation across three interfaces. Traffic between segments is controlled by explicit firewall rules — default deny between OPT1/OPT2, selective allow to LAN services.</p>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.5rem;">The decision to use three segments instead of two came from thinking about what I actually wanted to test. LAN is where you'd put workstations in a real environment. OPT1 is where servers live — things that need limited, specific access to LAN services (like a Splunk indexer) but shouldn't be able to roam freely. OPT2 is the attacker box. The whole point is that OPT2 has no legitimate reason to ever talk to LAN directly. If traffic is crossing that boundary, something is wrong.</p>
     <div class="arch-wrap">
       <svg width="680" height="340" viewBox="0 0 680 340" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="pfSense VLAN architecture diagram">
         <!-- Internet/WAN -->
@@ -431,11 +432,14 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
         <line x1="155" y1="280" x2="155" y2="300" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
       </svg>
     </div>
+    <div class="screenshot-grid mt-3">
+      <img src="../images/pfsense/pfsense-architecture.png" alt="pfSense lab network architecture — VLAN segmentation and interface assignment" onclick="openLightbox(this.src)" title="Click to enlarge">
+    </div>
   </div>
 
   <div class="glass">
     <div class="s-title"><span class="s-num">04.</span> Firewall Rule Logic</div>
-    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">Each interface enforces its own ruleset. LAN has unrestricted outbound. OPT1 permits only specific ports toward LAN services. OPT2 is default-deny — no inter-VLAN traffic unless explicitly allowed.</p>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">pfSense processes rules top-down and stops at the first match. That ordering is everything. I learned this the wrong way — I had a broad PASS rule on OPT1 that came before my specific BLOCK rules, so OPT1 could reach LAN freely. Flipping the order immediately fixed it. The rule table below reflects the final working state. The OPT1 BLOCK to LAN rule sits above the general PASS rule deliberately — if it were below, it would never fire.</p>
     <div class="rules-wrap">
       <table class="rules-tbl">
         <thead>
@@ -534,6 +538,25 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
         </tbody>
       </table>
     </div>
+    <p style="font-size:0.82rem;color:var(--text);opacity:0.55;margin-top:0.75rem;margin-bottom:0.5rem;">Screenshots from the pfSense rule editor — individual block rules and the consolidated view:</p>
+    <div class="screenshot-grid">
+      <img src="../images/pfsense/pfsense-firewall-rules.png"  alt="pfSense all firewall rules overview"                     onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-block-ping.png"      alt="pfSense ICMP block rule between VLANs"                   onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-block-http.png"      alt="pfSense HTTP port 80 block rule"                         onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-block-ssh.png"       alt="pfSense SSH block rule for inter-VLAN isolation"         onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-alias-rules.png"     alt="pfSense alias-based IP group for aggregate blocking"     onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-block-private.png"   alt="pfSense block private network ranges on WAN"             onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-block-telnet.png"    alt="pfSense Telnet block rule configuration"                 onclick="openLightbox(this.src)" title="Click to enlarge">
+    </div>
+    <p style="font-size:0.82rem;color:var(--text);opacity:0.55;margin-top:1.25rem;margin-bottom:0.5rem;">Test results — what blocked traffic actually looks like from the client side. Each attempt produces a clean timeout or connection refused, confirming the rules are firing:</p>
+    <div class="screenshot-grid">
+      <img src="../images/pfsense/pfsense-test-block-ping.png"    alt="ICMP ping blocked — client-side timeout output"              onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-test-block-http.png"    alt="HTTP connection blocked — curl timeout from OPT2"            onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-test-block-telnet.png"  alt="Telnet connection refused by firewall rule"                  onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-test-block-telnet2.png" alt="Telnet second test — persistent block confirmed"             onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-test-ssh-block.png"     alt="SSH connection blocked between OPT1 and LAN"                onclick="openLightbox(this.src)" title="Click to enlarge">
+      <img src="../images/pfsense/pfsense-test-private-block.png" alt="Private network range blocked on WAN interface"             onclick="openLightbox(this.src)" title="Click to enlarge">
+    </div>
   </div>
 
   <div class="glass">
@@ -541,32 +564,46 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 
     <div class="step-card">
       <span class="step-num">STEP 01 — VLAN SEGMENTATION</span>
-      <div class="step-title">Three isolated network segments with per-VLAN DHCP and DNS</div>
-      <div class="step-body">Each interface (LAN, OPT1, OPT2) operates as an isolated L3 segment. pfSense runs DHCP Server and DNS Resolver independently per interface — a device on OPT2 cannot reach LAN unless an explicit firewall rule permits it.</div>
+      <div class="step-title">Three isolated segments, each with its own DHCP and DNS scope</div>
+      <div class="step-body">Each interface gets its own DHCP server and DNS Resolver instance — so a machine on OPT2 gets a 192.168.3.x address and resolves DNS through the OPT2 gateway, not LAN's. This matters because it makes the isolation structural, not just policy-based. Even if firewall rules were wiped, the segments wouldn't communicate — there's no L2 path between them. The VirtualBox internal network adapters enforce that at the hypervisor level.</div>
     </div>
 
     <div class="step-card">
       <span class="step-num">STEP 02 — FIREWALL RULES</span>
-      <div class="step-title">Default-deny between segments, explicit allow for required services</div>
-      <div class="step-body">LAN has unrestricted outbound access. OPT1 permits only specific ports toward LAN (e.g., TCP 443 to the Splunk indexer). OPT2 is fully isolated — no inter-VLAN traffic unless a specific rule is added. Floating rules apply Suricata IDS inspection on all interfaces simultaneously.</div>
+      <div class="step-title">Rule ordering is the thing that actually matters</div>
+      <div class="step-body">pfSense evaluates rules top-to-bottom and stops at the first match. I initially had a broad "OPT1 → any → PASS" rule at the top, which meant nothing below it ever fired. Specific service allowances (like OPT1 → LAN:9997 for Splunk) and the cross-VLAN block rules all have to sit above any general PASS rule. Once I got the order right, I tested by trying to ping LAN from OPT2 — complete silence, no ICMP unreachable, just a timeout. That's the expected behavior for a block rule without logging. Took me a few minutes to confirm the rule was actually firing rather than something else being wrong.</div>
     </div>
 
     <div class="step-card">
       <span class="step-num">STEP 03 — DNS RESOLVER + NAT</span>
-      <div class="step-title">Per-segment DNS policies and outbound NAT</div>
-      <div class="step-body">DNS Resolver (Unbound) is configured with domain overrides per VLAN. Outbound NAT translates each VLAN's subnet to the WAN IP for internet access. DNS rebind protection is active on all segments to prevent internal resource hijacking.</div>
+      <div class="step-title">Outbound NAT and per-VLAN DNS policies</div>
+      <div class="step-body">Outbound NAT translates all three subnets to the WAN IP for internet access — straightforward. The DNS piece was more interesting. I enabled DNS rebind protection on all segments, which blocks resolvers from returning private-range IPs for public domain queries. It's a minor thing but it prevents a specific class of attack where an attacker-controlled domain resolves to an internal IP to bypass same-origin policies. I also set domain overrides per VLAN so internal hostnames resolve correctly within each segment without leaking to upstream DNS.</div>
     </div>
 
     <div class="step-card">
       <span class="step-num">STEP 04 — VPN CONFIGURATION</span>
       <div class="step-title">Site-to-site tunnel + OpenVPN remote access</div>
-      <div class="step-body">A site-to-site IPSec VPN simulates a remote branch connecting to the primary LAN. Separately, an OpenVPN server on UDP/1194 handles remote client access — connecting clients land on the LAN segment with full internal routing. Certificate-based authentication only; no shared-secret mode.</div>
+      <div class="step-body">I chose certificate-based auth over shared keys for one reason: a stolen password is useless without the matching certificate. The setup is more involved — create a CA in pfSense's Certificate Manager, issue a server cert, issue per-user certs, export client bundles — but the security model is genuinely better. The OpenVPN server runs on UDP/1194 and clients land on the LAN segment with full internal routing. I also set up a site-to-site tunnel between two VirtualBox instances to simulate a branch connecting back to HQ — mostly to understand how pfSense handles routing across two separate pfSense boxes, which is a common real-world configuration.</div>
+      <p style="font-size:0.82rem;color:var(--text);opacity:0.55;margin-top:0.75rem;margin-bottom:0.5rem;">VPN setup from CA creation through client export:</p>
+      <div class="screenshot-grid">
+        <img src="../images/pfsense/pfsense-create-ca.png"       alt="pfSense Certificate Authority creation for OpenVPN"     onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-server-cert.png"     alt="pfSense server certificate generation"                  onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-vpn-tunnel.png"      alt="pfSense OpenVPN tunnel network configuration"           onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-vpn-auth.png"        alt="pfSense VPN authentication method settings"             onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-vpn-encryption.png"  alt="pfSense VPN data encryption configuration"              onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-vpn-rules.png"       alt="pfSense firewall rules for VPN interface"               onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-user-cert.png"       alt="pfSense user certificate for VPN client auth"           onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-openvpn-export.png"    alt="pfSense OpenVPN client configuration export"            onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-vpn-server-host.png"  alt="pfSense OpenVPN server host configuration settings"     onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-vpn-user-property.png" alt="pfSense VPN user certificate properties"               onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-vpn-file-exported.png" alt="pfSense VPN client config file downloaded and ready"   onclick="openLightbox(this.src)" title="Click to enlarge">
+      </div>
     </div>
 
     <div class="step-card">
       <span class="step-num">STEP 05 — SURICATA INLINE IDS MODE</span>
       <div class="step-title">Active intrusion detection across all VLAN interfaces</div>
-      <div class="step-body">Suricata is configured in inline (NFQUEUE) mode rather than passive sniffing — packets are held until Suricata makes a pass/drop decision. ET Open and emerging-threats rulesets are applied. During red team exercises, simulated attacks (nmap scans, Metasploit payloads, brute-force attempts) generated alert events that appeared in Splunk alongside pfSense firewall logs, enabling full kill-chain correlation.</div>
+      <div class="step-body">The default Suricata install with ET Open rules fired on almost everything in the first few hours — including my own DNS queries and normal browser traffic. I spent more time on tuning than on the initial setup. The biggest categories of false positives were ET POLICY rules (flagging legitimate services like Windows Update) and some SCAN rules triggering on ARP traffic inside the lab. I suppressed by source IP for lab-internal hosts after confirming the traffic was benign, rather than disabling entire rule categories — that way the rules still fire on anything unexpected coming from outside those known hosts. After a few days of tuning, the noise dropped to a manageable level and actual attack traffic stood out clearly. Running Suricata on all interfaces — not just WAN — was the call I'm most glad I made. Lateral movement from OPT1 shows up on the OPT1 interface. If it were WAN-only, that traffic would be invisible.</div>
       <div class="suri-log">
         <div class="suri-log-hdr">
           <span>suricata/fast.log — red team exercise excerpt</span>
@@ -585,7 +622,44 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   </div>
 
   <div class="glass">
-    <div class="s-title"><span class="s-num">06.</span> Technical Specifications</div>
+    <div class="s-title"><span class="s-num">06.</span> Red Team Integration</div>
+    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:1.25rem;">The goal wasn't to "pass" a test — it was to understand what my own perimeter looks like to an attacker. OPT2 is the attacker machine. Everything it tries has to go through pfSense. I ran exercises in three stages, deliberately starting simple to confirm the fundamentals held before moving to more complex scenarios.</p>
+
+    <div class="step-card">
+      <span class="step-num">PHASE 01 — RECONNAISSANCE</span>
+      <div class="step-title">Scanning from OPT2 — mostly silence, which is the right answer</div>
+      <div class="step-body">I ran a port scan from OPT2 toward LAN hosts. The scan just timed out — no RST, no ICMP unreachable, nothing. That's what a block-without-log rule looks like from the attacker's side. I confirmed the rule was actually firing (not just the host being down) by temporarily enabling logging on the block rule and watching the pfSense firewall log. Suricata also fired on the Nmap user-agent in the HTTP probe headers, which was a useful reminder that IDS detection doesn't require a firewall failure — the scan signature fires even on blocked traffic.</div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">PHASE 02 — TESTING SURICATA SPECIFICALLY</span>
+      <div class="step-title">Temporarily opening a rule to see if IDS catches what firewall blocks</div>
+      <div class="step-body">To test Suricata's detection independently of the firewall, I temporarily added a rule allowing OPT2 → LAN TCP (scoped to a specific test port) and ran a payload exercise. Suricata caught the reverse shell signature immediately — the alert showed up in the Suricata web UI and forwarded to Splunk within a few seconds. I closed the test rule right after. What this confirmed: the firewall and IDS are independent layers. A misconfigured rule that opens too much doesn't mean the intrusion is invisible — Suricata still fires on the traffic pattern regardless of whether the firewall permitted it.</div>
+      <div class="screenshot-grid mt-3">
+        <img src="../images/pfsense/pfsense-test-fb-blocked.png"    alt="Facebook blocked by pfSense firewall rule — browser error"   onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-test-fb-bypass.png"     alt="Facebook bypass attempt via alternate port — also blocked"   onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-test-proxy-bypass.png"  alt="Proxy bypass attempt through OPT2 — caught and blocked"      onclick="openLightbox(this.src)" title="Click to enlarge">
+      </div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">PHASE 03 — LATERAL MOVEMENT FROM DMZ</span>
+      <div class="step-title">SSH brute-force from OPT1 — this is why all-interface IDS matters</div>
+      <div class="step-body">I launched an SSH brute-force from OPT1 toward a LAN host. The firewall blocked the connection (OPT1 doesn't have a rule permitting SSH to LAN), and Suricata fired on the OPT1 interface — not WAN. That's the important part. If Suricata were only on WAN, this event would be completely invisible. A compromised DMZ server pivoting toward production would generate no WAN traffic at all. It took this exercise to make me fully appreciate why binding Suricata to internal interfaces isn't optional — it's what separates network monitoring from perimeter-only monitoring.</div>
+      <div class="screenshot-grid mt-3">
+        <img src="../images/pfsense/pfsense-test-ssh-tunnel.png"      alt="SSH tunnel attempt from OPT2 — detected by Suricata"             onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-test-squid-redirect.png"  alt="Squid transparent proxy redirect intercepting OPT2 traffic"      onclick="openLightbox(this.src)" title="Click to enlarge">
+        <img src="../images/pfsense/pfsense-test-squid2.png"          alt="Squid proxy continued — request log showing intercepted traffic"  onclick="openLightbox(this.src)" title="Click to enlarge">
+      </div>
+    </div>
+
+    <div class="pull-quote mt-3">
+      <p>"The scan from OPT2 just timed out — no response at all. That's the correct behavior, but it took me a few minutes to distinguish 'rule is working' from 'host is down.' Confirming your own controls are actually firing is a skill."</p>
+    </div>
+  </div>
+
+  <div class="glass">
+    <div class="s-title"><span class="s-num">07.</span> Technical Specifications</div>
     <div class="spec-grid">
       <div class="spec-card">
         <span class="spec-label">PLATFORM</span>
@@ -619,18 +693,18 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   </div>
 
   <div class="glass">
-    <div class="s-title"><span class="s-num">07.</span> Key Takeaways</div>
+    <div class="s-title"><span class="s-num">08.</span> Key Takeaways</div>
     <ul class="bullet-list">
-      <li>VLAN segmentation limits lateral movement — a compromised OPT2 device cannot reach LAN without an explicit firewall rule, which doesn't exist by default</li>
-      <li>Inline IDS mode provides active blocking capability, not just alerting — Suricata can drop malicious packets in real time rather than logging after the fact</li>
-      <li>Correlating pfSense firewall logs with Suricata events in Splunk gives a full kill-chain view: denied connection attempts alongside matched signatures</li>
-      <li>DNS Resolver per-segment control prevents internal rebind attacks and allows VLAN-specific domain overrides without touching the WAN DNS settings</li>
-      <li>Certificate-based VPN auth eliminates the shared-secret weakness — stolen credentials don't grant VPN access without the corresponding certificate</li>
+      <li>Rule ordering in pfSense bit me before I understood it. A broad PASS rule that sits above specific BLOCK rules makes those block rules unreachable. I had OPT1 talking to LAN freely for a while before I caught it. Always verify isolation is actually working — log a test connection attempt and watch for it explicitly, don't assume.</li>
+      <li>Alert tuning was the most time-consuming part of the whole project by far. The ET Open ruleset out of the box fires on Windows Update traffic, ARP broadcasts, and legitimate DNS. I suppressed by source IP for known-benign internal hosts rather than disabling entire categories — more work upfront, but the rules still catch the same behavior from anything unexpected.</li>
+      <li>Binding Suricata to all interfaces changed how I think about IDS placement. WAN-only coverage leaves a blind spot for anything that stays east-west. In a real SOC, half the interesting traffic never touches the perimeter.</li>
+      <li>The "block without reply" behavior of pfSense is useful from a security standpoint but confusing to verify. A silent timeout from the attacker's side could mean the firewall rule fired, or the host is down, or the route is broken. Building the habit of checking pfSense logs to confirm a rule actually fired — not just assuming — is something I now do automatically.</li>
+      <li>Certificate-based VPN is more setup than shared keys, but the tradeoff is real: someone who phishes your VPN password still can't connect without your certificate file. Worth the extra steps.</li>
     </ul>
   </div>
 
   <div class="glass">
-    <div class="s-title"><span class="s-num">08.</span> Reference Documentation</div>
+    <div class="s-title"><span class="s-num">09.</span> Reference Documentation</div>
     <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.25rem;">Official Netgate documentation and community resources used during this lab build.</p>
     <div class="doc-grid">
       <a href="https://docs.netgate.com/pfsense/en/latest/vlan/configuration.html" target="_blank" rel="noopener noreferrer" class="doc-link">

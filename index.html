@@ -1132,9 +1132,14 @@ tailwind.config = {
     text-decoration-color: rgba(255,255,255,0.45);
     text-underline-offset: 3px;
   }
-  .cert-card[data-hc] { cursor: help; }
+  .cert-card[data-bwp] { cursor: help; }
 
   /* ── Competency Radar ── */
+  #skills-radar-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
   .radar-polygon {
     fill: rgba(184,216,236,0.08);
     fill-opacity: 0;
@@ -1142,10 +1147,6 @@ tailwind.config = {
     stroke-width: 1.5;
     stroke-linejoin: round;
     stroke-opacity: 0.6;
-    transition: filter 0.4s ease;
-  }
-  .radar-polygon:hover {
-    filter: drop-shadow(0 0 12px rgba(184,216,236,0.3));
   }
   @keyframes radar-draw {
     to { stroke-dashoffset: 0; }
@@ -1153,9 +1154,20 @@ tailwind.config = {
   @keyframes radar-fill {
     to { fill-opacity: 0.1; }
   }
+  @keyframes radar-breathe {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(184,216,236,0.2)); }
+    50%       { filter: drop-shadow(0 0 22px rgba(184,216,236,0.55)); }
+  }
   #skills-radar-svg.radar-drawn .radar-polygon {
-    animation: radar-draw 1.5s cubic-bezier(0.22,1,0.36,1) forwards,
-               radar-fill 1s ease 0.55s forwards;
+    animation: radar-draw 1.2s ease-out forwards,
+               radar-fill 0.9s ease 0.4s forwards;
+  }
+  #skills-radar-svg.radar-drawn-done .radar-polygon {
+    stroke-dashoffset: 0;
+    fill-opacity: 0.1;
+  }
+  #skills-radar-svg.radar-drawn-done .radar-polygon:hover {
+    animation: radar-breathe 2.8s ease-in-out infinite;
   }
   .radar-dot {
     fill: var(--sky);
@@ -1163,23 +1175,27 @@ tailwind.config = {
     stroke-width: 2;
     transform-box: fill-box;
     transform-origin: center;
-    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), filter 0.28s ease;
+    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), fill 0.28s ease, filter 0.28s ease;
     cursor: pointer;
   }
   .radar-vertex:hover .radar-dot {
-    transform: scale(1.9);
-    filter: drop-shadow(0 0 5px var(--sky));
+    transform: scale(1.6);
+    fill: #ffffff;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
   }
   .radar-label {
     fill: var(--text);
     font-family: 'Fira Code', monospace;
     font-size: 10px;
     letter-spacing: 0.05em;
-    cursor: pointer;
+    cursor: default;
     user-select: none;
-    transition: fill 0.25s ease;
+    transition: fill 0.25s ease, letter-spacing 0.25s ease;
   }
-  .radar-vertex:hover .radar-label { fill: var(--text-bright); }
+  .radar-vertex:hover .radar-label {
+    fill: var(--text-bright);
+    letter-spacing: 0.12em;
+  }
   .radar-tooltip {
     position: fixed;
     z-index: 9990;
@@ -1212,6 +1228,155 @@ tailwind.config = {
     letter-spacing: 0.03em;
     line-height: 1.7;
   }
+
+  /* ── B&W Futuristic Popup ── */
+  #bw-conn-svg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 99980;
+    overflow: visible;
+  }
+  #bw-conn-line {
+    stroke: #ffffff;
+    stroke-width: 1;
+    stroke-dasharray: 6 4;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+  #bw-conn-line.bwc-draw {
+    opacity: 1;
+    animation: bw-conn-flicker 0.15s ease-out;
+  }
+  @keyframes bw-conn-flicker {
+    0%   { opacity: 0; }
+    35%  { opacity: 1; }
+    55%  { opacity: 0.5; }
+    75%  { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  #bw-popup {
+    position: fixed;
+    z-index: 99981;
+    width: 270px;
+    max-width: calc(100vw - 24px);
+    background: #000;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    padding: 14px 16px;
+    pointer-events: none;
+    opacity: 0;
+    transform: rotate(-4deg) scale(0.92);
+    filter: blur(6px);
+    overflow: hidden;
+  }
+  #bw-popup.bwp-visible {
+    animation: bwp-dizzy-in 280ms cubic-bezier(0.34,1.56,0.64,1) forwards;
+    pointer-events: auto;
+  }
+  #bw-popup.bwp-locked {
+    outline: 1px dashed rgba(255,255,255,0.25);
+    outline-offset: 4px;
+  }
+  @keyframes bwp-dizzy-in {
+    0%   { opacity: 0; transform: rotate(-4deg) scale(0.92); filter: blur(6px); }
+    100% { opacity: 1; transform: rotate(0deg)  scale(1);    filter: blur(0px); }
+  }
+  .bwp-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,0.018) 2px,
+      rgba(255,255,255,0.018) 4px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+  #bwp-content { position: relative; z-index: 1; }
+  .bwp-badge {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: #555;
+    border: 1px solid #222;
+    padding: 2px 7px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 9px;
+    text-transform: uppercase;
+  }
+  .bwp-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+  .bwp-subtitle {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.62rem;
+    color: #888;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    margin-bottom: 7px;
+  }
+  .bwp-meta {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.6rem;
+    color: #555;
+    margin-bottom: 9px;
+  }
+  .bwp-divider {
+    border: none;
+    border-top: 1px solid #111;
+    margin: 9px 0;
+  }
+  .bwp-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: #888;
+    line-height: 1.6;
+  }
+  .bwp-courses {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0;
+  }
+  .bwp-courses li {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.6rem;
+    color: #555;
+    padding: 2.5px 0;
+    display: flex;
+    gap: 6px;
+    line-height: 1.5;
+  }
+  .bwp-courses li::before {
+    content: '▸';
+    color: #333;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .bwp-links { margin-top: 4px; }
+  .bwp-link {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.62rem;
+    color: #888;
+    text-decoration: none;
+    border-bottom: 1px solid #222;
+    padding-bottom: 1px;
+    display: inline-block;
+    margin-top: 6px;
+    pointer-events: all;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .bwp-link:hover { color: #fff; border-color: #888; }
 </style>
 </head>
 <body>
@@ -1260,6 +1425,17 @@ tailwind.config = {
     filter="url(#hc-conn-filter)"
     style="opacity:0;transition:opacity 0.2s ease;"/>
 </svg>
+
+<!-- B&W Popup connector -->
+<svg id="bw-conn-svg" aria-hidden="true">
+  <line id="bw-conn-line" x1="0" y1="0" x2="0" y2="0"/>
+</svg>
+
+<!-- B&W Popup -->
+<div id="bw-popup" role="tooltip" aria-hidden="true">
+  <div class="bwp-scanlines" aria-hidden="true"></div>
+  <div id="bwp-content"></div>
+</div>
 
 <!-- Lightbox -->
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
@@ -1382,7 +1558,7 @@ tailwind.config = {
         <div class="flex items-start justify-between flex-wrap gap-3 mb-5">
           <div>
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">DEC — Computer Security &amp; Networking</h3>
-            <p class="accent-violet font-mono text-xs mt-1 tracking-wide"><span class="hc-text-trigger" data-hc="bdeb">Collège de Bois-de-Boulogne</span> · Montreal, QC</p>
+            <p class="accent-violet font-mono text-xs mt-1 tracking-wide"><span class="hc-text-trigger" data-bwp="bdeb">Collège de Bois-de-Boulogne</span> · Montreal, QC</p>
           </div>
           <p class="font-mono text-xs" style="color:var(--text);">Graduated 2025</p>
         </div>
@@ -1397,7 +1573,7 @@ tailwind.config = {
         <div class="flex items-start justify-between flex-wrap gap-3 mb-5">
           <div>
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">Cycle Préparatoire Intégré, Sciences de l'Ingénieur</h3>
-            <p class="accent-violet font-mono text-xs mt-1 tracking-wide"><span class="hc-text-trigger" data-hc="ensa">ENSA Berrechid</span> · Université Hassan 1<sup>er</sup> · Morocco</p>
+            <p class="accent-violet font-mono text-xs mt-1 tracking-wide"><span class="hc-text-trigger" data-bwp="ensa">ENSA Berrechid</span> · Université Hassan 1<sup>er</sup> · Morocco</p>
           </div>
           <p class="font-mono text-xs" style="color:var(--text);">2019 – 2021</p>
         </div>
@@ -1412,7 +1588,7 @@ tailwind.config = {
         <div class="flex items-start justify-between flex-wrap gap-3 mb-5">
           <div>
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:500;color:var(--text-bright);">Baccalauréat, Sciences Physiques</h3>
-            <p class="accent-violet font-mono text-xs mt-1 tracking-wide"><span class="hc-text-trigger" data-hc="bac-riad">Groupe Scolaire RIAD</span> · Casablanca, Morocco</p>
+            <p class="accent-violet font-mono text-xs mt-1 tracking-wide"><span class="hc-text-trigger" data-bwp="bac-riad">Groupe Scolaire RIAD</span> · Casablanca, Morocco</p>
           </div>
           <div class="text-right">
             <p class="font-mono text-xs" style="color:var(--text);">2019</p>
@@ -1674,11 +1850,11 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">LAN/WAN segmented lab across <span class="metric-highlight">3 VLANs</span> (LAN, OPT1, OPT2) with site-to-site VPN and OpenVPN client access. Configured firewall rules, NAT, DNS Resolver, and DHCP per segment. Integrated Suricata in inline IDS mode — detected and logged intrusion attempts across all interfaces during active red team exercises.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Three-VLAN segmented lab (LAN / OPT1 / OPT2) with full LAN/WAN separation, per-segment DHCP and DNS, explicit inter-VLAN firewall rules, NAT, and OpenVPN client + site-to-site VPN. <span class="metric-highlight">Suricata</span> running in inline IDS mode across all interfaces — actively caught and logged intrusion attempts during red team exercises. Default-deny between segments, tuned ruleset, forensic alert review.</p>
           <div class="snap-gallery mb-1" id="snap-g4">
-            <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"             onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/screen2.png" alt="OPNsense console — interface IP config"     onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="https://karim871.github.io/Portfolio/images/screen3.png" alt="Windows client receiving DHCP from pfSense"  onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="images/pfsense/pfsense-architecture.png"    alt="pfSense lab — 3-VLAN network architecture diagram"       onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="images/pfsense/pfsense-firewall-rules.png"  alt="pfSense complete firewall rules across all interfaces"   onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="images/pfsense/pfsense-openvpn-export.png"  alt="pfSense OpenVPN client configuration export"             onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
           <div class="gallery-dots" data-gallery="snap-g4"></div>
           <div class="flex flex-wrap gap-2">
@@ -1735,37 +1911,37 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-        <div class="cert-card" data-hc="cysa-plus">
+        <div class="cert-card" data-bwp="cysa-plus">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CySA+-png.webp" alt="CompTIA CySA+" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA CySA+</h4>
           <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
-        <div class="cert-card" data-hc="security-plus">
+        <div class="cert-card" data-bwp="security-plus">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/Security+-png.webp" alt="CompTIA Security+" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA Security+</h4>
           <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
-        <div class="cert-card" data-hc="ccna-itn">
+        <div class="cert-card" data-bwp="ccna-itn">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ITN.png" alt="Cisco CCNA ITN" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ITN</h4>
         </div>
-        <div class="cert-card" data-hc="ccna-srwe">
+        <div class="cert-card" data-bwp="ccna-srwe">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_SRWE.png" alt="Cisco CCNA SRWE" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA SRWE</h4>
         </div>
-        <div class="cert-card" data-hc="ccna-ensa">
+        <div class="cert-card" data-bwp="ccna-ensa">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ENSA.png" alt="Cisco CCNA ENSA" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ENSA</h4>
         </div>
-        <div class="cert-card" data-hc="network-defense">
+        <div class="cert-card" data-bwp="network-defense">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/NetworkDefense.png" alt="Cisco Network Defense" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco Network Defense</h4>
         </div>
-        <div class="cert-card" data-hc="az-900">
+        <div class="cert-card" data-bwp="az-900">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/AZ-900.png" alt="Microsoft AZ-900" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft AZ-900</h4>
         </div>
-        <div class="cert-card" data-hc="sc-900">
+        <div class="cert-card" data-bwp="sc-900">
           <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/SC-900.png" alt="Microsoft SC-900" class="w-full h-full object-contain"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft SC-900</h4>
         </div>
@@ -1775,7 +1951,7 @@ tailwind.config = {
         <span class="section-num">06.1</span> Language Certifications
       </h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="cert-card" data-hc="tcf-canada">
+        <div class="cert-card" data-bwp="tcf-canada">
           <div class="w-20 h-20 mb-3 flex items-center justify-center">
             <svg class="w-12 h-12" style="color:var(--text);" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
           </div>
@@ -1783,7 +1959,7 @@ tailwind.config = {
           <p class="text-xs text-center mt-1" style="color:var(--text);">Test de Connaissance du Français</p>
           <p class="text-xs accent-violet font-mono mt-1">C1 / B2 — French</p>
         </div>
-        <div class="cert-card" data-hc="celpip">
+        <div class="cert-card" data-bwp="celpip">
           <div class="w-20 h-20 mb-3 flex items-center justify-center">
             <svg class="w-12 h-12" style="color:var(--text);" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
@@ -1990,10 +2166,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
 (function initBinaryCanvas() {
   const canvas = document.getElementById('binary-canvas');
   const ctx = canvas.getContext('2d');
-  const mathSyms = ['∑','π','∞','√','∂','∫','∇','×','÷','±','≤','≥','≠','≈','α','β','γ','δ','θ','λ','μ','σ','φ'];
-  const chars = '01010011 01001111 43 2E 4F 52 47 FF A0 B3'.split(' ')
-    .concat('0123456789ABCDEF'.split(''))
-    .concat(mathSyms);
+  const chars = ['∑','π','∞','√','∂','∫','∇','×','÷','±','≤','≥','≠','≈','∈','∉','∅','∧','∨','⊕','α','β','γ','δ','θ','λ','μ','σ','φ','ψ','ω','ε','ξ','ζ'];
   const COUNT = 50;
   const particles = [];
 
@@ -2007,7 +2180,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       y: Math.random() * innerHeight,
       vy: 0.008 + Math.random() * 0.02,
       ch: chars[Math.floor(Math.random() * chars.length)],
-      alpha: 0.15 + Math.random() * 0.12,
+      alpha: 0.28 + Math.random() * 0.20,
       size: 10 + Math.floor(Math.random() * 6),
       tick: 0,
       interval: 40 + Math.floor(Math.random() * 80),
@@ -2498,12 +2671,12 @@ if (prefersReduced) {
 
   // Scores drive shape only — never displayed as numbers
   const axes = [
-    { name: 'Threat Detection',       score: 0.88, tools: 'Suricata · Wazuh · Wireshark · Nessus' },
-    { name: 'Incident Response',      score: 0.82, tools: 'MITRE ATT&CK · Sysmon · Forensic artifact preservation' },
-    { name: 'Network Security',       score: 0.78, tools: 'pfSense · OPNsense · Pi-hole · VLANs · OpenVPN · Cisco IOS' },
-    { name: 'Scripting & Automation', score: 0.65, tools: 'Python · Bash · PowerShell · REST APIs' },
-    { name: 'SIEM & Log Analysis',    score: 0.88, tools: 'Splunk · ELK Stack · Sysmon · rsyslog' },
-    { name: 'Endpoint Security',      score: 0.72, tools: 'Wazuh HIDS · Windows hardening · Active Directory' },
+    { name: 'Threat Detection',       score: 0.92, tools: 'Suricata · Wazuh · Wireshark · Nessus' },
+    { name: 'SIEM & Log Analysis',    score: 0.86, tools: 'Splunk · ELK · Sysmon · rsyslog' },
+    { name: 'Incident Response',      score: 0.84, tools: 'MITRE ATT&CK · Forensic artifact preservation · 42-min containment' },
+    { name: 'Network Security',       score: 0.76, tools: 'pfSense · OPNsense · Pi-hole · VLANs · OpenVPN · Cisco IOS' },
+    { name: 'Endpoint Security',      score: 0.70, tools: 'Wazuh HIDS · Windows hardening · Active Directory' },
+    { name: 'Scripting & Automation', score: 0.65, tools: 'Python · Bash · PowerShell · REST APIs · JSON' },
   ];
 
   function mk(tag, attrs = {}) {
@@ -2642,6 +2815,7 @@ if (prefersReduced) {
     if (entries[0].isIntersecting && !fired) {
       fired = true;
       svg.classList.add('radar-drawn');
+      setTimeout(() => svg.classList.add('radar-drawn-done'), 2200);
       obs.disconnect();
     }
   }, { threshold: 0.2 });
@@ -3038,6 +3212,242 @@ if (prefersReduced) {
       hcLockedTrigger = null;
       HC.classList.remove('hc-locked');
       hideCard();
+    }
+  });
+})();
+
+// ── B&W Futuristic Popup System ───────────────────────────────
+(function initBWPopup() {
+  const POP  = document.getElementById('bw-popup');
+  const CONT = document.getElementById('bwp-content');
+  const CL   = document.getElementById('bw-conn-line');
+  if (!POP || !CONT || !CL) return;
+
+  const DATA = {
+    'bdeb': {
+      badge: 'EDUCATION',
+      title: 'Collège de Bois-de-Boulogne',
+      subtitle: 'DEC — Computer Security & Networking',
+      meta: '3 years · Graduated 2025 · Montreal, QC',
+      courses: [
+        'Network Security & Firewall Configuration',
+        'Ethical Hacking & Penetration Testing',
+        'Incident Response & Digital Forensics',
+        'SIEM Implementation & Log Analysis',
+        'Cryptography & PKI',
+      ],
+      links: [{ label: 'View Program →', href: 'https://bdeb.qc.ca', target: '_blank' }],
+    },
+    'ensa': {
+      badge: 'EDUCATION',
+      title: 'ENSA Berrechid',
+      subtitle: "Cycle Préparatoire Intégré en Sciences de l'Ingénieur",
+      meta: '2 years · 2019–2021 · Berrechid, Morocco',
+      courses: [
+        'Advanced Mathematics (Algebra, Analysis, Probability)',
+        'Physics, Electronics & Mechanics',
+        'Algorithmics & C Programming',
+        'Computer Architecture & IT Tools',
+        'Engineering Sciences & Thermodynamics',
+      ],
+      links: [{ label: 'View Program →', href: 'https://www-ensab.uh1.ac.ma/cycle-preparatoire', target: '_blank' }],
+    },
+    'bac-riad': {
+      badge: 'EDUCATION',
+      title: 'Groupe Scolaire RIAD',
+      subtitle: 'Baccalauréat, Sciences Physiques, Option Français',
+      meta: 'Juin 2019 · Casablanca · Mention Très Bien · 16.85/20',
+      courses: [
+        'Mathematics — 19.75/20',
+        'Physics & Chemistry — 19.44/20',
+        'English — 19.25/20',
+        'French, Earth Sciences, Philosophy',
+      ],
+      links: [{ label: 'École RIAD →', href: 'https://project.tnkoffee.com/ecolesriad2/', target: '_blank' }],
+    },
+    'cysa-plus': {
+      badge: 'COMPTIA',
+      title: 'CompTIA CySA+',
+      subtitle: 'Cybersecurity Analyst+',
+      meta: 'Valid 2025 – 2028',
+      body: 'Threat detection, SIEM analysis, vulnerability management, and incident response.',
+      links: [{ label: 'Verify credential →', href: 'https://www.comptia.org/certifications/cybersecurity-analyst', target: '_blank' }],
+    },
+    'security-plus': {
+      badge: 'COMPTIA',
+      title: 'CompTIA Security+',
+      subtitle: 'Foundation Security Certification',
+      meta: 'Valid 2025 – 2028',
+      body: 'Threats, attacks, vulnerabilities, cryptography, network security, and IAM.',
+      links: [{ label: 'Learn more →', href: 'https://www.comptia.org/certifications/security', target: '_blank' }],
+    },
+    'ccna-itn': {
+      badge: 'CISCO',
+      title: 'Cisco CCNA ITN',
+      subtitle: 'Introduction to Networks',
+      body: 'Networking fundamentals: TCP/IP stack, Ethernet, IP addressing, routing basics.',
+      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+    },
+    'ccna-srwe': {
+      badge: 'CISCO',
+      title: 'Cisco CCNA SRWE',
+      subtitle: 'Switching, Routing & Wireless Essentials',
+      body: 'VLANs, inter-VLAN routing, STP, EtherChannel, WLAN configuration, layer-2 security.',
+      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+    },
+    'ccna-ensa': {
+      badge: 'CISCO',
+      title: 'Cisco CCNA ENSA',
+      subtitle: 'Enterprise Networking, Security & Automation',
+      body: 'OSPF, QoS, ACLs, site-to-site and remote-access VPN, and network automation basics.',
+      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+    },
+    'network-defense': {
+      badge: 'CISCO',
+      title: 'Cisco Network Defense',
+      subtitle: 'Cybersecurity Operations Track',
+      body: 'Network security monitoring, firewall operation, IDS/IPS deployment, and SOC workflows.',
+      links: [{ label: 'Official course →', href: 'https://www.netacad.com/courses/network-defense?courseLang=en-US', target: '_blank' }],
+    },
+    'az-900': {
+      badge: 'MICROSOFT',
+      title: 'Microsoft AZ-900',
+      subtitle: 'Azure Fundamentals',
+      body: 'Cloud concepts, Azure services, security, compliance, identity, and governance.',
+      links: [{ label: 'Microsoft Learn →', href: 'https://learn.microsoft.com/en-us/certifications/azure-fundamentals/', target: '_blank' }],
+    },
+    'sc-900': {
+      badge: 'MICROSOFT',
+      title: 'Microsoft SC-900',
+      subtitle: 'Security, Compliance & Identity',
+      body: 'Microsoft Entra ID, Defender, Sentinel, and regulatory compliance frameworks.',
+      links: [{ label: 'Microsoft Learn →', href: 'https://learn.microsoft.com/en-us/certifications/security-compliance-and-identity-fundamentals/', target: '_blank' }],
+    },
+    'tcf-canada': {
+      badge: 'LANGUAGE',
+      title: 'TCF Canada',
+      subtitle: 'Test de Connaissance du Français',
+      meta: 'C1 / B2 · French proficiency',
+      body: 'C1 proficiency in oral and written comprehension. B2 in oral and written expression.',
+      links: [{ label: 'Official TCF Canada →', href: 'https://www.france-education-international.fr/test/tcf-canada', target: '_blank' }],
+    },
+    'celpip': {
+      badge: 'LANGUAGE',
+      title: 'CELPIP-G',
+      subtitle: 'Canadian English Language Proficiency Index',
+      meta: 'CLB 9 overall · English proficiency',
+      body: 'CLB 9 overall — proficient across listening, reading, writing, and speaking.',
+      links: [{ label: 'Official CELPIP-G →', href: 'https://www.celpip.ca/celpip-general/', target: '_blank' }],
+    },
+  };
+
+  function buildHTML(d) {
+    let h = '';
+    if (d.badge) h += `<div class="bwp-badge">${d.badge}</div>`;
+    h += `<div class="bwp-title">${d.title}</div>`;
+    if (d.subtitle) h += `<div class="bwp-subtitle">${d.subtitle}</div>`;
+    if (d.meta) h += `<div class="bwp-meta">${d.meta}</div>`;
+    if (d.courses && d.courses.length) {
+      h += '<ul class="bwp-courses">' + d.courses.map(c => `<li>${c}</li>`).join('') + '</ul>';
+    }
+    if (d.body) {
+      h += '<hr class="bwp-divider"><div class="bwp-body">' + d.body + '</div>';
+    }
+    if (d.links && d.links.length) {
+      h += '<div class="bwp-links">';
+      d.links.forEach(l => {
+        h += `<a href="${l.href}" target="${l.target}" rel="noopener noreferrer" class="bwp-link">${l.label}</a>`;
+      });
+      h += '</div>';
+    }
+    return h;
+  }
+
+  let hideTimer  = null;
+  let locked     = false;
+  let lockedTrig = null;
+
+  function showPopup(trigger, key) {
+    const d = DATA[key];
+    if (!d) return;
+    clearTimeout(hideTimer);
+
+    CONT.innerHTML = buildHTML(d);
+    const GAP  = 58;
+    const popW = Math.min(270, window.innerWidth - 24);
+    POP.style.width = popW + 'px';
+    POP.style.left  = '-9999px';
+
+    requestAnimationFrame(() => {
+      const tr   = trigger.getBoundingClientRect();
+      const popH = POP.offsetHeight;
+      const vw   = window.innerWidth;
+      const vh   = window.innerHeight;
+
+      let left = tr.left + tr.width / 2 - popW / 2;
+      left = Math.max(12, Math.min(left, vw - popW - 12));
+
+      let top, below;
+      if (tr.top - popH - GAP > 8) {
+        top = tr.top - popH - GAP;
+        below = false;
+      } else {
+        top = tr.bottom + GAP;
+        below = true;
+      }
+      top = Math.max(8, Math.min(top, vh - popH - 8));
+
+      POP.style.left = left + 'px';
+      POP.style.top  = top  + 'px';
+
+      // Connector line
+      const trigCx = tr.left + tr.width / 2;
+      const trigCy = below ? tr.bottom : tr.top;
+      const popCy  = below ? top : top + popH;
+      const popCx  = Math.max(left + 16, Math.min(trigCx, left + popW - 16));
+      CL.setAttribute('x1', trigCx); CL.setAttribute('y1', trigCy);
+      CL.setAttribute('x2', popCx);  CL.setAttribute('y2', popCy);
+      CL.classList.remove('bwc-draw');
+      void CL.offsetWidth;
+      CL.classList.add('bwc-draw');
+
+      POP.className = 'bwp-visible' + (locked && lockedTrig === trigger ? ' bwp-locked' : '');
+      POP.setAttribute('aria-hidden', 'false');
+    });
+  }
+
+  function hidePopup() {
+    hideTimer = setTimeout(() => {
+      POP.className = '';
+      POP.setAttribute('aria-hidden', 'true');
+      CL.classList.remove('bwc-draw');
+    }, 110);
+  }
+
+  document.querySelectorAll('[data-bwp]').forEach(el => {
+    el.addEventListener('mouseenter', () => { if (!locked) showPopup(el, el.dataset.bwp); });
+    el.addEventListener('mouseleave', () => { if (!locked) hidePopup(); });
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (locked && lockedTrig === el) {
+        locked = false; lockedTrig = null;
+        POP.classList.remove('bwp-locked');
+        hidePopup();
+      } else {
+        locked = true; lockedTrig = el;
+        showPopup(el, el.dataset.bwp);
+      }
+    });
+  });
+
+  POP.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  POP.addEventListener('mouseleave', () => { if (!locked) hidePopup(); });
+
+  document.addEventListener('click', () => {
+    if (locked) {
+      locked = false; lockedTrig = null;
+      POP.classList.remove('bwp-locked');
+      hidePopup();
     }
   });
 })();
