@@ -1134,34 +1134,83 @@ tailwind.config = {
   }
   .cert-card[data-hc] { cursor: help; }
 
-  /* ── Skills table (minimal) ── */
-  .skills-table {
-    display: flex;
-    flex-direction: column;
+  /* ── Competency Radar ── */
+  .radar-polygon {
+    fill: rgba(184,216,236,0.08);
+    fill-opacity: 0;
+    stroke: var(--sky);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    stroke-opacity: 0.6;
+    transition: filter 0.4s ease;
   }
-  .skills-row {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 0 28px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-    align-items: baseline;
+  .radar-polygon:hover {
+    filter: drop-shadow(0 0 12px rgba(184,216,236,0.3));
   }
-  .skills-row:first-child { border-top: 1px solid var(--border); }
-  .skills-cat {
+  @keyframes radar-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes radar-fill {
+    to { fill-opacity: 0.1; }
+  }
+  #skills-radar-svg.radar-drawn .radar-polygon {
+    animation: radar-draw 1.5s cubic-bezier(0.22,1,0.36,1) forwards,
+               radar-fill 1s ease 0.55s forwards;
+  }
+  .radar-dot {
+    fill: var(--sky);
+    stroke: var(--base);
+    stroke-width: 2;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), filter 0.28s ease;
+    cursor: pointer;
+  }
+  .radar-vertex:hover .radar-dot {
+    transform: scale(1.9);
+    filter: drop-shadow(0 0 5px var(--sky));
+  }
+  .radar-label {
+    fill: var(--text);
     font-family: 'Fira Code', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--steel);
-    white-space: nowrap;
-    padding-top: 2px;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    user-select: none;
+    transition: fill 0.25s ease;
   }
-  .skills-list {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
-    color: var(--text-light);
-    line-height: 1.6;
+  .radar-vertex:hover .radar-label { fill: var(--text-bright); }
+  .radar-tooltip {
+    position: fixed;
+    z-index: 9990;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(184,216,236,0.18);
+    border-radius: 10px;
+    padding: 10px 14px;
+    max-width: 215px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+  }
+  .radar-tooltip.rt-visible { opacity: 1; transform: translateY(0); }
+  .radar-tt-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+  .radar-tt-tools {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.63rem;
+    color: var(--sky);
+    letter-spacing: 0.03em;
+    line-height: 1.7;
   }
 </style>
 </head>
@@ -1626,39 +1675,11 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
 
-      <!-- Skills minimal table -->
-      <div class="skills-table">
-        <div class="skills-row">
-          <span class="skills-cat">Detection</span>
-          <span class="skills-list">Suricata · Splunk · Wazuh · ELK Stack · Sysmon · Wireshark · Nessus · MITRE ATT&amp;CK · Incident Response</span>
-        </div>
-        <div class="skills-row">
-          <span class="skills-cat">Network</span>
-          <span class="skills-list">pfSense / OPNsense · Pi-hole · TCP/IP · VLANs · OpenVPN · Cisco IOS · DNS / DHCP / NAT</span>
-        </div>
-        <div class="skills-row">
-          <span class="skills-cat">Scripting</span>
-          <span class="skills-list">Python · Bash · PowerShell</span>
-        </div>
-        <div class="skills-row">
-          <span class="skills-cat">Cloud</span>
-          <span class="skills-list">Microsoft Azure · Microsoft 365 · Entra ID (AAD)</span>
-        </div>
-        <div class="skills-row">
-          <span class="skills-cat">Systems</span>
-          <span class="skills-list">Linux · Windows Server · Active Directory · VMware / VirtualBox</span>
-        </div>
+      <!-- Competency Radar -->
+      <div id="skills-radar-wrap">
+        <svg id="skills-radar-svg" viewBox="0 0 400 380" style="width:100%;max-width:480px;display:block;overflow:visible;" aria-label="Cybersecurity competency radar" role="img"></svg>
       </div>
-
-      <!-- Skills Radar -->
-      <div class="mt-10" id="skills-radar-wrap">
-        <h3 class="font-mono text-xs tracking-widest uppercase mb-1" style="color:var(--steel);">Competency Radar</h3>
-        <p class="text-xs mb-5" style="color:var(--text);font-family:'Inter',sans-serif;">Hover over any axis to see tools &amp; context.</p>
-        <div style="position:relative;max-width:460px;">
-          <svg id="skills-radar-svg" viewBox="0 0 440 380" style="width:100%;overflow:visible;" aria-label="Cybersecurity competency radar chart" role="img"></svg>
-          <div id="radar-tt" style="position:fixed;pointer-events:none;opacity:0;z-index:9990;background:rgba(12,12,12,0.97);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 14px;max-width:220px;transition:opacity 0.18s ease;box-shadow:0 16px 40px rgba(0,0,0,0.6);"></div>
-        </div>
-      </div>
+      <div id="radar-tooltip" class="radar-tooltip" aria-hidden="true"></div>
 
       <!-- Footer CTA -->
       <div class="mt-8 pt-5 border-t" style="border-color:var(--border);">
@@ -1727,8 +1748,7 @@ tailwind.config = {
           </div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">TCF Canada</h4>
           <p class="text-xs text-center mt-1" style="color:var(--text);">Test de Connaissance du Français</p>
-          <p class="text-xs accent-violet font-mono mt-1">Fluent — French</p>
-          <p class="text-xs text-center font-mono mt-1.5" style="color:#86efac;font-size:0.6rem;">C1 comprehension · B2 expression</p>
+          <p class="text-xs accent-violet font-mono mt-1">C1 / B2 — French</p>
         </div>
         <div class="cert-card" data-hc="celpip">
           <div class="w-20 h-20 mb-3 flex items-center justify-center">
@@ -1736,8 +1756,7 @@ tailwind.config = {
           </div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CELPIP-G</h4>
           <p class="text-xs text-center mt-1" style="color:var(--text);">Canadian English Proficiency</p>
-          <p class="text-xs accent-violet font-mono mt-1">Fluent — English</p>
-          <p class="text-xs text-center font-mono mt-1.5" style="color:#86efac;font-size:0.6rem;">CLB 9 · Avg 9/12</p>
+          <p class="text-xs accent-violet font-mono mt-1">CLB 9 — English</p>
         </div>
       </div>
     </section>
@@ -2456,230 +2475,162 @@ if (prefersReduced) {
 // ── Skills Radar Chart ────────────────────────────────────────
 (function initSkillsRadar() {
   const svg = document.getElementById('skills-radar-svg');
+  const tt  = document.getElementById('radar-tooltip');
   if (!svg) return;
 
-  const CX = 220, CY = 193, R = 118;
-  const N = 6;
-  const SKY = '#b8d8ec';
+  const CX = 200, CY = 192, R = 108, N = 6;
   const NS = 'http://www.w3.org/2000/svg';
 
+  // Scores drive shape only — never displayed as numbers
   const axes = [
-    { label: ['Threat', 'Detection'],   score: 88, tools: 'Suricata · Wazuh · Nessus',        note: 'IDS/IPS, alert tuning & IOC enrichment' },
-    { label: ['Incident', 'Response'],  score: 82, tools: 'MITRE ATT&CK · Splunk',             note: 'Detection-to-containment: 42 min in lab' },
-    { label: ['Network', 'Security'],   score: 85, tools: 'pfSense · Wireshark · Pi-hole',     note: '3-VLAN segmentation, firewall hardening' },
-    { label: ['Scripting &', 'Automation'], score: 72, tools: 'Python · Bash · PowerShell',    note: 'Threat Intel Bot, API integrations' },
-    { label: ['SIEM &', 'Log Analysis'], score: 85, tools: 'Splunk · ELK Stack · Kibana',      note: '40% false-positive reduction via tuning' },
-    { label: ['Endpoint', 'Security'],  score: 78, tools: 'Sysmon · Wazuh · Defender',         note: 'FIM, event logs, kill-chain mapping' },
+    { name: 'Threat Detection',       score: 0.88, tools: 'Suricata · Wazuh · Wireshark · Nessus' },
+    { name: 'Incident Response',      score: 0.82, tools: 'MITRE ATT&CK · Sysmon · Forensic artifact preservation' },
+    { name: 'Network Security',       score: 0.78, tools: 'pfSense · OPNsense · Pi-hole · VLANs · OpenVPN · Cisco IOS' },
+    { name: 'Scripting & Automation', score: 0.65, tools: 'Python · Bash · PowerShell · REST APIs' },
+    { name: 'SIEM & Log Analysis',    score: 0.88, tools: 'Splunk · ELK Stack · Sysmon · rsyslog' },
+    { name: 'Endpoint Security',      score: 0.72, tools: 'Wazuh HIDS · Windows hardening · Active Directory' },
   ];
 
-  function el(tag, attrs = {}) {
+  function mk(tag, attrs = {}) {
     const e = document.createElementNS(NS, tag);
     for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
     return e;
   }
 
-  function coords(i, r) {
+  function pt(i, r) {
     const a = (i * 2 * Math.PI / N) - Math.PI / 2;
     return { x: CX + r * Math.cos(a), y: CY + r * Math.sin(a) };
   }
 
-  function pts(arr) {
+  function polyStr(arr) {
     return arr.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
   }
 
-  // Grid rings
-  [0.25, 0.5, 0.75, 1].forEach(frac => {
-    svg.appendChild(el('polygon', {
-      points: pts(axes.map((_, i) => coords(i, R * frac))),
+  // Defs: glow filter for dots
+  const defs = mk('defs');
+  const flt = mk('filter', { id: 'rdot-g', x: '-80%', y: '-80%', width: '260%', height: '260%' });
+  const fgb = mk('feGaussianBlur', { stdDeviation: '2.5', result: 'b' });
+  const fgm = mk('feMerge');
+  fgm.appendChild(mk('feMergeNode', { in: 'b' }));
+  fgm.appendChild(mk('feMergeNode', { in: 'SourceGraphic' }));
+  flt.appendChild(fgb); flt.appendChild(fgm); defs.appendChild(flt);
+  svg.appendChild(defs);
+
+  // Grid rings — 4 levels, outermost slightly brighter
+  [0.25, 0.5, 0.75, 1].forEach(f => {
+    svg.appendChild(mk('polygon', {
+      points: polyStr(axes.map((_, i) => pt(i, R * f))),
       fill: 'none',
-      stroke: `rgba(255,255,255,${frac === 1 ? 0.11 : 0.06})`,
+      stroke: f === 1 ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.05)',
       'stroke-width': '1',
     }));
   });
 
-  // Percentage labels on grid rings (at right-most axis)
-  [25, 50, 75, 100].forEach(pct => {
-    const p = coords(1, R * pct / 100);
-    const t = el('text', {
-      x: (p.x + 5).toFixed(1),
-      y: p.y.toFixed(1),
-      fill: 'rgba(255,255,255,0.22)',
-      'font-family': "'Fira Code', monospace",
-      'font-size': '8',
-      'dominant-baseline': 'middle',
-    });
-    t.textContent = pct + '%';
-    svg.appendChild(t);
-  });
-
-  // Axis lines
+  // Axis spokes
   axes.forEach((_, i) => {
-    const p = coords(i, R);
-    svg.appendChild(el('line', {
-      x1: CX, y1: CY, x2: p.x.toFixed(2), y2: p.y.toFixed(2),
-      stroke: 'rgba(255,255,255,0.1)',
-      'stroke-width': '1',
+    const o = pt(i, R);
+    svg.appendChild(mk('line', {
+      x1: CX, y1: CY, x2: o.x.toFixed(2), y2: o.y.toFixed(2),
+      stroke: 'rgba(255,255,255,0.09)', 'stroke-width': '1',
     }));
   });
 
-  // Filled polygon (starts at center, animated out)
-  const poly = el('polygon', {
-    points: pts(axes.map((_, i) => coords(i, 0))),
-    fill: 'rgba(184,216,236,0.10)',
-    stroke: SKY,
-    'stroke-width': '1.5',
-    'stroke-linejoin': 'round',
-    'stroke-opacity': '0.7',
-  });
+  // Skill polygon — final coordinates; CSS animates the stroke in via dashoffset
+  const skillPts = axes.map((a, i) => pt(i, R * a.score));
+  let perimeter = 0;
+  for (let i = 0; i < skillPts.length; i++) {
+    const a = skillPts[i], b = skillPts[(i + 1) % skillPts.length];
+    perimeter += Math.hypot(b.x - a.x, b.y - a.y);
+  }
+  const poly = mk('polygon', { points: polyStr(skillPts), class: 'radar-polygon' });
+  poly.style.strokeDasharray  = perimeter.toFixed(2);
+  poly.style.strokeDashoffset = perimeter.toFixed(2);
   svg.appendChild(poly);
 
-  // Axis labels
-  axes.forEach((axis, i) => {
-    const labelR = R + 26;
-    const center = coords(i, labelR);
-    const angle = (i * 2 * Math.PI / N) - Math.PI / 2;
-    const cos = Math.cos(angle);
-    const anchor = cos > 0.25 ? 'start' : cos < -0.25 ? 'end' : 'middle';
-
-    const g = el('g', { style: 'cursor:pointer;' });
-    axis.label.forEach((line, li) => {
-      const lineOffset = (li - (axis.label.length - 1) / 2) * 13;
-      const t = el('text', {
-        x: center.x.toFixed(2),
-        y: (center.y + lineOffset).toFixed(2),
-        'text-anchor': anchor,
-        'dominant-baseline': 'middle',
-        fill: 'rgba(140,164,184,0.85)',
-        'font-family': "'Fira Code', monospace",
-        'font-size': '10',
-        'letter-spacing': '0.03em',
-      });
-      t.textContent = line;
-      g.appendChild(t);
-    });
-    svg.appendChild(g);
-    axis._labelEl = g;
-  });
-
-  // Data point dots
-  axes.forEach((axis, i) => {
-    const dot = el('circle', {
-      cx: CX, cy: CY, r: '4',
-      fill: SKY,
-      stroke: 'rgba(10,10,10,0.85)',
-      'stroke-width': '2',
-      style: 'cursor:pointer;transition:r 0.2s ease,filter 0.2s ease;',
-    });
-    svg.appendChild(dot);
-    axis._dot = dot;
-  });
-
-  // Animation
-  let progress = 0;
-
-  function updateChart(t) {
-    const finalPts = axes.map((axis, i) => coords(i, R * (axis.score / 100) * t));
-    poly.setAttribute('points', pts(finalPts));
-    axes.forEach((axis, i) => {
-      axis._dot.setAttribute('cx', finalPts[i].x.toFixed(2));
-      axis._dot.setAttribute('cy', finalPts[i].y.toFixed(2));
-    });
-  }
-
-  function animateIn() {
-    if (progress >= 1) return;
-    const start = performance.now();
-    const dur = 1300;
-    (function step(now) {
-      const raw = Math.min((now - start) / dur, 1);
-      const ease = 1 - Math.pow(1 - raw, 3);
-      progress = ease;
-      updateChart(ease);
-      if (raw < 1) requestAnimationFrame(step);
-    })(performance.now());
-  }
-
-  // Tooltip
-  const tt = document.getElementById('radar-tt');
-  let ttVisible = false;
-
-  function showTT(axis, dotEl) {
-    if (!tt) return;
-    tt.innerHTML =
-      `<div style="font-family:'Fira Code',monospace;font-size:0.62rem;color:${SKY};margin-bottom:4px;letter-spacing:0.07em;text-transform:uppercase;">${axis.label.join(' ')}</div>` +
-      `<div style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:#e8f6ff;margin-bottom:5px;">${axis.score}<span style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-weight:400;">/100</span></div>` +
-      `<div style="font-family:'Inter',sans-serif;font-size:0.72rem;color:#8ca4b8;margin-bottom:3px;">${axis.tools}</div>` +
-      `<div style="font-family:'Inter',sans-serif;font-size:0.68rem;color:#566878;line-height:1.5;">${axis.note}</div>`;
-
-    const r = dotEl.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top;
-    tt.style.opacity = '0';
-    tt.style.display = 'block';
-    requestAnimationFrame(() => {
-      const ttH = tt.offsetHeight;
-      const ttW = tt.offsetWidth;
-      let left = cx - ttW / 2;
-      let top = cy - ttH - 12;
-      left = Math.max(8, Math.min(left, window.innerWidth - ttW - 8));
-      if (top < 8) top = r.bottom + 12;
-      tt.style.left = left + 'px';
-      tt.style.top = top + 'px';
-      tt.style.opacity = '1';
-      ttVisible = true;
-    });
-  }
-
-  function hideTT() {
-    if (tt) tt.style.opacity = '0';
-    ttVisible = false;
-  }
-
-  // Wire up events (skip on touch devices)
+  // Vertex groups: hit zone + dot + label (CSS handles all hover states)
   const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-  if (!isTouch) {
-    axes.forEach((axis, i) => {
-      function hoverOn() {
-        axis._dot.setAttribute('r', '6');
-        axis._dot.setAttribute('filter', 'url(#radar-glow)');
-        axis._labelEl.querySelectorAll('text').forEach(t => t.setAttribute('fill', '#e8f6ff'));
-        showTT(axis, axis._dot);
-      }
-      function hoverOff() {
-        axis._dot.setAttribute('r', '4');
-        axis._dot.removeAttribute('filter');
-        axis._labelEl.querySelectorAll('text').forEach(t => t.setAttribute('fill', 'rgba(140,164,184,0.85)'));
-        hideTT();
-      }
-      axis._dot.addEventListener('mouseenter', hoverOn);
-      axis._dot.addEventListener('mouseleave', hoverOff);
-      axis._labelEl.addEventListener('mouseenter', hoverOn);
-      axis._labelEl.addEventListener('mouseleave', hoverOff);
+
+  axes.forEach((axis, i) => {
+    const sp = skillPts[i];
+    const angle = (i * 2 * Math.PI / N) - Math.PI / 2;
+    const lp    = pt(i, R + 26);
+    const cos   = Math.cos(angle);
+    const anch  = cos > 0.25 ? 'start' : cos < -0.25 ? 'end' : 'middle';
+
+    const g = mk('g', { class: 'radar-vertex' });
+
+    // Large transparent hit area for easy hover targeting
+    g.appendChild(mk('circle', {
+      cx: sp.x.toFixed(2), cy: sp.y.toFixed(2), r: '18',
+      fill: 'transparent', style: 'cursor:pointer;',
+    }));
+
+    // Visual dot — CSS scales it on .radar-vertex:hover
+    const dot = mk('circle', {
+      cx: sp.x.toFixed(2), cy: sp.y.toFixed(2), r: '4',
+      class: 'radar-dot',
     });
-  }
+    g.appendChild(dot);
 
-  // Add glow filter to SVG defs
-  const defs = el('defs', {});
-  const filter = el('filter', { id: 'radar-glow', x: '-50%', y: '-50%', width: '200%', height: '200%' });
-  const blur = el('feGaussianBlur', { stdDeviation: '3', result: 'blur' });
-  const merge = el('feMerge', {});
-  const mn1 = el('feMergeNode', { in: 'blur' });
-  const mn2 = el('feMergeNode', { in: 'SourceGraphic' });
-  merge.appendChild(mn1);
-  merge.appendChild(mn2);
-  filter.appendChild(blur);
-  filter.appendChild(merge);
-  defs.appendChild(filter);
-  svg.insertBefore(defs, svg.firstChild);
+    // Label: split at sensible boundary into ≤2 lines
+    const words = axis.name.split(' ');
+    let split = Math.ceil(words.length / 2);
+    // Keep "& X" together on line 2 for cleaner labels
+    if (axis.name === 'Scripting & Automation') split = 2;
+    if (axis.name === 'SIEM & Log Analysis')    split = 2;
+    const l1 = words.slice(0, split).join(' ');
+    const l2 = words.slice(split).join(' ');
+    const dy  = l2 ? 7 : 0;
 
-  // Trigger on scroll
+    const mkT = (txt, offsetY) => {
+      const t = mk('text', {
+        x: lp.x.toFixed(2), y: (lp.y + offsetY).toFixed(2),
+        'text-anchor': anch, 'dominant-baseline': 'middle',
+        class: 'radar-label',
+      });
+      t.textContent = txt;
+      return t;
+    };
+    g.appendChild(mkT(l1, l2 ? -dy : 0));
+    if (l2) g.appendChild(mkT(l2, dy));
+
+    // Tooltip (hover only, skip touch)
+    if (!isTouch && tt) {
+      g.addEventListener('mouseenter', () => {
+        tt.innerHTML =
+          `<div class="radar-tt-name">${axis.name}</div>` +
+          `<div class="radar-tt-tools">${axis.tools}</div>`;
+        tt.classList.remove('rt-visible');
+        requestAnimationFrame(() => {
+          const dr = dot.getBoundingClientRect();
+          const tw = tt.offsetWidth, th = tt.offsetHeight;
+          let left = dr.left + dr.width / 2 - tw / 2;
+          let top  = dr.top - th - 10;
+          left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+          if (top < 8) top = dr.bottom + 10;
+          tt.style.left = left + 'px';
+          tt.style.top  = top  + 'px';
+          tt.classList.add('rt-visible');
+        });
+      });
+      g.addEventListener('mouseleave', () => tt.classList.remove('rt-visible'));
+    }
+
+    svg.appendChild(g);
+  });
+
+  // IntersectionObserver — toggles CSS class that triggers @keyframes draw
   const section = document.getElementById('skills');
-  if (section) {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting && progress === 0) animateIn(); });
-    }, { threshold: 0.25 });
-    obs.observe(section);
-  }
+  if (!section) return;
+  let fired = false;
+  const obs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !fired) {
+      fired = true;
+      svg.classList.add('radar-drawn');
+      obs.disconnect();
+    }
+  }, { threshold: 0.2 });
+  obs.observe(section);
 })();
 
 // ── HoverCard System ──────────────────────────────────────────
@@ -2891,19 +2842,15 @@ if (prefersReduced) {
       badge: 'LANGUAGE',
       title: 'TCF Canada',
       subtitle: 'Test de Connaissance du Français',
-      meta: 'Alliance Française Montréal · Oct 2025 · Valid until Oct 2027',
-      body: 'Comprehensive assessment of French proficiency across oral and written comprehension and expression. Used for Canadian permanent residence and citizenship applications.',
-      usage: 'Result: C1 oral/reading comprehension (505/699), B2 written & spoken expression.',
-      links: [{ label: 'Official TCF Canada →', href: 'https://www.france-education-international.fr/diplome/tcf-canada', target: '_blank' }],
+      body: 'C1 proficiency in oral and written comprehension. B2 in oral and written expression.',
+      links: [{ label: 'Official TCF Canada →', href: 'https://www.france-education-international.fr/test/test-connaissance-francais-canada', target: '_blank' }],
     },
     'celpip': {
       badge: 'LANGUAGE',
       title: 'CELPIP-G',
       subtitle: 'Canadian English Language Proficiency Index',
-      meta: 'Concordia University, Montréal · Jul 2025',
-      body: 'General proficiency test for Canadian immigration and citizenship. Evaluates listening, reading, writing, and speaking in Canadian English contexts.',
-      usage: 'Result: CLB 9 overall (Avg 9/12). Listening 12 — expert level, Reading 7, Writing 9, Speaking 8.',
-      links: [{ label: 'Official CELPIP →', href: 'https://www.celpip.ca', target: '_blank' }],
+      body: 'CLB 9 overall — proficient across listening, reading, writing, and speaking.',
+      links: [{ label: 'Official CELPIP-G →', href: 'https://www.celpip.ca/celpip-general/', target: '_blank' }],
     },
   };
 
