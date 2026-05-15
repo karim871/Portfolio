@@ -2021,7 +2021,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       if (p.y > canvas.height + 20) { p.y = -20; p.x = Math.random() * canvas.width; }
       if (++p.tick >= p.interval) { p.ch = chars[Math.floor(Math.random() * chars.length)]; p.tick = 0; }
       ctx.font = `${p.size}px 'Fira Code',monospace`;
-      ctx.fillStyle = `rgba(227,226,226,${p.alpha})`;
+      ctx.fillStyle = `rgba(207,148,50,${p.alpha})`;
       ctx.fillText(p.ch, p.x, p.y);
     }
     requestAnimationFrame(draw);
