@@ -1202,31 +1202,40 @@ tailwind.config = {
     background: rgba(10,10,10,0.97);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(184,216,236,0.18);
+    border: 1px solid rgba(91,200,255,0.28);
     border-radius: 10px;
-    padding: 10px 14px;
-    max-width: 215px;
+    padding: 12px 16px;
+    max-width: 240px;
     pointer-events: none;
     opacity: 0;
     transform: translateY(6px);
     transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.16,1,0.3,1);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.6), 0 0 18px rgba(91,200,255,0.07);
   }
   .radar-tooltip.rt-visible { opacity: 1; transform: translateY(0); }
   .radar-tt-name {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 600;
-    color: var(--text-bright);
-    margin-bottom: 5px;
+    color: var(--sky);
+    margin-bottom: 6px;
     line-height: 1.3;
   }
   .radar-tt-tools {
     font-family: 'Fira Code', monospace;
     font-size: 0.63rem;
-    color: var(--sky);
+    color: var(--text-light);
     letter-spacing: 0.03em;
     line-height: 1.7;
+    margin-bottom: 5px;
+  }
+  .radar-tt-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    color: var(--text);
+    opacity: 0.65;
+    font-style: italic;
+    line-height: 1.5;
   }
 
   /* ── B&W Futuristic Popup ── */
@@ -1592,13 +1601,12 @@ tailwind.config = {
           </div>
           <div class="text-right">
             <p class="font-mono text-xs" style="color:var(--text);">2019</p>
-            <p class="font-mono text-xs mt-1" style="color:var(--sky);">Mention Très Bien</p>
           </div>
         </div>
         <ul class="space-y-2.5 text-sm" style="color:var(--text-light);">
           <li class="flex items-start"><span class="exp-bullet">▹</span><span>Sciences Physiques track, Option Français. Equivalent to the Quebec Diplôme d'études secondaires (DES).</span></li>
           <li class="flex items-start"><span class="exp-bullet">▹</span><span>Rigorous STEM-focused curriculum covering mathematics, physics, chemistry, and earth sciences with bilingual instruction in French and English.</span></li>
-          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Graduated with Mention Très Bien (highest honors), awarded Félicitations du Jury.</span></li>
+          <li class="flex items-start"><span class="exp-bullet">▹</span><span>Awarded Félicitations du Jury by the examination board.</span></li>
         </ul>
       </div>
     </section>
@@ -1656,7 +1664,6 @@ tailwind.config = {
         Some Things I've Built
         <span class="section-line"></span>
       </h2>
-      <p class="text-sm text-center italic mb-8 max-w-2xl mx-auto" style="color:var(--text);opacity:0.65;"><em>These aren't isolated projects — they're one connected pipeline. Pi-hole feeds DNS logs into the Mini-SOC. The Mini-SOC produced the IR. The IR used the Threat Intel Bot. Everything runs together.</em></p>
       <div class="space-y-8">
 
         <!-- Threat Intel Bot -->
@@ -1803,7 +1810,7 @@ tailwind.config = {
               </a>
             </div>
           </div>
-          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="metric-highlight">~15,000 domains/day</span> with query logging feeding into the Mini-SOC pipeline for correlation.</p>
+          <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Pi-hole DNS sinkhole blocking ads and malicious domains across the entire home network. Custom blocklists, regex filtering, and whitelist management. Blocks <span class="metric-highlight">~15,000 domains/day</span> with full query logging and per-client visibility.</p>
           <div class="snap-gallery mb-1" id="snap-g3">
             <img src="./images/Screenshot1.webp"  alt="Pi-hole installation process"          loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
             <img src="./images/Screenshot2.webp"  alt="Pi-hole upstream DNS selection"        loading="lazy" onclick="openLightbox(this.src)" title="Click to enlarge">
@@ -1852,9 +1859,9 @@ tailwind.config = {
           </div>
           <p class="text-sm leading-[1.8] mb-5" style="color:var(--text-light);">Three-VLAN segmented lab (LAN / OPT1 / OPT2) with full LAN/WAN separation, per-segment DHCP and DNS, explicit inter-VLAN firewall rules, NAT, and OpenVPN client + site-to-site VPN. <span class="metric-highlight">Suricata</span> running in inline IDS mode across all interfaces — actively caught and logged intrusion attempts during red team exercises. Default-deny between segments, tuned ruleset, forensic alert review.</p>
           <div class="snap-gallery mb-1" id="snap-g4">
-            <img src="images/pfsense/pfsense-architecture.png"    alt="pfSense lab — 3-VLAN network architecture diagram"       onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="images/pfsense/pfsense-firewall-rules.png"  alt="pfSense complete firewall rules across all interfaces"   onclick="openLightbox(this.src)" title="Click to enlarge">
-            <img src="images/pfsense/pfsense-openvpn-export.png"  alt="pfSense OpenVPN client configuration export"             onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="https://karim871.github.io/Portfolio/images/screen1.png" alt="pfSense boot in VirtualBox lab"                onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="images/pfsense/pfsense-firewall-rules.png"               alt="pfSense complete firewall rules across all interfaces" onclick="openLightbox(this.src)" title="Click to enlarge">
+            <img src="images/pfsense/pfsense-openvpn-export.png"               alt="pfSense OpenVPN client configuration export"    onclick="openLightbox(this.src)" title="Click to enlarge">
           </div>
           <div class="gallery-dots" data-gallery="snap-g4"></div>
           <div class="flex flex-wrap gap-2">
@@ -2183,7 +2190,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       alpha: 0.28 + Math.random() * 0.20,
       size: 10 + Math.floor(Math.random() * 6),
       tick: 0,
-      interval: 40 + Math.floor(Math.random() * 80),
+      interval: 180 + Math.floor(Math.random() * 220),
     });
   }
 
@@ -2671,12 +2678,12 @@ if (prefersReduced) {
 
   // Scores drive shape only — never displayed as numbers
   const axes = [
-    { name: 'Threat Detection',       score: 0.92, tools: 'Suricata · Wazuh · Wireshark · Nessus' },
-    { name: 'SIEM & Log Analysis',    score: 0.86, tools: 'Splunk · ELK · Sysmon · rsyslog' },
-    { name: 'Incident Response',      score: 0.84, tools: 'MITRE ATT&CK · Forensic artifact preservation · 42-min containment' },
-    { name: 'Network Security',       score: 0.76, tools: 'pfSense · OPNsense · Pi-hole · VLANs · OpenVPN · Cisco IOS' },
-    { name: 'Endpoint Security',      score: 0.70, tools: 'Wazuh HIDS · Windows hardening · Active Directory' },
-    { name: 'Scripting & Automation', score: 0.65, tools: 'Python · Bash · PowerShell · REST APIs · JSON' },
+    { name: 'Threat Detection',       score: 0.92, tools: 'Suricata · Wazuh · Wireshark · Nessus',                       note: 'IDS rule tuning, alert triage, IOC analysis' },
+    { name: 'SIEM & Log Analysis',    score: 0.86, tools: 'Splunk · ELK Stack · Sysmon · rsyslog',                       note: 'Custom dashboards, correlation rules, log pipeline' },
+    { name: 'Incident Response',      score: 0.84, tools: 'MITRE ATT&CK · Sysmon · Splunk',                              note: 'Detection to containment in 42 min — documented IR writeup' },
+    { name: 'Network Security',       score: 0.76, tools: 'pfSense · OPNsense · Pi-hole · VLANs · OpenVPN · Cisco IOS', note: '3-VLAN segmentation, firewall rules, DNS sinkhole' },
+    { name: 'Endpoint Security',      score: 0.70, tools: 'Wazuh HIDS · Windows hardening · Active Directory',           note: 'Host-based detection, hardening, AD administration' },
+    { name: 'Scripting & Automation', score: 0.65, tools: 'Python · Bash · PowerShell · REST APIs',                      note: 'Threat intel bot: AbuseIPDB + VirusTotal + OTX automation' },
   ];
 
   function mk(tag, attrs = {}) {
@@ -2787,7 +2794,8 @@ if (prefersReduced) {
       g.addEventListener('mouseenter', () => {
         tt.innerHTML =
           `<div class="radar-tt-name">${axis.name}</div>` +
-          `<div class="radar-tt-tools">${axis.tools}</div>`;
+          `<div class="radar-tt-tools">${axis.tools}</div>` +
+          `<div class="radar-tt-note">${axis.note}</div>`;
         tt.classList.remove('rt-visible');
         requestAnimationFrame(() => {
           const dr = dot.getBoundingClientRect();
@@ -2933,21 +2941,21 @@ if (prefersReduced) {
       title: 'Cisco CCNA ITN',
       subtitle: 'Introduction to Networks',
       body: 'Networking fundamentals: TCP/IP stack, Ethernet, IP addressing, routing basics, and network infrastructure components.',
-      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+      links: [{ label: 'Course page →', href: 'https://www.netacad.com/courses/ccna-introduction-networks?courseLang=en-US', target: '_blank' }],
     },
     'ccna-srwe': {
       badge: 'CISCO',
       title: 'Cisco CCNA SRWE',
       subtitle: 'Switching, Routing & Wireless Essentials',
       body: 'VLANs, inter-VLAN routing, STP, EtherChannel, WLAN configuration, and layer-2 security concepts.',
-      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+      links: [{ label: 'Course page →', href: 'https://www.netacad.com/courses/ccna-switching-routing-wireless-essentials?courseLang=en-US', target: '_blank' }],
     },
     'ccna-ensa': {
       badge: 'CISCO',
       title: 'Cisco CCNA ENSA',
       subtitle: 'Enterprise Networking, Security & Automation',
       body: 'OSPF, QoS, ACLs, site-to-site and remote-access VPN, and network automation basics.',
-      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+      links: [{ label: 'Course page →', href: 'https://www.netacad.com/courses/ccna-enterprise-networking-security-automation?courseLang=en-US', target: '_blank' }],
     },
     'network-defense': {
       badge: 'CISCO',
@@ -3286,21 +3294,21 @@ if (prefersReduced) {
       title: 'Cisco CCNA ITN',
       subtitle: 'Introduction to Networks',
       body: 'Networking fundamentals: TCP/IP stack, Ethernet, IP addressing, routing basics.',
-      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+      links: [{ label: 'Course page →', href: 'https://www.netacad.com/courses/ccna-introduction-networks?courseLang=en-US', target: '_blank' }],
     },
     'ccna-srwe': {
       badge: 'CISCO',
       title: 'Cisco CCNA SRWE',
       subtitle: 'Switching, Routing & Wireless Essentials',
       body: 'VLANs, inter-VLAN routing, STP, EtherChannel, WLAN configuration, layer-2 security.',
-      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+      links: [{ label: 'Course page →', href: 'https://www.netacad.com/courses/ccna-switching-routing-wireless-essentials?courseLang=en-US', target: '_blank' }],
     },
     'ccna-ensa': {
       badge: 'CISCO',
       title: 'Cisco CCNA ENSA',
       subtitle: 'Enterprise Networking, Security & Automation',
       body: 'OSPF, QoS, ACLs, site-to-site and remote-access VPN, and network automation basics.',
-      links: [{ label: 'CCNA certification →', href: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html', target: '_blank' }],
+      links: [{ label: 'Course page →', href: 'https://www.netacad.com/courses/ccna-enterprise-networking-security-automation?courseLang=en-US', target: '_blank' }],
     },
     'network-defense': {
       badge: 'CISCO',
