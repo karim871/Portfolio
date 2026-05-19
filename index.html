@@ -1137,8 +1137,56 @@ tailwind.config = {
   /* ── Competency Radar ── */
   #skills-radar-wrap {
     display: flex;
+    align-items: center;
+    gap: 48px;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
+  }
+  /* ── Skills Legend ── */
+  #skills-legend {
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .skill-leg-row {
+    cursor: default;
+    transition: opacity 0.2s ease;
+  }
+  .skill-leg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .skill-leg-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-light);
+    transition: color 0.2s ease;
+  }
+  .skill-leg-tool {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+    color: var(--sky);
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .skill-leg-track {
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .skill-leg-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--sky), #e8f6ff);
+    border-radius: 1px;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .radar-polygon {
     fill: rgba(184,216,236,0.08);
@@ -1891,9 +1939,54 @@ tailwind.config = {
         <span class="section-line"></span>
       </h2>
 
-      <!-- Competency Radar -->
+      <!-- Competency Radar + Legend -->
       <div id="skills-radar-wrap">
         <svg id="skills-radar-svg" viewBox="0 0 400 380" style="width:100%;max-width:480px;display:block;overflow:visible;" aria-label="Cybersecurity competency radar" role="img"></svg>
+
+        <div id="skills-legend">
+          <div class="skill-leg-row" data-idx="0">
+            <div class="skill-leg-header">
+              <span class="skill-leg-name">Threat Detection</span>
+              <span class="skill-leg-tool">Suricata</span>
+            </div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.92"></div></div>
+          </div>
+          <div class="skill-leg-row" data-idx="1">
+            <div class="skill-leg-header">
+              <span class="skill-leg-name">SIEM &amp; Log Analysis</span>
+              <span class="skill-leg-tool">Splunk</span>
+            </div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.86"></div></div>
+          </div>
+          <div class="skill-leg-row" data-idx="2">
+            <div class="skill-leg-header">
+              <span class="skill-leg-name">Incident Response</span>
+              <span class="skill-leg-tool">MITRE ATT&amp;CK</span>
+            </div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.84"></div></div>
+          </div>
+          <div class="skill-leg-row" data-idx="3">
+            <div class="skill-leg-header">
+              <span class="skill-leg-name">Network Security</span>
+              <span class="skill-leg-tool">pfSense</span>
+            </div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.76"></div></div>
+          </div>
+          <div class="skill-leg-row" data-idx="4">
+            <div class="skill-leg-header">
+              <span class="skill-leg-name">Endpoint Security</span>
+              <span class="skill-leg-tool">Wazuh HIDS</span>
+            </div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.70"></div></div>
+          </div>
+          <div class="skill-leg-row" data-idx="5">
+            <div class="skill-leg-header">
+              <span class="skill-leg-name">Scripting &amp; Automation</span>
+              <span class="skill-leg-tool">Python</span>
+            </div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.65"></div></div>
+          </div>
+        </div>
       </div>
       <div id="radar-tooltip" class="radar-tooltip" aria-hidden="true"></div>
 
@@ -2808,14 +2901,22 @@ if (prefersReduced) {
           tt.style.top  = top  + 'px';
           tt.classList.add('rt-visible');
         });
+        // Dim all legend rows except the matching one
+        document.querySelectorAll('.skill-leg-row').forEach((r, j) => {
+          r.style.opacity = j === i ? '1' : '0.35';
+        });
       });
-      g.addEventListener('mouseleave', () => tt.classList.remove('rt-visible'));
+      g.addEventListener('mouseleave', () => {
+        tt.classList.remove('rt-visible');
+        document.querySelectorAll('.skill-leg-row').forEach(r => { r.style.opacity = '1'; });
+      });
     }
 
     svg.appendChild(g);
   });
 
   // IntersectionObserver — toggles CSS class that triggers @keyframes draw
+  // Also animates the legend bars with a staggered delay
   const section = document.getElementById('skills');
   if (!section) return;
   let fired = false;
@@ -2824,10 +2925,47 @@ if (prefersReduced) {
       fired = true;
       svg.classList.add('radar-drawn');
       setTimeout(() => svg.classList.add('radar-drawn-done'), 2200);
+
+      // Staggered legend bar animation
+      document.querySelectorAll('.skill-leg-bar').forEach((bar, i) => {
+        const val = parseFloat(bar.getAttribute('data-value') || '0');
+        setTimeout(() => {
+          bar.style.transform = `scaleX(${val})`;
+        }, 300 + i * 80);
+      });
+
       obs.disconnect();
     }
   }, { threshold: 0.2 });
   obs.observe(section);
+
+  // Legend hover: dim others, highlight hovered row + matching radar vertex
+  const legRows = document.querySelectorAll('.skill-leg-row');
+  const radarVertices = svg.querySelectorAll('.radar-vertex');
+  legRows.forEach((row) => {
+    const idx = parseInt(row.getAttribute('data-idx') || '0');
+    row.addEventListener('mouseenter', () => {
+      legRows.forEach((r, j) => {
+        r.style.opacity = j === idx ? '1' : '0.35';
+      });
+      // Highlight matching radar dot
+      radarVertices.forEach((v, j) => {
+        v.querySelectorAll('.radar-label').forEach(l => {
+          l.style.fill = j === idx ? 'var(--text-bright)' : 'var(--text)';
+          l.style.letterSpacing = j === idx ? '0.12em' : '0.05em';
+        });
+      });
+    });
+    row.addEventListener('mouseleave', () => {
+      legRows.forEach(r => { r.style.opacity = '1'; });
+      radarVertices.forEach(v => {
+        v.querySelectorAll('.radar-label').forEach(l => {
+          l.style.fill = 'var(--text)';
+          l.style.letterSpacing = '0.05em';
+        });
+      });
+    });
+  });
 })();
 
 // ── HoverCard System ──────────────────────────────────────────
