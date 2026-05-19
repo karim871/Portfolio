@@ -1186,7 +1186,7 @@ tailwind.config = {
     border-radius: 1px;
     transform-origin: left;
     transform: scaleX(0);
-    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 2.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .radar-polygon {
     fill: rgba(184,216,236,0.08);
@@ -2385,6 +2385,11 @@ const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('active');
+      // Once a reveal element has animated in, stop observing it
+      // so the animation never replays on subsequent scroll passes
+      if (entry.target.classList.contains('reveal')) {
+        revealObserver.unobserve(entry.target);
+      }
       const id = entry.target.id;
       if (id) document.querySelectorAll('.nav-link').forEach(l => {
         l.classList.toggle('active', l.getAttribute('href') === '#' + id);
@@ -2926,12 +2931,13 @@ if (prefersReduced) {
       svg.classList.add('radar-drawn');
       setTimeout(() => svg.classList.add('radar-drawn-done'), 2200);
 
-      // Staggered legend bar animation
+      // Staggered legend bar animation — delay start until radar is drawing,
+      // then fan out slowly so each bar finishes at a different time
       document.querySelectorAll('.skill-leg-bar').forEach((bar, i) => {
         const val = parseFloat(bar.getAttribute('data-value') || '0');
         setTimeout(() => {
           bar.style.transform = `scaleX(${val})`;
-        }, 300 + i * 80);
+        }, 500 + i * 200);
       });
 
       obs.disconnect();
