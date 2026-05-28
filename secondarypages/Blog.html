@@ -307,7 +307,7 @@
       </p>
       <div class="hero-stats">
         <div class="h-stat">
-          <span class="h-stat-val">10</span>
+          <span class="h-stat-val">11</span>
           <span class="h-stat-label">Articles</span>
         </div>
         <div class="stat-div"></div>
@@ -399,6 +399,31 @@
     </div>
 
     <div class="articles-grid" id="articles-grid">
+
+      <!-- 0: Local AI Guide -->
+      <article class="article-card" data-category="guides" id="art-0">
+        <div class="article-inner">
+          <div class="art-meta">
+            <span class="feat-cat" style="background:rgba(0,212,255,0.08);color:#00d4ff;border:1px solid rgba(0,212,255,0.28)">Guide</span>
+            <span class="art-date">May 2026</span>
+            <span class="art-read">15 min read</span>
+          </div>
+          <h3 class="art-title">Run a Fully Local Uncensored AI &mdash; RTX 3060 Ti Edition</h3>
+          <p class="art-preview">LM Studio + Hermes-3-8B + AnythingLLM, fully GPU-optimized for 8GB VRAM. No internet, no telemetry, no refusals. Covers model selection, GPU layer config, the RedTeamAI system prompt, RAG document ingestion, and performance tuning for ~35 t/s throughput.</p>
+          <div class="art-tags">
+            <span class="tag">LM Studio</span>
+            <span class="tag">Hermes-3</span>
+            <span class="tag">AnythingLLM</span>
+            <span class="tag">RAG</span>
+            <span class="tag">Local AI</span>
+            <span class="tag">Privacy</span>
+          </div>
+          <div class="art-footer">
+            <span style="font-family:'Fira Code',monospace;font-size:0.68rem;color:#00d4ff">~35 t/s &middot; RTX 3060 Ti</span>
+            <a href="local-ai-guide.html" class="art-cta" style="color:#00d4ff">Read Guide &rarr;</a>
+          </div>
+        </div>
+      </article>
 
       <!-- 1: Pi-hole -->
       <article class="article-card" data-category="projects" id="art-1">
@@ -724,7 +749,7 @@
       ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
       requestAnimationFrame(animCursor);
     })();
-    document.querySelectorAll('a,button,.article-card,.filter-tab,.featured-card').forEach(el => {
+    document.querySelectorAll('a,button,.article-card,.filter-tab,.featured-card,.featured-guide').forEach(el => {
       el.addEventListener('mouseenter', () => ring.classList.add('big'));
       el.addEventListener('mouseleave', () => ring.classList.remove('big'));
     });
