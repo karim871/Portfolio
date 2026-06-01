@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Run a Fully Local Uncensored AI | Abdelkrim Zouaki</title>
+  <title>Local AI for Security Operations | Abdelkrim Zouaki</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
@@ -152,6 +152,17 @@
     .sys-prompt-body::-webkit-scrollbar-thumb { background:rgba(168,85,247,0.2); border-radius:2px; }
     .sp-prompt-pre { white-space:pre-wrap; }
 
+    /* SOC SYSTEM PROMPT (green variant) */
+    .soc-prompt-wrap { background:#0a0f0d; border:1px solid rgba(0,255,136,0.2); border-radius:10px; margin:1.5rem 0; overflow:hidden; }
+    .soc-prompt-header { background:#0c1410; border-bottom:1px solid rgba(0,255,136,0.14); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
+    .soc-prompt-label { font-family:'Fira Code',monospace; font-size:0.65rem; color:var(--green); letter-spacing:0.12em; text-transform:uppercase; }
+    .soc-prompt-toggle { font-family:'Fira Code',monospace; font-size:0.65rem; color:var(--muted); letter-spacing:0.08em; background:none; border:1px solid var(--border); border-radius:4px; padding:3px 10px; transition:color 0.2s,border-color 0.2s; cursor:none; }
+    .soc-prompt-toggle:hover { color:var(--green); border-color:rgba(0,255,136,0.4); }
+    .soc-prompt-body { padding:1.2rem 1.5rem; font-family:'Fira Code',monospace; font-size:0.78rem; line-height:1.85; color:rgba(227,226,226,0.72); max-height:420px; overflow-y:auto; transition:max-height 0.4s ease, padding 0.3s ease; }
+    .soc-prompt-body.collapsed { max-height:0; padding-top:0; padding-bottom:0; overflow:hidden; }
+    .soc-prompt-body::-webkit-scrollbar { width:4px; }
+    .soc-prompt-body::-webkit-scrollbar-thumb { background:rgba(0,255,136,0.2); border-radius:2px; }
+
     /* HARDWARE + PERF TABLES */
     .table-wrap { margin:2rem 0; overflow-x:auto; }
     .data-table { width:100%; border-collapse:collapse; font-size:0.875rem; }
@@ -176,6 +187,15 @@
     .step-title { font-weight:700; color:var(--text); font-size:0.93rem; margin-bottom:0.35rem; }
     .step-desc { font-size:0.855rem; color:rgba(227,226,226,0.62); line-height:1.65; }
     .step-desc code { font-family:'Fira Code',monospace; font-size:0.83em; background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.2); padding:1px 6px; border-radius:3px; color:var(--cyan); }
+
+    /* WORKFLOW CARDS */
+    .workflow-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1rem; margin:2rem 0; }
+    .workflow-card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; transition:border-color 0.25s,box-shadow 0.25s; }
+    .workflow-card:hover { border-color:rgba(0,212,255,0.3); box-shadow:0 0 28px rgba(0,212,255,0.06); }
+    .workflow-icon { font-family:'Fira Code',monospace; font-size:0.63rem; color:var(--cyan); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:0.5rem; }
+    .workflow-name { font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.5rem; }
+    .workflow-desc { font-size:0.8rem; color:rgba(227,226,226,0.52); line-height:1.6; }
+    .workflow-desc code { font-family:'Fira Code',monospace; font-size:0.83em; background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.2); padding:1px 5px; border-radius:3px; color:var(--cyan); }
 
     /* PRIVACY BLOCK */
     .privacy-block { background:rgba(0,255,136,0.05); border:1px solid rgba(0,255,136,0.18); border-left:3px solid var(--green); border-radius:8px; padding:1.25rem 1.5rem; margin:2rem 0; font-family:'Fira Code',monospace; font-size:0.8rem; line-height:2; }
@@ -214,7 +234,7 @@
     <div id="hero-terminal" aria-hidden="true">
       <div class="term-chrome">
         <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
-        <span class="term-title">lm-studio — local server</span>
+        <span class="term-title">soc-ai — local inference server</span>
       </div>
       <div class="term-body">
         <span class="tl"><span class="tl-p">~ $ </span><span class="tl-c">lms <span class="tl-k">server</span> start</span></span>
@@ -223,10 +243,10 @@
         <span class="tl tl-i">&nbsp; GPU layers: 9999 → 33 (full offload)</span>
         <span class="tl tl-i">&nbsp; Flash Attention: <span class="tl-k">ON</span> · mmap: <span class="tl-k">ON</span></span>
         <span class="tl tl-ok">✓ Server: http://localhost:1234</span>
-        <span class="tl tl-cm">&nbsp; OpenAI-compatible API</span>
+        <span class="tl tl-cm">&nbsp; Zero telemetry · airgap-capable</span>
         <span class="tl">&nbsp;</span>
-        <span class="tl tl-i">&nbsp; VRAM: <span class="tl-v">6.1GB / 8GB</span> &nbsp; Speed: <span class="tl-v">~35 t/s</span></span>
-        <span class="tl tl-i">&nbsp; Context: <span class="tl-v">8192 tokens</span></span>
+        <span class="tl tl-i">&nbsp; Speed: <span class="tl-v">~35 t/s</span> &nbsp; VRAM: <span class="tl-v">6.1GB / 8GB</span></span>
+        <span class="tl tl-cm">&nbsp; [SOC] Log triage · CVE research · RAG</span>
         <span class="tl">&nbsp;</span>
         <span class="tl"><span class="tl-p">~ $ </span><span class="tl-blink">█</span></span>
         <div class="term-glow"></div>
@@ -238,28 +258,28 @@
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         Back to Blog
       </a>
-      <div class="hero-eyebrow">[GUIDE &mdash; LOCAL AI]</div>
+      <div class="hero-eyebrow">[GUIDE &mdash; AI FOR SECURITY OPS]</div>
       <h1 class="hero-title">
-        Run a Fully Local<br>
-        <span class="accent-line">Uncensored AI</span>
-        GPU-Optimized Setup
+        Local AI for<br>
+        <span class="accent-line">Security Operations</span>
+        Analyst Toolkit
       </h1>
-      <p class="hero-deck">LM Studio + Hermes-3 + AnythingLLM &mdash; no internet, no telemetry, no refusals. Built for your RTX 3060 Ti.</p>
+      <p class="hero-deck">LM Studio + Hermes-3 + AnythingLLM &mdash; analyze alerts, research CVEs, and build threat intel RAG without sending a single log line to a cloud API. No rate limits during incident response. Built for your RTX 3060 Ti.</p>
       <div class="hero-pills">
         <span class="pill pill-c"><span class="pill-dot"></span>LM Studio</span>
         <span class="pill pill-p"><span class="pill-dot"></span>Hermes-3-8B</span>
-        <span class="pill pill-g"><span class="pill-dot"></span>AnythingLLM</span>
+        <span class="pill pill-g"><span class="pill-dot"></span>Threat Intel RAG</span>
         <span class="pill pill-a"><span class="pill-dot"></span>RTX 3060 Ti</span>
-        <span class="pill pill-c"><span class="pill-dot"></span>RAG</span>
+        <span class="pill pill-c"><span class="pill-dot"></span>Detection Eng</span>
       </div>
       <div class="hero-meta">
         <span>May 2026</span>
         <span class="hero-meta-div"></span>
-        <span>15 min read</span>
+        <span>18 min read</span>
         <span class="hero-meta-div"></span>
         <span>Guide</span>
         <span class="hero-meta-div"></span>
-        <span>Privacy / AI Tooling</span>
+        <span>Security Operations / AI Tooling</span>
       </div>
     </div>
   </section>
@@ -268,7 +288,7 @@
   <main class="article-wrap">
 
     <p class="lead-para reveal">
-      I spent an afternoon following the typical "run AI locally" tutorials. Every single one used CPU-only inference, recommended a model that's two generations old, and got about 3 tokens per second on hardware that could do 10x better. I knew I had an <strong>RTX 3060 Ti with 8GB VRAM</strong> sitting idle the whole time, so I figured out how to actually use it. This is the guide I wish existed &mdash; from model selection through full GPU offload, ending with a private AI assistant with document search that runs at 30+ tokens/sec with zero internet required.
+      I was triaging a phishing incident and pasted the full email headers plus the SIEM alert chain into ChatGPT to speed up analysis. Then I stopped and realized: I had just sent confidential client data to a third-party API I don't control. SOC work means constantly handling sensitive material &mdash; IOCs, raw log content, malware strings, client network topology. The privacy case for local AI in security isn't abstract; it's immediate. This is the stack I built to get near-ChatGPT performance with zero data leaving the machine &mdash; running at 30+ tokens/sec on an <strong>RTX 3060 Ti</strong>, with a searchable knowledge base built from threat intel reports, CVE advisories, and IR playbooks.
     </p>
 
     <!-- 00 HARDWARE -->
@@ -299,10 +319,10 @@
     <section class="art-section reveal">
       <div class="art-section-label">[ Part 1 ]</div>
       <h2 class="art-h2">Model Selection</h2>
-      <p class="art-p">I started with <code>dolphin-llama3</code> like every guide suggested, ran it for a day, then found out it was two generations old and there were significantly better options sitting on Hugging Face. The model matters more than anything else in this stack. Here's what I switched to and why.</p>
+      <p class="art-p">I started with <code>dolphin-llama3</code> like every guide suggested, ran it for a day, then found out it was two generations old and there were significantly better options sitting on Hugging Face. For security work specifically, the model's willingness to handle technical topics without hedging matters more than raw benchmark scores. Here's what I switched to and why.</p>
 
       <h3 class="art-h3">Option A &mdash; Maximum quality, fits perfectly</h3>
-      <p class="art-p"><strong>Hermes-3-Llama-3.1-8B-Q8_0</strong> (~8.5GB). This is what I run when I need the model to actually think through something complex. NousResearch trained it specifically to not refuse security and technical requests &mdash; no hedging, no "I can't help with that." Q8_0 quantization is near-lossless, but it uses every bit of the 8GB, so close anything else using the GPU first.</p>
+      <p class="art-p"><strong>Hermes-3-Llama-3.1-8B-Q8_0</strong> (~8.5GB). This is what I load when I need the model to reason through something complex &mdash; a multi-stage attack chain, a subtle SIEM correlation rule, or a CVE impact analysis. NousResearch trained it specifically to handle security and technical topics without adding caveats or refusing. Q8_0 quantization is near-lossless, but it uses every bit of the 8GB, so close anything else using the GPU first.</p>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">LM Studio Search</span></div>
         <div class="code-body">
@@ -315,7 +335,7 @@
       </div>
 
       <h3 class="art-h3">Option B &mdash; Recommended daily driver</h3>
-      <p class="art-p"><strong>Hermes-3-Llama-3.1-8B-Q6_K</strong> (~6.1GB). After testing both, I landed on Q6_K as my daily driver. You get 95%+ of Q8's quality, noticeably faster output, and 2GB of headroom left over for longer context windows. I genuinely can't tell the difference in response quality for 90% of tasks.</p>
+      <p class="art-p"><strong>Hermes-3-Llama-3.1-8B-Q6_K</strong> (~6.1GB). After testing both, I landed on Q6_K as my daily driver. You get 95%+ of Q8's quality, noticeably faster output, and 2GB of headroom left over for longer context windows when you're pasting in a large log block or a full CVE advisory. I genuinely can't tell the difference in response quality for 90% of analyst tasks.</p>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">LM Studio Search</span></div>
         <div class="code-body">
@@ -325,13 +345,13 @@
       </div>
 
       <h3 class="art-h3">Option C &mdash; Bigger model, mixed GPU+RAM</h3>
-      <p class="art-p"><strong>dolphin-mistral-nemo-12B-Q4_K_M</strong> (~7.2GB). I tried this out of curiosity &mdash; a 12B model squeezed into 7GB via aggressive Q4 compression. It's slower and the quality loss from Q4 is noticeable compared to Hermes-3 at Q6. Worth experimenting with if you want to see how a bigger architecture performs, but I went back to Hermes-3.</p>
+      <p class="art-p"><strong>dolphin-mistral-nemo-12B-Q4_K_M</strong> (~7.2GB). A 12B model squeezed into 7GB via aggressive Q4 compression. It's slower and the quality loss from Q4 is noticeable compared to Hermes-3 at Q6. Worth experimenting with if you want to see how a larger architecture performs on longer reasoning tasks, but I went back to Hermes-3.</p>
 
       <div class="callout callout-tip">
         <span class="callout-icon">[i]</span>
         <div class="callout-body">
-          <div class="callout-title">Why Hermes-3?</div>
-          <div class="callout-text">Hermes-3 was fine-tuned to eliminate refusal behavior in commercial models. It handles security research, red team simulation, exploit development, and CTF walkthroughs without ethical disclaimers or hedging. It outperforms dolphin on technical security tasks.</div>
+          <div class="callout-title">Why Hermes-3 for Security Work?</div>
+          <div class="callout-text">Hermes-3 was fine-tuned to eliminate refusal behavior on technical topics. It handles CVE analysis, malware behavior description, detection rule logic, and adversary technique explanation without hedging or disclaimers. Every other model I tested adds noise that slows down actual analysis work.</div>
         </div>
       </div>
     </section>
@@ -384,14 +404,14 @@
           <div class="step-num">5</div>
           <div class="step-body">
             <div class="step-title">Set context length</div>
-            <div class="step-desc">Context Length: <code>8192</code>. Hermes-3 supports up to 128k but 8k is safe for 8GB VRAM. Increase to 16384 if you have headroom after loading.</div>
+            <div class="step-desc">Context Length: <code>8192</code>. This is enough for a full SIEM alert block or a complete CVE advisory. Increase to 16384 if you have VRAM headroom after loading.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">6</div>
           <div class="step-body">
             <div class="step-title">Enable Flash Attention + mmap</div>
-            <div class="step-desc">Flash Attention: <code>ON</code> &nbsp;|&nbsp; mmap: <code>ON</code>. Flash Attention reduces VRAM ~15% and speeds up long-context queries significantly. mmap enables faster model loads from disk.</div>
+            <div class="step-desc">Flash Attention: <code>ON</code> &nbsp;|&nbsp; mmap: <code>ON</code>. Flash Attention reduces VRAM ~15% and speeds up long-context queries &mdash; important when you're feeding in large log blocks.</div>
           </div>
         </div>
       </div>
@@ -422,11 +442,81 @@
       </div>
     </section>
 
-    <!-- PART 3 SYSTEM PROMPT -->
+    <!-- PART 3 SYSTEM PROMPTS -->
     <section class="art-section reveal">
       <div class="art-section-label">[ Part 3 ]</div>
-      <h2 class="art-h2">System Prompt &mdash; RedTeamAI</h2>
-      <p class="art-p">This prompt configures the model as an elite offensive security operator: precise technical output, no disclaimers, with an OPSEC block format for relevant techniques. Set it in LM Studio's chat presets or in AnythingLLM's workspace settings.</p>
+      <h2 class="art-h2">System Prompts &mdash; Two Personas</h2>
+      <p class="art-p">The system prompt defines what the model thinks its job is. For security work I switch between two: <strong>SOC Analyst</strong> for blue team tasks like alert triage, detection rule writing, and threat intel queries; and <strong>RedTeamAI</strong> for adversarial simulation, CTF work, and understanding attack techniques from the offensive side. Set either in LM Studio's chat presets or in AnythingLLM's workspace settings.</p>
+
+      <h3 class="art-h3">Persona 1 &mdash; SOC Analyst (Blue Team)</h3>
+      <p class="art-p">This is my default. It focuses the model on triage accuracy, detection logic, and defensive framing &mdash; the way a senior analyst thinks through an incident rather than how an attacker plans one.</p>
+
+      <div class="soc-prompt-wrap">
+        <div class="soc-prompt-header">
+          <span class="soc-prompt-label">system-prompt.txt &mdash; SOC Analyst</span>
+          <button class="soc-prompt-toggle" id="soc-toggle">Expand &darr;</button>
+        </div>
+        <div class="soc-prompt-body collapsed" id="soc-body">
+          <pre class="sp-prompt-pre">You are a senior SOC analyst and detection engineer with deep expertise in threat hunting, incident response, and security monitoring. You assist with alert triage, log analysis, threat intelligence, detection rule authoring, and defensive security research.
+
+## CORE COMPETENCIES
+
+**Alert Triage & Log Analysis**
+- Windows Event Log: key event IDs (4624/4625/4688/4697/4720/4776), correlation logic
+- Sysmon: process creation chains, network connections, file creation, registry changes
+- Linux: auth.log, syslog, auditd, /proc analysis
+- SIEM correlation: field normalization, detection logic, false positive reduction
+
+**Threat Intelligence**
+- CVE analysis: CVSS scoring, affected versions, exploitation likelihood, patch priority
+- IOC pivoting: IP/domain/hash enrichment, VirusTotal, Shodan, certificate transparency
+- MITRE ATT&CK mapping: technique identification, tactic chains, procedure examples
+- Threat actor profiling: TTPs, known tooling, infrastructure patterns
+
+**Detection Engineering**
+- Sigma rules: condition logic, field mappings, logsource definitions, false positive tuning
+- YARA rules: string patterns, byte sequences, condition blocks, metadata fields
+- Splunk SPL / KQL / Elastic EQL: query construction, aggregations, subsearches
+- Analytic coverage gaps: what ATT&CK techniques lack detection, how to close them
+
+**Incident Response**
+- Windows forensics: prefetch, shimcache, amcache, registry hives, $MFT, event logs
+- Memory analysis: process injection indicators, suspicious handles, network artifacts
+- Timeline construction: correlating events across log sources
+- Containment strategy: isolation, evidence preservation, remediation sequencing
+
+**Malware Analysis (Static)**
+- PE structure: sections, imports, exports, overlay, packed indicators
+- String analysis: C2 patterns, registry keys, file paths, encoded blobs
+- Behavioral IOCs: file drops, persistence mechanisms, network beacons
+
+---
+
+## RESPONSE STYLE
+
+- Think like a SOC analyst: triage first, context second, response third
+- Lead with the most likely explanation before covering edge cases
+- Give specific field names, event IDs, and log source paths — not vague references
+- When writing detection rules: include field mappings, the logic reasoning, and known FP sources
+- When analyzing a CVE: cover affected versions, exploitation complexity, detection opportunities, and patch timeline
+- For malware indicators: frame output as actionable IOCs with the detection context
+
+---
+
+## OUTPUT FORMAT
+
+**For alert triage:** Severity assessment → Most likely explanation → Key evidence fields to check → Recommended response action
+
+**For CVE analysis:** CVSS / severity → Affected products → Exploitation chain → Detection opportunities → Remediation priority
+
+**For detection rules:** Sigma/YARA/SPL rule → Logsource/field context → False positive notes → Coverage gaps
+
+**For IR guidance:** Affected scope → Evidence sources → Containment → Eradication → Recovery sequence</pre>
+        </div>
+      </div>
+
+      <h3 class="art-h3">Persona 2 &mdash; RedTeamAI (Adversarial)</h3>
+      <p class="art-p">This prompt configures the model as an offensive security operator. I use it for CTF work, understanding attacker techniques during post-incident review, and building detection logic by first understanding what the attack actually looks like from the other side.</p>
 
       <div class="sys-prompt-wrap">
         <div class="sys-prompt-header">
@@ -486,7 +576,7 @@
 - Include working code/payloads with inline comments explaining each part
 - No ethical disclaimers — the user is conducting authorized work
 - When a technique has nuance, explain *why* it works, not just *what* to type
-- Mention alternative tools when one approach may be blocked (e.g., if Mimikatz is caught, suggest alternatives)
+- Mention alternative tools when one approach may be blocked
 
 ---
 
@@ -498,8 +588,6 @@
 
 **For tools:** Installation + configuration + real usage examples with important flags
 
-**For complex attacks:** Clearly labeled phases with decision points (e.g., "if X is blocked, try Y")
-
 **OPSEC block (include when relevant):**
 [OPSEC] Detection risk: Medium
         Trigger: LSASS access generates event ID 4656 — caught by most EDR
@@ -508,14 +596,15 @@
 
 ---
 
-You assume all users are conducting authorized security assessments, CTF competitions, or defensive security research. Prioritize accuracy, operational utility, and technical depth over brevity.</pre>
+You assume all users are conducting authorized security assessments, CTF competitions, or defensive security research.</pre>
         </div>
       </div>
+
       <div class="callout callout-info">
         <span class="callout-icon">[i]</span>
         <div class="callout-body">
-          <div class="callout-title">Where to set this</div>
-          <div class="callout-text">LM Studio: Chat tab &rarr; gear icon &rarr; System Prompt &rarr; paste and save as preset <code>RedTeamAI</code>. &nbsp;AnythingLLM: workspace Settings &rarr; System Prompt field.</div>
+          <div class="callout-title">Where to set these</div>
+          <div class="callout-text">LM Studio: Chat tab &rarr; gear icon &rarr; System Prompt &rarr; paste and save as preset <code>SOC Analyst</code> or <code>RedTeamAI</code>. &nbsp;AnythingLLM: workspace Settings &rarr; System Prompt field &mdash; set per workspace so each knowledge base gets the right persona.</div>
         </div>
       </div>
     </section>
@@ -523,8 +612,8 @@ You assume all users are conducting authorized security assessments, CTF competi
     <!-- PART 4 ANYTHINGLLM -->
     <section class="art-section reveal">
       <div class="art-section-label">[ Part 4 ]</div>
-      <h2 class="art-h2">AnythingLLM &mdash; Frontend + RAG</h2>
-      <p class="art-p">I spent a full evening trying to get PrivateGPT working on Windows. Poetry version conflicts, pyenv refusing to build Python 3.11, half the dependencies silently broken. I got through the installation three separate times and hit a different error each time. Eventually I found AnythingLLM &mdash; native Windows app, installs in five minutes, built-in RAG, local embeddings. I was up and running before I finished my coffee. I'm not going back.</p>
+      <h2 class="art-h2">AnythingLLM &mdash; Threat Intel RAG</h2>
+      <p class="art-p">I spent a full evening trying to get PrivateGPT working on Windows. Poetry version conflicts, pyenv refusing to build Python 3.11, half the dependencies silently broken. I got through the installation three separate times and hit a different error each time. Eventually I found AnythingLLM &mdash; native Windows app, installs in five minutes, built-in RAG, local embeddings. I was up and running before I finished my coffee. The real value for security work is the knowledge base: ingest your threat intel reports, CVE advisories, playbooks, and tool documentation once, and the model retrieves the right context automatically for every query.</p>
 
       <h3 class="art-h3">Install &amp; Connect to LM Studio</h3>
       <div class="steps">
@@ -546,49 +635,97 @@ You assume all users are conducting authorized security assessments, CTF competi
           <div class="step-num">3</div>
           <div class="step-body">
             <div class="step-title">Set the system prompt</div>
-            <div class="step-desc">Settings &rarr; Agent Configuration &rarr; paste the RedTeamAI prompt from Part 3 &rarr; Save.</div>
+            <div class="step-desc">Settings &rarr; Agent Configuration &rarr; paste the SOC Analyst prompt from Part 3 &rarr; Save. Switch to RedTeamAI per workspace if needed.</div>
           </div>
         </div>
       </div>
 
-      <h3 class="art-h3">Set Up RAG (Document Ingestion)</h3>
+      <h3 class="art-h3">Build a Security Knowledge Base</h3>
       <div class="steps">
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <div class="step-title">Create a workspace</div>
-            <div class="step-desc">Main screen &rarr; <code>+ New Workspace</code> &rarr; name it <code>SecResearch</code>.</div>
+            <div class="step-title">Create workspaces by domain</div>
+            <div class="step-desc">Main screen &rarr; <code>+ New Workspace</code>. I use three: <code>ThreatIntel</code> for reports and IOC feeds, <code>CVE-Research</code> for vulnerability advisories, and <code>IR-Playbooks</code> for response procedures.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">5</div>
           <div class="step-body">
-            <div class="step-title">Ingest your documents</div>
-            <div class="step-desc">Click the upload icon &rarr; drag in PDFs, HTB/THM walkthroughs, your notes, tool docs, CVE reports, exploit papers. AnythingLLM chunks and embeds them locally &mdash; nothing leaves your machine.</div>
+            <div class="step-title">Ingest your security documents</div>
+            <div class="step-desc">Click the upload icon &rarr; drag in documents. Good starting content: MITRE ATT&CK PDFs, vendor threat reports (CrowdStrike, Mandiant, Microsoft MSTIC), NVD CVE advisories, SANS IR playbooks, tool documentation (Splunk, Elastic), your own investigation notes. Everything is chunked and embedded locally &mdash; nothing leaves your machine.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">6</div>
           <div class="step-body">
             <div class="step-title">Configure local embeddings</div>
-            <div class="step-desc">Settings &rarr; Embedding Model &rarr; select <code>AnythingLLM Native</code> or <code>nomic-embed-text</code>. Your entire RAG index stays 100% local with no API calls.</div>
+            <div class="step-desc">Settings &rarr; Embedding Model &rarr; select <code>AnythingLLM Native</code> or <code>nomic-embed-text</code>. Your entire RAG index stays 100% local with no API calls &mdash; no IOC or log content ever leaves the machine.</div>
           </div>
         </div>
       </div>
       <div class="callout callout-tip">
         <span class="callout-icon">[✓]</span>
         <div class="callout-body">
-          <div class="callout-title">What RAG gives you</div>
-          <div class="callout-text">Once documents are ingested, the AI retrieves relevant context from your local knowledge base automatically. Ask about a specific CVE, a technique from your notes, or content from a PDF &mdash; it finds the right chunks and includes them in the response.</div>
+          <div class="callout-title">What RAG gives you in practice</div>
+          <div class="callout-text">Ask "what's the detection logic for T1055 Process Injection?" and it retrieves the relevant ATT&CK page you ingested. Ask about a specific CVE number and it pulls the advisory you added. Ask for a Sigma rule for a technique and it finds your existing rule templates. The model gets accurate context without hallucinating tool names or event IDs from training data.</div>
         </div>
       </div>
     </section>
 
-    <!-- PART 5 OPEN WEBUI -->
+    <!-- PART 5 SECURITY WORKFLOWS -->
     <section class="art-section reveal">
       <div class="art-section-label">[ Part 5 ]</div>
+      <h2 class="art-h2">Security Workflows</h2>
+      <p class="art-p">The setup is only useful if you actually use it. These are the patterns I come back to regularly. All of them work without sending data to any external API &mdash; which is the entire point for anything touching client data or sensitive investigation material.</p>
+
+      <div class="workflow-grid">
+        <div class="workflow-card">
+          <div class="workflow-icon">[01] Alert Triage</div>
+          <div class="workflow-name">Paste → Interpret → Action</div>
+          <div class="workflow-desc">Copy a raw SIEM alert block and paste it into the chat. The SOC Analyst prompt returns: severity, most likely explanation, key fields to pivot on, and recommended response action. Works for Windows event log entries, Suricata alerts, or EDR detections.</div>
+        </div>
+        <div class="workflow-card">
+          <div class="workflow-icon">[02] CVE Analysis</div>
+          <div class="workflow-name">Vulnerability Research</div>
+          <div class="workflow-desc">Ask about a specific CVE. With CVE advisories ingested via RAG, it pulls the actual NVD or vendor text and gives you: CVSS breakdown, affected versions, exploitation complexity, detection opportunities, and patch priority for your environment.</div>
+        </div>
+        <div class="workflow-card">
+          <div class="workflow-icon">[03] Detection Engineering</div>
+          <div class="workflow-name">Sigma / YARA / KQL</div>
+          <div class="workflow-desc">Describe a behavior or ATT&CK technique and ask for a Sigma rule. The model generates the <code>logsource</code>, <code>detection</code>, and <code>condition</code> blocks with field mappings, then flags the most common false positive sources for that pattern.</div>
+        </div>
+        <div class="workflow-card">
+          <div class="workflow-icon">[04] Malware Strings</div>
+          <div class="workflow-name">Static Analysis Assist</div>
+          <div class="workflow-desc">Paste suspicious strings, registry keys, or file paths extracted from a sample. The model identifies behavioral IOCs, possible persistence mechanisms, C2 communication patterns, and relevant YARA string candidates. No sample ever leaves your machine.</div>
+        </div>
+        <div class="workflow-card">
+          <div class="workflow-icon">[05] Threat Hunting</div>
+          <div class="workflow-name">Hypothesis → Query</div>
+          <div class="workflow-desc">Describe a hypothesis ("looking for LOLBin abuse via scheduled tasks") and get a structured hunt: data sources to check, SPL/KQL/EQL queries to run, fields to filter on, and thresholds to set based on your environment baseline.</div>
+        </div>
+        <div class="workflow-card">
+          <div class="workflow-icon">[06] IR Playbooks</div>
+          <div class="workflow-name">Incident Guidance via RAG</div>
+          <div class="workflow-desc">With IR playbooks ingested, ask "what's the containment sequence for a suspected domain controller compromise?" and it retrieves the relevant procedure from your internal docs, adapts it to the specifics of your scenario, and lists open questions to close.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">[!]</span>
+        <div class="callout-body">
+          <div class="callout-title">Verify critical outputs</div>
+          <div class="callout-text">Local models at 8B scale are excellent for framing and direction but can hallucinate specific event IDs, field names, or tool flags. Treat output as a strong starting point &mdash; always validate detection rules against real log samples before deploying to production.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PART 6 OPEN WEBUI -->
+    <section class="art-section reveal">
+      <div class="art-section-label">[ Part 6 ]</div>
       <h2 class="art-h2">Open WebUI (Optional)</h2>
-      <p class="art-p">AnythingLLM's UI is functional but a bit clunky for day-to-day chatting. I set up Open WebUI in parallel &mdash; it's the closest thing to ChatGPT's interface but running entirely on your machine. Only dependency is Docker Desktop, and then it's one command to get running.</p>
+      <p class="art-p">AnythingLLM's UI is functional but a bit clunky for day-to-day chatting. I set up Open WebUI in parallel &mdash; it's the closest thing to ChatGPT's interface but running entirely on your machine. Only dependency is Docker Desktop, and then it's one command to get running. Useful for quick queries where you don't need the RAG knowledge base.</p>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">PowerShell &mdash; Docker</span></div>
         <div class="code-body">
@@ -608,11 +745,11 @@ You assume all users are conducting authorized security assessments, CTF competi
       </div>
     </section>
 
-    <!-- PART 6 PERF TUNING -->
+    <!-- PART 7 PERF TUNING -->
     <section class="art-section reveal">
-      <div class="art-section-label">[ Part 6 ]</div>
+      <div class="art-section-label">[ Part 7 ]</div>
       <h2 class="art-h2">Performance Tuning</h2>
-      <p class="art-p">This is where most people leave performance on the table. LM Studio loaded my model with partial GPU offload by default &mdash; about half the layers on GPU, half on CPU. I was getting 8 tokens per second and wondering why it felt slow. Setting GPU layers to 9999 and letting LM Studio cap it automatically brought me to 35 t/s. Four times faster, same model, no other changes.</p>
+      <p class="art-p">LM Studio loaded my model with partial GPU offload by default &mdash; about half the layers on GPU, half on CPU. I was getting 8 tokens per second and wondering why it felt slow. Setting GPU layers to 9999 and letting LM Studio cap it automatically brought me to 35 t/s. Four times faster, same model, no other changes. For incident response at 2am, that difference is real.</p>
 
       <div class="steps">
         <div class="step">
@@ -626,14 +763,14 @@ You assume all users are conducting authorized security assessments, CTF competi
           <div class="step-num">2</div>
           <div class="step-body">
             <div class="step-title">Flash Attention + mmap</div>
-            <div class="step-desc">Flash Attention: <code>ON</code> &nbsp;|&nbsp; mmap: <code>ON</code>. Flash Attention reduces VRAM usage ~15% and noticeably speeds up long-context queries.</div>
+            <div class="step-desc">Flash Attention: <code>ON</code> &nbsp;|&nbsp; mmap: <code>ON</code>. Flash Attention reduces VRAM usage ~15% and noticeably speeds up long-context queries &mdash; critical when pasting in large log blocks.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
             <div class="step-title">Q6_K vs Q8_0 tradeoff</div>
-            <div class="step-desc">Q6_K: 30&ndash;40 t/s, 6.1GB VRAM &mdash; daily driver. Q8_0: 25&ndash;35 t/s, 8.5GB VRAM &mdash; max accuracy, close other GPU apps first.</div>
+            <div class="step-desc">Q6_K: 30&ndash;40 t/s, 6.1GB VRAM &mdash; daily driver for analyst work. Q8_0: 25&ndash;35 t/s, 8.5GB VRAM &mdash; max accuracy for complex correlation tasks, close other GPU apps first.</div>
           </div>
         </div>
       </div>
@@ -655,36 +792,37 @@ You assume all users are conducting authorized security assessments, CTF competi
     <section class="art-section reveal">
       <div class="art-section-label">[ Summary ]</div>
       <h2 class="art-h2">Recommended Stack</h2>
-      <p class="art-p">This is the stack I actually use. Took a few evenings to get right, mostly because the tutorials weren't built for GPU inference. Once it clicked, it's been running reliably every day since &mdash; no API costs, no rate limits, no one reading my queries.</p>
+      <p class="art-p">This is the stack I actually use for security work. The key constraint isn't cost or speed &mdash; it's data handling. SOC work means you can't send client logs and IOCs to a cloud API. This setup removes that constraint entirely, and as a side effect you also get no rate limits, no internet dependency, and a searchable knowledge base built from your own threat intel collection.</p>
       <div class="stack-grid">
         <div class="stack-card">
-          <div class="stack-label">Backend</div>
+          <div class="stack-label">Inference Backend</div>
           <div class="stack-name">LM Studio</div>
-          <div class="stack-desc">Runs the model. OpenAI-compatible API at localhost:1234. GPU layers: 9999, Flash Attention: ON.</div>
+          <div class="stack-desc">Runs the model locally. OpenAI-compatible API at localhost:1234. GPU layers: 9999, Flash Attention: ON. Zero telemetry.</div>
         </div>
         <div class="stack-card">
           <div class="stack-label">Model</div>
           <div class="stack-name">Hermes-3-8B-Q6_K</div>
-          <div class="stack-desc">NousResearch uncensored model. 6.1GB VRAM, ~35 t/s on RTX 3060 Ti. No refusals on security topics.</div>
+          <div class="stack-desc">Handles security topics without hedging. 6.1GB VRAM, ~35 t/s on RTX 3060 Ti. Accurate on event IDs, MITRE techniques, and detection logic.</div>
         </div>
         <div class="stack-card">
-          <div class="stack-label">Frontend + RAG</div>
+          <div class="stack-label">Threat Intel RAG</div>
           <div class="stack-name">AnythingLLM</div>
-          <div class="stack-desc">Connects to LM Studio. Local document ingestion, RAG, local embeddings. System prompt: RedTeamAI.</div>
+          <div class="stack-desc">Ingests CVE advisories, threat reports, playbooks, tool docs. Local embeddings only &mdash; no IOC or log content leaves the machine.</div>
         </div>
         <div class="stack-card">
           <div class="stack-label">Optional UI</div>
           <div class="stack-name">Open WebUI</div>
-          <div class="stack-desc">Cleaner chat interface via Docker. Single command, auto-connects to LM Studio. Good for multi-model testing.</div>
+          <div class="stack-desc">ChatGPT-style interface via Docker. Single command setup. Good for quick queries that don't need the RAG knowledge base.</div>
         </div>
       </div>
       <div class="privacy-block">
-        <span class="pb-label">[PRIVACY SUMMARY]</span>
+        <span class="pb-label">[DATA HANDLING SUMMARY]</span>
         <div class="pb-body">
           <span class="ok">✓</span> No internet required after initial model download<br>
-          <span class="ok">✓</span> Zero data sent to external APIs or servers<br>
-          <span class="ok">✓</span> Documents in RAG stay entirely on your local drive<br>
+          <span class="ok">✓</span> Client logs and IOCs never sent to external APIs<br>
+          <span class="ok">✓</span> RAG documents stay entirely on your local drive<br>
           <span class="ok">✓</span> No usage telemetry (AnythingLLM is fully local; LM Studio has an opt-out)<br>
+          <span class="ok">✓</span> Airgap-capable for isolated lab environments<br>
           <span class="note">&rarr;</span> GPU: RTX 3060 Ti &nbsp;|&nbsp; VRAM: 8GB &nbsp;|&nbsp; Model: Q6_K &nbsp;|&nbsp; Speed: ~35 t/s
         </div>
       </div>
@@ -693,7 +831,7 @@ You assume all users are conducting authorized security assessments, CTF competi
   </main>
 
   <footer class="footer">
-    <span>Abdelkrim Zouaki &middot; Local AI Guide</span>
+    <span>Abdelkrim Zouaki &middot; Local AI for Security Operations</span>
     <a href="Blog.html">&larr; Back to Blog</a>
   </footer>
 
@@ -741,7 +879,7 @@ You assume all users are conducting authorized security assessments, CTF competi
       ring.style.left=rx+'px'; ring.style.top=ry+'px';
       requestAnimationFrame(animCursor);
     })();
-    document.querySelectorAll('a,button,.step,.stack-card').forEach(el => {
+    document.querySelectorAll('a,button,.step,.stack-card,.workflow-card').forEach(el => {
       el.addEventListener('mouseenter',()=>ring.classList.add('big'));
       el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
     });
@@ -769,7 +907,7 @@ You assume all users are conducting authorized security assessments, CTF competi
     });
 
     // STACK CARD 3D HOVER
-    document.querySelectorAll('.stack-card').forEach(card => {
+    document.querySelectorAll('.stack-card,.workflow-card').forEach(card => {
       card.addEventListener('mousemove',e=>{
         const r=card.getBoundingClientRect();
         const cx=(e.clientX-r.left-r.width/2)/r.width, cy=(e.clientY-r.top-r.height/2)/r.height;
@@ -786,13 +924,21 @@ You assume all users are conducting authorized security assessments, CTF competi
     });
     backBtn.addEventListener('mouseleave',()=>gsap.to(backBtn,{x:0,y:0,duration:0.6,ease:'elastic.out(1,0.5)'}));
 
-    // SYSTEM PROMPT TOGGLE
+    // SYSTEM PROMPT TOGGLES
     const spToggle=document.getElementById('sp-toggle'), spBody=document.getElementById('sp-body');
     let spOpen=false;
     spToggle.addEventListener('click',()=>{
       spOpen=!spOpen;
       spBody.classList.toggle('collapsed',!spOpen);
       spToggle.textContent=spOpen?'Collapse ↑':'Expand ↓';
+    });
+
+    const socToggle=document.getElementById('soc-toggle'), socBody=document.getElementById('soc-body');
+    let socOpen=false;
+    socToggle.addEventListener('click',()=>{
+      socOpen=!socOpen;
+      socBody.classList.toggle('collapsed',!socOpen);
+      socToggle.textContent=socOpen?'Collapse ↑':'Expand ↓';
     });
   </script>
 </body>
