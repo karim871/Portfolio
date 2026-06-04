@@ -1949,42 +1949,42 @@ tailwind.config = {
               <span class="skill-leg-name">Threat Detection</span>
               <span class="skill-leg-tool">Suricata</span>
             </div>
-            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.92"></div></div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.70"></div></div>
           </div>
           <div class="skill-leg-row" data-idx="1">
             <div class="skill-leg-header">
               <span class="skill-leg-name">SIEM &amp; Log Analysis</span>
               <span class="skill-leg-tool">Splunk</span>
             </div>
-            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.86"></div></div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.78"></div></div>
           </div>
           <div class="skill-leg-row" data-idx="2">
             <div class="skill-leg-header">
               <span class="skill-leg-name">Incident Response</span>
               <span class="skill-leg-tool">MITRE ATT&amp;CK</span>
             </div>
-            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.84"></div></div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.74"></div></div>
           </div>
           <div class="skill-leg-row" data-idx="3">
             <div class="skill-leg-header">
               <span class="skill-leg-name">Network Security</span>
               <span class="skill-leg-tool">pfSense</span>
             </div>
-            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.76"></div></div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.68"></div></div>
           </div>
           <div class="skill-leg-row" data-idx="4">
             <div class="skill-leg-header">
               <span class="skill-leg-name">Endpoint Security</span>
               <span class="skill-leg-tool">Wazuh HIDS</span>
             </div>
-            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.70"></div></div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.62"></div></div>
           </div>
           <div class="skill-leg-row" data-idx="5">
             <div class="skill-leg-header">
               <span class="skill-leg-name">Scripting &amp; Automation</span>
               <span class="skill-leg-tool">Python</span>
             </div>
-            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.65"></div></div>
+            <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.58"></div></div>
           </div>
         </div>
       </div>
@@ -2776,12 +2776,12 @@ if (prefersReduced) {
 
   // Scores drive shape only — never displayed as numbers
   const axes = [
-    { name: 'Threat Detection',       score: 0.92, tools: 'Suricata · Wazuh · Wireshark · Nessus',                       note: 'IDS rule tuning, alert triage, IOC analysis' },
-    { name: 'SIEM & Log Analysis',    score: 0.86, tools: 'Splunk · ELK Stack · Sysmon · rsyslog',                       note: 'Custom dashboards, correlation rules, log pipeline' },
-    { name: 'Incident Response',      score: 0.84, tools: 'MITRE ATT&CK · Sysmon · Splunk',                              note: 'Detection to containment in 42 min — documented IR writeup' },
-    { name: 'Network Security',       score: 0.76, tools: 'pfSense · OPNsense · Pi-hole · VLANs · OpenVPN · Cisco IOS', note: '3-VLAN segmentation, firewall rules, DNS sinkhole' },
-    { name: 'Endpoint Security',      score: 0.70, tools: 'Wazuh HIDS · Windows hardening · Active Directory',           note: 'Host-based detection, hardening, AD administration' },
-    { name: 'Scripting & Automation', score: 0.65, tools: 'Python · Bash · PowerShell · REST APIs',                      note: 'Threat intel bot: AbuseIPDB + VirusTotal + OTX automation' },
+    { name: 'Threat Detection',       score: 0.70, tools: 'Suricata · Wazuh · Wireshark · Nessus',                       note: 'IDS rule tuning, alert triage, IOC analysis' },
+    { name: 'SIEM & Log Analysis',    score: 0.78, tools: 'Splunk · ELK Stack · Sysmon · rsyslog',                       note: 'Custom dashboards, correlation rules, log pipeline' },
+    { name: 'Incident Response',      score: 0.74, tools: 'MITRE ATT&CK · Sysmon · Splunk',                              note: 'Detection to containment in 42 min — documented IR writeup' },
+    { name: 'Network Security',       score: 0.68, tools: 'pfSense · OPNsense · Pi-hole · VLANs · OpenVPN · Cisco IOS', note: '3-VLAN segmentation, firewall rules, DNS sinkhole' },
+    { name: 'Endpoint Security',      score: 0.62, tools: 'Wazuh HIDS · Windows hardening · Active Directory',           note: 'Host-based detection, hardening, AD administration' },
+    { name: 'Scripting & Automation', score: 0.58, tools: 'Python · Bash · PowerShell · REST APIs',                      note: 'Threat intel bot: AbuseIPDB + VirusTotal + OTX automation' },
   ];
 
   function mk(tag, attrs = {}) {
