@@ -1,622 +1,664 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux+ Journey - Coming Soon | Abdelkrim Zouaki</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompTIA Linux+ XK0-006 Journey | Abdelkrim Zouaki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--surface:#111111;--border:rgba(255,255,255,0.08);--border-h:rgba(255,255,255,0.22);--text:#555555;--text-l:#aaaaaa;--text-h:#f0f0f0;--accent:#eeeeee;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:auto;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;cursor:none;}
 
-        body {
-            background: #0a0a0a;
-            color: #fff;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-        }
+#cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s;mix-blend-mode:screen;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(255,255,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+#cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
+#grain{position:fixed;inset:-100%;width:400%;height:400%;z-index:9996;pointer-events:none;opacity:0.038;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.6s steps(1) infinite;}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(255,255,255,0.3));z-index:10000;box-shadow:0 0 12px rgba(255,255,255,0.6);transition:width 0.1s linear;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:2px;}
 
-        /* Animated background grid */
-        .grid-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
-            z-index: 0;
-        }
+.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
+.nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
+.nav-back:hover{color:var(--accent);}
+.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.4;letter-spacing:0.06em;}
+.nav-ext{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--text);text-decoration:none;transition:color 0.2s;}
+.nav-ext:hover{color:var(--accent);}
 
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
-        }
+/* HERO */
+.hero-section{position:relative;min-height:70vh;display:flex;align-items:flex-end;padding:0 6% 6rem;overflow:hidden;}
+.hero-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-section::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 25% 20%,rgba(255,255,255,0.04) 0%,transparent 65%),linear-gradient(to bottom,transparent 40%,var(--bg) 100%);pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:820px;margin:0 auto;width:100%;}
+.hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.18em;margin-bottom:1.5rem;opacity:0.8;display:block;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7.5vw,5.5rem);font-weight:700;color:var(--text-h);line-height:0.92;letter-spacing:-0.045em;margin-bottom:1.5rem;}
+.hero-sub{font-size:1rem;color:var(--text-l);margin-bottom:2rem;line-height:1.7;max-width:560px;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:2rem;}
+.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;}
+.tag-yellow{background:rgba(251,191,36,0.08);border-color:rgba(251,191,36,0.3);color:#fbbf24;}
+.hero-stats{display:flex;gap:3rem;}
+.h-stat-val{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;line-height:1;letter-spacing:-0.04em;color:var(--text-h);}
+.h-stat-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);opacity:0.6;margin-top:4px;letter-spacing:0.08em;}
 
-        /* Glowing orbs */
-        .orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.3;
-            animation: float 20s ease-in-out infinite;
-            z-index: 1;
-        }
+/* WRAP */
+.wrap{max-width:1060px;margin:0 auto;padding:4rem 5% 8rem;}
 
-        .orb1 {
-            width: 300px;
-            height: 300px;
-            background: #00ff41;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
+/* GLASS */
+.glass{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.35s,box-shadow 0.35s;position:relative;overflow:hidden;}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);opacity:0;transition:opacity 0.35s;}
+.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(255,255,255,0.04);}
+.glass:hover::before{opacity:1;}
 
-        .orb2 {
-            width: 400px;
-            height: 400px;
-            background: #00ffff;
-            bottom: 10%;
-            right: 10%;
-            animation-delay: 5s;
-        }
+/* S-TITLE */
+.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-h);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;letter-spacing:-0.02em;}
+.s-num{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--accent);opacity:0.8;flex-shrink:0;}
+.s-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
 
-        .orb3 {
-            width: 250px;
-            height: 250px;
-            background: #ff00ff;
-            top: 50%;
-            right: 20%;
-            animation-delay: 10s;
-        }
+/* STATUS BADGE */
+.status-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Fira Code',monospace;font-size:0.7rem;letter-spacing:0.1em;color:#fbbf24;border:1px solid rgba(251,191,36,0.3);border-radius:4px;padding:5px 14px;background:rgba(251,191,36,0.07);margin-bottom:1.5rem;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;animation:sdot 1.5s ease-in-out infinite;flex-shrink:0;}
+@keyframes sdot{0%,100%{opacity:1}50%{opacity:0.3}}
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 30px) scale(0.9); }
-        }
+/* DOMAIN GRID */
+.domain-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-top:1rem;}
+.domain-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:10px;padding:1.25rem;transition:border-color 0.3s,transform 0.3s;position:relative;}
+.domain-card:hover{border-color:var(--border-h);transform:translateY(-3px);}
+.domain-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0;}
+.d1::before{background:linear-gradient(90deg,#5bc8ff,transparent);}
+.d2::before{background:linear-gradient(90deg,#34d399,transparent);}
+.d3::before{background:linear-gradient(90deg,#f43f5e,transparent);}
+.d4::before{background:linear-gradient(90deg,#a855f7,transparent);}
+.d5::before{background:linear-gradient(90deg,#fbbf24,transparent);}
+.domain-pct{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;line-height:1;letter-spacing:-0.04em;margin-bottom:4px;}
+.d1 .domain-pct{color:#5bc8ff;}.d2 .domain-pct{color:#34d399;}.d3 .domain-pct{color:#f43f5e;}.d4 .domain-pct{color:#a855f7;}.d5 .domain-pct{color:#fbbf24;}
+.domain-name{font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;color:var(--text-h);margin-bottom:3px;}
+.domain-sub{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);opacity:0.6;letter-spacing:0.06em;}
 
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(135deg, rgba(16, 16, 16, 0.9), rgba(26, 26, 26, 0.9));
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
-        }
+/* TOPIC CARDS */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-top:1rem;}
+.topic-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:10px;padding:1.25rem;transition:border-color 0.25s;}
+.topic-card:hover{border-color:var(--border-h);}
+.topic-card h4{font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text-h);margin-bottom:0.5rem;letter-spacing:-0.01em;}
+.topic-card ul{list-style:none;padding:0;}
+.topic-card ul li{font-size:0.8rem;color:var(--text-l);padding:2px 0;display:flex;align-items:flex-start;gap:7px;line-height:1.6;}
+.topic-card ul li::before{content:'▹';color:var(--accent);font-size:0.7rem;flex-shrink:0;margin-top:2px;}
 
-        .inner_header {
-            max-width: 1400px;
-            height: 100%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
+/* CODE */
+pre{background:rgba(8,10,10,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.73rem;color:#a8b4b2;overflow-x:auto;line-height:1.9;margin:0.75rem 0;white-space:pre;}
+code.hl{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:3px;padding:1px 5px;font-family:'Fira Code',monospace;font-size:0.82em;color:var(--accent);}
 
-        .logo_container h1 {
-            color: white;
-            font-size: 32px;
-            font-weight: 200;
-        }
+/* BULLETS */
+.bullet-list{list-style:none;padding:0;}
+.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.3rem 0;font-size:0.86rem;color:var(--text-l);line-height:1.65;}
+.bullet-list li::before{content:'▹';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:0.75rem;}
 
-        .logo_container h1 span {
-            font-weight: 800;
-            color: #00ff41;
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
-        }
+/* SUB-HEADING */
+.sub-h{font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;color:var(--text-h);margin:1.25rem 0 0.6rem;letter-spacing:-0.01em;}
 
-        .navigation {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            list-style: none;
-        }
+/* ALERT */
+.alert-info{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:1rem 1.25rem;font-size:0.84rem;color:#9df5c5;margin-bottom:1rem;}
+.alert-warn{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.84rem;color:#fde68a;margin-bottom:1rem;}
 
-        .navigation a {
-            padding: 0.5rem 1.5rem;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
+/* STUDY PROGRESS */
+.progress-row{display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;}
+.progress-label{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text-l);min-width:220px;}
+.progress-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),rgba(255,255,255,0.4));transition:width 1s ease;}
+.progress-pct{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--text);min-width:30px;text-align:right;}
 
-        .navigation a:hover {
-            background: rgba(0, 255, 65, 0.1);
-            color: #00ff41;
-        }
+/* BUTTONS */
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(255,255,255,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
+.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.btn-outline:hover::before{transform:scaleX(1);}
+.btn-outline:hover{border-color:rgba(255,255,255,0.6);box-shadow:0 0 24px rgba(255,255,255,0.12);}
 
-        /* Main content */
-        .container {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 140px 20px 60px;
-        }
-
-        /* Back button */
-        .back-button {
-            position: absolute;
-            top: 120px;
-            left: 20px;
-            padding: 12px 30px;
-            background: rgba(0, 255, 65, 0.1);
-            border: 2px solid rgba(0, 255, 65, 0.5);
-            color: #00ff41;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .back-button:hover {
-            background: rgba(0, 255, 65, 0.2);
-            transform: translateX(-5px);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-        }
-
-        /* Glitch text */
-        .glitch-wrapper {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .glitch {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            color: #00ff41;
-            text-transform: uppercase;
-            position: relative;
-            text-shadow: 
-                0 0 10px rgba(0, 255, 65, 0.8),
-                0 0 20px rgba(0, 255, 65, 0.6),
-                0 0 40px rgba(0, 255, 65, 0.4);
-            animation: glitchText 3s infinite;
-        }
-
-        @keyframes glitchText {
-            0%, 90%, 100% { transform: translate(0); }
-            91% { transform: translate(-2px, 2px); }
-            92% { transform: translate(2px, -2px); }
-            93% { transform: translate(-2px, 2px); }
-        }
-
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .glitch::before {
-            animation: glitch1 2s infinite;
-            color: #ff00ff;
-            z-index: -1;
-        }
-
-        .glitch::after {
-            animation: glitch2 3s infinite;
-            color: #00ffff;
-            z-index: -2;
-        }
-
-        @keyframes glitch1 {
-            0%, 100% { transform: translate(0); opacity: 0.8; }
-            20% { transform: translate(-3px, 3px); }
-            40% { transform: translate(-3px, -3px); }
-            60% { transform: translate(3px, 3px); }
-            80% { transform: translate(3px, -3px); }
-        }
-
-        @keyframes glitch2 {
-            0%, 100% { transform: translate(0); opacity: 0.8; }
-            25% { transform: translate(3px, -3px); }
-            50% { transform: translate(-3px, 3px); }
-            75% { transform: translate(3px, 3px); }
-        }
-
-        /* Status badge */
-        .status-badge {
-            display: inline-block;
-            padding: 12px 30px;
-            background: rgba(0, 255, 65, 0.1);
-            border: 2px solid #00ff41;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #00ff41;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 30px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .status-badge::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.3), transparent);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { left: -100%; }
-            50%, 100% { left: 200%; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(0, 255, 65, 0.8); }
-        }
-
-        /* Mysterious box */
-        .mystery-box {
-            max-width: 800px;
-            background: rgba(10, 10, 10, 0.8);
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            border-radius: 20px;
-            padding: 60px 40px;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                0 0 50px rgba(0, 255, 65, 0.2),
-                inset 0 0 50px rgba(0, 255, 65, 0.05);
-            animation: boxFloat 6s ease-in-out infinite;
-        }
-
-        @keyframes boxFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .mystery-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(0, 255, 65, 0.1) 50%,
-                transparent 70%
-            );
-            animation: rotate 10s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .mystery-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-        }
-
-        .mystery-content p {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 30px;
-        }
-
-        /* Terminal effect */
-        .terminal {
-            background: #000;
-            border: 1px solid #00ff41;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 30px 0;
-            font-family: 'Courier New', monospace;
-            text-align: left;
-        }
-
-        .terminal-line {
-            color: #00ff41;
-            margin: 10px 0;
-            opacity: 0;
-            animation: typeIn 0.5s forwards;
-        }
-
-        .terminal-line:nth-child(1) { animation-delay: 0.5s; }
-        .terminal-line:nth-child(2) { animation-delay: 1s; }
-        .terminal-line:nth-child(3) { animation-delay: 1.5s; }
-        .terminal-line:nth-child(4) { animation-delay: 2s; }
-
-        @keyframes typeIn {
-            to { opacity: 1; }
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 20px;
-            background: #00ff41;
-            animation: blink 1s step-end infinite;
-            margin-left: 5px;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-
-        /* Progress indicators */
-        .progress-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .progress-item {
-            background: rgba(0, 255, 65, 0.05);
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .progress-item:hover {
-            transform: translateY(-5px);
-            border-color: #00ff41;
-            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
-        }
-
-        .progress-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            filter: grayscale(100%);
-            opacity: 0.5;
-            transition: all 0.3s ease;
-        }
-
-        .progress-item:hover .progress-icon {
-            filter: grayscale(0%);
-            opacity: 1;
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-
-        .progress-label {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Hexagon loader */
-        .hexagon-loader {
-            margin: 40px auto;
-            width: 100px;
-            height: 100px;
-            position: relative;
-        }
-
-        .hexagon {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: #00ff41;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            animation: hexSpin 3s ease-in-out infinite;
-        }
-
-        .hexagon:nth-child(1) { animation-delay: 0s; }
-        .hexagon:nth-child(2) { animation-delay: 0.3s; left: 30px; }
-        .hexagon:nth-child(3) { animation-delay: 0.6s; top: 30px; }
-        .hexagon:nth-child(4) { animation-delay: 0.9s; left: 30px; top: 30px; }
-
-        @keyframes hexSpin {
-            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-            50% { opacity: 0.3; transform: scale(0.8) rotate(180deg); }
-        }
-
-        /* Call to action */
-        .cta-text {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 30px;
-            font-style: italic;
-        }
-
-        .cta-text strong {
-            color: #00ff41;
-            font-weight: 700;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header { height: 80px; }
-            .inner_header {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            .navigation {
-                font-size: 0.8rem;
-                gap: 0.5rem;
-            }
-            .back-button { top: 90px; }
-            .mystery-box { padding: 40px 20px; }
-            .glitch { font-size: 2.5rem; }
-            .progress-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
+.mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-6{margin-bottom:1.5rem;}.mb-8{margin-bottom:2rem;}
+</style>
 </head>
 <body>
-    <!-- Animated background -->
-    <div class="grid-background"></div>
-    <div class="orb orb1"></div>
-    <div class="orb orb2"></div>
-    <div class="orb orb3"></div>
 
-    <!-- Header -->
-    <div class="header">
-        <div class="inner_header">
-            <div class="logo_container">
-                <h1>Z<span>Sec.io</span></h1>
-            </div>
-            <ul class="navigation">
-                <a href="../index.html"><li>Home</li></a>
-                <a href="../index.html#projects"><li>Projects</li></a>
-                <a href="../index.html#skills"><li>Skills</li></a>
-                <a href="../index.html#certifications"><li>Certifications</li></a>
-                <a href="Blog.html"><li>Blog</li></a>
-                <a href="Contact.html"><li>Contact</li></a>
-            </ul>
-        </div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<canvas id="cursor-canvas"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="progress-bar" aria-hidden="true"></div>
+
+<nav class="page-nav">
+  <a href="Blog.html" class="nav-back">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Blog
+  </a>
+  <span class="nav-crumb">Certifications / Linux+ XK0-006</span>
+  <a href="../index.html" class="nav-ext">Portfolio →</a>
+</nav>
+
+<section class="hero-section" id="hero">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">CERTIFICATIONS / LAB NOTES / ACTIVE STUDY</span>
+    <h1 class="hero-title" id="hero-h1">CompTIA Linux+<br>XK0-006</h1>
+    <p class="hero-sub">Live study notes for the XK0-006 (V8) exam — launched July 2025. Five domains covering system management, security, automation, containers, and troubleshooting. Notes updated as I work through each domain.</p>
+    <div class="hero-tags">
+      <span class="tag">XK0-006 V8</span>
+      <span class="tag">5 Domains</span>
+      <span class="tag">90 Questions · 90 min</span>
+      <span class="tag">720 / 900 Passing</span>
+      <span class="tag tag-yellow">In Progress — Jan 2026</span>
     </div>
-
-    <!-- Main Container -->
-    <div class="container">
-        <a href="Blog.html" class="back-button">← Back to Blog</a>
-
-        <!-- Glitch title -->
-        <div class="glitch-wrapper">
-            <h1 class="glitch" data-text="LINUX+">LINUX+</h1>
-        </div>
-
-        <!-- Status badge -->
-        <div class="status-badge">
-            🔒 Journey In Progress
-        </div>
-
-        <!-- Mystery box -->
-        <div class="mystery-box">
-            <div class="mystery-content">
-                <p>
-                    The path to <strong style="color: #00ff41;">CompTIA Linux+ certification</strong> is currently underway. 
-                    Deep in the terminal, mastering the ancient arts of system administration, security hardening, 
-                    and automation.
-                </p>
-
-                <!-- Terminal simulation -->
-                <div class="terminal">
-                    <div class="terminal-line">$ sudo systemctl status linux-certification.service</div>
-                    <div class="terminal-line">● linux-certification.service - Linux+ Journey</div>
-                    <div class="terminal-line">   Loaded: loaded (/etc/systemd/system/)</div>
-                    <div class="terminal-line">   Active: <span style="color: #ffff00;">active (studying)</span> since January 2026<span class="cursor"></span></div>
-                </div>
-
-                <!-- Progress indicators -->
-                <div class="progress-grid">
-                    <div class="progress-item">
-                        <div class="progress-icon">📚</div>
-                        <div class="progress-label">Studying</div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-icon">⚙️</div>
-                        <div class="progress-label">Lab Practice</div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-icon">🔒</div>
-                        <div class="progress-label">Security</div>
-                    </div>
-                    <div class="progress-item">
-                        <div class="progress-icon">🎯</div>
-                        <div class="progress-label">Exam Prep</div>
-                    </div>
-                </div>
-
-                <!-- Hexagon loader -->
-                <div class="hexagon-loader">
-                    <div class="hexagon"></div>
-                    <div class="hexagon"></div>
-                    <div class="hexagon"></div>
-                    <div class="hexagon"></div>
-                </div>
-
-                <p class="cta-text">
-                    The full <strong>CompTIA Linux+ certification story</strong> will be revealed here once the journey is complete. 
-                    <br><br>
-                    Stay tuned for an in-depth guide covering study strategies, hands-on labs, 
-                    and everything you need to master Linux system administration.
-                </p>
-            </div>
-        </div>
+    <div class="hero-stats">
+      <div>
+        <div class="h-stat-val">90</div>
+        <div class="h-stat-label">MAX QUESTIONS</div>
+      </div>
+      <div>
+        <div class="h-stat-val">720</div>
+        <div class="h-stat-label">PASSING SCORE</div>
+      </div>
+      <div>
+        <div class="h-stat-val">5</div>
+        <div class="h-stat-label">EXAM DOMAINS</div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-    <script>
-        const lenis = new Lenis({
-          duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          smooth: true,
-          smoothWheel: false,
-        });
-        (function raf(time) { lenis.raf(time); requestAnimationFrame(raf); })(0);
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-          a.addEventListener('click', e => { e.preventDefault(); lenis.scrollTo(a.getAttribute('href')); });
-        });
+<main class="wrap">
 
-        // Parallax effect for orbs
-        document.addEventListener('mousemove', (e) => {
-            const orbs = document.querySelectorAll('.orb');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            orbs.forEach((orb, index) => {
-                const speed = (index + 1) * 20;
-                orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
-            });
-        });
+  <!-- STATUS -->
+  <div class="glass mb-8">
+    <div class="s-title"><span class="s-num">00.</span> Status</div>
+    <div class="status-badge"><span class="status-dot"></span> ACTIVE — STUDYING SINCE JANUARY 2026</div>
+    <p style="font-size:0.87rem;color:var(--text-l);line-height:1.8;margin-bottom:1.25rem;">This page tracks my XK0-006 prep in real time. It documents what I'm learning per domain, key commands I'm drilling, and where I'm spending extra time. The full certification writeup — exam day, lessons learned, strategy — will replace this section once I pass.</p>
+    <div class="alert-warn">XK0-005 retired. If you're starting Linux+ now, you're on <strong style="color:var(--text-h)">XK0-006 (V8)</strong> — launched July 15, 2025. The domain structure changed significantly: 5 domains instead of 4, containers and Python scripting added explicitly.</div>
 
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(10, 10, 10, 0.95)';
-            } else {
-                header.style.background = 'linear-gradient(135deg, rgba(16, 16, 16, 0.9), rgba(26, 26, 26, 0.9))';
-            }
-        });
+    <div class="sub-h">Study Progress by Domain</div>
+    <div class="progress-row"><span class="progress-label">Domain 1 — System Management (23%)</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:80%"></div></div><span class="progress-pct">80%</span></div>
+    <div class="progress-row"><span class="progress-label">Domain 2 — Services &amp; User Mgmt (20%)</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:65%"></div></div><span class="progress-pct">65%</span></div>
+    <div class="progress-row"><span class="progress-label">Domain 3 — Security (18%)</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:55%"></div></div><span class="progress-pct">55%</span></div>
+    <div class="progress-row"><span class="progress-label">Domain 4 — Automation &amp; Scripting (17%)</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:70%"></div></div><span class="progress-pct">70%</span></div>
+    <div class="progress-row"><span class="progress-label">Domain 5 — Troubleshooting (22%)</span><div class="progress-bar-wrap"><div class="progress-fill" style="width:45%"></div></div><span class="progress-pct">45%</span></div>
+  </div>
 
-        // Interactive hover effect on mystery box
-        const mysteryBox = document.querySelector('.mystery-box');
-        mysteryBox.addEventListener('mousemove', (e) => {
-            const rect = mysteryBox.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            mysteryBox.style.setProperty('--mouse-x', `${x}px`);
-            mysteryBox.style.setProperty('--mouse-y', `${y}px`);
-        });
-    </script>
+  <!-- DOMAIN OVERVIEW -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">01.</span> Exam Domains at a Glance</div>
+    <div class="domain-grid">
+      <div class="domain-card d1">
+        <div class="domain-pct">23%</div>
+        <div class="domain-name">System Management</div>
+        <div class="domain-sub">BOOT · STORAGE · NETWORKING</div>
+      </div>
+      <div class="domain-card d2">
+        <div class="domain-pct">20%</div>
+        <div class="domain-name">Services &amp; User Mgmt</div>
+        <div class="domain-sub">SYSTEMD · CONTAINERS · PACKAGES</div>
+      </div>
+      <div class="domain-card d3">
+        <div class="domain-pct">18%</div>
+        <div class="domain-name">Security</div>
+        <div class="domain-sub">HARDENING · FIREWALLS · CRYPTO</div>
+      </div>
+      <div class="domain-card d4">
+        <div class="domain-pct">17%</div>
+        <div class="domain-name">Automation &amp; Scripting</div>
+        <div class="domain-sub">BASH · ANSIBLE · GIT · PYTHON</div>
+      </div>
+      <div class="domain-card d5">
+        <div class="domain-pct">22%</div>
+        <div class="domain-name">Troubleshooting</div>
+        <div class="domain-sub">BOOT · PERF · NETWORK · LOGS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOMAIN 1 -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num" style="color:#5bc8ff">D1.</span> System Management — 23%</div>
+    <div class="topic-grid">
+      <div class="topic-card">
+        <h4>Boot Process</h4>
+        <ul>
+          <li>BIOS/UEFI → GRUB2 → kernel → initramfs → systemd</li>
+          <li>GRUB2 config: <code class="hl">/boot/grub2/grub.cfg</code></li>
+          <li>Kernel parameters in <code class="hl">/etc/default/grub</code></li>
+          <li>systemd targets: multi-user, graphical, rescue, emergency</li>
+          <li><code class="hl">systemctl get-default</code> / <code class="hl">set-default</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Storage &amp; Filesystems</h4>
+        <ul>
+          <li>Partitioning: <code class="hl">fdisk</code>, <code class="hl">parted</code>, <code class="hl">lsblk</code></li>
+          <li>LVM: PV → VG → LV; <code class="hl">pvcreate</code> <code class="hl">vgcreate</code> <code class="hl">lvcreate</code></li>
+          <li>Extend LVM: <code class="hl">lvextend -L +10G</code> then <code class="hl">resize2fs</code> / <code class="hl">xfs_growfs</code></li>
+          <li>RAID: levels 0, 1, 5, 6, 10 — <code class="hl">mdadm</code></li>
+          <li>Mount: <code class="hl">/etc/fstab</code>, UUID vs device path</li>
+          <li>Filesystem check: <code class="hl">fsck</code> (unmounted), <code class="hl">xfs_repair</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Network Configuration</h4>
+        <ul>
+          <li><code class="hl">nmcli</code> for NetworkManager (RHEL/Fedora)</li>
+          <li><code class="hl">ip addr</code>, <code class="hl">ip route</code>, <code class="hl">ip link</code></li>
+          <li>Static IP: <code class="hl">/etc/network/interfaces</code> (Debian) or nmcli</li>
+          <li>DNS config: <code class="hl">/etc/resolv.conf</code>, <code class="hl">/etc/hosts</code></li>
+          <li>Bonding/bridging basics; VLAN tagging with <code class="hl">ip link</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Shell Operations</h4>
+        <ul>
+          <li>Redirection: <code class="hl">&gt;</code> <code class="hl">&gt;&gt;</code> <code class="hl">2&gt;</code> <code class="hl">2&gt;&amp;1</code> <code class="hl">/dev/null</code></li>
+          <li>Pipes, process substitution, here-docs</li>
+          <li>Environment: <code class="hl">export</code>, <code class="hl">.bashrc</code> vs <code class="hl">.bash_profile</code></li>
+          <li>Path management; <code class="hl">which</code>, <code class="hl">type</code>, <code class="hl">command -v</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Backup &amp; Restore</h4>
+        <ul>
+          <li><code class="hl">tar czf backup.tar.gz /dir</code> — create compressed archive</li>
+          <li><code class="hl">rsync -av --delete src/ dest/</code> — incremental sync</li>
+          <li>Full vs incremental vs differential backup strategies</li>
+          <li>LVM snapshots for live backups</li>
+          <li>Test restores — a backup not tested is not a backup</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Virtualization</h4>
+        <ul>
+          <li>KVM + QEMU for Linux VMs; <code class="hl">virsh</code> management</li>
+          <li>Type 1 (bare-metal) vs Type 2 (hosted) hypervisors</li>
+          <li>VM snapshots/checkpoints; disk image formats (qcow2, raw)</li>
+          <li><code class="hl">virt-manager</code> GUI; <code class="hl">qemu-img</code> for image ops</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOMAIN 2 -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num" style="color:#34d399">D2.</span> Services &amp; User Management — 20%</div>
+    <div class="topic-grid">
+      <div class="topic-card">
+        <h4>User &amp; Group Management</h4>
+        <ul>
+          <li><code class="hl">useradd</code>, <code class="hl">usermod</code>, <code class="hl">userdel -r</code></li>
+          <li><code class="hl">groupadd</code>, <code class="hl">gpasswd</code>, <code class="hl">id</code>, <code class="hl">groups</code></li>
+          <li>Password aging: <code class="hl">chage -l user</code>, <code class="hl">passwd -e</code></li>
+          <li><code class="hl">/etc/passwd</code>, <code class="hl">/etc/shadow</code>, <code class="hl">/etc/group</code></li>
+          <li>sudoers: <code class="hl">visudo</code> — never edit directly</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>File Permissions &amp; ACLs</h4>
+        <ul>
+          <li><code class="hl">chmod</code> octal and symbolic; <code class="hl">chown</code>, <code class="hl">chgrp</code></li>
+          <li>Special bits: setuid (4), setgid (2), sticky (1)</li>
+          <li>umask: default 022 → files 644, dirs 755</li>
+          <li>ACLs: <code class="hl">getfacl</code>, <code class="hl">setfacl -m u:user:rwx file</code></li>
+          <li>Extended attributes: <code class="hl">lsattr</code>, <code class="hl">chattr +i</code> (immutable)</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>systemd Services</h4>
+        <ul>
+          <li><code class="hl">systemctl start|stop|restart|status service</code></li>
+          <li><code class="hl">systemctl enable|disable</code> — boot persistence</li>
+          <li>Unit file types: service, socket, timer, mount, target</li>
+          <li><code class="hl">journalctl -u service -f</code> — follow service logs</li>
+          <li><code class="hl">systemd-analyze blame</code> — boot time per unit</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Package Management</h4>
+        <ul>
+          <li>Debian/Ubuntu: <code class="hl">apt</code>, <code class="hl">dpkg</code></li>
+          <li>RHEL/Fedora: <code class="hl">dnf</code>, <code class="hl">rpm</code></li>
+          <li>SUSE: <code class="hl">zypper</code></li>
+          <li>Repos: <code class="hl">/etc/apt/sources.list</code>, <code class="hl">/etc/yum.repos.d/</code></li>
+          <li>GPG signing keys; rollback/history with dnf</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Containers — Docker &amp; Podman</h4>
+        <ul>
+          <li><code class="hl">docker run -d -p 80:80 --name web nginx</code></li>
+          <li><code class="hl">docker ps</code>, <code class="hl">docker exec -it</code>, <code class="hl">docker logs</code></li>
+          <li>Images: <code class="hl">docker pull</code>, <code class="hl">docker build</code>, <code class="hl">Dockerfile</code></li>
+          <li>Volumes: <code class="hl">-v /host:/container</code> for persistence</li>
+          <li>Podman: rootless by default; <code class="hl">podman</code> is drop-in replacement</li>
+          <li>Networks: bridge (default), host, none, overlay</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Process Management</h4>
+        <ul>
+          <li><code class="hl">ps aux</code>, <code class="hl">top</code>, <code class="hl">htop</code>, <code class="hl">pgrep</code>, <code class="hl">pkill</code></li>
+          <li>Signals: <code class="hl">kill -9</code> (SIGKILL), <code class="hl">kill -15</code> (SIGTERM)</li>
+          <li>Priority: <code class="hl">nice -n 10 cmd</code>, <code class="hl">renice -n -5 PID</code></li>
+          <li>Job control: <code class="hl">bg</code>, <code class="hl">fg</code>, <code class="hl">jobs</code>, <code class="hl">nohup</code>, <code class="hl">tmux</code></li>
+          <li>Cron: <code class="hl">crontab -e</code>; systemd timers as modern alternative</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOMAIN 3 -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num" style="color:#f43f5e">D3.</span> Security — 18%</div>
+    <div class="topic-grid">
+      <div class="topic-card">
+        <h4>SSH Hardening</h4>
+        <ul>
+          <li>Disable password auth: <code class="hl">PasswordAuthentication no</code></li>
+          <li>Disable root login: <code class="hl">PermitRootLogin no</code></li>
+          <li>Change default port, restrict <code class="hl">AllowUsers</code></li>
+          <li>Key management: <code class="hl">ssh-keygen</code>, <code class="hl">ssh-copy-id</code></li>
+          <li><code class="hl">~/.ssh/authorized_keys</code> permissions must be 600</li>
+          <li>SSH tunnels: <code class="hl">-L</code> local, <code class="hl">-R</code> remote, <code class="hl">-D</code> SOCKS</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Firewalls</h4>
+        <ul>
+          <li>nftables: modern replacement for iptables</li>
+          <li>firewalld: <code class="hl">firewall-cmd --add-port=443/tcp --permanent</code></li>
+          <li>UFW (Ubuntu): <code class="hl">ufw allow 22</code>, <code class="hl">ufw enable</code></li>
+          <li>iptables basics: INPUT, OUTPUT, FORWARD chains; ACCEPT/DROP</li>
+          <li>Default-deny policy: <code class="hl">iptables -P INPUT DROP</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>SELinux &amp; AppArmor</h4>
+        <ul>
+          <li>SELinux modes: enforcing, permissive, disabled</li>
+          <li><code class="hl">getenforce</code>, <code class="hl">setenforce 1</code>, <code class="hl">sestatus</code></li>
+          <li>Context: <code class="hl">ls -Z</code>, <code class="hl">chcon</code>, <code class="hl">restorecon</code></li>
+          <li>Booleans: <code class="hl">getsebool -a</code>, <code class="hl">setsebool -P</code></li>
+          <li>AppArmor: <code class="hl">aa-status</code>, <code class="hl">aa-enforce</code>, <code class="hl">aa-complain</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Cryptography</h4>
+        <ul>
+          <li>LUKS full-disk encryption: <code class="hl">cryptsetup luksFormat</code></li>
+          <li>GPG: <code class="hl">gpg --gen-key</code>, encrypt, sign, verify</li>
+          <li>Hashing: <code class="hl">sha256sum</code>, <code class="hl">md5sum</code> for integrity checks</li>
+          <li>TLS certs: <code class="hl">openssl req -x509</code>, CA chains</li>
+          <li>File integrity: <code class="hl">aide</code> for baseline + comparison</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>OS Hardening</h4>
+        <ul>
+          <li>Minimal installs — remove unused packages and services</li>
+          <li>disable unused services: <code class="hl">systemctl disable --now bluetooth</code></li>
+          <li>PAM: <code class="hl">/etc/pam.d/</code> — account lockout, password complexity</li>
+          <li>Audit: <code class="hl">auditd</code>, <code class="hl">ausearch</code>, <code class="hl">aureport</code></li>
+          <li>Restrict su: <code class="hl">pam_wheel</code> module</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Compliance &amp; Scanning</h4>
+        <ul>
+          <li>Lynis: <code class="hl">lynis audit system</code> — hardening score</li>
+          <li>OpenSCAP: automated compliance scanning</li>
+          <li>Log retention: <code class="hl">/etc/logrotate.d/</code> configuration</li>
+          <li>Principle of least privilege for accounts and processes</li>
+          <li>Separation of duties in sudoers rules</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOMAIN 4 -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num" style="color:#a855f7">D4.</span> Automation, Orchestration &amp; Scripting — 17%</div>
+    <div class="topic-grid">
+      <div class="topic-card">
+        <h4>Bash Scripting</h4>
+        <ul>
+          <li>Variables: <code class="hl">VAR="value"</code>, <code class="hl">$VAR</code>, <code class="hl">${VAR:-default}</code></li>
+          <li>Conditionals: <code class="hl">if [[ $x -eq 1 ]]</code>; <code class="hl">-f</code>, <code class="hl">-d</code>, <code class="hl">-z</code>, <code class="hl">-n</code></li>
+          <li>Loops: <code class="hl">for f in *.log; do</code>; <code class="hl">while read line</code></li>
+          <li>Exit codes: <code class="hl">$?</code>; use <code class="hl">set -e</code> for fail-fast scripts</li>
+          <li>Functions: <code class="hl">function name() { ... }</code>; local variables</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Text Processing</h4>
+        <ul>
+          <li><code class="hl">grep -rn "pattern" /dir</code> — recursive search with line numbers</li>
+          <li><code class="hl">sed -i 's/old/new/g' file</code> — in-place replacement</li>
+          <li><code class="hl">awk '{print $1, $3}' file</code> — field extraction</li>
+          <li><code class="hl">sort | uniq -c | sort -rn</code> — frequency counting</li>
+          <li><code class="hl">cut -d: -f1 /etc/passwd</code> — delimiter-based cutting</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Ansible</h4>
+        <ul>
+          <li>Agentless — pushes over SSH; YAML playbooks</li>
+          <li>Inventory: <code class="hl">/etc/ansible/hosts</code> or custom file</li>
+          <li>Ad-hoc: <code class="hl">ansible all -m ping</code>, <code class="hl">-m shell -a "cmd"</code></li>
+          <li>Playbook: tasks with modules (apt, yum, copy, service, user)</li>
+          <li>Idempotency — running twice produces same result</li>
+          <li>Roles for reusable, organized automation</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Git Version Control</h4>
+        <ul>
+          <li><code class="hl">git clone</code>, <code class="hl">add</code>, <code class="hl">commit -m</code>, <code class="hl">push</code>, <code class="hl">pull</code></li>
+          <li>Branching: <code class="hl">git checkout -b feature</code>, <code class="hl">merge</code>, <code class="hl">rebase</code></li>
+          <li>Undo: <code class="hl">git revert</code> (safe), <code class="hl">git reset --hard</code> (destructive)</li>
+          <li>Stash: <code class="hl">git stash</code>, <code class="hl">git stash pop</code></li>
+          <li>Secrets: never commit — use <code class="hl">.gitignore</code> and vault tools</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Python (Foundational)</h4>
+        <ul>
+          <li>Virtual environments: <code class="hl">python3 -m venv venv</code></li>
+          <li>Package management: <code class="hl">pip install</code>, <code class="hl">requirements.txt</code></li>
+          <li>File I/O, string manipulation, list comprehensions</li>
+          <li>subprocess module for shell command execution</li>
+          <li>sys.exit() with exit codes — important for scripting</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Puppet</h4>
+        <ul>
+          <li>Agent-based (pull model) — agents pull from Puppet master</li>
+          <li>Push model (Ansible) vs pull model (Puppet) — exam distinction</li>
+          <li>Puppet DSL for resource declarations: package, file, service</li>
+          <li>Catalog compilation; agent runs every 30 min by default</li>
+          <li>Idempotency: same as Ansible — desired state enforcement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOMAIN 5 -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num" style="color:#fbbf24">D5.</span> Troubleshooting — 22%</div>
+    <div class="alert-info">The troubleshooting domain is the second-largest (22%) and heavily scenario-based. The methodology matters as much as the commands — know the six-step process: identify → hypothesize → test → remediate → verify → document.</div>
+    <div class="topic-grid mt-3">
+      <div class="topic-card">
+        <h4>Boot Troubleshooting</h4>
+        <ul>
+          <li>GRUB rescue prompt: <code class="hl">set root</code>, <code class="hl">linux</code>, <code class="hl">initrd</code>, <code class="hl">boot</code></li>
+          <li>Kernel panic: check <code class="hl">dmesg</code>, bad initramfs, missing modules</li>
+          <li>systemd failures: <code class="hl">systemctl list-units --failed</code></li>
+          <li>Emergency/rescue mode: append <code class="hl">systemd.unit=emergency.target</code> to kernel line</li>
+          <li>chroot recovery from live media</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Performance Analysis</h4>
+        <ul>
+          <li>CPU: <code class="hl">top</code>, <code class="hl">mpstat</code>, <code class="hl">sar</code> — watch %wa (I/O wait)</li>
+          <li>Memory: <code class="hl">free -h</code>, <code class="hl">vmstat</code> — check swap usage</li>
+          <li>Disk I/O: <code class="hl">iostat -x 1</code>, <code class="hl">iotop</code></li>
+          <li>Network throughput: <code class="hl">iftop</code>, <code class="hl">nethogs</code>, <code class="hl">ss -s</code></li>
+          <li>Runaway processes: <code class="hl">ps aux --sort=-%cpu</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Network Troubleshooting</h4>
+        <ul>
+          <li>Layer 3: <code class="hl">ping</code>, <code class="hl">traceroute</code>, check default gateway</li>
+          <li>DNS: <code class="hl">dig</code>, <code class="hl">nslookup</code>, check <code class="hl">/etc/resolv.conf</code></li>
+          <li>Port/service: <code class="hl">ss -tlnp</code>, <code class="hl">nc -zv host port</code></li>
+          <li>Capture: <code class="hl">tcpdump -i eth0 -n 'port 80'</code></li>
+          <li>MTU issues: <code class="hl">ping -M do -s 1472 gw</code></li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Log Analysis</h4>
+        <ul>
+          <li><code class="hl">journalctl -xe</code> — extended recent journal output</li>
+          <li><code class="hl">journalctl -u sshd --since "1 hour ago"</code></li>
+          <li><code class="hl">/var/log/auth.log</code> (Debian) or <code class="hl">/var/log/secure</code> (RHEL)</li>
+          <li><code class="hl">/var/log/syslog</code>, <code class="hl">/var/log/messages</code></li>
+          <li><code class="hl">dmesg | tail -20</code> — recent kernel messages</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Storage Issues</h4>
+        <ul>
+          <li>Disk full: <code class="hl">df -h</code>, <code class="hl">du -sh /*</code> to find large dirs</li>
+          <li>Inode exhaustion: <code class="hl">df -i</code> — full inodes = no new files</li>
+          <li>Read-only filesystem: <code class="hl">mount -o remount,rw /</code></li>
+          <li>fsck on unmounted ext4: <code class="hl">fsck -y /dev/sdb1</code></li>
+          <li>SMART: <code class="hl">smartctl -a /dev/sda</code> for disk health</li>
+        </ul>
+      </div>
+      <div class="topic-card">
+        <h4>Application &amp; Service Failures</h4>
+        <ul>
+          <li>Permission denied: check <code class="hl">ls -la</code>, SELinux context, <code class="hl">ls -Z</code></li>
+          <li>Port conflicts: <code class="hl">ss -tlnp | grep :80</code></li>
+          <li>Dependency order: ExecStartPre, After= in unit files</li>
+          <li>Library issues: <code class="hl">ldd /usr/bin/app</code>, <code class="hl">ldconfig</code></li>
+          <li>Core dumps: <code class="hl">ulimit -c unlimited</code>; analyze with gdb</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY COMMANDS QUICK REF -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">06.</span> Command Quick Reference</div>
+    <pre># ── SYSTEM ──────────────────────────────────────────────────────
+uname -r                   # kernel version
+lscpu                      # CPU info
+lsblk                      # block devices
+lsmod / modprobe / rmmod   # kernel modules
+dmesg | grep -i error      # kernel errors
+
+# ── STORAGE ─────────────────────────────────────────────────────
+lsblk -f                   # filesystems + UUIDs
+blkid                      # UUID lookup
+mount -o remount,rw /
+pvdisplay / vgdisplay / lvdisplay
+
+# ── PROCESSES ───────────────────────────────────────────────────
+ps aux --sort=-%mem | head -10
+lsof -p PID                # open files by process
+strace -p PID              # trace system calls
+
+# ── NETWORK ─────────────────────────────────────────────────────
+ip -br addr                # brief interface list
+ip route show
+ss -tulnp                  # all listening sockets with PIDs
+tcpdump -i any -n -c 100   # 100 packets any interface
+
+# ── SECURITY ────────────────────────────────────────────────────
+last / lastb               # login / failed login history
+who / w / id
+passwd -S user             # password status
+getent passwd user         # user info from any source (LDAP-aware)
+chage -l user              # password expiry info
+
+# ── LOGS ────────────────────────────────────────────────────────
+journalctl -p err -b       # errors since last boot
+journalctl --disk-usage
+ausearch -m USER_LOGIN -ts today   # audit: today's logins</pre>
+  </div>
+
+  <!-- CTA -->
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2.5rem;">
+    <a href="Blog.html" class="btn-outline">← Back to Blog</a>
+    <a href="accomp.html" class="btn-outline">CySA+ &amp; Security+ Notes →</a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Abdelkrim Zouaki · <a href="https://github.com/karim871" style="color:inherit;text-decoration:none;">karim871</a> · Montreal, QC</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const lenis = new Lenis({ duration:1.2, easing:(t)=>Math.min(1,1.001-Math.pow(2,-10*t)), smooth:true, smoothWheel:false });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((t)=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+
+const pb = document.getElementById('progress-bar');
+window.addEventListener('scroll',()=>{const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100;pb.style.width=Math.min(p,100)+'%';},{passive:true});
+
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',(e)=>{mx=e.clientX;my=e.clientY;});
+(function animC(){rx+=(mx-rx)*0.13;ry+=(my-ry)*0.13;dot.style.left=mx+'px';dot.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animC);})();
+document.querySelectorAll('a,button,.domain-card,.topic-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{dot.style.transform='translate(-50%,-50%) scale(2.5)';ring.style.width='56px';ring.style.height='56px';ring.style.borderColor='rgba(255,255,255,0.9)';});
+  el.addEventListener('mouseleave',()=>{dot.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(255,255,255,0.5)';});
+});
+
+const tc=document.getElementById('cursor-canvas');
+const tctx=tc.getContext('2d');
+let pts=[];
+function rTC(){tc.width=window.innerWidth;tc.height=window.innerHeight;}
+rTC();window.addEventListener('resize',rTC);
+document.addEventListener('mousemove',(e)=>{pts.push({x:e.clientX,y:e.clientY,age:0,life:26+Math.random()*16});if(pts.length>60)pts.shift();});
+(function dT(){tctx.clearRect(0,0,tc.width,tc.height);pts=pts.filter(p=>p.age<p.life);for(const p of pts){const a=(1-p.age/p.life)*0.5;const r=(1-p.age/p.life)*2.2;tctx.beginPath();tctx.arc(p.x,p.y,r,0,Math.PI*2);tctx.fillStyle=`rgba(255,255,255,${a})`;tctx.fill();p.age++;}requestAnimationFrame(dT);})();
+
+// hero split
+const h1=document.getElementById('hero-h1');
+const wds=h1.innerHTML.replace(/<br>/g,' BREAK ').trim().split(/\s+/);
+h1.innerHTML=wds.map(w=>w==='BREAK'?'<br>':`<span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block">${w}</span></span>`).join(' ');
+gsap.from('#hero-h1 span > span',{y:'115%',duration:1.1,ease:'power4.out',stagger:0.06,delay:0.2});
+gsap.from('.hero-eyebrow',{opacity:0,y:14,duration:0.9,ease:'power3.out',delay:0.1});
+gsap.from('.hero-sub',{opacity:0,y:16,duration:0.9,ease:'power3.out',delay:0.65});
+gsap.from('.hero-tags',{opacity:0,y:10,duration:0.8,ease:'power3.out',delay:0.85});
+gsap.from('.hero-stats > div',{opacity:0,y:20,duration:0.7,ease:'power3.out',stagger:0.1,delay:1.0});
+
+gsap.utils.toArray('.glass').forEach(el=>{gsap.from(el,{y:36,opacity:0,duration:0.8,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true}});});
+gsap.utils.toArray('.domain-card,.topic-card').forEach(el=>{gsap.from(el,{y:20,opacity:0,duration:0.6,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 92%',once:true}});});
+
+// animate progress bars on scroll
+ScrollTrigger.create({trigger:'.progress-row',start:'top 85%',once:true,onEnter:()=>{
+  document.querySelectorAll('.progress-fill').forEach(bar=>{
+    const w=bar.style.width;bar.style.width='0%';
+    setTimeout(()=>{bar.style.width=w;},100);
+  });
+}});
+
+document.querySelectorAll('.btn-outline').forEach(btn=>{
+  btn.addEventListener('mousemove',(e)=>{const r=btn.getBoundingClientRect();gsap.to(btn,{x:(e.clientX-r.left-r.width/2)*0.28,y:(e.clientY-r.top-r.height/2)*0.28,duration:0.35,ease:'power2.out'});});
+  btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:0.6,ease:'elastic.out(1,0.5)'}));
+});
+</script>
 </body>
 </html>
