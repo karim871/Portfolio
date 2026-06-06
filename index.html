@@ -645,6 +645,14 @@ tailwind.config = {
     pointer-events: none;
   }
 
+  /* ── Shapes canvas ── */
+  #shapes-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
 
   /* ── Name split-text chars ── */
   .name-char {
@@ -1449,6 +1457,9 @@ tailwind.config = {
 
 <!-- Binary/hex particle background -->
 <canvas id="binary-canvas" aria-hidden="true"></canvas>
+
+<!-- Geometric shapes parallax background -->
+<canvas id="shapes-canvas" aria-hidden="true"></canvas>
 
 <!-- Ambient orbs -->
 <div class="orb orb-1" aria-hidden="true"></div>
@@ -2262,40 +2273,176 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
   });
 });
 
-// ── Binary / hex particle canvas ─────────────────────────────
+// ── Binary / hex particle canvas — 3-D depth parallax ────────
 (function initBinaryCanvas() {
   const canvas = document.getElementById('binary-canvas');
   const ctx = canvas.getContext('2d');
-  const chars = ['∑','π','∞','√','∂','∫','∇','×','÷','±','≤','≥','≠','≈','∈','∉','∅','∧','∨','⊕','α','β','γ','δ','θ','λ','μ','σ','φ','ψ','ω','ε','ξ','ζ'];
-  const COUNT = 50;
+
+  // Layered character sets — mix of math, hex, cyber, greek
+  const chars = [
+    '∑','π','∞','√','∂','∫','∇','×','÷','±','≤','≥','≠','≈','∈','∅','∧','∨','⊕',
+    'α','β','γ','δ','θ','λ','μ','σ','φ','ψ','ω','ε','ξ','ζ',
+    '0','1','A','B','C','D','E','F',
+    'FF','00','01','10','11','1A','3F','7E',
+    '{','}','[',']','<','>','/','|',';',':','#',
+    '42','0x','\/\/',
+  ];
+
+  const COUNT = 95;
   const particles = [];
 
   function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
   resize();
   addEventListener('resize', resize, { passive: true });
 
-  for (let i = 0; i < COUNT; i++) {
-    particles.push({
+  function spawnParticle(preplace) {
+    // z: 0.05 = far/background, 1.0 = near/foreground
+    const z = 0.05 + Math.random() * 0.95;
+    return {
       x: Math.random() * innerWidth,
-      y: Math.random() * innerHeight,
-      vy: 0.008 + Math.random() * 0.02,
+      y: preplace ? Math.random() * innerHeight : -(20 + Math.random() * 80),
+      z,
+      vy: (0.012 + Math.random() * 0.045) * z,   // near = faster
+      vx: (Math.random() - 0.5) * 0.018 * z,      // slight horizontal drift
       ch: chars[Math.floor(Math.random() * chars.length)],
-      alpha: 0.28 + Math.random() * 0.20,
-      size: 10 + Math.floor(Math.random() * 6),
+      // near = brighter yellow-white, far = dim cool-blue
+      alpha: 0.05 + z * 0.42,
+      size: (7 + Math.random() * 11) * z,          // near = bigger
       tick: 0,
-      interval: 180 + Math.floor(Math.random() * 220),
-    });
+      interval: 120 + Math.floor(Math.random() * 280),
+    };
   }
+
+  for (let i = 0; i < COUNT; i++) particles.push(spawnParticle(true));
 
   (function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const p of particles) {
       p.y += p.vy;
-      if (p.y > canvas.height + 20) { p.y = -20; p.x = Math.random() * canvas.width; }
-      if (++p.tick >= p.interval) { p.ch = chars[Math.floor(Math.random() * chars.length)]; p.tick = 0; }
-      ctx.font = `${p.size}px 'Fira Code',monospace`;
-      ctx.fillStyle = `rgba(255,235,59,${p.alpha})`;
+      p.x += p.vx;
+
+      if (p.y > canvas.height + 40) { Object.assign(p, spawnParticle(false)); }
+      if (p.x < -20) p.x = canvas.width + 20;
+      if (p.x > canvas.width + 20) p.x = -20;
+
+      if (++p.tick >= p.interval) {
+        p.ch = chars[Math.floor(Math.random() * chars.length)];
+        p.tick = 0;
+      }
+
+      // Color: far (z≈0) = dim steel-blue, near (z≈1) = bright yellow
+      const r = Math.round(100 + p.z * 155);
+      const g = Math.round(190 + p.z * 50);
+      const b = Math.round(255 - p.z * 196);
+
+      ctx.font = `${Math.round(Math.max(6, p.size))}px 'Fira Code',monospace`;
+      ctx.fillStyle = `rgba(${r},${g},${b},${p.alpha})`;
       ctx.fillText(p.ch, p.x, p.y);
+    }
+    requestAnimationFrame(draw);
+  })();
+})();
+
+// ── Geometric shapes parallax canvas — 3-D depth ─────────────
+(function initShapesCanvas() {
+  const canvas = document.getElementById('shapes-canvas');
+  const ctx = canvas.getContext('2d');
+  const COUNT = 40;
+  const shapes = [];
+
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize();
+  addEventListener('resize', resize, { passive: true });
+
+  // Design system accent colors: sky, steel, ice
+  const colorBases = [
+    [91, 200, 255],   // sky
+    [150, 208, 255],  // steel
+    [228, 249, 255],  // ice
+    [60, 140, 200],   // deep muted blue
+    [120, 180, 230],  // mid tone
+  ];
+
+  function spawnShape(preplace) {
+    const z = 0.05 + Math.random() * 0.95;
+    const cb = colorBases[Math.floor(Math.random() * colorBases.length)];
+    // 0=ring, 1=square, 2=triangle, 3=hexagon, 4=diamond, 5=cross
+    const type = Math.floor(Math.random() * 6);
+    return {
+      x: Math.random() * innerWidth,
+      y: preplace ? Math.random() * innerHeight : -(40 + Math.random() * 100),
+      z,
+      vy: (0.006 + Math.random() * 0.022) * z,
+      vx: (Math.random() - 0.5) * 0.010 * z,
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.004 * (0.4 + z * 0.6),
+      size: (8 + Math.random() * 26) * z,
+      type,
+      alpha: 0.03 + z * 0.15,
+      lineWidth: 0.4 + z * 0.9,
+      color: cb,
+    };
+  }
+
+  for (let i = 0; i < COUNT; i++) shapes.push(spawnShape(true));
+
+  function strokeShape(type, size) {
+    ctx.beginPath();
+    if (type === 0) {
+      ctx.arc(0, 0, size, 0, Math.PI * 2);
+    } else if (type === 1) {
+      ctx.rect(-size, -size, size * 2, size * 2);
+    } else if (type === 2) {
+      ctx.moveTo(0, -size);
+      ctx.lineTo(size * 0.866, size * 0.5);
+      ctx.lineTo(-size * 0.866, size * 0.5);
+      ctx.closePath();
+    } else if (type === 3) {
+      for (let k = 0; k < 6; k++) {
+        const a = (k / 6) * Math.PI * 2 - Math.PI / 6;
+        if (k === 0) ctx.moveTo(Math.cos(a) * size, Math.sin(a) * size);
+        else ctx.lineTo(Math.cos(a) * size, Math.sin(a) * size);
+      }
+      ctx.closePath();
+    } else if (type === 4) {
+      ctx.moveTo(0, -size);
+      ctx.lineTo(size * 0.55, 0);
+      ctx.lineTo(0, size);
+      ctx.lineTo(-size * 0.55, 0);
+      ctx.closePath();
+    } else {
+      // cross / plus
+      const arm = size * 0.35;
+      ctx.moveTo(-arm, -size); ctx.lineTo(arm, -size);
+      ctx.lineTo(arm, -arm);  ctx.lineTo(size, -arm);
+      ctx.lineTo(size, arm);  ctx.lineTo(arm, arm);
+      ctx.lineTo(arm, size);  ctx.lineTo(-arm, size);
+      ctx.lineTo(-arm, arm);  ctx.lineTo(-size, arm);
+      ctx.lineTo(-size, -arm); ctx.lineTo(-arm, -arm);
+      ctx.closePath();
+    }
+    ctx.stroke();
+  }
+
+  (function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of shapes) {
+      s.y += s.vy;
+      s.x += s.vx;
+      s.rot += s.rotSpeed;
+
+      if (s.y > canvas.height + 100) { Object.assign(s, spawnShape(false)); }
+      if (s.x < -100) s.x = canvas.width + 100;
+      if (s.x > canvas.width + 100) s.x = -100;
+
+      ctx.save();
+      ctx.translate(s.x, s.y);
+      ctx.rotate(s.rot);
+      const [r, g, b] = s.color;
+      ctx.strokeStyle = `rgba(${r},${g},${b},${s.alpha})`;
+      ctx.lineWidth = s.lineWidth;
+      strokeShape(s.type, s.size);
+      ctx.restore();
     }
     requestAnimationFrame(draw);
   })();
