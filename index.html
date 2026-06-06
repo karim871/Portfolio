@@ -1188,6 +1188,22 @@ tailwind.config = {
     border-radius: 1px;
     overflow: hidden;
   }
+  .skill-leg-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .sleg-pill {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+    color: var(--text);
+    background: rgba(100,200,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 6px;
+    letter-spacing: 0.02em;
+  }
   .skill-leg-bar {
     height: 100%;
     background: linear-gradient(to right, var(--sky), #e8f6ff);
@@ -1561,7 +1577,7 @@ tailwind.config = {
       <!-- CTA buttons — magnetic on hover -->
       <div class="flex flex-wrap gap-3" id="hero-btns" style="opacity:0;transform:translateY(10px)">
         <a href="#contact" class="btn-outline magnetic-btn" data-magnetic>Get In Touch</a>
-        <a href="https://karim871.github.io/Portfolio/cv.html" target="_blank" rel="noopener" class="btn-primary magnetic-btn" data-magnetic>
+        <a href="https://karim871.github.io/Portfolio/Abdelkrim_Zouaki_CV.pdf" target="_blank" rel="noopener" download class="btn-primary magnetic-btn" data-magnetic>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>
           Download CV
         </a>
@@ -1608,7 +1624,8 @@ tailwind.config = {
       </h2>
       <div class="space-y-5 text-[0.95rem] leading-[1.85] text-slate-400">
         <p class="about-p">I build, monitor, and troubleshoot systems. My experience ranges from Tier 1 IT support to hands-on cybersecurity labs involving <span class="accent-sky font-medium">SIEM, IDS, threat intelligence, and network security tools</span>.</p>
-        <p class="about-p"><span class="accent-sky font-medium">DEC graduate in Computer Security &amp; Networking</span>, based in Montreal, fluent in French &amp; English, and currently open to <span class="accent-sky font-medium">SOC analyst and IT support roles</span>.</p>
+        <p class="about-p"><span class="accent-sky font-medium">DEC graduate in Computer Security &amp; Networking</span>, based in Montreal, fluent in French &amp; English, and currently seeking <span class="accent-sky font-medium">SOC analyst and IT support roles</span>.</p>
+        <p class="about-p">Since my last role I've been sharpening my skills: rooting HackTheBox machines, maintaining my home detection lab, and building out CTF writeups. Available immediately.</p>
       </div>
     </section>
 
@@ -1961,6 +1978,12 @@ tailwind.config = {
               <span class="skill-leg-tool">Suricata</span>
             </div>
             <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.78"></div></div>
+            <div class="skill-leg-pills">
+              <span class="sleg-pill">Wazuh</span>
+              <span class="sleg-pill">Wireshark</span>
+              <span class="sleg-pill">Snort</span>
+              <span class="sleg-pill">Nessus</span>
+            </div>
           </div>
           <div class="skill-leg-row" data-idx="1">
             <div class="skill-leg-header">
@@ -1968,6 +1991,11 @@ tailwind.config = {
               <span class="skill-leg-tool">Splunk</span>
             </div>
             <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.84"></div></div>
+            <div class="skill-leg-pills">
+              <span class="sleg-pill">ELK Stack</span>
+              <span class="sleg-pill">Sysmon</span>
+              <span class="sleg-pill">rsyslog</span>
+            </div>
           </div>
           <div class="skill-leg-row" data-idx="2">
             <div class="skill-leg-header">
@@ -1975,6 +2003,11 @@ tailwind.config = {
               <span class="skill-leg-tool">MITRE ATT&amp;CK</span>
             </div>
             <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.81"></div></div>
+            <div class="skill-leg-pills">
+              <span class="sleg-pill">Sysmon</span>
+              <span class="sleg-pill">Splunk</span>
+              <span class="sleg-pill">Log Correlation</span>
+            </div>
           </div>
           <div class="skill-leg-row" data-idx="3">
             <div class="skill-leg-header">
@@ -1982,6 +2015,12 @@ tailwind.config = {
               <span class="skill-leg-tool">pfSense</span>
             </div>
             <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.75"></div></div>
+            <div class="skill-leg-pills">
+              <span class="sleg-pill">OpenVPN</span>
+              <span class="sleg-pill">VLANs</span>
+              <span class="sleg-pill">Cisco IOS</span>
+              <span class="sleg-pill">DNS / DHCP</span>
+            </div>
           </div>
           <div class="skill-leg-row" data-idx="4">
             <div class="skill-leg-header">
@@ -1989,6 +2028,11 @@ tailwind.config = {
               <span class="skill-leg-tool">Wazuh HIDS</span>
             </div>
             <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.68"></div></div>
+            <div class="skill-leg-pills">
+              <span class="sleg-pill">Active Directory</span>
+              <span class="sleg-pill">Windows Hardening</span>
+              <span class="sleg-pill">Sysmon</span>
+            </div>
           </div>
           <div class="skill-leg-row" data-idx="5">
             <div class="skill-leg-header">
@@ -1996,6 +2040,11 @@ tailwind.config = {
               <span class="skill-leg-tool">Python</span>
             </div>
             <div class="skill-leg-track"><div class="skill-leg-bar" data-value="0.63"></div></div>
+            <div class="skill-leg-pills">
+              <span class="sleg-pill">Bash</span>
+              <span class="sleg-pill">PowerShell</span>
+              <span class="sleg-pill">REST APIs</span>
+            </div>
           </div>
         </div>
       </div>
@@ -2068,7 +2117,7 @@ tailwind.config = {
           </div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">TCF Canada</h4>
           <p class="text-xs text-center mt-1" style="color:var(--text);">Test de Connaissance du Français</p>
-          <p class="text-xs accent-violet font-mono mt-1">C1 / B2 — French</p>
+          <p class="text-xs accent-violet font-mono mt-1">B2–C1 — French</p>
         </div>
         <div class="cert-card" data-bwp="celpip">
           <div class="w-20 h-20 mb-3 flex items-center justify-center">
@@ -2198,7 +2247,7 @@ function fadeInEl(el, dur = 600) {
 
 
 // ── Typewriter (job titles) ───────────────────────────────────
-const titles = ['SOC Analyst', 'Cybersecurity Specialist', 'Threat Hunter'];
+const titles = ['SOC Analyst', 'IT Support Technician', 'Security Analyst'];
 let ti = 0, ci = 0, deleting = false;
 const tw = document.getElementById('typewriter');
 function typeWriter() {
