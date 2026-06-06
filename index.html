@@ -2278,14 +2278,16 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
   const canvas = document.getElementById('binary-canvas');
   const ctx = canvas.getContext('2d');
 
-  // Layered character sets — mix of math, hex, cyber, greek
+  // Scientific symbols — physics, chemistry, greek letters
   const chars = [
-    '∑','π','∞','√','∂','∫','∇','×','÷','±','≤','≥','≠','≈','∈','∅','∧','∨','⊕',
-    'α','β','γ','δ','θ','λ','μ','σ','φ','ψ','ω','ε','ξ','ζ',
-    '0','1','A','B','C','D','E','F',
-    'FF','00','01','10','11','1A','3F','7E',
-    '{','}','[',']','<','>','/','|',';',':','#',
-    '42','0x','\/\/',
+    // Greek (physics & chemistry)
+    'α','β','γ','δ','θ','λ','μ','σ','φ','ψ','ω','ρ','η','τ','ν','ε','ζ','κ',
+    // Physics
+    'ℏ','Ω','Δ','∇','∞','π',
+    // Element symbols
+    'He','Li','C','N','O','Na','Mg','Fe','Cu','Ag','Au','Si','Pt','Ca',
+    // Scientific notation
+    'eV','Hz','mol','pH','hν','kT',
   ];
 
   const COUNT = 95;
@@ -2343,7 +2345,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
   })();
 })();
 
-// ── Geometric shapes parallax canvas — 3-D depth ─────────────
+// ── Scientific shapes parallax canvas — 3-D depth ────────────
 (function initShapesCanvas() {
   const canvas = document.getElementById('shapes-canvas');
   const ctx = canvas.getContext('2d');
@@ -2354,20 +2356,17 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
   resize();
   addEventListener('resize', resize, { passive: true });
 
-  // Design system accent colors: sky, steel, ice
   const colorBases = [
-    [91, 200, 255],   // sky
-    [150, 208, 255],  // steel
-    [228, 249, 255],  // ice
-    [60, 140, 200],   // deep muted blue
-    [120, 180, 230],  // mid tone
+    [91, 200, 255],
+    [150, 208, 255],
+    [228, 249, 255],
+    [60, 140, 200],
+    [120, 180, 230],
   ];
 
+  // 0=axes3D  1=atom  2=triangle  3=benzene  4=cube  5=dna  6=sinewave  7=tetrahedron
   function spawnShape(preplace) {
     const z = 0.05 + Math.random() * 0.95;
-    const cb = colorBases[Math.floor(Math.random() * colorBases.length)];
-    // 0=ring, 1=square, 2=triangle, 3=hexagon, 4=diamond, 5=cross
-    const type = Math.floor(Math.random() * 6);
     return {
       x: Math.random() * innerWidth,
       y: preplace ? Math.random() * innerHeight : -(40 + Math.random() * 100),
@@ -2376,52 +2375,131 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       vx: (Math.random() - 0.5) * 0.022 * z,
       rot: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() - 0.5) * 0.004 * (0.4 + z * 0.6),
-      size: (8 + Math.random() * 26) * z,
-      type,
-      alpha: 0.03 + z * 0.15,
-      lineWidth: 0.4 + z * 0.9,
-      color: cb,
+      size: (12 + Math.random() * 24) * z,
+      type: Math.floor(Math.random() * 8),
+      alpha: 0.04 + z * 0.18,
+      lineWidth: 0.4 + z * 1.0,
+      color: colorBases[Math.floor(Math.random() * colorBases.length)],
     };
   }
 
   for (let i = 0; i < COUNT; i++) shapes.push(spawnShape(true));
 
-  function strokeShape(type, size) {
-    ctx.beginPath();
+  function drawShape(type, s) {
     if (type === 0) {
-      ctx.arc(0, 0, size, 0, Math.PI * 2);
+      // XYZ coordinate frame (isometric 3-D axes)
+      const ah = s * 0.18;
+      ctx.beginPath();
+      ctx.moveTo(0, 0); ctx.lineTo(s, 0);
+      ctx.moveTo(s, 0); ctx.lineTo(s - ah, -ah * 0.45);
+      ctx.moveTo(s, 0); ctx.lineTo(s - ah,  ah * 0.45);
+      ctx.moveTo(0, 0); ctx.lineTo(0, -s);
+      ctx.moveTo(0, -s); ctx.lineTo(-ah * 0.45, -s + ah);
+      ctx.moveTo(0, -s); ctx.lineTo( ah * 0.45, -s + ah);
+      ctx.moveTo(0, 0);  ctx.lineTo(-s * 0.5, s * 0.5);
+      ctx.moveTo(-s * 0.5, s * 0.5); ctx.lineTo(-s * 0.5 + ah * 0.6, s * 0.5);
+      ctx.moveTo(-s * 0.5, s * 0.5); ctx.lineTo(-s * 0.5, s * 0.5 - ah * 0.6);
+      ctx.stroke();
+
     } else if (type === 1) {
-      ctx.rect(-size, -size, size * 2, size * 2);
+      // Atom — Bohr model: nucleus + 3 tilted orbitals
+      ctx.beginPath();
+      ctx.arc(0, 0, Math.max(1, s * 0.1), 0, Math.PI * 2);
+      ctx.stroke();
+      [0, Math.PI / 3, -Math.PI / 3].forEach(angle => {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, s, s * 0.28, angle, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
     } else if (type === 2) {
-      ctx.moveTo(0, -size);
-      ctx.lineTo(size * 0.866, size * 0.5);
-      ctx.lineTo(-size * 0.866, size * 0.5);
+      // Equilateral triangle
+      ctx.beginPath();
+      ctx.moveTo(0, -s);
+      ctx.lineTo(s * 0.866, s * 0.5);
+      ctx.lineTo(-s * 0.866, s * 0.5);
       ctx.closePath();
+      ctx.stroke();
+
     } else if (type === 3) {
+      // Benzene ring — hexagon + delocalized inner circle
+      ctx.beginPath();
       for (let k = 0; k < 6; k++) {
         const a = (k / 6) * Math.PI * 2 - Math.PI / 6;
-        if (k === 0) ctx.moveTo(Math.cos(a) * size, Math.sin(a) * size);
-        else ctx.lineTo(Math.cos(a) * size, Math.sin(a) * size);
+        if (k === 0) ctx.moveTo(Math.cos(a) * s, Math.sin(a) * s);
+        else ctx.lineTo(Math.cos(a) * s, Math.sin(a) * s);
       }
       ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, s * 0.55, 0, Math.PI * 2);
+      ctx.stroke();
+
     } else if (type === 4) {
-      ctx.moveTo(0, -size);
-      ctx.lineTo(size * 0.55, 0);
-      ctx.lineTo(0, size);
-      ctx.lineTo(-size * 0.55, 0);
-      ctx.closePath();
+      // Wireframe cube — isometric projection
+      const h = s * 0.5, ox = s * 0.38, oy = s * 0.22;
+      ctx.beginPath();
+      ctx.moveTo(-h, -h); ctx.lineTo(h, -h); ctx.lineTo(h, h); ctx.lineTo(-h, h); ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-h+ox, -h-oy); ctx.lineTo(h+ox, -h-oy);
+      ctx.lineTo(h+ox, h-oy); ctx.lineTo(-h+ox, h-oy); ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-h, -h); ctx.lineTo(-h+ox, -h-oy);
+      ctx.moveTo( h, -h); ctx.lineTo( h+ox, -h-oy);
+      ctx.moveTo( h,  h); ctx.lineTo( h+ox,  h-oy);
+      ctx.moveTo(-h,  h); ctx.lineTo(-h+ox,  h-oy);
+      ctx.stroke();
+
+    } else if (type === 5) {
+      // DNA double helix — two interlocked sine strands + rungs
+      const segs = 8;
+      [1, -1].forEach(dir => {
+        ctx.beginPath();
+        for (let i = 0; i <= segs; i++) {
+          const t = i / segs;
+          const x = dir * Math.sin(t * Math.PI * 2) * s * 0.38;
+          const y = t * s * 2 - s;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
+      ctx.beginPath();
+      for (let i = 0; i < segs; i++) {
+        const t = (i + 0.5) / segs;
+        const x = Math.sin(t * Math.PI * 2) * s * 0.38;
+        const y = t * s * 2 - s;
+        ctx.moveTo(x, y); ctx.lineTo(-x, y);
+      }
+      ctx.stroke();
+
+    } else if (type === 6) {
+      // Sine wave — electromagnetic / wave physics
+      ctx.beginPath();
+      for (let i = 0; i <= 24; i++) {
+        const x = (i / 24) * s * 2 - s;
+        const y = Math.sin((i / 24) * Math.PI * 2) * s * 0.4;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-s, 0); ctx.lineTo(s, 0);
+      ctx.stroke();
+
     } else {
-      // cross / plus
-      const arm = size * 0.35;
-      ctx.moveTo(-arm, -size); ctx.lineTo(arm, -size);
-      ctx.lineTo(arm, -arm);  ctx.lineTo(size, -arm);
-      ctx.lineTo(size, arm);  ctx.lineTo(arm, arm);
-      ctx.lineTo(arm, size);  ctx.lineTo(-arm, size);
-      ctx.lineTo(-arm, arm);  ctx.lineTo(-size, arm);
-      ctx.lineTo(-size, -arm); ctx.lineTo(-arm, -arm);
-      ctx.closePath();
+      // Tetrahedron — 3D solid (triangular faces projected flat)
+      const top = [0, -s], bl = [-s * 0.8, s * 0.5], br = [s * 0.8, s * 0.5], ctr = [0, s * 0.08];
+      ctx.beginPath();
+      ctx.moveTo(top[0], top[1]); ctx.lineTo(bl[0], bl[1]);
+      ctx.lineTo(br[0], br[1]); ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(top[0], top[1]); ctx.lineTo(ctr[0], ctr[1]);
+      ctx.moveTo(bl[0], bl[1]);   ctx.lineTo(ctr[0], ctr[1]);
+      ctx.moveTo(br[0], br[1]);   ctx.lineTo(ctr[0], ctr[1]);
+      ctx.stroke();
     }
-    ctx.stroke();
   }
 
   (function draw() {
@@ -2441,7 +2519,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       const [r, g, b] = s.color;
       ctx.strokeStyle = `rgba(${r},${g},${b},${s.alpha})`;
       ctx.lineWidth = s.lineWidth;
-      strokeShape(s.type, s.size);
+      drawShape(s.type, s.size);
       ctx.restore();
     }
     requestAnimationFrame(draw);
