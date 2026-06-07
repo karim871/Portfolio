@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abdelkrim Zouaki | SOC Analyst Montreal — Cybersecurity Specialist</title>
+<title>Abdelkrim Zouaki | SOC Analyst — Montreal, QC</title>
 <meta name="description" content="Abdelkrim Zouaki — SOC Analyst in Montreal. Builds real-world detection systems: Mini-SOC with Suricata &amp; Splunk, Threat Intelligence automation, pfSense labs.">
 <meta name="author" content="Abdelkrim Zouaki">
 <meta property="og:type" content="website">
@@ -15,6 +15,7 @@
 <meta property="twitter:title" content="Abdelkrim Zouaki | SOC Analyst Montreal">
 <meta property="twitter:description" content="Montreal-based SOC Analyst — Suricata, Splunk, Threat Intelligence Automation.">
 <meta property="twitter:image" content="https://karim871.github.io/Portfolio/images/thumbnail.webp">
+<link rel="canonical" href="https://karim871.github.io/Portfolio/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -653,6 +654,10 @@ tailwind.config = {
     pointer-events: none;
   }
 
+  @media (max-width: 1023px) {
+    #binary-canvas { opacity: 0.45; }
+    #shapes-canvas { opacity: 0.35; }
+  }
 
   /* ── Name split-text chars ── */
   .name-char {
@@ -1545,9 +1550,9 @@ tailwind.config = {
         <span id="typewriter"></span><span class="tw-cursor"></span>
       </div>
 
-      <p class="hero-sub mb-5" id="hero-lang" style="opacity:0;transform:translateY(10px)">Fluent: English &amp; French · Native: Moroccan Arabic</p>
+      <p class="hero-sub mb-3 lg:mb-5" id="hero-lang" style="opacity:0;transform:translateY(10px)">Fluent: English &amp; French · Native: Moroccan Arabic</p>
 
-      <div class="mb-8" id="hero-badge" style="opacity:0;transform:translateY(10px)">
+      <div class="mb-4 lg:mb-8" id="hero-badge" style="opacity:0;transform:translateY(10px)">
         <span class="inline-flex items-center gap-2 font-mono text-xs px-3 py-1.5 rounded-full" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.22);color:#4ade80;">
           <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse-glow 2s ease-in-out infinite;flex-shrink:0;"></span>
           Available for hire · Montreal, QC
@@ -1565,7 +1570,7 @@ tailwind.config = {
       </nav>
 
       <!-- Mobile nav -->
-      <nav class="flex lg:hidden flex-wrap gap-2 mb-8" aria-label="Main navigation">
+      <nav class="flex lg:hidden flex-wrap gap-2 mb-5 lg:mb-8" aria-label="Main navigation">
         <a href="#about"          class="mobile-nav-pill">About</a>
         <a href="#education"      class="mobile-nav-pill">Education</a>
         <a href="#experience"     class="mobile-nav-pill">Experience</a>

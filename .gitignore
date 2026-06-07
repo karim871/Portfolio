@@ -1,3 +1,4 @@
 images_backup/
 .claude/settings.local.json
 .claude/worktrees/
+.gstack/
