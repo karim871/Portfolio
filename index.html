@@ -1617,7 +1617,7 @@ tailwind.config = {
   </header>
 
   <!-- ─── MAIN CONTENT ─── -->
-  <main class="lg:w-[60%] lg:ml-[40%] px-6 py-16 lg:px-14 lg:py-28 lg:pr-[8%]">
+  <main class="lg:w-[60%] lg:ml-[40%] px-6 py-16 lg:px-14 lg:py-28 lg:pr-[8%]" style="background:rgba(255,255,255,0.028);">
 
     <!-- 01 ABOUT -->
     <section id="about" class="mb-28 relative">
@@ -2251,18 +2251,68 @@ function fadeInEl(el, dur = 600) {
 }
 
 
-// ── Typewriter (job titles) ───────────────────────────────────
+// ── Human typewriter (job titles) ─────────────────────────────
 const titles = ['SOC Analyst', 'IT Support Technician', 'Security Analyst'];
-let ti = 0, ci = 0, deleting = false;
+let twIndex = 0;
 const tw = document.getElementById('typewriter');
-function typeWriter() {
-  const t = titles[ti];
-  tw.textContent = deleting ? t.substring(0, ci - 1) : t.substring(0, ci + 1);
-  deleting ? ci-- : ci++;
-  let d = deleting ? 70 : 160;
-  if (!deleting && ci === t.length) { d = 3800; deleting = true; }
-  else if (deleting && ci === 0) { deleting = false; ti = (ti + 1) % titles.length; d = 400; }
-  setTimeout(typeWriter, d);
+const TYPO_MAP = {
+  'a':['s','q'],'e':['r','w'],'i':['o','u'],'o':['p','i'],
+  'n':['m','b'],'t':['r','y'],'s':['a','d'],'c':['x','v'],
+  'l':['k'],'y':['u','t'],'r':['t','e'],'u':['y','i'],
+  'h':['g','j'],'p':['o','l']
+};
+function getTypo(ch) {
+  const lower = ch.toLowerCase();
+  if (TYPO_MAP[lower] && Math.random() < 0.05) {
+    const t = TYPO_MAP[lower][Math.floor(Math.random() * TYPO_MAP[lower].length)];
+    return ch === ch.toUpperCase() ? t.toUpperCase() : t;
+  }
+  return null;
+}
+async function humanType() {
+  const title = titles[twIndex];
+  let cur = '';
+  for (let i = 0; i < title.length; i++) {
+    const ch = title[i];
+    const typo = getTypo(ch);
+    if (typo) {
+      cur += typo; tw.textContent = cur;
+      await wait(60 + Math.random() * 70);
+      await wait(200 + Math.random() * 250); // "wait, that's wrong"
+      cur = cur.slice(0, -1); tw.textContent = cur;
+      await wait(90 + Math.random() * 80);
+    }
+    cur += ch; tw.textContent = cur;
+    let delay = 95 + Math.random() * 90;
+    if (title[i] === ' ') delay += 40;
+    if (Math.random() < 0.08) delay += 320; // occasional brain pause
+    await wait(delay);
+  }
+  await wait(2600 + Math.random() * 900);
+  // Deletion strategy: 0=instant (Ctrl+A Del), 1=char-by-char, 2=word-by-word (Ctrl+Bksp)
+  const strategy = Math.floor(Math.random() * 3);
+  if (strategy === 0) {
+    await wait(80);
+    cur = ''; tw.textContent = cur;
+  } else if (strategy === 1) {
+    while (cur.length > 0) {
+      cur = cur.slice(0, -1); tw.textContent = cur;
+      await wait(55 + Math.random() * 50);
+    }
+  } else {
+    while (cur.length > 0) {
+      const lastSpace = cur.lastIndexOf(' ');
+      const n = lastSpace === -1 ? cur.length : cur.length - lastSpace;
+      for (let j = 0; j < n; j++) {
+        cur = cur.slice(0, -1); tw.textContent = cur;
+        await wait(22 + Math.random() * 28);
+      }
+      if (cur.length > 0) await wait(110 + Math.random() * 130);
+    }
+  }
+  await wait(320 + Math.random() * 280);
+  twIndex = (twIndex + 1) % titles.length;
+  humanType();
 }
 
 // ── Hero sequence ─────────────────────────────────────────────
@@ -2277,7 +2327,7 @@ if (prefersReduced) {
     if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
   });
   document.querySelectorAll('#hero-nav .nav-link').forEach(l => l.classList.add('nav-visible'));
-  typeWriter();
+  humanType();
 } else {
   (async function heroSequence() {
     await wait(350);
@@ -2291,7 +2341,7 @@ if (prefersReduced) {
 
     // 3 — typewriter area
     fadeInEl(document.getElementById('hero-title'));
-    typeWriter();
+    humanType();
     await wait(180);
 
     // 5 — language line, badge
