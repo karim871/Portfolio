@@ -2449,11 +2449,11 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
   })();
 })();
 
-// ── Scientific shapes parallax canvas — 3-D depth ────────────
+// ── Scientific shapes — void depth parallax ──────────────────
 (function initShapesCanvas() {
   const canvas = document.getElementById('shapes-canvas');
   const ctx = canvas.getContext('2d');
-  const COUNT = 40;
+  const COUNT = 36;
   const shapes = [];
 
   function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
@@ -2468,21 +2468,22 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
     [120, 180, 230],
   ];
 
-  // 0=axes3D  1=atom  2=triangle  3=benzene  4=cube  5=dna  6=sinewave  7=tetrahedron
+  // 0=axes3D  1=atom  2=lissajous-2:3  3=golden-spiral  4=cube  5=dna  6=hyperbola  7=tetrahedron
   function spawnShape(preplace) {
-    const z = 0.05 + Math.random() * 0.95;
+    // Power bias: most shapes are far (tiny, faint, near-still) — void depth
+    const z = 0.04 + Math.pow(Math.random(), 1.8) * 0.94;
     return {
       x: Math.random() * innerWidth,
-      y: preplace ? Math.random() * innerHeight : -(40 + Math.random() * 100),
+      y: preplace ? Math.random() * innerHeight : -(40 + Math.random() * 120),
       z,
-      vy: (0.014 + Math.random() * 0.048) * z,
-      vx: (Math.random() - 0.5) * 0.022 * z,
+      vy: (0.006 + Math.random() * 0.058) * z,
+      vx: (Math.random() - 0.5) * 0.018 * z,
       rot: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.004 * (0.4 + z * 0.6),
-      size: (12 + Math.random() * 24) * z,
+      rotSpeed: (Math.random() - 0.5) * 0.003 * (0.3 + z * 0.7),
+      size: (6 + Math.random() * 36) * z,
       type: Math.floor(Math.random() * 8),
-      alpha: 0.04 + z * 0.18,
-      lineWidth: 0.4 + z * 1.0,
+      alpha: 0.018 + z * 0.22,
+      lineWidth: 0.25 + z * 1.4,
       color: colorBases[Math.floor(Math.random() * colorBases.length)],
     };
   }
@@ -2491,7 +2492,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
 
   function drawShape(type, s) {
     if (type === 0) {
-      // XYZ coordinate frame (isometric 3-D axes)
+      // XYZ coordinate frame — isometric 3-D axes
       const ah = s * 0.18;
       ctx.beginPath();
       ctx.moveTo(0, 0); ctx.lineTo(s, 0);
@@ -2506,7 +2507,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       ctx.stroke();
 
     } else if (type === 1) {
-      // Atom — Bohr model: nucleus + 3 tilted orbitals
+      // Atom — Bohr model: nucleus + 3 tilted elliptical orbitals
       ctx.beginPath();
       ctx.arc(0, 0, Math.max(1, s * 0.1), 0, Math.PI * 2);
       ctx.stroke();
@@ -2517,26 +2518,30 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       });
 
     } else if (type === 2) {
-      // Equilateral triangle
+      // Lissajous 2:3 — x=cos(2t), y=sin(3t), δ=π/2 phase offset
       ctx.beginPath();
-      ctx.moveTo(0, -s);
-      ctx.lineTo(s * 0.866, s * 0.5);
-      ctx.lineTo(-s * 0.866, s * 0.5);
+      for (let i = 0; i <= 72; i++) {
+        const t = (i / 72) * Math.PI * 2;
+        const x = Math.cos(2 * t) * s;
+        const y = Math.sin(3 * t) * s * 0.85;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
       ctx.closePath();
       ctx.stroke();
 
     } else if (type === 3) {
-      // Benzene ring — hexagon + delocalized inner circle
+      // Golden ratio logarithmic spiral — r = e^(bθ), b = ln(φ)/(π/2) ≈ 0.3063
+      const b = 0.3063;
+      const maxTheta = Math.PI * 4;
+      const scale = s / Math.exp(b * maxTheta);
       ctx.beginPath();
-      for (let k = 0; k < 6; k++) {
-        const a = (k / 6) * Math.PI * 2 - Math.PI / 6;
-        if (k === 0) ctx.moveTo(Math.cos(a) * s, Math.sin(a) * s);
-        else ctx.lineTo(Math.cos(a) * s, Math.sin(a) * s);
+      for (let i = 0; i <= 80; i++) {
+        const theta = (i / 80) * maxTheta;
+        const r = scale * Math.exp(b * theta);
+        const x = r * Math.cos(theta);
+        const y = r * Math.sin(theta);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
-      ctx.closePath();
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(0, 0, s * 0.55, 0, Math.PI * 2);
       ctx.stroke();
 
     } else if (type === 4) {
@@ -2579,20 +2584,21 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       ctx.stroke();
 
     } else if (type === 6) {
-      // Sine wave — electromagnetic / wave physics
-      ctx.beginPath();
-      for (let i = 0; i <= 24; i++) {
-        const x = (i / 24) * s * 2 - s;
-        const y = Math.sin((i / 24) * Math.PI * 2) * s * 0.4;
-        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(-s, 0); ctx.lineTo(s, 0);
-      ctx.stroke();
+      // Hyperbola — two symmetric branches of x²/a² − y²/b² = 1
+      const ha = s * 0.4, hb = s * 0.5;
+      [1, -1].forEach(dir => {
+        ctx.beginPath();
+        for (let i = 0; i <= 32; i++) {
+          const t = (i / 32) * 3.0 - 1.5;
+          const x = dir * ha * Math.cosh(t);
+          const y = hb * Math.sinh(t);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
 
     } else {
-      // Tetrahedron — 3D solid (triangular faces projected flat)
+      // Tetrahedron — triangular faces projected flat
       const top = [0, -s], bl = [-s * 0.8, s * 0.5], br = [s * 0.8, s * 0.5], ctr = [0, s * 0.08];
       ctx.beginPath();
       ctx.moveTo(top[0], top[1]); ctx.lineTo(bl[0], bl[1]);
@@ -2613,7 +2619,7 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       s.x += s.vx;
       s.rot += s.rotSpeed;
 
-      if (s.y > canvas.height + 100) { Object.assign(s, spawnShape(false)); }
+      if (s.y > canvas.height + 120) { Object.assign(s, spawnShape(false)); }
       if (s.x < -100) s.x = canvas.width + 100;
       if (s.x > canvas.width + 100) s.x = -100;
 
