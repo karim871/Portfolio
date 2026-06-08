@@ -981,7 +981,7 @@ tailwind.config = {
     z-index: 99985;
     width: 300px;
     max-width: calc(100vw - 32px);
-    background: rgba(18,26,42,0.88);
+    background: rgba(42,52,74,0.88);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255,255,255,0.1);
@@ -1016,7 +1016,7 @@ tailwind.config = {
     content: '';
     position: absolute;
     width: 10px; height: 10px;
-    background: var(--hc-arrow-bg, rgba(18,26,42,0.88));
+    background: var(--hc-arrow-bg, rgba(42,52,74,0.88));
     border: 1px solid rgba(255,255,255,0.1);
     transform: rotate(45deg);
     pointer-events: none;
@@ -3598,8 +3598,8 @@ if (prefersReduced) {
     const accentColor = BADGE_COLORS[d.badge] || '#b8d8ec';
     HC.style.setProperty('--hc-accent', accentColor);
     const [r,g,b] = _hexRgb(accentColor);
-    HC.style.background = `linear-gradient(145deg, rgba(18,26,42,0.92) 0%, rgba(${r},${g},${b},0.09) 100%)`;
-    HC.style.setProperty('--hc-arrow-bg', 'rgba(18,26,42,0.92)');
+    HC.style.background = `linear-gradient(145deg, rgba(42,52,74,0.92) 0%, rgba(${r},${g},${b},0.12) 100%)`;
+    HC.style.setProperty('--hc-arrow-bg', 'rgba(42,52,74,0.92)');
     HC.style.borderColor = accentColor + '30';
     HC.style.boxShadow = `0 20px 44px rgba(0,0,0,0.55), 0 0 28px rgba(${r},${g},${b},0.12), 0 0 0 1px rgba(${r},${g},${b},0.14)`;
     HC.className = 'hc-measuring';
