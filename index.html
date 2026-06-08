@@ -2490,6 +2490,45 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
 
   for (let i = 0; i < COUNT; i++) shapes.push(spawnShape(true));
 
+  // Draws a 3-D Cartesian repère (x right, y up, z at 150° depth)
+  function drawCartesian(axLen) {
+    const prevLW = ctx.lineWidth;
+    ctx.lineWidth = prevLW * 0.58;
+    const ah = axLen * 0.13;
+    const tk = axLen * 0.065;
+
+    // X-axis →
+    ctx.beginPath();
+    ctx.moveTo(-axLen * 0.28, 0); ctx.lineTo(axLen, 0);
+    ctx.moveTo(axLen - ah, -ah * 0.42); ctx.lineTo(axLen, 0); ctx.lineTo(axLen - ah, ah * 0.42);
+    ctx.stroke();
+
+    // Y-axis ↑
+    ctx.beginPath();
+    ctx.moveTo(0, axLen * 0.28); ctx.lineTo(0, -axLen);
+    ctx.moveTo(-ah * 0.42, -axLen + ah); ctx.lineTo(0, -axLen); ctx.lineTo(ah * 0.42, -axLen + ah);
+    ctx.stroke();
+
+    // Z-axis at 150° — foreshortened depth axis
+    const zLen = axLen * 0.48;
+    const zx = -zLen * 0.866, zy = zLen * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(0, 0); ctx.lineTo(zx, zy);
+    ctx.moveTo(zx + ah * 1.09, zy - ah * 0.11); ctx.lineTo(zx, zy);
+    ctx.moveTo(zx + ah * 0.64, zy - ah * 0.89); ctx.lineTo(zx, zy);
+    ctx.stroke();
+
+    // 2 tick marks on each positive axis
+    for (let i = 1; i <= 2; i++) {
+      const f = (i / 3) * axLen;
+      ctx.beginPath();
+      ctx.moveTo(f, -tk); ctx.lineTo(f, tk);
+      ctx.moveTo(-tk, -f); ctx.lineTo(tk, -f);
+      ctx.stroke();
+    }
+    ctx.lineWidth = prevLW;
+  }
+
   function drawShape(type, s) {
     if (type === 0) {
       // XYZ coordinate frame — isometric 3-D axes
@@ -2518,22 +2557,24 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       });
 
     } else if (type === 2) {
-      // Lissajous 2:3 — x=cos(2t), y=sin(3t), δ=π/2 phase offset
+      // Lissajous 2:3 plotted on 3D Cartesian repère — x=cos(2t), y=sin(3t)
+      drawCartesian(s * 1.1);
       ctx.beginPath();
       for (let i = 0; i <= 72; i++) {
         const t = (i / 72) * Math.PI * 2;
-        const x = Math.cos(2 * t) * s;
-        const y = Math.sin(3 * t) * s * 0.85;
+        const x = Math.cos(2 * t) * s * 0.88;
+        const y = Math.sin(3 * t) * s * 0.75;
         if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
       ctx.closePath();
       ctx.stroke();
 
     } else if (type === 3) {
-      // Golden ratio logarithmic spiral — r = e^(bθ), b = ln(φ)/(π/2) ≈ 0.3063
+      // Golden ratio spiral on 3D Cartesian repère — r = e^(0.3063θ)
+      drawCartesian(s * 1.1);
       const b = 0.3063;
       const maxTheta = Math.PI * 4;
-      const scale = s / Math.exp(b * maxTheta);
+      const scale = (s * 0.9) / Math.exp(b * maxTheta);
       ctx.beginPath();
       for (let i = 0; i <= 80; i++) {
         const theta = (i / 80) * maxTheta;
@@ -2584,8 +2625,20 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       ctx.stroke();
 
     } else if (type === 6) {
-      // Hyperbola — two symmetric branches of x²/a² − y²/b² = 1
-      const ha = s * 0.4, hb = s * 0.5;
+      // Hyperbola on 3D Cartesian repère — x²/a² − y²/b² = 1 + asymptotes
+      const ha = s * 0.38, hb = s * 0.48;
+      drawCartesian(s * 1.1);
+      // Asymptotes — dashed, thinner
+      const prevLW6 = ctx.lineWidth;
+      ctx.lineWidth = prevLW6 * 0.42;
+      ctx.setLineDash([s * 0.07, s * 0.07]);
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.88, -(hb / ha) * s * 0.88); ctx.lineTo(s * 0.88,  (hb / ha) * s * 0.88);
+      ctx.moveTo(-s * 0.88,  (hb / ha) * s * 0.88); ctx.lineTo(s * 0.88, -(hb / ha) * s * 0.88);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.lineWidth = prevLW6;
+      // Two branches
       [1, -1].forEach(dir => {
         ctx.beginPath();
         for (let i = 0; i <= 32; i++) {
