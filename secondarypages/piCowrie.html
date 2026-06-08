@@ -131,6 +131,73 @@ footer{text-align:center;padding:2rem 5%;font-family:'Fira Code',monospace;font-
 .mt-3{margin-top:0.75rem;}.mt-4{margin-top:1rem;}.mb-8{margin-bottom:2rem;}.mt-10{margin-top:2.5rem;}
 p{margin-bottom:0.85rem;}
 p:last-child{margin-bottom:0;}
+
+/* ===== HONEY CINEMATIC SCROLL ===== */
+#honey-scroll{position:relative;height:500vh;}
+.h-sticky{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg);}
+#h-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+.h-hex-bg{position:absolute;inset:0;pointer-events:none;z-index:2;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='58' height='50'%3E%3Cpolygon points='29,1 56,15 56,43 29,57 2,43 2,15' fill='none' stroke='rgba(240%2C120%2C0%2C0.09)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size:58px 50px;}
+.h-glow-ring{position:absolute;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,140,0,0.24) 0%,rgba(200,80,0,0.10) 44%,transparent 70%);
+  pointer-events:none;z-index:2;}
+.h-conn-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;}
+.h-pot-wrap{position:relative;z-index:4;width:min(290px,52vw);}
+.h-pot-svg{width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 42px rgba(220,110,0,0.52)) drop-shadow(0 6px 18px rgba(0,0,0,0.7));}
+
+.h-atk{position:absolute;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:5;}
+#h-atk1{left:3%;top:34%;}
+#h-atk2{right:3%;top:24%;}
+#h-atk3{left:4%;bottom:28%;}
+#h-atk4{right:4%;bottom:30%;}
+.h-atk-dot{width:10px;height:10px;border-radius:50%;background:#ff3333;
+  box-shadow:0 0 8px #ff4444,0 0 20px rgba(255,50,50,0.45);
+  animation:atk-pulse 2.1s ease-in-out infinite;}
+@keyframes atk-pulse{
+  0%,100%{box-shadow:0 0 7px #ff4444,0 0 14px rgba(255,60,60,0.4);}
+  50%{box-shadow:0 0 14px #ff6666,0 0 30px rgba(255,80,80,0.65);}
+}
+.h-atk-ip{font-family:'Fira Code',monospace;font-size:0.57rem;color:rgba(255,130,130,0.88);
+  background:rgba(255,20,20,0.07);border:1px solid rgba(255,55,55,0.2);
+  padding:2px 8px;border-radius:4px;white-space:nowrap;}
+.h-atk-country{font-family:'Fira Code',monospace;font-size:0.49rem;color:rgba(255,100,100,0.5);
+  letter-spacing:0.08em;text-align:center;}
+
+.h-chip{position:absolute;z-index:6;display:flex;align-items:center;gap:8px;
+  font-family:'Fira Code',monospace;font-size:0.62rem;color:rgba(255,215,130,0.94);
+  background:rgba(10,4,0,0.88);border:1px solid rgba(220,140,20,0.25);border-radius:100px;
+  padding:7px 16px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  white-space:nowrap;letter-spacing:0.01em;}
+.h-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+#h-chip1{top:11%;left:50%;transform:translateX(-50%);}
+#h-chip2{top:26%;right:2%;}
+#h-chip3{bottom:27%;left:2%;}
+#h-chip4{bottom:11%;left:50%;transform:translateX(-50%);}
+
+.h-phase{position:absolute;left:5%;bottom:15%;max-width:min(380px,38vw);z-index:6;pointer-events:none;}
+.h-eyebrow{font-family:'Fira Code',monospace;font-size:0.61rem;color:#e89010;
+  letter-spacing:0.2em;margin-bottom:10px;opacity:0.9;}
+.h-headline{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3.1vw,2.55rem);
+  font-weight:700;color:#f0f0f0;line-height:1.1;letter-spacing:-0.04em;}
+
+.h-hint{position:absolute;bottom:5%;right:5%;display:flex;flex-direction:column;
+  align-items:center;gap:6px;z-index:6;pointer-events:none;}
+.h-hint-line{width:1px;height:32px;
+  background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.22));
+  animation:h-hint-fall 1.9s ease-in-out infinite;}
+.h-hint span{font-family:'Fira Code',monospace;font-size:0.53rem;
+  color:rgba(255,255,255,0.2);letter-spacing:0.15em;text-transform:uppercase;}
+@keyframes h-hint-fall{
+  0%,100%{opacity:0.25;transform:scaleY(0.5) translateY(0);}
+  50%{opacity:0.85;transform:scaleY(1) translateY(4px);}
+}
+@media(max-width:640px){
+  .h-phase{left:3%;max-width:56vw;bottom:12%;}
+  .h-headline{font-size:1.3rem;}
+  #h-chip2,#h-chip3{display:none;}
+  .h-glow-ring{width:320px;height:320px;}
+}
 </style>
 </head>
 <body>
@@ -183,6 +250,208 @@ p:last-child{margin-bottom:0;}
     <div class="hero-stat-label">Honeypot Port<br>Attacker Trap</div>
   </div>
 </section>
+
+<!-- ===== HONEYPOT CINEMATIC SCROLL ===== -->
+<div id="honey-scroll">
+<div class="h-sticky" id="h-sticky">
+
+  <canvas id="h-canvas"></canvas>
+  <div class="h-hex-bg" id="h-hex-bg"></div>
+  <div class="h-glow-ring" id="h-glow-ring"></div>
+
+  <!-- Connection lines SVG overlay -->
+  <svg class="h-conn-svg" id="h-conn-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="arr" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+        <polygon points="0 0,5 2.5,0 5" fill="rgba(240,140,0,0.55)"/>
+      </marker>
+    </defs>
+    <!-- lines from attacker positions toward pot center (500,300) -->
+    <line id="cl1" x1="68"  y1="204" x2="468" y2="290" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+    <line id="cl2" x1="932" y1="144" x2="532" y2="290" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+    <line id="cl3" x1="72"  y1="432" x2="468" y2="312" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+    <line id="cl4" x1="928" y1="420" x2="532" y2="312" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  </svg>
+
+  <!-- SVG Honey Pot -->
+  <div class="h-pot-wrap" id="h-pot-wrap">
+    <svg class="h-pot-svg" viewBox="0 0 280 440" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="h-body-g" gradientUnits="userSpaceOnUse" cx="96" cy="148" r="190">
+          <stop offset="0%"   stop-color="#ffd84e"/>
+          <stop offset="28%"  stop-color="#e98a0c"/>
+          <stop offset="68%"  stop-color="#9c4900"/>
+          <stop offset="100%" stop-color="#4e1c00"/>
+        </radialGradient>
+        <radialGradient id="h-honey-g" gradientUnits="userSpaceOnUse" cx="140" cy="132" r="100">
+          <stop offset="0%"  stop-color="#ffec70"/>
+          <stop offset="100%" stop-color="#c87a00"/>
+        </radialGradient>
+        <radialGradient id="h-lid-g" gradientUnits="userSpaceOnUse" cx="110" cy="84" r="120">
+          <stop offset="0%"  stop-color="#eca030"/>
+          <stop offset="100%" stop-color="#6a2e00"/>
+        </radialGradient>
+        <filter id="h-blur4"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="h-blur8"><feGaussianBlur stdDeviation="8"/></filter>
+        <!-- Honeycomb pattern on pot surface -->
+        <pattern id="h-hex-p" x="0" y="0" width="20" height="17.3" patternUnits="userSpaceOnUse">
+          <polygon points="10,0.5 19,5.3 19,14.9 10,19.5 1,14.9 1,5.3"
+                   fill="none" stroke="rgba(255,255,255,0.17)" stroke-width="0.55"/>
+        </pattern>
+        <!-- Body clip for texture -->
+        <clipPath id="h-body-clip">
+          <path d="M50,108 Q28,124 22,178 Q14,246 28,294 Q44,338 140,348 Q236,338 252,294 Q266,246 258,178 Q252,124 230,108 Z"/>
+        </clipPath>
+        <!-- Lid clip -->
+        <clipPath id="h-lid-clip"><rect x="34" y="78" width="212" height="34" rx="9"/></clipPath>
+        <!-- Drip reveal clips — height animated via GSAP -->
+        <clipPath id="h-dc1"><rect id="h-dr1" x="60"  y="344" width="60"  height="0"/></clipPath>
+        <clipPath id="h-dc2"><rect id="h-dr2" x="110" y="346" width="60"  height="0"/></clipPath>
+        <clipPath id="h-dc3"><rect id="h-dr3" x="166" y="344" width="60"  height="0"/></clipPath>
+      </defs>
+
+      <!-- Floor glow -->
+      <ellipse cx="140" cy="358" rx="108" ry="28" fill="rgba(220,110,0,0.28)" filter="url(#h-blur8)"/>
+
+      <!-- Pot body -->
+      <path d="M50,108 Q28,124 22,178 Q14,246 28,294 Q44,338 140,348 Q236,338 252,294 Q266,246 258,178 Q252,124 230,108 Z"
+            fill="url(#h-body-g)"/>
+
+      <!-- Hex texture over body -->
+      <rect x="0" y="0" width="280" height="440" fill="url(#h-hex-p)" clip-path="url(#h-body-clip)" opacity="0.2"/>
+
+      <!-- Left highlight / shine -->
+      <path d="M62,134 Q52,166 54,208 Q56,240 66,248 Q76,255 80,234 Q84,210 82,174 Q80,146 72,132 Z"
+            fill="rgba(255,255,255,0.10)"/>
+
+      <!-- Honey surface (liquid at top) -->
+      <path d="M54,134 Q90,150 140,153 Q190,150 226,134 Q232,144 226,156 Q190,172 140,175 Q90,172 54,156 Q48,146 54,134 Z"
+            fill="url(#h-honey-g)" opacity="0.88"/>
+      <!-- Honey surface shimmer -->
+      <path d="M62,138 Q100,153 140,156 Q180,153 218,138 Q220,141 218,143 Q180,158 140,161 Q100,158 62,143 Z"
+            fill="rgba(255,248,180,0.22)"/>
+      <!-- Bubbles on honey surface -->
+      <circle cx="95"  cy="148" r="4"   fill="rgba(255,240,80,0.30)"/>
+      <circle cx="155" cy="145" r="3"   fill="rgba(255,240,80,0.22)"/>
+      <circle cx="197" cy="150" r="2.5" fill="rgba(255,240,80,0.28)"/>
+
+      <!-- Rim -->
+      <path d="M44,108 Q140,94 236,108 Q242,116 236,124 Q140,108 44,124 Q38,116 44,108 Z" fill="#b85800"/>
+      <path d="M52,109 Q140,98 228,109 Q230,113 228,115 Q140,104 52,115 Z" fill="rgba(255,200,80,0.28)"/>
+
+      <!-- Lid body -->
+      <rect x="34" y="78" width="212" height="34" rx="9" fill="url(#h-lid-g)"/>
+      <!-- Lid hex texture -->
+      <rect x="34" y="78" width="212" height="34" fill="url(#h-hex-p)" clip-path="url(#h-lid-clip)" opacity="0.12"/>
+      <!-- Lid top sheen -->
+      <path d="M46,80 Q100,76 150,77 Q128,81 46,85 Z" fill="rgba(255,220,100,0.26)"/>
+      <!-- Lid bottom shadow line -->
+      <rect x="34" y="110" width="212" height="3" rx="1.5" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Knob -->
+      <ellipse cx="140" cy="76"  rx="20" ry="10" fill="#a84e00"/>
+      <ellipse cx="140" cy="71"  rx="16" ry="8"  fill="#ca6000"/>
+      <ellipse cx="135" cy="68"  rx="7"  ry="4"  fill="rgba(255,210,80,0.27)"/>
+
+      <!-- Label band -->
+      <rect x="44" y="192" width="192" height="60" rx="7"
+            fill="rgba(0,0,0,0.26)" stroke="rgba(220,150,20,0.20)" stroke-width="1"/>
+      <text x="140" y="220" text-anchor="middle"
+            font-family="Fira Code, monospace" font-size="16" font-weight="500"
+            fill="rgba(255,220,90,0.93)" letter-spacing="4">COWRIE</text>
+      <text x="140" y="239" text-anchor="middle"
+            font-family="Fira Code, monospace" font-size="8.5"
+            fill="rgba(255,178,48,0.60)" letter-spacing="2.5">SSH HONEYPOT</text>
+
+      <!-- Bottom base edge -->
+      <path d="M42,338 Q80,360 140,364 Q200,360 238,338 Q220,352 140,358 Q60,352 42,338 Z"
+            fill="rgba(0,0,0,0.20)"/>
+
+      <!-- Honey drip 1 — left -->
+      <g clip-path="url(#h-dc1)">
+        <path d="M84,344 Q80,360 83,374 Q86,388 82,398 Q79,407 83,413"
+              stroke="#de8800" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <ellipse cx="83" cy="420" rx="6.5" ry="8" fill="#de8800"/>
+      </g>
+      <!-- Honey drip 2 — center-left -->
+      <g clip-path="url(#h-dc2)">
+        <path d="M138,346 Q134,364 138,378 Q142,390 137,400 Q133,408 137,413"
+              stroke="#f0a228" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <ellipse cx="137" cy="420" rx="5.5" ry="7" fill="#f0a228"/>
+      </g>
+      <!-- Honey drip 3 — right -->
+      <g clip-path="url(#h-dc3)">
+        <path d="M194,344 Q198,359 194,372 Q190,385 195,395 Q198,403 194,408"
+              stroke="#cc7800" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <ellipse cx="194" cy="415" rx="5" ry="6.5" fill="#cc7800"/>
+      </g>
+
+    </svg>
+  </div>
+
+  <!-- Attacker nodes -->
+  <div class="h-atk" id="h-atk1">
+    <div class="h-atk-dot"></div>
+    <div class="h-atk-ip">185.220.101.47</div>
+    <div class="h-atk-country">RU &middot; TOR EXIT</div>
+  </div>
+  <div class="h-atk" id="h-atk2">
+    <div class="h-atk-dot"></div>
+    <div class="h-atk-ip">91.93.236.183</div>
+    <div class="h-atk-country">CN &middot; SCANNER</div>
+  </div>
+  <div class="h-atk" id="h-atk3">
+    <div class="h-atk-dot"></div>
+    <div class="h-atk-ip">194.165.16.29</div>
+    <div class="h-atk-country">DE &middot; BOTNET</div>
+  </div>
+  <div class="h-atk" id="h-atk4">
+    <div class="h-atk-dot"></div>
+    <div class="h-atk-ip">45.142.212.100</div>
+    <div class="h-atk-country">NL &middot; MASS SCAN</div>
+  </div>
+
+  <!-- Info chips (nano-banana pill labels) -->
+  <div class="h-chip" id="h-chip1">
+    <span class="h-dot" style="background:#ff4444;box-shadow:0 0 6px #ff4444;"></span>
+    Port :22 &nbsp;&middot;&nbsp; Fake Shell Active
+  </div>
+  <div class="h-chip" id="h-chip2">
+    <span class="h-dot" style="background:#44ff99;box-shadow:0 0 6px #44ff99;"></span>
+    Credentials Captured in Plaintext
+  </div>
+  <div class="h-chip" id="h-chip3">
+    <span class="h-dot" style="background:#5bc8ff;box-shadow:0 0 6px #5bc8ff;"></span>
+    17 Events &rarr; Splunk HEC &middot; Live
+  </div>
+  <div class="h-chip" id="h-chip4">
+    <span class="h-dot" style="background:#ffaa30;box-shadow:0 0 6px #ffaa30;"></span>
+    TTY Session Recorded &middot; SHA256
+  </div>
+
+  <!-- Phase headlines (Apple-style left column) -->
+  <div class="h-phase" id="h-phase1">
+    <div class="h-eyebrow">THE TRAP</div>
+    <div class="h-headline">Port :22.<br>Every attacker<br>walks right in.</div>
+  </div>
+  <div class="h-phase" id="h-phase2">
+    <div class="h-eyebrow">THE LURE</div>
+    <div class="h-headline">Fake shell.<br>Every credential<br>typed in plaintext.</div>
+  </div>
+  <div class="h-phase" id="h-phase3">
+    <div class="h-eyebrow">THE PIPELINE</div>
+    <div class="h-headline">Structured JSON.<br>Live HEC stream.<br>Real-time in Splunk.</div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="h-hint" id="h-hint">
+    <div class="h-hint-line"></div>
+    <span>scroll</span>
+  </div>
+
+</div>
+</div>
+<!-- ===== END HONEYPOT SCROLL ===== -->
 
 <main class="wrap">
 
@@ -737,6 +1006,144 @@ document.querySelectorAll('.btn-outline').forEach(btn=>{
   btn.addEventListener('mousemove',(e)=>{const r=btn.getBoundingClientRect();const x=(e.clientX-r.left-r.width/2)*0.28;const y=(e.clientY-r.top-r.height/2)*0.28;gsap.to(btn,{x,y,duration:0.35,ease:'power2.out'});});
   btn.addEventListener('mouseleave',()=>{gsap.to(btn,{x:0,y:0,duration:0.6,ease:'elastic.out(1,0.5)'});});
 });
+
+// ===== HONEY CINEMATIC SCROLL =====
+(function initHoneyScroll(){
+  if(!document.getElementById('honey-scroll')) return;
+
+  // ── Initial hidden states ──
+  gsap.set('#h-pot-wrap',  {scale:0.40, opacity:0, transformOrigin:'center 56%'});
+  gsap.set('#h-glow-ring', {scale:0.25, opacity:0});
+  gsap.set('#h-hex-bg',    {opacity:0});
+  // Drips: expand the clipRect height from 0
+  gsap.set(['#h-dr1','#h-dr2','#h-dr3'], {attr:{height:0}});
+  gsap.set('.h-atk',  {opacity:0, scale:0.35});
+  gsap.set('#h-chip1',{opacity:0, y:14});
+  gsap.set('#h-chip2',{opacity:0, y:14});
+  gsap.set('#h-chip3',{opacity:0, y:14});
+  gsap.set('#h-chip4',{opacity:0, y:14});
+  gsap.set('#h-phase1',{opacity:0, y:32});
+  gsap.set('#h-phase2',{opacity:0, y:28});
+  gsap.set('#h-phase3',{opacity:0, y:28});
+
+  // ── Master scrubbed timeline ──
+  const tl = gsap.timeline({
+    scrollTrigger:{
+      trigger:'#honey-scroll',
+      start:'top top',
+      end:'bottom bottom',
+      scrub:2.4,
+    }
+  });
+
+  tl
+    // 0–2.2 ── pot emerges from darkness ──
+    .to('#h-pot-wrap',  {scale:1, opacity:1, ease:'power2.out',  duration:2.2}, 0)
+    .to('#h-glow-ring', {scale:1, opacity:1, ease:'power2.out',  duration:2.0}, 0.3)
+    .to('#h-hex-bg',    {opacity:0.6,        ease:'none',         duration:1.8}, 0.5)
+
+    // 2.4–3.6 ── honey drips extend downward (clipRect height → 100) ──
+    .to('#h-dr1', {attr:{height:96},  ease:'power1.inOut', duration:1.2}, 2.4)
+    .to('#h-dr2', {attr:{height:88},  ease:'power1.inOut', duration:1.0}, 2.55)
+    .to('#h-dr3', {attr:{height:82},  ease:'power1.inOut', duration:1.1}, 2.45)
+
+    // 2.8–3.8 ── phase 1 text slides up ──
+    .to('#h-phase1', {opacity:1, y:0, ease:'power3.out', duration:1.0}, 2.8)
+    .to('#h-hint',   {opacity:0,      ease:'none',        duration:0.6}, 2.0)
+
+    // 4.2–5.2 ── attackers pop in from edges ──
+    .to('#h-atk1', {opacity:1, scale:1, ease:'back.out(1.5)', duration:0.8}, 4.2)
+    .to('#h-atk2', {opacity:1, scale:1, ease:'back.out(1.5)', duration:0.8}, 4.45)
+    .to('#h-atk3', {opacity:1, scale:1, ease:'back.out(1.5)', duration:0.8}, 4.35)
+    .to('#h-atk4', {opacity:1, scale:1, ease:'back.out(1.5)', duration:0.8}, 4.55)
+
+    // 4.6 ── connection lines fade in ──
+    .to('#cl1', {attr:{stroke:'rgba(240,140,0,0.40)'}, duration:0.7}, 4.6)
+    .to('#cl2', {attr:{stroke:'rgba(240,140,0,0.40)'}, duration:0.7}, 4.75)
+    .to('#cl3', {attr:{stroke:'rgba(240,140,0,0.40)'}, duration:0.7}, 4.7)
+    .to('#cl4', {attr:{stroke:'rgba(240,140,0,0.40)'}, duration:0.7}, 4.85)
+
+    // 5.4 ── phase 1 → phase 2 ──
+    .to('#h-phase1', {opacity:0, y:-26, ease:'power2.in',  duration:0.7}, 5.4)
+    .to('#h-phase2', {opacity:1, y:0,   ease:'power3.out', duration:1.0}, 5.8)
+
+    // 6.4–7.2 ── chips pop in ──
+    .to('#h-chip1', {opacity:1, y:0, ease:'power2.out', duration:0.65}, 6.4)
+    .to('#h-chip2', {opacity:1, y:0, ease:'power2.out', duration:0.65}, 6.6)
+    .to('#h-chip3', {opacity:1, y:0, ease:'power2.out', duration:0.65}, 6.72)
+    .to('#h-chip4', {opacity:1, y:0, ease:'power2.out', duration:0.65}, 6.88)
+
+    // 7.8 ── phase 2 → phase 3 ──
+    .to('#h-phase2', {opacity:0, y:-26, ease:'power2.in',  duration:0.7}, 7.8)
+    .to('#h-phase3', {opacity:1, y:0,   ease:'power3.out', duration:1.0}, 8.2)
+
+    // 8.8–10 ── glow intensifies, pot floats ──
+    .to('#h-glow-ring', {scale:1.38, opacity:0.82, ease:'sine.inOut', duration:2.0}, 8.8)
+    .to('#h-pot-wrap',  {y:-14,                    ease:'sine.inOut', duration:2.4}, 8.8);
+
+  // ── Canvas: ambient honey particle field ──
+  const cv  = document.getElementById('h-canvas');
+  const ctx = cv.getContext('2d');
+  let pOpa  = 0;
+
+  function resizeHC(){
+    cv.width  = cv.offsetWidth  || window.innerWidth;
+    cv.height = cv.offsetHeight || window.innerHeight;
+  }
+  resizeHC();
+  window.addEventListener('resize', resizeHC);
+
+  ScrollTrigger.create({
+    trigger:'#honey-scroll', start:'top top', end:'bottom bottom',
+    onUpdate:(s)=>{
+      // fade in at start, fade out at end
+      pOpa = Math.min(s.progress * 6, 1) * Math.min((1 - s.progress) * 6, 1);
+    }
+  });
+
+  const PALETTES = [
+    'rgba(255,170,22,',
+    'rgba(205,98,0,',
+    'rgba(255,212,60,',
+    'rgba(168,68,0,',
+    'rgba(255,140,10,',
+  ];
+
+  class HP {
+    constructor(){ this.reset(true); }
+    reset(cold){
+      this.x  = Math.random() * (cv.width  || window.innerWidth);
+      this.y  = cold ? Math.random() * (cv.height || window.innerHeight)
+                     : (cv.height || window.innerHeight) + 4;
+      this.vx = (Math.random() - 0.5) * 0.38;
+      this.vy = (Math.random() - 0.5) * 0.28;
+      this.r  = Math.random() * 2.2 + 0.6;
+      this.a  = Math.random() * 0.32 + 0.06;
+      this.life = Math.random() * 220 + 100;
+      this.age  = cold ? Math.random() * this.life : 0;
+      this.col  = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+    }
+    step(){ this.x += this.vx; this.y += this.vy; this.age++; if(this.age > this.life) this.reset(false); }
+    draw(){
+      const a = this.a * (1 - this.age / this.life) * pOpa;
+      if(a < 0.004) return;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.col + a + ')';
+      ctx.fill();
+    }
+  }
+
+  const ptcls = [];
+  for(let i = 0; i < 65; i++) ptcls.push(new HP());
+
+  (function loop(){
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ptcls.forEach(p => { p.step(); p.draw(); });
+    requestAnimationFrame(loop);
+  })();
+
+})();
 </script>
 </body>
 </html>
