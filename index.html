@@ -2479,12 +2479,14 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
     const rotSpeed = type === 5
       ? (Math.random() > 0.5 ? 1 : -1) * (0.009 + Math.random() * 0.013) * (0.5 + z * 0.5)
       : (Math.random() - 0.5) * 0.003 * (0.3 + z * 0.7);
+    const speed = (0.018 + Math.random() * 0.038) * z;
+    const angle = Math.random() * Math.PI * 2; // any direction
     return {
       x: Math.random() * innerWidth,
-      y: preplace ? Math.random() * innerHeight : -(40 + Math.random() * 120),
+      y: Math.random() * innerHeight,
       z,
-      vy: (0.006 + Math.random() * 0.058) * z,
-      vx: (Math.random() - 0.5) * 0.018 * z,
+      vy: Math.sin(angle) * speed,
+      vx: Math.cos(angle) * speed,
       rot: Math.random() * Math.PI * 2,
       rotSpeed,
       size: (6 + Math.random() * 36) * z,
@@ -2689,9 +2691,10 @@ document.querySelectorAll('[data-magnetic]').forEach(btn => {
       s.x += s.vx;
       s.rot += s.rotSpeed;
 
-      if (s.y > canvas.height + 120) { Object.assign(s, spawnShape(false)); }
-      if (s.x < -100) s.x = canvas.width + 100;
-      if (s.x > canvas.width + 100) s.x = -100;
+      if (s.y > canvas.height + 120) s.y = -120;
+      if (s.y < -120) s.y = canvas.height + 120;
+      if (s.x > canvas.width  + 120) s.x = -120;
+      if (s.x < -120) s.x = canvas.width + 120;
 
       ctx.save();
       ctx.translate(s.x, s.y);
