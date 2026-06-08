@@ -146,11 +146,12 @@ p:last-child{margin-bottom:0;}
 .h-pot-wrap{position:relative;z-index:4;width:min(290px,52vw);}
 .h-pot-svg{width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 42px rgba(220,110,0,0.52)) drop-shadow(0 6px 18px rgba(0,0,0,0.7));}
 
+/* Attacker nodes — one per true corner, no edge-sharing with chips */
 .h-atk{position:absolute;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:5;}
-#h-atk1{left:3%;top:34%;}
-#h-atk2{right:3%;top:24%;}
-#h-atk3{left:4%;bottom:28%;}
-#h-atk4{right:4%;bottom:30%;}
+#h-atk1{left:2%;top:14%;}      /* top-left  */
+#h-atk2{right:2%;top:14%;}     /* top-right */
+#h-atk3{left:2%;bottom:16%;}   /* bot-left  */
+#h-atk4{right:2%;bottom:16%;}  /* bot-right */
 .h-atk-dot{width:10px;height:10px;border-radius:50%;background:#ff3333;
   box-shadow:0 0 8px #ff4444,0 0 20px rgba(255,50,50,0.45);
   animation:atk-pulse 2.1s ease-in-out infinite;}
@@ -164,21 +165,28 @@ p:last-child{margin-bottom:0;}
 .h-atk-country{font-family:'Fira Code',monospace;font-size:0.49rem;color:rgba(255,100,100,0.5);
   letter-spacing:0.08em;text-align:center;}
 
+/* Chips — clear zones: top-center, right-mid, left-mid, bot-center */
 .h-chip{position:absolute;z-index:6;display:flex;align-items:center;gap:8px;
   font-family:'Fira Code',monospace;font-size:0.62rem;color:rgba(255,215,130,0.94);
   background:rgba(10,4,0,0.88);border:1px solid rgba(220,140,20,0.25);border-radius:100px;
   padding:7px 16px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   white-space:nowrap;letter-spacing:0.01em;}
 .h-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-#h-chip1{top:11%;left:50%;transform:translateX(-50%);}
-#h-chip2{top:26%;right:2%;}
-#h-chip3{bottom:27%;left:2%;}
-#h-chip4{bottom:11%;left:50%;transform:translateX(-50%);}
+/* top-center — above both top-corner attackers */
+#h-chip1{top:7%;left:50%;transform:translateX(-50%);}
+/* right-mid — halfway down, clear of top-right & bot-right attackers */
+#h-chip2{top:50%;right:2%;transform:translateY(-50%);}
+/* left-mid — halfway down, clear of top-left & bot-left attackers */
+#h-chip3{top:50%;left:2%;transform:translateY(-50%);}
+/* bot-center — below both bottom-corner attackers */
+#h-chip4{bottom:7%;left:50%;transform:translateX(-50%);}
 
-.h-phase{position:absolute;left:5%;bottom:15%;max-width:min(380px,38vw);z-index:6;pointer-events:none;}
+/* Phase text — vertically centered left column, between the two left attackers */
+.h-phase{position:absolute;left:5%;top:50%;transform:translateY(-50%);
+  max-width:min(320px,30vw);z-index:6;pointer-events:none;}
 .h-eyebrow{font-family:'Fira Code',monospace;font-size:0.61rem;color:#e89010;
   letter-spacing:0.2em;margin-bottom:10px;opacity:0.9;}
-.h-headline{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3.1vw,2.55rem);
+.h-headline{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.3rem,2.6vw,2.2rem);
   font-weight:700;color:#f0f0f0;line-height:1.1;letter-spacing:-0.04em;}
 
 .h-hint{position:absolute;bottom:5%;right:5%;display:flex;flex-direction:column;
@@ -192,11 +200,15 @@ p:last-child{margin-bottom:0;}
   0%,100%{opacity:0.25;transform:scaleY(0.5) translateY(0);}
   50%{opacity:0.85;transform:scaleY(1) translateY(4px);}
 }
-@media(max-width:640px){
-  .h-phase{left:3%;max-width:56vw;bottom:12%;}
-  .h-headline{font-size:1.3rem;}
+@media(max-width:760px){
+  .h-phase{max-width:44vw;}
+  .h-headline{font-size:1.25rem;}
   #h-chip2,#h-chip3{display:none;}
   .h-glow-ring{width:320px;height:320px;}
+}
+@media(max-width:480px){
+  .h-phase{left:3%;max-width:55vw;}
+  #h-chip1,#h-chip4{font-size:0.52rem;padding:5px 12px;}
 }
 </style>
 </head>
@@ -266,11 +278,11 @@ p:last-child{margin-bottom:0;}
         <polygon points="0 0,5 2.5,0 5" fill="rgba(240,140,0,0.55)"/>
       </marker>
     </defs>
-    <!-- lines from attacker positions toward pot center (500,300) -->
-    <line id="cl1" x1="68"  y1="204" x2="468" y2="290" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
-    <line id="cl2" x1="932" y1="144" x2="532" y2="290" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
-    <line id="cl3" x1="72"  y1="432" x2="468" y2="312" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
-    <line id="cl4" x1="928" y1="420" x2="532" y2="312" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+    <!-- lines from true corners toward pot center -->
+    <line id="cl1" x1="38"  y1="84"  x2="464" y2="272" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+    <line id="cl2" x1="962" y1="84"  x2="536" y2="272" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+    <line id="cl3" x1="38"  y1="516" x2="464" y2="328" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+    <line id="cl4" x1="962" y1="516" x2="536" y2="328" stroke="rgba(240,140,0,0)" stroke-width="1.1" stroke-dasharray="5 4" marker-end="url(#arr)"/>
   </svg>
 
   <!-- SVG Honey Pot -->
@@ -1022,9 +1034,9 @@ document.querySelectorAll('.btn-outline').forEach(btn=>{
   gsap.set('#h-chip2',{opacity:0, y:14});
   gsap.set('#h-chip3',{opacity:0, y:14});
   gsap.set('#h-chip4',{opacity:0, y:14});
-  gsap.set('#h-phase1',{opacity:0, y:32});
-  gsap.set('#h-phase2',{opacity:0, y:28});
-  gsap.set('#h-phase3',{opacity:0, y:28});
+  gsap.set('#h-phase1',{opacity:0, yPercent:-50, y:32});
+  gsap.set('#h-phase2',{opacity:0, yPercent:-50, y:28});
+  gsap.set('#h-phase3',{opacity:0, yPercent:-50, y:28});
 
   // ── Master scrubbed timeline ──
   const tl = gsap.timeline({
@@ -1048,7 +1060,7 @@ document.querySelectorAll('.btn-outline').forEach(btn=>{
     .to('#h-dr3', {attr:{height:82},  ease:'power1.inOut', duration:1.1}, 2.45)
 
     // 2.8–3.8 ── phase 1 text slides up ──
-    .to('#h-phase1', {opacity:1, y:0, ease:'power3.out', duration:1.0}, 2.8)
+    .to('#h-phase1', {opacity:1, yPercent:-50, y:0, ease:'power3.out', duration:1.0}, 2.8)
     .to('#h-hint',   {opacity:0,      ease:'none',        duration:0.6}, 2.0)
 
     // 4.2–5.2 ── attackers pop in from edges ──
@@ -1064,8 +1076,8 @@ document.querySelectorAll('.btn-outline').forEach(btn=>{
     .to('#cl4', {attr:{stroke:'rgba(240,140,0,0.40)'}, duration:0.7}, 4.85)
 
     // 5.4 ── phase 1 → phase 2 ──
-    .to('#h-phase1', {opacity:0, y:-26, ease:'power2.in',  duration:0.7}, 5.4)
-    .to('#h-phase2', {opacity:1, y:0,   ease:'power3.out', duration:1.0}, 5.8)
+    .to('#h-phase1', {opacity:0, yPercent:-50, y:-26, ease:'power2.in',  duration:0.7}, 5.4)
+    .to('#h-phase2', {opacity:1, yPercent:-50, y:0,   ease:'power3.out', duration:1.0}, 5.8)
 
     // 6.4–7.2 ── chips pop in ──
     .to('#h-chip1', {opacity:1, y:0, ease:'power2.out', duration:0.65}, 6.4)
@@ -1074,8 +1086,8 @@ document.querySelectorAll('.btn-outline').forEach(btn=>{
     .to('#h-chip4', {opacity:1, y:0, ease:'power2.out', duration:0.65}, 6.88)
 
     // 7.8 ── phase 2 → phase 3 ──
-    .to('#h-phase2', {opacity:0, y:-26, ease:'power2.in',  duration:0.7}, 7.8)
-    .to('#h-phase3', {opacity:1, y:0,   ease:'power3.out', duration:1.0}, 8.2)
+    .to('#h-phase2', {opacity:0, yPercent:-50, y:-26, ease:'power2.in',  duration:0.7}, 7.8)
+    .to('#h-phase3', {opacity:1, yPercent:-50, y:0,   ease:'power3.out', duration:1.0}, 8.2)
 
     // 8.8–10 ── glow intensifies, pot floats ──
     .to('#h-glow-ring', {scale:1.38, opacity:0.82, ease:'sine.inOut', duration:2.0}, 8.8)
