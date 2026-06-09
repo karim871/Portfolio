@@ -16,7 +16,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 #cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s,opacity 0.2s;mix-blend-mode:screen;}
 #cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(255,255,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s,border-color 0.25s;}
-#cursor-canvas{position:fixed;inset:0;pointer-events:none;z-index:9997;}
 
 #grain{position:fixed;inset:-100%;width:400%;height:400%;z-index:9996;pointer-events:none;opacity:0.038;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.6s steps(1) infinite;}
 @keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}20%{transform:translate(2%,3%)}30%{transform:translate(-1%,1%)}40%{transform:translate(1%,-3%)}50%{transform:translate(-2%,2%)}60%{transform:translate(3%,-1%)}70%{transform:translate(-1%,3%)}80%{transform:translate(2%,1%)}90%{transform:translate(-3%,-1%)}}
@@ -39,7 +38,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 @keyframes orb-drift{0%{transform:translate(0,0);}100%{transform:translate(60px,40px);}}
 .hero-inner{position:relative;z-index:2;max-width:820px;margin:0 auto;width:100%;}
 .hero-eyebrow{font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.18em;margin-bottom:1.5rem;opacity:0.8;display:block;}
-.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:700;color:var(--text-h);line-height:0.92;letter-spacing:-0.045em;margin-bottom:1.5rem;animation:glitch-skew 7s infinite;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:700;color:var(--text-h);line-height:0.92;letter-spacing:-0.045em;margin-bottom:1.5rem;}
 .hero-title .line{display:block;overflow:hidden;}
 .word-w{display:inline-block;overflow:hidden;vertical-align:bottom;}
 .word-i{display:inline-block;}
@@ -51,7 +50,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .hero-stat-val{font-family:'Space Grotesk',sans-serif;font-size:clamp(4.5rem,10vw,8rem);font-weight:700;color:var(--accent);letter-spacing:-0.06em;line-height:1;text-shadow:0 0 80px rgba(255,255,255,0.25);}
 .hero-stat-label{font-family:'Fira Code',monospace;font-size:0.65rem;color:var(--text);opacity:0.55;letter-spacing:0.1em;margin-top:6px;text-transform:uppercase;}
 
-@keyframes glitch-skew{0%,90%,100%{clip-path:none;text-shadow:none;}91%{clip-path:polygon(0 25%,100% 25%,100% 40%,0 40%);text-shadow:-3px 0 #ff0066,3px 0 var(--accent);}93%{clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%);text-shadow:3px 0 #ff0066,-3px 0 var(--accent);}95%{clip-path:none;text-shadow:none;}}
 
 .tag{font-family:'Fira Code',monospace;font-size:0.65rem;padding:4px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);border-radius:4px;color:var(--accent);white-space:nowrap;display:inline-block;letter-spacing:0.04em;transition:background 0.2s,border-color 0.2s;}
 .tag:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.35);}
@@ -133,7 +131,7 @@ p{margin-bottom:0.85rem;}
 p:last-child{margin-bottom:0;}
 
 /* ===== HONEY CINEMATIC SCROLL ===== */
-#honey-scroll{position:relative;height:500vh;}
+#honey-scroll{position:relative;height:260vh;}
 .h-sticky{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg);}
 #h-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
 .h-hex-bg{position:absolute;inset:0;pointer-events:none;z-index:2;
@@ -216,7 +214,6 @@ p:last-child{margin-bottom:0;}
 
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
-<canvas id="cursor-canvas"></canvas>
 <div id="grain" aria-hidden="true"></div>
 <div id="progress-bar" aria-hidden="true"></div>
 
@@ -455,12 +452,12 @@ p:last-child{margin-bottom:0;}
       <div class="metric-label">Real SSH<br>hidden port</div>
     </div>
     <div class="metric-card">
-      <div class="metric-val">100%</div>
-      <div class="metric-label">Credentials<br>captured</div>
+      <div class="metric-val">17</div>
+      <div class="metric-label">Splunk events<br>per session</div>
     </div>
     <div class="metric-card">
-      <div class="metric-val">SIEM</div>
-      <div class="metric-label">Live events<br>in Splunk</div>
+      <div class="metric-val">8</div>
+      <div class="metric-label">Real blockers<br>solved</div>
     </div>
   </div>
 
@@ -962,13 +959,6 @@ document.querySelectorAll('a,button,.metric-card,.step-card,.step-card-err,.glas
   el.addEventListener('mouseleave',()=>{dot.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(255,255,255,0.5)';});
 });
 
-const tc=document.getElementById('cursor-canvas');
-const tctx=tc.getContext('2d');
-let pts=[];
-function resizeTC(){tc.width=window.innerWidth;tc.height=window.innerHeight;}
-resizeTC();window.addEventListener('resize',resizeTC);
-document.addEventListener('mousemove',(e)=>{pts.push({x:e.clientX,y:e.clientY,age:0,life:28+Math.random()*18});if(pts.length>70)pts.shift();});
-(function drawTrail(){tctx.clearRect(0,0,tc.width,tc.height);pts=pts.filter(p=>p.age<p.life);for(const p of pts){const a=(1-p.age/p.life)*0.55;const r=(1-p.age/p.life)*2.5;tctx.beginPath();tctx.arc(p.x,p.y,r,0,Math.PI*2);tctx.fillStyle=`rgba(255,255,255,${a})`;tctx.fill();p.age++;}requestAnimationFrame(drawTrail);})();
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1017,7 +1007,7 @@ document.querySelectorAll('.btn-outline').forEach(btn=>{
   const dp = {d1:0, d2:0, d3:0};
 
   const tl = gsap.timeline({
-    scrollTrigger:{trigger:'#honey-scroll',start:'top top',end:'bottom bottom',scrub:2.4}
+    scrollTrigger:{trigger:'#honey-scroll',start:'top top',end:'bottom bottom',scrub:1.6}
   });
 
   tl
