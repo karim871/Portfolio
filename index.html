@@ -2108,37 +2108,37 @@ tailwind.config = {
       </h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
         <div class="cert-card" data-bwp="cysa-plus">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CySA+-png.webp" alt="CompTIA CySA+" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CySA+-png.webp" alt="CompTIA CySA+" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA CySA+</h4>
           <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
         <div class="cert-card" data-bwp="security-plus">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/Security+-png.webp" alt="CompTIA Security+" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/Security+-png.webp" alt="CompTIA Security+" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">CompTIA Security+</h4>
           <p class="text-xs accent-violet font-mono mt-1">Valid 2025–2028</p>
         </div>
         <div class="cert-card" data-bwp="ccna-itn">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ITN.png" alt="Cisco CCNA ITN" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ITN.png" alt="Cisco CCNA ITN" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ITN</h4>
         </div>
         <div class="cert-card" data-bwp="ccna-srwe">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_SRWE.png" alt="Cisco CCNA SRWE" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_SRWE.png" alt="Cisco CCNA SRWE" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA SRWE</h4>
         </div>
         <div class="cert-card" data-bwp="ccna-ensa">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ENSA.png" alt="Cisco CCNA ENSA" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/CCNA_ENSA.png" alt="Cisco CCNA ENSA" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco CCNA ENSA</h4>
         </div>
         <div class="cert-card" data-bwp="network-defense">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/NetworkDefense.png" alt="Cisco Network Defense" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/NetworkDefense.png" alt="Cisco Network Defense" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Cisco Network Defense</h4>
         </div>
         <div class="cert-card" data-bwp="az-900">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/AZ-900.png" alt="Microsoft AZ-900" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/AZ-900.png" alt="Microsoft AZ-900" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft AZ-900</h4>
         </div>
         <div class="cert-card" data-bwp="sc-900">
-          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/SC-900.png" alt="Microsoft SC-900" class="w-full h-full object-contain"></div>
+          <div class="w-20 h-20 mb-3"><img src="https://karim871.github.io/Portfolio/images/SC-900.png" alt="Microsoft SC-900" class="w-full h-full object-contain" loading="lazy"></div>
           <h4 class="text-xs font-semibold text-center" style="color:var(--text-bright);">Microsoft SC-900</h4>
         </div>
       </div>
@@ -2942,7 +2942,7 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
   allCards.forEach(c => {
     c.style.opacity = '0';
     c.style.transform = 'translateY(18px)';
-    c.style.transition = 'opacity 0.55s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1), border-color 0.4s ease, box-shadow 0.4s ease';
+    c.style.transition = 'opacity 0.32s ease, transform 0.32s cubic-bezier(0.16,1,0.3,1), border-color 0.4s ease, box-shadow 0.4s ease';
   });
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -2951,32 +2951,13 @@ if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
       setTimeout(() => {
         entry.target.style.opacity = '1';
         entry.target.style.transform = 'translateY(0)';
-      }, (idx % 4) * 90);
+      }, (idx % 4) * 45);
       obs.unobserve(entry.target);
     });
   }, { threshold: 0.12 });
   allCards.forEach(c => obs.observe(c));
 })();
 
-// ── Page load: stagger main sections into view ────────────────
-(function initPageLoadReveal() {
-  const sections = [...document.querySelectorAll('main > section')];
-  sections.forEach((sec, i) => {
-    gsap.from(sec, {
-      opacity: 0,
-      y: 10,
-      duration: 0.5,
-      ease: 'power3.out',
-      delay: 0.05 + i * 0.025,
-      scrollTrigger: {
-        trigger: sec,
-        start: 'top 88%',
-        toggleActions: 'play none none none',
-      },
-      clearProps: 'opacity,transform',
-    });
-  });
-})();
 
 // ── Gallery dots ──────────────────────────────────────────────
 document.querySelectorAll('.gallery-dots').forEach(dotsEl => {
