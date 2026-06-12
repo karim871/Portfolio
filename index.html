@@ -889,7 +889,7 @@ tailwind.config = {
   /* ── Glitch effect ── */
   #hero-name { position: relative; }
   #hero-name.glitching {
-    animation: glitch-base 0.68s steps(10) forwards;
+    animation: glitch-base var(--glitch-dur, 0.68s) steps(10) forwards;
   }
   #hero-name.glitching::before,
   #hero-name.glitching::after {
@@ -907,11 +907,11 @@ tailwind.config = {
   }
   #hero-name.glitching::before {
     color: rgba(255, 18, 55, 0.95);
-    animation: glitch-r 0.68s steps(10) forwards;
+    animation: glitch-r var(--glitch-dur, 0.68s) steps(10) forwards;
   }
   #hero-name.glitching::after {
     color: rgba(0, 238, 255, 0.95);
-    animation: glitch-b 0.68s steps(10) forwards;
+    animation: glitch-b var(--glitch-dur, 0.68s) steps(10) forwards;
   }
   /* Brief white surge on the base text during glitch */
   @keyframes glitch-base {
@@ -3121,41 +3121,60 @@ document.querySelectorAll('.gallery-dots').forEach(dotsEl => {
   if (prefersReduced) return;
   const h1 = document.getElementById('hero-name');
   let busy = false;
+  // Duration pool — each glitch picks randomly, so they feel visually distinct
+  const DURS = [380, 480, 580, 700, 860];
 
-  function triggerGlitch() {
-    if (busy) return;
+  // Fire one glitch; calls onDone when the animation fully clears
+  function fire(onDone) {
+    if (busy) { onDone?.(); return; }
     busy = true;
+    const dur = DURS[Math.floor(Math.random() * DURS.length)];
+    h1.style.setProperty('--glitch-dur', dur + 'ms');
     h1.classList.add('glitching');
-    const mainDur = 720;
     setTimeout(() => {
       h1.classList.remove('glitching');
-      // ~35% chance: stutter — a quick second burst shortly after
-      if (Math.random() > 0.65) {
-        setTimeout(() => {
-          h1.classList.add('glitching');
-          setTimeout(() => {
-            h1.classList.remove('glitching');
-            busy = false;
-          }, 360 + Math.random() * 80);
-        }, 100 + Math.random() * 130);
-      } else {
-        busy = false;
-      }
-    }, mainDur);
+      h1.style.removeProperty('--glitch-dur');
+      busy = false;
+      onDone?.();
+    }, dur + 40);
   }
 
-  function scheduleNext() {
-    const delay = 1600 + Math.random() * 4400;
-    setTimeout(() => {
-      if (Math.random() > 0.08) triggerGlitch();
-      scheduleNext();
-    }, delay);
+  function schedule() {
+    const roll = Math.random();
+
+    if (roll < 0.44) {
+      // ── Single glitch, then 2–8 s quiet
+      fire(() => setTimeout(schedule, 2000 + Math.random() * 6000));
+
+    } else if (roll < 0.70) {
+      // ── Stutter: two bursts with a short gap between them
+      fire(() => setTimeout(() =>
+        fire(() => setTimeout(schedule, 2500 + Math.random() * 4500)),
+        80 + Math.random() * 180
+      ));
+
+    } else if (roll < 0.86) {
+      // ── Triple burst: three rapid-fire pulses
+      fire(() => setTimeout(() =>
+        fire(() => setTimeout(() =>
+          fire(() => setTimeout(schedule, 3000 + Math.random() * 5000)),
+          60 + Math.random() * 140
+        )),
+        60 + Math.random() * 140
+      ));
+
+    } else {
+      // ── Long silence (7–16 s), then a single glitch
+      setTimeout(() =>
+        fire(() => setTimeout(schedule, 1500 + Math.random() * 3000)),
+        7000 + Math.random() * 9000
+      );
+    }
   }
 
-  // First glitch after hero sequence settles
+  // Kick off after hero sequence settles
   setTimeout(() => {
-    triggerGlitch();
-    setTimeout(scheduleNext, 1400);
+    fire(() => setTimeout(schedule, 1800 + Math.random() * 1500));
   }, 2500);
 })();
 
